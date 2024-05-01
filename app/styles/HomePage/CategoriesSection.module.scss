@@ -2,8 +2,8 @@
 
 .main {
   @include sectionPadding;
- padding-top: 80px;
- padding-bottom: 80px;
+  padding-top: 80px;
+  padding-bottom: 80px;
 
   h2 {
     text-align: center;
@@ -61,6 +61,60 @@
           color: #90d26d;
           border-bottom: 2px solid #90d26d;
           padding-bottom: 6px;
+        }
+      }
+
+      .cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(20%, 1fr));
+        gap: 30px;
+        width: 100%;
+
+        @include smallLaptop {
+          grid-template-columns: repeat(auto-fill, minmax(30%, 1fr));
+        }
+        @include bigTablet {
+          display: flex;
+          width: 100%;
+        }
+        @include tablet {
+          display: flex;
+          width: 100%;
+        }
+
+        .card {
+          display: flex;
+          flex-direction: column;
+          width: 100%;
+          .images {
+            position: relative;
+            border-radius: 22px;
+            height: 206px;
+            margin-bottom: 20px;
+
+            @include bigTablet {
+              width: 300px;
+            }
+            @include tablet {
+              width: 300px;
+            }
+            img {
+              object-fit: cover;
+              border-radius: 22px !important;
+            }
+          }
+          span {
+            color: #828282;
+            font-size: 16px;
+            margin-bottom: 7px;
+            white-space: wrap;
+          }
+
+          h4 {
+            font-weight: 500;
+            font-size: 16px;
+            color: #1e1e1e;
+          }
         }
       }
     }

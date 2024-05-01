@@ -2,8 +2,10 @@
 
 import React, { useState } from 'react'
 import styles from '../styles/HomePage/CategoriesSection.module.scss'
-import { LeftArrowIcon, LongArroowIcon, RightArrowIcon } from '../components/SVGs/SVGicons'
+import { LeftArrowIcon, LongArrowIcon, RightArrowIcon } from '../components/SVGs/SVGicons'
 import Link from 'next/link'
+import images from '@/public/images'
+import Image from 'next/image'
 
 type Props = {}
 
@@ -11,31 +13,45 @@ const Categories = (props: Props) => {
     const tabs = [
         {
             text: 'Fashion',
-            content: 'Fashion'
+            content: 'Cashew bag, 120kg with additional add ons and an extra bowl',
+            price: '$250',
+            image: images.cashew
         },
         {
             text: 'Electronics',
-            content: 'Electronics'
+            content: 'Electronics',
+            price: '$250',
+            image: images.cashew
         },
         {
             text: 'Mobile phones',
-            content: 'Mobile phones'
+            content: 'Mobile phones',
+            price: '$250',
+            image: images.cashew
         },
         {
             text: 'House hold items',
-            content: 'House hold items'
+            content: 'House hold items',
+            price: '$250',
+            image: images.cashew
         },
         {
             text: 'Food items',
-            content: 'Food items'
+            content: 'Food items',
+            price: '$250',
+            image: images.cashew
         },
         {
             text: 'Clothings',
-            content: 'Clothings'
+            content: 'Clothings',
+            price: '$250',
+            image: images.cashew
         },
         {
             text: 'Television',
-            content: 'Television'
+            content: 'Television',
+            price: '$250',
+            image: images.cashew
         },
     ]
 
@@ -73,15 +89,56 @@ const Categories = (props: Props) => {
                             </span>
                         ))}
                     </div>
-                    <div className={styles.contents}>
-                        <h1>{tabs[activeTab].content}</h1>
+                    <div className={styles.cards}>
+                        <div className={styles.card}>
+                            <div className={styles.images}>
+                                <Image src={tabs[activeTab].image} alt='product iamge' fill />
+                            </div>
+                            <span>{tabs[activeTab].content}</span>
+                            <h4>{tabs[activeTab].price}</h4>
+                        </div>
+                        <div className={styles.card}>
+                            <div className={styles.images}>
+                                <Image src={tabs[activeTab].image} alt='product iamge' fill />
+                            </div>
+                            <span>{tabs[activeTab].content}</span>
+                            <h4>{tabs[activeTab].price}</h4>
+                        </div>
+                        <div className={styles.card}>
+                            <div className={styles.images}>
+                                <Image src={tabs[activeTab].image} alt='product iamge' fill />
+                            </div>
+                            <span>{tabs[activeTab].content}</span>
+                            <h4>{tabs[activeTab].price}</h4>
+                        </div>
+                        <div className={styles.card}>
+                            <div className={styles.images}>
+                                <Image src={tabs[activeTab].image} alt='product iamge' fill />
+                            </div>
+                            <span>{tabs[activeTab].content}</span>
+                            <h4>{tabs[activeTab].price}</h4>
+                        </div>
+                        <div className={styles.card}>
+                            <div className={styles.images}>
+                                <Image src={tabs[activeTab].image} alt='product iamge' fill />
+                            </div>
+                            <span>{tabs[activeTab].content}</span>
+                            <h4>{tabs[activeTab].price}</h4>
+                        </div>
+                        <div className={styles.card}>
+                            <div className={styles.images}>
+                                <Image src={tabs[activeTab].image} alt='product iamge' fill />
+                            </div>
+                            <span>{tabs[activeTab].content}</span>
+                            <h4>{tabs[activeTab].price}</h4>
+                        </div>
                     </div>
 
                 </div>
                 <div className={styles.arrow} onClick={scrollRight}><RightArrowIcon /></div>
             </div>
 
-            <Link href='/' className={styles.btn}>See all Categories <LongArroowIcon /></Link>
+            <Link href='/' className={styles.btn}>See all Categories <LongArrowIcon /></Link>
         </div>
     )
 }

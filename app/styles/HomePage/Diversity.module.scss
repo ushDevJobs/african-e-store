@@ -40,13 +40,58 @@
       height: 100%;
       border-radius: 16px !important;
     }
-    span {
+    .content {
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
       color: white;
-      font-size: 24px;
+      display: flex;
+      flex-direction: column;
+
+      h2 {
+        font-size: 24px !important;
+        color: #cbf6dd;
+        font-weight: 800;
+        margin-bottom: 20px !important;
+        text-align: left !important;
+
+        @include smallLaptop {
+          margin-bottom: 5px !important;
+          font-size: 16px !important;
+        }
+      }
+      h3 {
+        font-size: 40px;
+          color: #cbf6dd;
+
+            @include smallLaptop {
+         font-size: 30px;
+        }
+      }
+      span {
+        font-size: 12px;
+        color: #fff;
+        line-height: 16px;
+        font-weight: 300;
+        text-align: left !important;
+      }
+      button {
+        background-color: transparent;
+        border: 1px solid #fff;
+        font-size: 14px;
+        color: #fff;
+        padding: 11px 30px;
+        border-radius: 37px;
+        cursor: pointer;
+        margin-right: auto;
+        margin-top: 30px;
+
+        @include smallLaptop {
+          padding: 8px 20px;
+          margin-top: 10px;
+        }
+      }
     }
 
     .image1 {

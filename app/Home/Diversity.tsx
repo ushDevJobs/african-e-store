@@ -12,26 +12,44 @@ const Diversity = (props: Props) => {
             <div className={styles.imageGrid}>
                 <div className={styles.image1} >
                     <Image src={images.explore_1} alt="Image 1" />
-                    <span>hello</span>
+                    <div className={styles.content}>
+                        <h2>Check out new uploads</h2>
+                        <span>All vendors are being fully screened and made set for publications </span>
+                        <button>See more</button>
+                    </div>
                 </div>
                 <div className={styles.image2}>
                     <Image src={images.explore_2} alt="Image 2" />
-                    <span>hello</span>
+                    <div className={styles.content}>
+                        <h2>Check out new uploads</h2>
+                        <span>All vendors are being fully screened and made set for publications </span>
+                        <button>See more</button>
                     </div>
-               <div className={styles.image3}>
+                </div>
+                <div className={styles.image3}>
                     <Image src={images.explore_5} alt="Image 3" />
-                    <span>hello</span>
-               </div>
-               <div className={styles.image4}>
+                    <div className={styles.content}>
+                        <h3>Revolutionizing the African market </h3>
+                    </div>
+                </div>
+                <div className={styles.image4}>
                     <Image src={images.explore_4} alt="Image 4" />
-                    <span>hello</span>
-               </div>
+                    <div className={styles.content}>
+                        <h2>Check out new uploads</h2>
+                        <span>All vendors are being fully screened and made set for publications </span>
+                        <button>See more</button>
+                    </div>
+                </div>
                 <div className={styles.image5}>
                     <Image src={images.explore_3} alt="Image 5" />
-                    <span>hello</span>
-               </div>
-            
-                
+                    <div className={styles.content}>
+                        <h2>Check out new uploads</h2>
+                        <span>All vendors are being fully screened and made set for publications </span>
+                        <button>See more</button>
+                    </div>
+                </div>
+
+
             </div>
         </div>
     )
