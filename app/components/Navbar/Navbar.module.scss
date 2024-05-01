@@ -1,0 +1,56 @@
+@import '../../styles/reusables';
+
+.navbarContainer {
+  @include sectionPadding;
+  position: fixed;
+  z-index: 100;
+  width: 100%;
+  background-color: #ffffff;
+
+    &.scrolled {
+        background-color: #D9EDBF; 
+    }
+
+  .navContent {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 0;
+
+    .logo {
+      img {
+        width: 115px;
+        height: 25px;
+        object-fit: cover;
+      }
+    }
+
+    .links {
+      display: flex;
+      align-items: center;
+      gap: 40px;
+      li {
+        color: #6f6f6f;
+        font-size: 14px;
+      }
+
+      .dropdown {
+        li {
+          color: #6f6f6f;
+          font-size: 14px;
+        }
+      }
+
+      .login {
+        color: #2c7865;
+        font-size: 14px;
+        border: none;
+        background-color: transparent;
+        cursor: pointer;
+      }
+      .signup {
+   @include smallButton;
+      }
+    }
+  }
+}

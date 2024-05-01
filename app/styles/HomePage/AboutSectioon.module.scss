@@ -1,0 +1,76 @@
+@import '../reusables';
+
+.aboutSection {
+  @include sectionPadding;
+ padding-top: 80px;
+ padding-bottom: 80px;
+
+  .cards {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+
+    @include bigTablet {
+      gap: 30px;
+    }
+
+    @include tablet {
+      flex-direction: column;
+    }
+
+    .card {
+      display: flex;
+      flex-direction: column;
+      text-align: center;
+      justify-content: space-evenly;
+      background: linear-gradient(to bottom, #ffffff 0%, #d9edbf 100%);
+      box-shadow: 8px 19px 41.6px -18px rgba(150, 150, 150, 0.31);
+      padding: 30px;
+      min-height: 350px;
+      border-radius: 23px !important;
+      transition: all 0.3s ease-in-out;
+
+      &:hover {
+        border: 1px solid #2c7865;
+      }
+
+      p {
+        svg {
+          background-color: #c4e7b1;
+          border-radius: 50%;
+          padding: 13px;
+          width: 53px;
+          height: 53px;
+        }
+      }
+
+      h3 {
+        font-weight: 300;
+        font-size: 20px;
+        color: #2c7865;
+      }
+
+      h4 {
+        font-size: 16px;
+        color: #828282;
+        line-height: 19px;
+        font-weight: 300;
+      }
+
+      .link {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: fit-content;
+        margin: 0 auto;
+        gap: 3px;
+        font-size: 16px;
+        color: #2c7865;
+        svg {
+          background-color: #c4e7b1;
+          padding: 3px;
+        }
+      }
+    }
+  }
+}
