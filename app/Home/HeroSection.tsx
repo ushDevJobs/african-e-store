@@ -19,7 +19,7 @@ const HeroSection = (props: Props) => {
             {onDesktop && (
                 <div className={styles.heroSection}>
                     <div className={styles.backgroundImage}>
-                        <Image src={images.home_hero_bg} alt='hero background image' />
+                        <Image src={images.hero_bg} alt='hero background image' />
                         <div className={styles.contents}>
                             <h1>An African Goods market place </h1>
                             <p>Buy and sell to Africans all over the globe with Rayvinn, create a buyer or seller account on our platform to get started.</p>
