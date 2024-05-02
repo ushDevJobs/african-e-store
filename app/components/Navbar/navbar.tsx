@@ -43,7 +43,7 @@ const Navbar = (props: Props) => {
                         <Link href='/'>
                             <li>Home</li>
                         </Link>
-                        <Link href='/'>
+                        <Link href='/seller/signup'>
                             <li>Sell</li>
                         </Link>
                         <Link href='/'>
@@ -52,10 +52,10 @@ const Navbar = (props: Props) => {
                         <div className={styles.dropdown}>
                             <li>Categories <DownArrowIcon /></li>
                         </div>
-                        <Link href='/'>
+                        <Link href='/login'>
                             <button className={styles.login}>  Login</button>
                         </Link>
-                        <Link href='/'>
+                        <Link href='/signup'>
                             <button className={styles.signup}>Sign up</button>
                         </Link>
                     </ul>
