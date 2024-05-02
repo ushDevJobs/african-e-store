@@ -1,0 +1,70 @@
+@import '../../styles/reusables';
+
+.footerContainer {
+  display: flex;
+  flex-direction: column;
+  background-color: #2c7865;
+  padding-top: 60px;
+  @include sectionPadding;
+  color: #fff;
+
+  .links {
+    display: flex;
+   justify-content: space-between;
+    padding-bottom: 60px;
+
+    ul {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      h3 {
+        font-size: 16px;
+        font-weight: 700;
+      }
+
+      a {
+        color: #fff;
+
+        li {
+          font-size: 14px;
+        }
+      }
+    }
+  }
+
+  .logoArea {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 60px;
+
+    .lhs {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+
+      img {
+        object-fit: cover;
+        width: 160px;
+        height: 34px;
+      }
+
+      h2 {
+        color: #fff;
+        font-size: 20px;
+        font-weight: 700;
+      }
+    }
+
+    .rhs {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+    }
+  }
+
+  .copyright{
+    padding-bottom: 22px;
+    text-align: center ;
+  }
+}
