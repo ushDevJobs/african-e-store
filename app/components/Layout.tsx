@@ -11,6 +11,9 @@ import {
 import Navbar from './Navbar/navbar';
 import Footer from './Footer/footer';
 import images from '@/public/images';
+import { usePathname } from 'next/navigation';
+import RegistrationNav from './RegistrationNav';
+import RegistrationFooter from './RegistrationFooter';
 
 interface LayoutProps {
     children?: ReactNode;
@@ -18,6 +21,7 @@ interface LayoutProps {
 
 const Layout: FunctionComponent<LayoutProps> = ({ children }): ReactElement => {
     const [loaderIsVisible, setLoaderIsVisible] = useState(true);
+    const pathname = usePathname()
 
     const iswindow = typeof window !== 'undefined' ? true : false;
 
@@ -31,9 +35,15 @@ const Layout: FunctionComponent<LayoutProps> = ({ children }): ReactElement => {
         <>
             {!loaderIsVisible && (
                 <>
-                    <Navbar />
+                    {/* {pathname.includes('/signup') || pathname.includes('/login') || pathname.includes('/verification') && <RegistrationNav />}
+                    {!pathname.includes('/signup') && !pathname.includes('/login') && !pathname.includes('/verification') && <Navbar />}
                     {children}
-                    <Footer />
+                    {!pathname.includes('/signup') && !pathname.includes('/login') && !pathname.includes('/verification') && <Footer />}
+                    {pathname.includes('/signup') || pathname.includes('/login') || pathname.includes('/verification') && <RegistrationFooter />} */}
+                    {(pathname.includes('/signup') || pathname.includes('/login') || pathname.includes('/verification')) ? <RegistrationNav /> : <Navbar />}
+                    {children}
+                    {(pathname.includes('/signup') || pathname.includes('/login') || pathname.includes('/verification')) ? <RegistrationFooter /> : <Footer />}
+
                 </>
             )}
 
