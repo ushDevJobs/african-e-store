@@ -11,6 +11,8 @@ import explore_3 from './images/explore_3.png';
 import explore_4 from './images/explore_4.png';
 import explore_5 from './images/explore_5.png';
 import white_logo from './images/white-logo.png';
+import category_dropdown_image from './images/category_dropdown_image.png';
+import cart_prooduct_image from './images/cart_prooduct_image.png';
 
 export default {
   logo,
@@ -26,4 +28,6 @@ export default {
   explore_3,
   explore_4,
   explore_5,
+  category_dropdown_image,
+  cart_prooduct_image,
 };
