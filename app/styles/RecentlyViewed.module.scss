@@ -1,0 +1,55 @@
+@import './reusables';
+.main {
+  margin-top: 60px;
+  h1 {
+    color: #6f6f6f;
+    font-size: 24px;
+  }
+
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(20%, 1fr));
+    gap: 32px;
+
+    @include bigTablet {
+      grid-template-columns: repeat(auto-fill, minmax(30%, 1fr));
+      gap: 16px;
+    }
+
+    @include tablet {
+      display: flex;
+      overflow-x: auto;
+    }
+
+    @include bigTablet {
+      gap: 16px;
+    }
+    .card {
+      .image {
+        position: relative;
+        // width: 261px;
+        height: 206px;
+        margin-bottom: 20px;
+
+        @include tablet {
+          width: 261px;
+        }
+
+        img {
+          object-fit: cover;
+          border-radius: 22px !important;
+        }
+      }
+      p {
+        color: #828282;
+        font-size: 18px;
+        margin-bottom: 7px;
+      }
+
+      h4 {
+        font-size: 16px;
+        color: #1e1e1e;
+      }
+    }
+  }
+}
