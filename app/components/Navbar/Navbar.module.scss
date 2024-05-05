@@ -1,5 +1,16 @@
 @import '../../styles/reusables';
 
+@mixin modalBumpInAnimation {
+  animation: modalBumpIn 400ms cubic-bezier(0.97, -0.18, 0.27, 1.55);
+
+  @keyframes modalBumpIn {
+    from {
+      transform: translateY(3rem);
+      opacity: 0;
+    }
+  }
+}
+
 .navbarContainer {
   @include sectionPadding;
   position: fixed;
@@ -7,9 +18,9 @@
   width: 100%;
   background-color: #ffffff;
 
-    &.scrolled {
-        background-color: #D9EDBF; 
-    }
+  &.scrolled {
+    background-color: #d9edbf;
+  }
 
   .navContent {
     display: flex;
@@ -35,9 +46,58 @@
       }
 
       .dropdown {
+        position: relative;
         li {
           color: #6f6f6f;
           font-size: 14px;
+          cursor: pointer;
+        }
+        .dropdownContainer {
+          background-color: #fff;
+          position: absolute;
+          top: 35px;
+          right: 0;
+          z-index: 3;
+          height: 400px;
+          @include modalBumpInAnimation();
+          border-radius: 5px;
+          display: flex;
+
+          .lhs {
+            background-color: #fff;
+            display: grid;
+            gap: 50px;
+            grid-template-columns: repeat(4, 1fr);
+            padding: 25px;
+            .category {
+              display: flex;
+              flex-direction: column;
+              gap: 6px;
+              h3 {
+                font-size: 16px;
+                font-weight: 500;
+                margin-bottom: 5px;
+                color: #6f6f6f;
+              }
+            }
+
+            li {
+              font-size: 14px;
+              font-weight: 400;
+              color: #828282;
+            }
+          }
+
+          .rhs {
+            flex: 1;
+            width: 100%;
+            height: 100%;
+            img {
+              max-width: 300px;
+              height: 400px;
+              object-fit: cover;
+            }
+          }
         }
       }
 
@@ -49,7 +109,72 @@
         cursor: pointer;
       }
       .signup {
-   @include smallButton;
+        @include smallButton;
+      }
+
+      .cart {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+
+        .cartIcon {
+          display: flex;
+          position: relative;
+
+          span {
+            position: absolute;
+            background-color: #828282;
+            color: #fff;
+            padding: 0 4px;
+            border-radius: 50%;
+            font-size: 12px;
+            top: -4px;
+            left: 12px;
+          }
+        }
+
+        h4 {
+          color: #828282;
+          font-size: 16px;
+          font-weight: 400;
+        }
+      }
+
+      .dropDownInfo {
+        @include smallButton;
+        position: relative;
+        span {
+          display: flex;
+          align-items: center;
+          gap: 7px;
+
+          svg {
+            path {
+              fill: #fff;
+            }
+          }
+        }
+      }
+
+      .loginDropdownContainer {
+        background-color: #fff;
+        position: absolute;
+        top: 80px;
+        // left: 0;
+        // width: fit-content;
+        right: 80px;
+        z-index: 3;
+        // height: 400px;
+        @include modalBumpInAnimation();
+        border-radius: 5px;
+        display: flex;
+        flex-direction: column;
+        padding: 18px;
+        gap: 18px;
+
+        a{
+            color: #6F6F6F;
+        }
       }
     }
   }
