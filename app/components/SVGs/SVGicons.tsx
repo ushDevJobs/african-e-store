@@ -21,6 +21,13 @@ export function CartIcon() {
         </svg>
 );
 }
+export function RectangleIcon() {
+    return (
+        <svg width="20" height="17" viewBox="0 0 20 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="20" height="17" rx="3" fill="#D9D9D9" />
+        </svg>
+);
+}
 export function UserIcon() {
     return (
         <svg width="16" height="15" viewBox="0 0 16 15" fill="none" xmlns="http://www.w3.org/2000/svg">
