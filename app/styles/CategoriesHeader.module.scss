@@ -1,0 +1,62 @@
+@import '../styles/reusables';
+
+.main {
+  padding-bottom: 74px;
+
+  .image {
+    position: relative;
+    width: 100%;
+
+    .imageContainer {
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+      border-radius: 20px;
+
+      img {
+        object-fit: cover;
+      }
+    }
+
+    .textContent {
+      position: absolute;
+      top: 0;
+      padding: 28px;
+
+      @include smallLaptop {
+        padding: 20px;
+      }
+      @include bigTablet {
+        padding: 16px;
+      }
+
+      h1 {
+        font-size: 32px;
+        color: #fff;
+        margin-bottom: 16px;
+        font-weight: 700;
+
+        @include smallLaptop {
+          margin-bottom: 13px;
+          font-size: 25px;
+        }
+
+        @include bigTablet {
+          font-size: 20px;
+        }
+      }
+
+      p {
+        font-size: 20px;
+        color: #fff;
+
+        @include smallLaptop {
+          font-size: 18px;
+        }
+        @include bigTablet {
+          font-size: 16px;
+        }
+      }
+    }
+  }
+}
