@@ -1,0 +1,62 @@
+@import '../../styles/reusables';
+
+.main {
+  margin-top: 40px;
+
+  h2 {
+    font-size: 32px;
+    color: #6f6f6f;
+    @include sectionPadding;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+  .faqSections {
+    @include sectionPadding;
+    padding-top: 32px;
+    padding-bottom: 70px;
+    background-color: #f6f6f6 !important;
+    display: flex;
+    flex-direction: column;
+    gap: 29px;
+
+    .card {
+      background-color: #fff;
+      padding: 30px 60px;
+      border-radius: 14px;
+
+      .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        
+        h3 {
+          font-size: 400;
+          color: #828282;
+          font-size: 16px;
+        }
+
+        span {
+          svg {
+            background-color: #76c0ae;
+            width: 13.5px;
+            height: 13.5px;
+            padding: 3px;
+            cursor: pointer;
+          }
+        }
+      }
+
+      .item {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        margin-top: 20px;
+
+        a {
+          color: #2c7865;
+          font-size: 16px;
+        }
+      }
+    }
+  }
+}
