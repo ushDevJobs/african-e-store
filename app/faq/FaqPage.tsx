@@ -7,10 +7,10 @@ import { ContactIcon, DownArrowIcon, PlusIcon, ReportIcon, ReturnIcon } from '..
 type Props = {}
 
 const FaqPage = (props: Props) => {
-    const [visibleItemIndex, setVisibleItemIndex] = useState<number | null>(null);
-    const [selectedCategoryIndex, setSelectedCategoryIndex] = useState<number | null>(null);
-    const [useClientOpen, setUseClientOpen] = useState<boolean>(false);
+    const [visibleItemIndex, setVisibleItemIndex] = useState<number | null>(null); 
+    const [selectedCategoryIndex, setSelectedCategoryIndex] = useState<number | null>(null); 
 
+    
     const faqData = [
         {
             id: 1,
@@ -125,17 +125,15 @@ const FaqPage = (props: Props) => {
 
 
     const toggleAccordion = (index: number) => {
-        setSelectedCategoryIndex(index);
+        setSelectedCategoryIndex(index); 
         setVisibleItemIndex(null);
-        setUseClientOpen(!useClientOpen); 
     };
-
 
     const selectItem = (index: number) => {
-        setVisibleItemIndex(index);
+        setVisibleItemIndex(index); 
     };
 
-    const currentCategory = faqData[selectedCategoryIndex as number];
+    const currentCategory = faqData[selectedCategoryIndex as number]; 
     const currentItem = currentCategory ? (visibleItemIndex !== null ? currentCategory.items[visibleItemIndex] : null) : null;
     return (
         <div className={styles.main}>
@@ -175,7 +173,7 @@ const FaqPage = (props: Props) => {
                                 <span onClick={() => toggleAccordion(index)}><DownArrowIcon /></span>
                             </div>
 
-                            {selectedCategoryIndex === index && useClientOpen && <div className={styles.item}>
+                            {selectedCategoryIndex === index && <div className={styles.item}>
                                 {data.items.map((data, index) => (
                                     <p onClick={() => selectItem(index)} className={styles.item} key={index}>{data.item}</p>))}
                             </div>}
@@ -185,7 +183,7 @@ const FaqPage = (props: Props) => {
                 </div>
 
                 <div className={styles.rhs}>
-                    <h1>{currentItem  && currentItem.desc}</h1>
+                    <h1>{currentItem && currentItem.desc}</h1>
                 </div>
             </div>
         </div>
