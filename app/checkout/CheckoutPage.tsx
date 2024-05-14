@@ -3,6 +3,7 @@ import styles from './Checkout.module.scss'
 import Image from 'next/image'
 import images from '@/public/images'
 import { RectangleIcon } from '../components/SVGs/SVGicons'
+import QuantityButton from '../components/QuantityButton'
 
 type Props = {}
 
@@ -24,14 +25,7 @@ const CheckoutPage = (props: Props) => {
                             <div className={styles.item}>
                                 <p className={styles.name}>Samsung Galaxy S21 5G SM-G991U Factory Unlocked 128GB Phantom Gray C</p>
                                 <p className={styles.price}>US $164.99</p>
-                                <div className={styles.qty}>
-                                    <h4>Quantity</h4>
-                                    <div className={styles.qtyBtn}>
-                                        <button>-</button>
-                                        <p>2</p>
-                                        <button>+</button>
-                                    </div>
-                                </div>
+                                <QuantityButton />
                                 <div className={styles.delivery}>
                                     <h3>Delivery</h3>
                                     <p>Delivery
@@ -85,9 +79,9 @@ const CheckoutPage = (props: Props) => {
                             <p>By confirming your order, you agree to the Rayvinn International Shipping terms and conditions. </p>
 
                             <p>By placing your order, you agree to eBay&apos;s User Agreement and Privacy Notice</p>
-                             <button>Pay with  Visa $195.99</button>
-                             </div>
-                       
+                            <button>Pay with  Visa $195.99</button>
+                        </div>
+
                     </div>
 
 

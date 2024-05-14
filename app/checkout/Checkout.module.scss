@@ -67,41 +67,6 @@
               font-size: 14px;
               margin-bottom: 24px;
             }
-            .qty {
-              display: flex;
-              flex-direction: column;
-              margin-bottom: 30px;
-              gap: 9px;
-
-              h4 {
-                color: #828282;
-                font-size: 14px;
-              }
-
-              .qtyBtn {
-                display: flex;
-                align-items: center;
-                gap: 20px;
-
-                > button {
-                  padding: 5px 21px;
-                  border-radius: 15px;
-                  background-color: #e7e7e7;
-                  color: #828282;
-                  cursor: pointer;
-                  border: 1px solid #e7e7e7;
-                }
-
-                > p {
-                  background-color: #ecf8f5;
-                  color: #828282;
-                  font-size: 16px;
-                  font-weight: 700;
-                  padding: 12px 31px;
-                  border-radius: 22px;
-                }
-              }
-            }
 
             .delivery {
               color: #1e1e1e;
@@ -291,7 +256,7 @@
       background-color: #f7fafa;
       border-radius: 17px;
       border: 1px solid #d9edbf;
-      padding:30px 19px;
+      padding: 30px 19px;
 
       .formField {
         display: flex;
