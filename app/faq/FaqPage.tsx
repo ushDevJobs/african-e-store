@@ -10,7 +10,6 @@ const FaqPage = (props: Props) => {
     const [visibleItemIndex, setVisibleItemIndex] = useState<number | null>(null); 
     const [selectedCategoryIndex, setSelectedCategoryIndex] = useState<number | null>(null); 
 
-    
     const faqData = [
         {
             id: 1,
@@ -122,7 +121,6 @@ const FaqPage = (props: Props) => {
         },
 
     ]
-
 
     const toggleAccordion = (index: number) => {
         setSelectedCategoryIndex(index); 
