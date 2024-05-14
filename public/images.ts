@@ -14,6 +14,9 @@ import white_logo from './images/white-logo.png';
 import category_dropdown_image from './images/category_dropdown_image.png';
 import cart_prooduct_image from './images/cart_prooduct_image.png';
 import header_image from './images/header_image.png';
+import singleProduct from './images/singleProduct.png';
+import singleProduct2 from './images/singleProduct2.png';
+import singleproduct3 from './images/singleproduct3.png';
 
 export default {
   logo,
@@ -32,4 +35,7 @@ export default {
   category_dropdown_image,
   cart_prooduct_image,
   header_image,
+  singleProduct,
+singleProduct2,
+singleproduct3
 };
