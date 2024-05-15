@@ -5,6 +5,7 @@ import QuantityButton from './QuantityButton'
 import { FavoriteIcon, RatingIcon, ShoppingIcon } from './SVGs/SVGicons'
 import images from '@/public/images'
 import Image from 'next/image'
+import Link from 'next/link'
 
 type Props = {}
 
@@ -62,19 +63,25 @@ const AddProductToCart = (props: Props) => {
                             </span>
                         ))}
                         {[1].map((_, index) => (
-                                    <span key={index}>
-                                        <RatingIcon />
-                                    </span>
-                                ))}
+                            <span key={index}>
+                                <RatingIcon />
+                            </span>
+                        ))}
                     </span>
                     <p className='text-base text-[#2C7865]'>(121 review)</p>
                 </div>
                 <QuantityButton />
 
                 <div className={styles.buyNow}>
-                    <button>Buy Now</button>
-                    <span className={styles.icon}><ShoppingIcon /></span>
-                    <span className={styles.icon}><FavoriteIcon /></span>
+                    <Link href={'/checkout'}>
+                        <button>Buy Now</button>
+                    </Link>
+                    <Link className={styles.icon} href={'/cart'}>
+                        <span><ShoppingIcon /></span>
+                    </Link>
+                    <Link className={styles.icon} href={'/'}>
+                        <span><FavoriteIcon /></span>
+                    </Link>
                 </div>
             </div>
         </div>
