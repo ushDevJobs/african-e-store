@@ -8,7 +8,7 @@ type Props = {}
 const Recommendations = (props: Props) => {
     return (
         <div className={styles.main}>
-            <h1>Recommended for you</h1>
+            <h1 className='mb-3'>Recommended for you</h1>
             <div className={styles.cards}>
                 <div className={styles.card}>
                     <div className={styles.image}>

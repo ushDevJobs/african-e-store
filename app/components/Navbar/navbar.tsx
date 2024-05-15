@@ -182,13 +182,18 @@ const Navbar = (props: Props) => {
                                                 <li>Spices</li>
                                             </Link>
                                         </div>
+                                        <Link
+                                            className='whitespace-nowrap text-[#2C7865] text-sm'
+                                            href='/categories'
+                                            onClick={() => setIsCategoryDropdownOpen(false)}
+                                        >
+                                            See all
+                                            {/* See all categories */}
+                                        </Link>
                                     </div>
                                     <div className={styles.rhs}>
                                         <Image src={images.category_dropdown_image} alt='category iamge' />
                                     </div>
-
-
-
                                 </ul>
                             )}
 
@@ -208,16 +213,16 @@ const Navbar = (props: Props) => {
                         {
                             isLoginDropdownOpen && (
                                 <div className={styles.loginDropdownContainer}>
-                                        <Link href={'/'} onClick={() => setIsLoginDropdownOpen(false)}>
+                                    <Link href={'/orders'} onClick={() => setIsLoginDropdownOpen(false)}>
+                                        My orders
+                                    </Link>
+                                    <Link href={'/help'} onClick={() => setIsLoginDropdownOpen(false)}>
+                                        Help/support
+                                    </Link>
+                                    <Link href={'/'} onClick={() => setIsLoginDropdownOpen(false)}>
                                         Track order
                                     </Link>
-                                    <Link href={'/'}>
-                                        Track order
-                                    </Link>
-                                    <Link href={'/'}>
-                                        Track order
-                                    </Link>
-                                    <Link href={'/'}>
+                                    <Link href={'/'} onClick={() => setIsLoginDropdownOpen(false)}>
                                         Purchase history
                                     </Link>
                                     <Link href={'/'}>
