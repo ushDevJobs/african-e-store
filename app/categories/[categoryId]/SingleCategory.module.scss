@@ -59,7 +59,250 @@
       flex: 1;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+
+      .productName {
+        color: #1e1e1e;
+        font-size: 20px;
+        font-weight: 700;
+        line-height: 23px;
+        margin-bottom: 20px;
+      }
+
+      .shipping {
+        max-width: 309px;
+        color: #828282;
+        font-size: 16px;
+        line-height: 19px;
+        margin-bottom: 31px;
+      }
+
+      .price {
+        font-size: 24px;
+        color: #1e1e1e;
+        font-weight: 700;
+        margin-bottom: 3px;
+      }
+
+      .bid {
+        font-size: 14px;
+        color: #828282;
+        line-height: 20px;
+        margin-bottom: 22px;
+
+        button {
+          font-size: 16px;
+          color: #2c7865;
+          border-bottom: 1px solid #2c7865;
+          font-weight: 600;
+          cursor: pointer;
+        }
+      }
+
+      .rating {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 11px;
+      }
+
+      .buyNow {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+
+        button {
+          min-width: 367px;
+          color: #fff;
+          cursor: pointer;
+          padding: 14px 0;
+          border-radius: 27px;
+          font-weight: 700;
+          background-color: #2c7865;
+          text-align: center;
+
+          @include bigTablet {
+            min-width: 250px;
+          }
+          @include tablet {
+            min-width: 180px;
+          }
+        }
+
+        .icon {
+          border: 1px solid #828282;
+          border-radius: 27px;
+          padding: 14px 32px;
+        }
+      }
+    }
+  }
+
+  .reviews {
+    padding-top: 29px;
+    h2 {
+      font-size: 20px;
+      color: #4b4b4b;
+      margin-bottom: 35px;
+      font-weight: 700;
+    }
+
+    .reviewContents {
+      display: flex;
+
+      @include tablet {
+        flex-direction: column;
+      }
+
+      .lhs {
+        flex: 1;
+        background-color: #fff;
+        border-radius: 15px;
+        box-shadow: 0px 0px 43.9px 2px rgba(151, 151, 151, 0.17);
+
+        @include smallLaptop {
+          flex: 2;
+        }
+        @include bigTablet {
+          flex: 2.5;
+        }
+
+        .top {
+          padding: 12px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          border-bottom: 1px solid #d9d9d9;
+          padding-bottom: 20px;
+
+          .top_lhs {
+            display: flex;
+            gap: 7px;
+            align-items: center;
+
+            > span {
+              svg {
+                background-color: #2c7865;
+                width: 48px;
+                height: 48px;
+                border-radius: 50%;
+                padding: 13px;
+              }
+            }
+
+            .product {
+              p {
+                span {
+                  border-bottom: 1px solid #2c7865;
+                }
+              }
+            }
+          }
+
+          .top_rhs {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+
+            span {
+              border: 1px solid #828282;
+              width: 50px;
+              height: 50px;
+              padding: 15px;
+              border-radius: 50%;
+            }
+
+            button {
+              min-width: 126px;
+              padding: 15px 29px;
+              color: #828282;
+              border: 1px solid #828282;
+              border-radius: 37px;
+              cursor: pointer;
+              white-space: nowrap;
+            }
+          }
+        }
+
+        .ratings {
+          padding: 22px 40px;
+
+          > .rating {
+            display: flex;
+            gap: 30px;
+            .average {
+              background-color: #e9e9e9;
+              border-radius: 12px;
+              > h4 {
+                color: #2c7865;
+                font-size: 16px;
+                font-weight: 700;
+                padding: 50px;
+              }
+            }
+
+            .ratingProgress {
+              width: 70%;
+              .value {
+                display: flex;
+                gap: 30px;
+                > p {
+                  display: flex;
+                  justify-content: space-evenly;
+                  align-items: center;
+                  gap: 6px;
+
+                  span {
+                  }
+                }
+
+                .progress {
+                  height: 5px;
+                  flex: 1 1 0;
+                  transform: translateY(10px);
+                  border-radius: 0.5rem;
+                  background-color: #d9d9d9;
+
+                  .bar {
+                    height: 100%;
+                    background-color: #2c7865;
+                    // border-radius: 0.5rem !important;
+                  }
+                }
+
+                .rangeValue {
+                  font-size: 12px;
+                  color: #828282;
+                }
+              }
+            }
+          }
+        }
+
+        .reviewContainer {
+          display: flex;
+          flex-direction: column;
+          //   gap: 20px;
+          overflow-y: auto;
+          max-height: 400px;
+          > .review {
+            padding: 22px 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+
+            span {
+              svg {
+                width: 20px;
+                height: 20px;
+              }
+            }
+          }
+        }
+      }
+
+      .rhs {
+        flex: 1;
+      }
     }
   }
 }

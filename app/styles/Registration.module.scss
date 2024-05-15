@@ -96,29 +96,30 @@
         outline: none;
         background-color: #f7fafa;
         border-radius: 7px;
+        font-size: 16px;
 
         &::placeholder {
           color: #828282;
         }
 
-        @include tablet{
-            padding: 14px 8px;
+        @include tablet {
+          padding: 14px 8px;
         }
       }
-        select {
-      width: 100%;
-      border: 1px solid #acacac;
-      height: 50px;
-      outline: none;
-      background-color: #f7fafa;
-      border-radius: 7px;
-      padding: 14px 21px; 
-      color: #424242; 
+      select {
+        width: 100%;
+        border: 1px solid #acacac;
+        height: 50px;
+        outline: none;
+        background-color: #f7fafa;
+        border-radius: 7px;
+        padding: 14px 21px;
+        color: #424242;
 
-      &::placeholder {
-        color: #828282;
+        &::placeholder {
+          color: #828282;
+        }
       }
-    }
 
       .dial {
         display: flex;
@@ -127,6 +128,7 @@
 
         input {
           border: none;
+          font-size: 16px;
         }
 
         select {
@@ -136,6 +138,7 @@
           border-left: none;
           border-radius: 7px;
           width: 98px;
+          font-size: 16px;
         }
       }
     }

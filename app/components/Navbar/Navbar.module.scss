@@ -65,11 +65,13 @@
           @include modalBumpInAnimation();
           border-radius: 5px;
           display: flex;
+          box-shadow: 0px 0px 43.9px 2px rgba(151, 151, 151, 0.17);
 
           .lhs {
             background-color: #fff;
+            //    border-radius: 5px;
             display: grid;
-            gap: 50px;
+            gap: 30px;
             grid-template-columns: repeat(4, 1fr);
             padding: 25px;
             .category {
@@ -95,10 +97,15 @@
             flex: 1;
             width: 100%;
             height: 100%;
+            //    border-radius: 5px;
             img {
               max-width: 300px;
               height: 400px;
               object-fit: cover;
+
+              @include smallLaptop {
+                display: none;
+              }
             }
           }
         }
