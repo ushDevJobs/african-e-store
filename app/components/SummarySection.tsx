@@ -1,5 +1,6 @@
 import React from 'react'
 import styles from '../styles/SummarySection.module.scss'
+import Link from 'next/link'
 type Props = {}
 
 const SummarySection = (props: Props) => {
@@ -17,7 +18,9 @@ const SummarySection = (props: Props) => {
               <p>Subtotal </p>
               <h3>US $195</h3>
           </div>
-          <button>Pay $195.99</button>
+          <Link href={'/checkout'}> 
+           <button>Pay $195.99</button>
+           </Link>
       </div>
   )
 }

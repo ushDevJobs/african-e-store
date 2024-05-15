@@ -18,7 +18,7 @@ const GetStarted = (props: Props) => {
                 <div className={styles.rhs}>
                     <h3>See products from different suppliers in Africa </h3>
                     <p>Lorem ipsum dolor sit amet consectetur. Tellus turpis quis nisi consequat nisl. In ultrices nisl lectus etiam arcu ipsum mauris odio tincidunt. </p>
-              <Link href={'/'}> <button>Sign up</button></Link>
+              <Link href={'/signup'}> <button>Sign up</button></Link>
                    
                 </div>
             </div>

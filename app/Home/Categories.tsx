@@ -118,27 +118,13 @@ const Categories = (props: Props) => {
                             <span>{tabs[activeTab].content}</span>
                             <h4>{tabs[activeTab].price}</h4>
                         </div>
-                        <div className={styles.card}>
-                            <div className={styles.images}>
-                                <Image src={tabs[activeTab].image} alt='product iamge' fill />
-                            </div>
-                            <span>{tabs[activeTab].content}</span>
-                            <h4>{tabs[activeTab].price}</h4>
-                        </div>
-                        <div className={styles.card}>
-                            <div className={styles.images}>
-                                <Image src={tabs[activeTab].image} alt='product iamge' fill />
-                            </div>
-                            <span>{tabs[activeTab].content}</span>
-                            <h4>{tabs[activeTab].price}</h4>
-                        </div>
                     </div>
 
                 </div>
                 <div className={styles.arrow} onClick={scrollRight}><RightArrowIcon /></div>
             </div>
 
-            <Link href='/' className={styles.btn}>See all Categories <LongArrowIcon /></Link>
+            <Link href='/categories' className={styles.btn}>See all Categories <LongArrowIcon /></Link>
         </div>
     )
 }

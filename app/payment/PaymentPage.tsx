@@ -3,6 +3,7 @@ import styles from '../checkout/Checkout.module.scss'
 import Image from 'next/image'
 import images from '@/public/images'
 import { RectangleIcon } from '../components/SVGs/SVGicons'
+import QuantityButton from '../components/QuantityButton'
 
 type Props = {}
 
@@ -24,14 +25,7 @@ const PaymentPage = (props: Props) => {
                             <div className={styles.item}>
                                 <p className={styles.name}>Samsung Galaxy S21 5G SM-G991U Factory Unlocked 128GB Phantom Gray C</p>
                                 <p className={styles.price}>US $164.99</p>
-                                <div className={styles.qty}>
-                                    <h4>Quantity</h4>
-                                    <div className={styles.qtyBtn}>
-                                        <button>-</button>
-                                        <p>2</p>
-                                        <button>+</button>
-                                    </div>
-                                </div>
+                        <QuantityButton/>
                                 <div className={styles.delivery}>
                                     <h3>Delivery</h3>
                                     <p className='mb-4 max-w-[300px]'>Delivery
@@ -47,8 +41,6 @@ const PaymentPage = (props: Props) => {
                                     <p>Country</p>
                                     <p>Number</p>
                                 </div>
-
-
                             </div>
                         </div>
                     </div>

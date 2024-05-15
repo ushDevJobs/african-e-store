@@ -19,7 +19,7 @@ const Navbar = (props: Props) => {
     const [isCategoryDropdownOpen, setIsCategoryDropdownOpen] = useState(false);
     const [isLoginDropdownOpen, setIsLoginDropdownOpen] = useState(false);
 
-    const isAuthenticated = true
+    const isAuthenticated = false
 
     const [scrolled, setScrolled] = useState(false);
 
@@ -57,7 +57,7 @@ const Navbar = (props: Props) => {
                         <Link href='/seller/signup'>
                             <li>Sell</li>
                         </Link>
-                        <Link href='/'>
+                        <Link href='/faq'>
                             <li>FAQ&apos;s</li>
                         </Link>
                         <div className={styles.dropdown}>
@@ -73,7 +73,7 @@ const Navbar = (props: Props) => {
                         <Link href='/'>
                             <li>Home</li>
                         </Link>
-                        <Link href='/'>
+                        <Link href='/faq'>
                             <li>FAQ&apos;s</li>
                         </Link>
                         <div className={styles.dropdown}>
@@ -219,8 +219,8 @@ const Navbar = (props: Props) => {
                                     <Link href={'/help'} onClick={() => setIsLoginDropdownOpen(false)}>
                                         Help/support
                                     </Link>
-                                    <Link href={'/'} onClick={() => setIsLoginDropdownOpen(false)}>
-                                        Track order
+                                    <Link href={'/stores'} onClick={() => setIsLoginDropdownOpen(false)}>
+                                        Stores
                                     </Link>
                                     <Link href={'/'} onClick={() => setIsLoginDropdownOpen(false)}>
                                         Purchase history

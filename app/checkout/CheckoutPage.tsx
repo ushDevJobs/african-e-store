@@ -4,6 +4,7 @@ import Image from 'next/image'
 import images from '@/public/images'
 import { RectangleIcon } from '../components/SVGs/SVGicons'
 import QuantityButton from '../components/QuantityButton'
+import Link from 'next/link'
 
 type Props = {}
 
@@ -79,12 +80,11 @@ const CheckoutPage = (props: Props) => {
                             <p>By confirming your order, you agree to the Rayvinn International Shipping terms and conditions. </p>
 
                             <p>By placing your order, you agree to eBay&apos;s User Agreement and Privacy Notice</p>
-                            <button>Pay with  Visa $195.99</button>
+                            <Link href={'/payment'}>
+                                <button>Pay with  Visa $195.99</button>
+                            </Link>
                         </div>
-
                     </div>
-
-
                 </div>
             </div>
         </div>

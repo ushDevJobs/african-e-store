@@ -19,7 +19,7 @@ const AboutSection = (props: Props) => {
             text: 'Trusted suppliers from all around africa ',
             subtext: "Rayvvin let's you connect with Africans all around the globe in exchange for goods and services",
             linkText: 'Explore categories',
-            link: '/'
+            link: '/categories'
         },
         {
             abouticon: <TruckIcon />,
