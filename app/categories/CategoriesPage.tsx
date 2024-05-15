@@ -9,6 +9,7 @@ import Image from 'next/image'
 import images from '@/public/images'
 import { LeftArrowIcon, RightArrowIcon } from '../components/SVGs/SVGicons'
 import PageTransition from '../components/PageTransition'
+import Link from 'next/link'
 
 
 type Props = {}
@@ -21,7 +22,7 @@ const CategoriesPage = (props: Props) => {
     return (
         <div className={styles.main}>
             {/* <PageTransition previousPage={previousPage} currentPage="/my-page" direction="forward" /> */}
-            <CategoriesHeader mainText='Explore different categories' subText='Search for any product in different categories on Rayvinn'/>
+            <CategoriesHeader mainText='Explore different categories' subText='Search for any product in different categories on Rayvinn' />
             <div className={styles.contents}>
                 {onDesktop &&
                     <div className={styles.lhs}>
@@ -29,51 +30,68 @@ const CategoriesPage = (props: Props) => {
                     </div>}
                 <div className={styles.rhs}>
                     <h3>Groceries</h3>
-
                     <div className={styles.cards}>
-                        <div className={styles.card}>
-                            <div className={styles.image}>
-                                <Image fill src={images.cashew} alt='product image' />
+                        <Link href={'/categories/2'}>
+                            <div className={styles.card}>
+                                <div className={styles.image}>
+                                    <Image fill src={images.cashew} alt='product image' />
+                                </div>
+                                <p>Dog food 3 pcs bag </p>
+                                <h4>$250</h4>
                             </div>
-                            <p>Dog food 3 pcs bag </p>
-                            <h4>$250</h4>
-                        </div>
-                        <div className={styles.card}>
-                            <div className={styles.image}>
-                                <Image fill src={images.cashew} alt='product image' />
+                        </Link>
+                        <Link href={'/categories/2'}>
+                            <div className={styles.card}>
+                                <div className={styles.image}>
+                                    <Image fill src={images.cashew} alt='product image' />
+                                </div>
+                                <p>Dog food 3 pcs bag </p>
+                                <h4>$250</h4>
                             </div>
-                            <p>Dog food 3 pcs bag </p>
-                            <h4>$250</h4>
-                        </div>
-                        <div className={styles.card}>
-                            <div className={styles.image}>
-                                <Image fill src={images.cashew} alt='product image' />
+                        </Link>
+                        <Link href={'/categories/2'}>
+                            <div className={styles.card}>
+                                <div className={styles.image}>
+                                    <Image fill src={images.cashew} alt='product image' />
+                                </div>
+                                <p>Dog food 3 pcs bag </p>
+                                <h4>$250</h4>
                             </div>
-                            <p>Dog food 3 pcs bag </p>
-                            <h4>$250</h4>
-                        </div>
-                        <div className={styles.card}>
-                            <div className={styles.image}>
-                                <Image fill src={images.cashew} alt='product image' />
+                        </Link>
+                        <Link href={'/categories/2'}>
+                            <div className={styles.card}>
+                                <div className={styles.image}>
+                                    <Image fill src={images.cashew} alt='product image' />
+                                </div>
+                                <p>Dog food 3 pcs bag </p>
+                                <h4>$250</h4>
                             </div>
-                            <p>Dog food 3 pcs bag </p>
-                            <h4>$250</h4>
-                        </div>
+                        </Link>
+                        <Link href={'/categories/2'}>
+                            <div className={styles.card}>
+                                <div className={styles.image}>
+                                    <Image fill src={images.cashew} alt='product image' />
+                                </div>
+                                <p>Dog food 3 pcs bag </p>
+                                <h4>$250</h4>
+                            </div>
+                        </Link>
+
                     </div>
                     <div className={styles.pagination}>
-                   <button><LeftArrowIcon/></button>
-                   <div className={styles.value}>
+                        <button><LeftArrowIcon /></button>
+                        <div className={styles.value}>
                             <span>1</span>
                             <span>1</span>
                             <span>1</span>
-                   </div>
-                   <button><RightArrowIcon/></button>
+                        </div>
+                        <button><RightArrowIcon /></button>
                     </div>
                 </div>
 
 
             </div>
-         
+
         </div>
     )
 }

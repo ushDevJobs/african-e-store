@@ -61,7 +61,126 @@ const Navbar = (props: Props) => {
                             <li>FAQ&apos;s</li>
                         </Link>
                         <div className={styles.dropdown}>
-                            <li>Categories <DownArrowIcon /></li>
+                            <li ref={categoryDropdownRef}
+                                onClick={() => setIsCategoryDropdownOpen(!isCategoryDropdownOpen)}>Categories <DownArrowIcon /></li>
+                            {isCategoryDropdownOpen && (
+                                <ul className={styles.dropdownContainer}>
+                                    <div className={styles.lhs}>
+                                        <div className={styles.category}>
+                                            <h3>Food</h3>
+                                            <Link
+                                                href='/categories'
+                                                onClick={() => setIsCategoryDropdownOpen(false)}
+                                            >
+
+                                                <li>Spices</li>
+                                            </Link>
+                                        </div>
+                                        <div className={styles.category}>
+                                            <h3>Food</h3>
+                                            <Link
+                                                href='/categories'
+                                                onClick={() => setIsCategoryDropdownOpen(false)}
+                                            >
+
+                                                <li>Spices</li>
+                                            </Link>
+                                        </div>
+                                        <div className={styles.category}>
+                                            <h3>Food</h3>
+                                            <Link
+                                                href='/categories'
+                                                onClick={() => setIsCategoryDropdownOpen(false)}
+                                            >
+
+                                                <li>Spices</li>
+                                            </Link>
+                                        </div>
+                                        <div className={styles.category}>
+                                            <h3>Food</h3>
+                                            <Link
+                                                href='/categories'
+                                                onClick={() => setIsCategoryDropdownOpen(false)}
+                                            >
+
+                                                <li>Spices</li>
+                                            </Link>
+                                        </div>
+                                        <div className={styles.category}>
+                                            <h3>Food</h3>
+                                            <Link
+                                                href='/categories'
+                                                onClick={() => setIsCategoryDropdownOpen(false)}
+                                            >
+
+                                                <li>Spices</li>
+                                            </Link>
+                                        </div>
+                                        <div className={styles.category}>
+                                            <h3>Food</h3>
+                                            <Link
+                                                href='/categories'
+                                                onClick={() => setIsCategoryDropdownOpen(false)}
+                                            >
+
+                                                <li>Spices</li>
+                                            </Link>
+                                        </div>
+                                        <div className={styles.category}>
+                                            <h3>Food</h3>
+                                            <Link
+                                                href='/categories'
+                                                onClick={() => setIsCategoryDropdownOpen(false)}
+                                            >
+
+                                                <li>Spices</li>
+                                            </Link>
+                                        </div>
+                                        <div className={styles.category}>
+                                            <h3>Food</h3>
+                                            <Link
+                                                href='/categories'
+                                                onClick={() => setIsCategoryDropdownOpen(false)}
+                                            >
+
+                                                <li>Spices</li>
+                                            </Link>
+                                        </div>
+                                        <div className={styles.category}>
+                                            <h3>Food</h3>
+                                            <Link
+                                                href='/categories'
+                                                onClick={() => setIsCategoryDropdownOpen(false)}
+                                            >
+
+                                                <li>Spices</li>
+                                            </Link>
+                                        </div>
+                                        <div className={styles.category}>
+                                            <h3>Food</h3>
+                                            <Link
+                                                href='/categories'
+                                                onClick={() => setIsCategoryDropdownOpen(false)}
+                                            >
+
+                                                <li>Spices</li>
+                                            </Link>
+                                        </div>
+                                        <Link
+                                            className='whitespace-nowrap text-[#2C7865] text-sm'
+                                            href='/categories'
+                                            onClick={() => setIsCategoryDropdownOpen(false)}
+                                        >
+                                            See all
+                                            {/* See all categories */}
+                                        </Link>
+                                    </div>
+                                    <div className={styles.rhs}>
+                                        <Image src={images.category_dropdown_image} alt='category iamge' />
+                                    </div>
+                                </ul>
+                            )}
+
                         </div>
                         <Link href='/login'>
                             <button className={styles.login}>  Login</button>
