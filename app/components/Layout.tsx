@@ -14,6 +14,7 @@ import images from '@/public/images';
 import { usePathname } from 'next/navigation';
 import RegistrationNav from './RegistrationNav';
 import RegistrationFooter from './RegistrationFooter';
+import NextBreadcrumb from './Breadcrumbs';
 
 interface LayoutProps {
     children?: ReactNode;
@@ -35,12 +36,19 @@ const Layout: FunctionComponent<LayoutProps> = ({ children }): ReactElement => {
         <>
             {!loaderIsVisible && (
                 <>
-                    {/* {pathname.includes('/signup') || pathname.includes('/login') || pathname.includes('/verification') && <RegistrationNav />}
-                    {!pathname.includes('/signup') && !pathname.includes('/login') && !pathname.includes('/verification') && <Navbar />}
-                    {children}
-                    {!pathname.includes('/signup') && !pathname.includes('/login') && !pathname.includes('/verification') && <Footer />}
-                    {pathname.includes('/signup') || pathname.includes('/login') || pathname.includes('/verification') && <RegistrationFooter />} */}
                     {(pathname.includes('/signup') || pathname.includes('/login') || pathname.includes('/verification')) ? <RegistrationNav /> : <Navbar />}
+                   
+                    {!['/', '/login', '/verification', '/signup'].includes(pathname) &&
+                        <NextBreadcrumb
+                            homeElement={'Home'}
+                            separator={<span> | </span>}
+                            activeClasses='text-amber-500'
+                            containerClasses='flex py-5 bg-gradient-to-r from-purple-600 to-blue-600'
+                            listClasses='hover:underline mx-2 font-bold'
+                            capitalizeLinks
+                        />}
+
+
                     {children}
                     {(pathname.includes('/signup') || pathname.includes('/login') || pathname.includes('/verification')) ? <RegistrationFooter /> : <Footer />}
 

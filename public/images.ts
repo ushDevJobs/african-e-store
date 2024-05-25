@@ -17,8 +17,10 @@ import header_image from './images/header_image.png';
 import singleProduct from './images/singleProduct.png';
 import singleProduct2 from './images/singleProduct2.png';
 import singleproduct3 from './images/singleproduct3.png';
+import noProduct from './images/noProduct.png';
 
 export default {
+    noProduct,
   logo,
   white_logo,
   hero_bg,

@@ -2,7 +2,7 @@
 
 .main {
   @include sectionPadding;
-  padding-top: 93px;
+//   padding-top: 93px;
   padding-bottom: 100px;
 
   .storeInfo {
@@ -105,6 +105,10 @@
     gap: 47px;
     .lhs {
       flex: 1;
+
+      @include tablet {
+        display: none;
+      }
     }
     .rhs {
       flex: 3.5;
@@ -173,6 +177,11 @@
     @include bigTablet {
       grid-template-columns: repeat(auto-fill, minmax(40%, 1fr));
     }
+    @include tablet {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+    }
 
     .card {
       .image {
@@ -182,7 +191,7 @@
         margin-bottom: 20px;
 
         @include tablet {
-          width: 261px;
+          width: 100%;
         }
 
         img {

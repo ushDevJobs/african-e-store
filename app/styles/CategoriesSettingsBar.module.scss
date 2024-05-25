@@ -1,3 +1,4 @@
+@import '../styles/reusables';
 .settingsBar {
   background-color: #ecf8f5;
   padding: 16px;
@@ -5,6 +6,11 @@
   flex-direction: column;
   gap: 40px;
   border-radius: 13px;
+
+  @include tablet {
+    display: none;
+  }
+
   h3 {
     color: #1e1e1e;
     font-size: 16px;
@@ -18,8 +24,8 @@
     gap: 10px;
     margin-bottom: 10px;
 
-    input{
-        cursor: pointer;
+    input {
+      cursor: pointer;
     }
 
     label {
@@ -40,8 +46,8 @@
         cursor: pointer;
       }
 
-      .active{
-        color: #2C7865;
+      .active {
+        color: #2c7865;
       }
     }
   }

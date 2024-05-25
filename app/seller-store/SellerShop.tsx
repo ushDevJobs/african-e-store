@@ -1,6 +1,5 @@
 import React from 'react'
 import styles from './SellerStore.module.scss'
-import CategoriesSettingsBar from '../components/CategoriesSettingsBar'
 import Link from 'next/link'
 import Image from 'next/image'
 import images from '@/public/images'

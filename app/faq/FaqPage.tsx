@@ -3,12 +3,13 @@ import React, { useState } from 'react'
 import styles from './FaqPage.module.scss'
 import Image from 'next/image'
 import images from '@/public/images'
-import { ContactIcon, DownArrowIcon, PlusIcon, ReportIcon, ReturnIcon } from '../components/SVGs/SVGicons'
+import { ContactIcon, DownArrowIcon, PlusIcon, ReportIcon, ReturnIcon, RightArrowIcon } from '../components/SVGs/SVGicons'
+import NextBreadcrumb from '../components/Breadcrumbs'
 type Props = {}
 
 const FaqPage = (props: Props) => {
-    const [visibleItemIndex, setVisibleItemIndex] = useState<number | null>(null); 
-    const [selectedCategoryIndex, setSelectedCategoryIndex] = useState<number | null>(null); 
+    const [visibleItemIndex, setVisibleItemIndex] = useState<number | null>(null);
+    const [selectedCategoryIndex, setSelectedCategoryIndex] = useState<number | null>(null);
 
     const faqData = [
         {
@@ -123,18 +124,19 @@ const FaqPage = (props: Props) => {
     ]
 
     const toggleAccordion = (index: number) => {
-        setSelectedCategoryIndex(index); 
+        setSelectedCategoryIndex(index);
         setVisibleItemIndex(null);
     };
 
     const selectItem = (index: number) => {
-        setVisibleItemIndex(index); 
+        setVisibleItemIndex(index);
     };
 
-    const currentCategory = faqData[selectedCategoryIndex as number]; 
+    const currentCategory = faqData[selectedCategoryIndex as number];
     const currentItem = currentCategory ? (visibleItemIndex !== null ? currentCategory.items[visibleItemIndex] : null) : null;
     return (
         <div className={styles.main}>
+
             <div className={styles.heroSection}>
                 <div className={styles.backgroundImage}>
                     <Image src={images.home_hero_bg} alt='hero background image' />
