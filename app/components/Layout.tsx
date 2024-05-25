@@ -37,18 +37,16 @@ const Layout: FunctionComponent<LayoutProps> = ({ children }): ReactElement => {
             {!loaderIsVisible && (
                 <>
                     {(pathname.includes('/signup') || pathname.includes('/login') || pathname.includes('/verification')) ? <RegistrationNav /> : <Navbar />}
-                   
-                    {!['/', '/login', '/verification', '/signup'].includes(pathname) &&
+
+                    {!['/', '/login', '/verification', '/signup', '/seller/signup','/seller/login'].includes(pathname) &&
                         <NextBreadcrumb
                             homeElement={'Home'}
                             separator={<span> | </span>}
                             activeClasses='text-amber-500'
-                            containerClasses='flex py-5 bg-gradient-to-r from-purple-600 to-blue-600'
+                            containerClasses='flex py-5 bg-white'
                             listClasses='hover:underline mx-2 font-bold'
                             capitalizeLinks
                         />}
-
-
                     {children}
                     {(pathname.includes('/signup') || pathname.includes('/login') || pathname.includes('/verification')) ? <RegistrationFooter /> : <Footer />}
 
