@@ -1,0 +1,190 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String      @id @default(cuid())
+  email          String      @unique
+  googleId       String?     @unique
+  facebookId     String?     @unique
+  status         UserStatus  @default(PENDING)
+  profilePicture String?
+  fullname       String
+  password       String?
+  telephone      String?
+  country        String?
+  accountType    AccountType @default(BUYER)
+  store          Store?
+  VerifyUser     VerifyUser?
+  cartItems      Cart[]
+  ratings        Rating[]
+  orders         Order[]
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+
+  @@map("users")
+}
+
+model VerifyUser {
+  id        String   @id @default(uuid())
+  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String   @unique
+  otp       String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
+
+model Store {
+  id          String     @id @default(cuid())
+  name        String     @unique
+  description String     @db.VarChar(255)
+  image       String?
+  location    String
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String     @unique
+  products    Product[]
+  ratings     Rating[]
+  categories  Category[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  @@map("stores")
+}
+
+model Product {
+  id            String     @id @default(cuid())
+  name          String     @unique
+  itemCondition String?
+  amount        Float      @default(0.00)
+  quantity      Int        @default(1)
+  details       String     @db.VarChar(255)
+  publish       Boolean    @default(false)
+  coverImage    String
+  images        String?
+  returnPolicy  String?
+  location      String?
+  store         Store?     @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  storeId       String?
+  categories    Category[]
+  carts         Cart[]
+  orders        Order[]
+  ratings       Rating[]
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+
+  @@map("products")
+}
+
+model Category {
+  id        String    @id @default(cuid())
+  name      String    @unique
+  Product   Product[]
+  Store     Store[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@map("categories")
+}
+
+model Cart {
+  id              String   @id @default(uuid())
+  quantity        Int
+  shippingDetails Json
+  products        Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId       String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId          String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@map("carts")
+}
+
+model Order {
+  id              String      @id @default(cuid())
+  amount          Float
+  quantity        Int
+  status          OrderStatus @default(PENDING)
+  shippingDetails Json
+  user            User?       @relation(fields: [userId], references: [id], onDelete: SetNull)
+  userId          String?
+  products        Product     @relation(fields: [productId], references: [id])
+  productId       String
+  tracker         Tracker?    @relation(fields: [trackingId], references: [id], onDelete: SetNull)
+  trackingId      String?     @unique
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  @@map("orders")
+}
+
+model Tracker {
+  id              String        @id @default(uuid())
+  progress        Int           @default(0)
+  currentLocation String?
+  description     String?       @db.VarChar(255)
+  status          TrackerStatus @default(PENDING)
+  order           Order?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  @@map("tracks")
+}
+
+model Rating {
+  id        String   @id @default(uuid())
+  rating    Int
+  review    String?
+  product   Product  @relation(fields: [productId], references: [id])
+  productId String
+  store     Store    @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  storeId   String
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  userId    String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("ratings")
+}
+
+model Sessions {
+  session_id String @id @db.VarChar(128)
+  expires    Int    @db.Int()
+  data       String @db.MediumText()
+}
+
+enum UserStatus {
+  VERIFIED
+  PENDING
+  FAILED
+}
+
+enum OrderStatus {
+  DELIVERED
+  PENDING
+  FAILED
+}
+
+enum AccountType {
+  BUYER
+  SELLER
+  ADMIN
+}
+
+enum TrackerStatus {
+  PENDING
+  DELAYED
+  CANCELLED
+  PAUSED
+}

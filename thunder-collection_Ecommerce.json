@@ -1,0 +1,154 @@
+{
+    "clientName": "Thunder Client",
+    "collectionName": "Ecommerce",
+    "collectionId": "1b8db9a3-078c-4268-9fa4-89cad692531b",
+    "dateExported": "2024-05-17T16:07:07.254Z",
+    "version": "1.2",
+    "folders": [
+        {
+            "_id": "910c017c-bd39-4c64-bbbf-5cef8bc9c266",
+            "name": "auth",
+            "containerId": "",
+            "created": "2024-05-15T21:58:50.732Z",
+            "sortNum": 10000
+        },
+        {
+            "_id": "3eff9f21-2d7f-40e8-9275-c75e1febdbc0",
+            "name": "store",
+            "containerId": "",
+            "created": "2024-05-16T09:17:12.324Z",
+            "sortNum": 20000
+        }
+    ],
+    "requests": [
+        {
+            "_id": "3f27dc68-dbfb-4333-8e89-47bea3966693",
+            "colId": "1b8db9a3-078c-4268-9fa4-89cad692531b",
+            "containerId": "910c017c-bd39-4c64-bbbf-5cef8bc9c266",
+            "name": "Register",
+            "url": "http://localhost:3000/api/auth/register",
+            "method": "POST",
+            "sortNum": 10000,
+            "created": "2024-05-15T21:58:59.871Z",
+            "modified": "2024-05-16T09:55:57.704Z",
+            "headers": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"email\":\"segunade041@gmail.com\",\n  \"fullname\":\"Segun Ade\",\n  \"telephone\":\"09078785538\",\n  \"password\":\"Segunade041@\"\n}",
+                "form": []
+            }
+        },
+        {
+            "_id": "21fd9199-2764-4218-a914-90941aa98396",
+            "colId": "1b8db9a3-078c-4268-9fa4-89cad692531b",
+            "containerId": "910c017c-bd39-4c64-bbbf-5cef8bc9c266",
+            "name": "Manual  Login",
+            "url": "http://localhost:3000/api/auth/login",
+            "method": "POST",
+            "sortNum": 20000,
+            "created": "2024-05-15T23:16:41.051Z",
+            "modified": "2024-05-17T11:14:32.970Z",
+            "headers": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"email\":\"segunade041@gmail.com\",\n  \"password\":\"Segunade041@\"\n}",
+                "form": []
+            }
+        },
+        {
+            "_id": "c302c278-9d7a-4fdc-bc66-1b220d788a97",
+            "colId": "1b8db9a3-078c-4268-9fa4-89cad692531b",
+            "containerId": "910c017c-bd39-4c64-bbbf-5cef8bc9c266",
+            "name": "Account Status",
+            "url": "http://localhost:3000/api/auth/account/status",
+            "method": "GET",
+            "sortNum": 30000,
+            "created": "2024-05-16T00:00:24.948Z",
+            "modified": "2024-05-16T00:01:13.694Z",
+            "headers": []
+        },
+        {
+            "_id": "8cf4d239-9cca-43c4-bde8-3d24e31ac9ac",
+            "colId": "1b8db9a3-078c-4268-9fa4-89cad692531b",
+            "containerId": "910c017c-bd39-4c64-bbbf-5cef8bc9c266",
+            "name": "Logout",
+            "url": "http://localhost:3000/api/auth/logout",
+            "method": "GET",
+            "sortNum": 50000,
+            "created": "2024-05-16T07:53:54.821Z",
+            "modified": "2024-05-16T07:54:13.667Z",
+            "headers": []
+        },
+        {
+            "_id": "1d7f9770-0469-4479-af49-fc129e3cd25d",
+            "colId": "1b8db9a3-078c-4268-9fa4-89cad692531b",
+            "containerId": "3eff9f21-2d7f-40e8-9275-c75e1febdbc0",
+            "name": "Get All Stores",
+            "url": "http://localhost:3000/api/stores/all",
+            "method": "GET",
+            "sortNum": 60000,
+            "created": "2024-05-16T09:17:27.339Z",
+            "modified": "2024-05-17T11:15:37.657Z",
+            "headers": []
+        },
+        {
+            "_id": "532df14d-f9ea-4f04-aa10-2e341acee780",
+            "colId": "1b8db9a3-078c-4268-9fa4-89cad692531b",
+            "containerId": "910c017c-bd39-4c64-bbbf-5cef8bc9c266",
+            "name": "Verify OTP",
+            "url": "http://localhost:3000/api/auth/verify",
+            "method": "POST",
+            "sortNum": 70000,
+            "created": "2024-05-16T09:56:18.299Z",
+            "modified": "2024-05-16T10:54:31.017Z",
+            "headers": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"id\":\"clw94uork0000a2veh1fg9tgf\",\n  \"code\":\"26311\"\n}",
+                "form": []
+            }
+        },
+        {
+            "_id": "8f0b8348-1fe7-43a6-8c7b-af5f6543ee5d",
+            "colId": "1b8db9a3-078c-4268-9fa4-89cad692531b",
+            "containerId": "3eff9f21-2d7f-40e8-9275-c75e1febdbc0",
+            "name": "Create Store",
+            "url": "http://localhost:3000/api/store",
+            "method": "POST",
+            "sortNum": 80000,
+            "created": "2024-05-16T11:18:01.950Z",
+            "modified": "2024-05-16T11:34:51.456Z",
+            "headers": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"name\":\"New Mega ShopShop\",\n  \"description\":\"A place to shop without nothing\",\n  \"location\":\"Nigeria\"\n}",
+                "form": []
+            }
+        },
+        {
+            "_id": "03fd6ab4-093f-4273-9482-b7c5317bdb02",
+            "colId": "1b8db9a3-078c-4268-9fa4-89cad692531b",
+            "containerId": "3eff9f21-2d7f-40e8-9275-c75e1febdbc0",
+            "name": "Get store by id",
+            "url": "http://localhost:3000/api/stores/clw95t5my0001lrixyj1u3qdd",
+            "method": "GET",
+            "sortNum": 90000,
+            "created": "2024-05-17T11:16:03.424Z",
+            "modified": "2024-05-17T11:16:38.760Z",
+            "headers": []
+        },
+        {
+            "_id": "bcf0d2a9-214a-4288-9492-3f557d0b31f5",
+            "colId": "1b8db9a3-078c-4268-9fa4-89cad692531b",
+            "containerId": "3eff9f21-2d7f-40e8-9275-c75e1febdbc0",
+            "name": "Search for store",
+            "url": "http://localhost:3000/api/stores/search/meg",
+            "method": "GET",
+            "sortNum": 100000,
+            "created": "2024-05-17T13:44:35.932Z",
+            "modified": "2024-05-17T13:47:48.452Z",
+            "headers": []
+        }
+    ],
+    "ref": "feYJVl0VyV2RVpMI2tiTJCsqZHGWPQapqvzHCVNVIYfjYtGdLYrts-OzfRH2XZ_73O203y2zN4HObyv_5KVhcw"
+}
