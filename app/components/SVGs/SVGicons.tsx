@@ -271,3 +271,65 @@ export function RatingIcon({
         </>
     );
 }
+export function HamburgerIcon({ width, height, active }: any) {
+    return (
+        <svg width="18" height="12" viewBox="0 0 18 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0.5 11.6345V10.1347H17.5V11.6345H0.5ZM0.5 6.74998V5.24998H17.5V6.74998H0.5ZM0.5 1.86523V0.365479H17.5V1.86523H0.5Z" fill="#2C7865" />
+        </svg>
+
+    );
+}
+export function TimesIcon({ width, height, active }: any) {
+    return (
+        <svg
+            width='24'
+            height='24'
+            viewBox='0 0 24 24'
+            fill='none'
+            xmlns='http://www.w3.org/2000/svg'
+        >
+            <path
+                d='M6.4 19L5 17.6L10.6 12L5 6.4L6.4 5L12 10.6L17.6 5L19 6.4L13.4 12L19 17.6L17.6 19L12 13.4L6.4 19Z'
+                fill='#2C7865'
+            />
+        </svg>
+    );
+}
+export function DropDownIcon({ width, height, active }: any) {
+    return (
+        <svg
+            width='12'
+            height='8'
+            viewBox='0 0 12 8'
+            fill='none'
+            xmlns='http://www.w3.org/2000/svg'
+        >
+            <path
+                d='M11 1.5L6 6.5L1 1.5'
+                stroke='#403138'
+                stroke-width='2'
+                stroke-linecap='round'
+                stroke-linejoin='round'
+            />
+        </svg>
+    );
+}
+export function DropDownIcon2({ width, height, active }: any) {
+    return (
+        <svg
+            width='12'
+            height='8'
+            viewBox='0 0 12 8'
+            fill='none'
+            xmlns='http://www.w3.org/2000/svg'
+        >
+            <path
+                d='M1 6.5L6 1.5L11 6.5'
+                stroke='#403138'
+                stroke-width='2'
+                stroke-linecap='round'
+                stroke-linejoin='round'
+            />
+        </svg>
+    );
+}

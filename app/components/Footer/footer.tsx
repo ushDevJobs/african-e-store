@@ -1,14 +1,35 @@
+'use client'
 import React from 'react'
 import styles from './Footer.module.scss'
 import Link from 'next/link'
 import Image from 'next/image'
 import images from '@/public/images'
 import { FacebookIcon, LinkedInIcon, TelegramIcon, TwitterIcon } from '../SVGs/SVGicons'
+import useResponsiveness from '../hooks/responsiveness-hook'
 type Props = {}
 
 const Footer = (props: Props) => {
+    const windowRes = useResponsiveness();
+    const isMobile = windowRes.width && windowRes.width < 768;
+    const onMobile = typeof isMobile == 'boolean' && isMobile;
+    const onDesktop = typeof isMobile == 'boolean' && !isMobile;
     return (
         <div className={styles.footerContainer}>
+            {onMobile &&
+                <div className={styles.logoArea}>
+                    <div className={styles.lhs}>
+                        <Link href={'/'}>
+                            <Image src={images.white_logo} alt='logo' /></Link>
+                        <h2>Your catch phrase here </h2>
+                    </div>
+                    <div className={styles.rhs}>
+                        <Link href={'/'}><FacebookIcon /></Link>
+                        <Link href={'/'}><TwitterIcon /></Link>
+                        <Link href={'/'}><LinkedInIcon /></Link>
+                        <Link href={'/'}><TelegramIcon /></Link>
+                    </div>
+                </div>
+            }
             <div className={styles.links}>
                 <ul>
                     <h3>Buy</h3>
@@ -71,19 +92,21 @@ const Footer = (props: Props) => {
                     </Link>
                 </ul>
             </div>
-            <div className={styles.logoArea}>
-                <div className={styles.lhs}>
-                    <Link href={'/'}>     
-                     <Image src={images.white_logo} alt='logo' /></Link>
-                    <h2>Your catch phrase here </h2>
+            {onDesktop &&
+                <div className={styles.logoArea}>
+                    <div className={styles.lhs}>
+                        <Link href={'/'}>
+                            <Image src={images.white_logo} alt='logo' /></Link>
+                        <h2>Your catch phrase here </h2>
+                    </div>
+                    <div className={styles.rhs}>
+                        <Link href={'/'}><FacebookIcon /></Link>
+                        <Link href={'/'}><TwitterIcon /></Link>
+                        <Link href={'/'}><LinkedInIcon /></Link>
+                        <Link href={'/'}><TelegramIcon /></Link>
+                    </div>
                 </div>
-                <div className={styles.rhs}>
-                    <Link href={'/'}><FacebookIcon /></Link>
-                    <Link href={'/'}><TwitterIcon /></Link>
-                    <Link href={'/'}><LinkedInIcon /></Link>
-                    <Link href={'/'}><TelegramIcon /></Link>
-                </div>
-            </div>
+            }
             <div className={styles.copyright}>  Copyright @ Rayvinn 2024 </div>
         </div>
     )

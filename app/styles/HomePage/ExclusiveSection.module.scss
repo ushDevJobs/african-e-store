@@ -2,8 +2,8 @@
 
 .main {
   @include sectionPadding;
- padding-top: 80px;
- padding-bottom: 80px;
+  padding-top: 80px;
+  padding-bottom: 80px;
 
   h2 {
     text-align: center;
@@ -30,7 +30,8 @@
     }
     @include tablet {
       display: flex;
-      flex-direction: column;
+      overflow-x: auto;
+       width: 100%;
     }
 
     .card {
@@ -42,6 +43,10 @@
         border-radius: 22px;
         height: 206px;
         margin-bottom: 20px;
+
+         @include tablet {
+              width: 300px;
+            }
         img {
           object-fit: cover;
           border-radius: 22px !important;

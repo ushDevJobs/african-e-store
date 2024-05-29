@@ -15,37 +15,30 @@ const HeroSection = (props: Props) => {
     const onMobile = typeof isMobile == 'boolean' && isMobile;
     const onDesktop = typeof isMobile == 'boolean' && !isMobile;
     return (
-<>
-            {onDesktop && (
-                <div className={styles.heroSection}>
-                    <div className={styles.backgroundImage}>
-                        <Image src={images.hero_bg} alt='hero background image' />
-                        <div className={styles.contents}>
-                            <h1>An African Goods market place </h1>
-                            <p>Buy and sell to Africans all over the globe with Rayvinn, create a buyer or seller account on our platform to get started.</p>
-                            <div className={styles.search}>
-                                <SearchIcon />
-                                <input type="text" placeholder='Search for your items ' />
-                            </div>
-                            <div className={styles.categories}>
-                                <h3>Suggested categories</h3>
-                                <div className={styles.links}>
-                                    <Link href='/'>House hold items </Link>
-                                    <Link href='/'>House hold items </Link>
-                                    <Link href='/'>House hold items </Link>
-                                    <Link href='/'>House hold items </Link>
-                                    <Link href='/'>House hold items </Link>
-                                    <Link href='/'>House hold items </Link>
-                                </div>
+            <div className={styles.heroSection}>
+                <div className={styles.backgroundImage}>
+                    <Image src={images.hero_bg} alt='hero background image' />
+                    <div className={styles.contents}>
+                        <h1>An African Goods market place </h1>
+                        <p>Buy and sell to Africans all over the globe with Rayvinn, create a buyer or seller account on our platform to get started.</p>
+                        <div className={styles.search}>
+                            <SearchIcon />
+                            <input type="text" placeholder='Search for your items ' />
+                        </div>
+                        <div className={styles.categories}>
+                            <h3>Suggested categories</h3>
+                            <div className={styles.links}>
+                                <Link href='/'>House hold items </Link>
+                                <Link href='/'>House hold items </Link>
+                                <Link href='/'>House hold items </Link>
+                                <Link href='/'>House hold items </Link>
+                                <Link href='/'>House hold items </Link>
+                                <Link href='/'>House hold items </Link>
                             </div>
                         </div>
                     </div>
                 </div>
-            )}
-            {onMobile && (
-                <h1>mobile screen</h1>
-            )}
-</>
+            </div>
     )
 }
 

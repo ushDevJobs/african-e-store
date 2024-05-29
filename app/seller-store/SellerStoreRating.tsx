@@ -55,6 +55,7 @@ const SellerStoreRating = (props: Props) => {
                 <div className={styles.rating}>
                     <div className={styles.average}>
                         <h4>{averageRating}/5</h4>
+                        <p className='text-[#828282]'>Rating</p>
                     </div>
 
                     <div className={styles.ratingProgress}>

@@ -1,7 +1,7 @@
 @import '../reusables';
 
 .heroSection {
-    padding-top: 83px;
+  padding-top: 83px;
 
   .backgroundImage {
     width: 100%;
@@ -36,6 +36,9 @@
         @include bigTablet {
           font-size: 30px;
         }
+        @include tablet {
+          margin-bottom: 5px;
+        }
       }
 
       p {
@@ -48,6 +51,11 @@
         @include bigTablet {
           font-size: 16px;
           line-height: 25px;
+        }
+        @include tablet {
+          font-size: 14px;
+          line-height: 22px;
+          margin-bottom: 10px;
         }
       }
 
@@ -64,6 +72,10 @@
 
         @include bigTablet {
           margin-bottom: 30px;
+        }
+        @include tablet {
+          padding: 8px 20px;
+          margin-bottom: 20px;
         }
 
         svg {
@@ -90,6 +102,10 @@
           margin-bottom: 30px;
           font-size: 16px;
           font-weight: 700;
+
+          @include tablet {
+            margin-bottom: 20px;
+          }
         }
 
         .links {
@@ -101,6 +117,7 @@
           width: 100%;
           max-width: 578px;
           margin: 0 auto;
+
           a {
             width: fit-content;
             background-color: rgba(217, 217, 217, 0.22);

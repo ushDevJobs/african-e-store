@@ -5,6 +5,10 @@
   padding-top: 80px;
   padding-bottom: 80px;
 
+  @include tablet{
+    margin-top: 30px;
+  }
+
   .cards {
     display: flex;
     align-items: center;
@@ -31,6 +35,10 @@
       transition: all 0.3s ease-in-out;
 
       &:hover {
+        border: 1px solid #2c7865;
+      }
+
+      @include tablet {
         border: 1px solid #2c7865;
       }
 

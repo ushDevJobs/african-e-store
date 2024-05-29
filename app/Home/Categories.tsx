@@ -1,15 +1,20 @@
 'use client'
-
 import React, { useState } from 'react'
 import styles from '../styles/HomePage/CategoriesSection.module.scss'
 import { LeftArrowIcon, LongArrowIcon, RightArrowIcon } from '../components/SVGs/SVGicons'
 import Link from 'next/link'
 import images from '@/public/images'
 import Image from 'next/image'
+import useResponsiveness from '../components/hooks/responsiveness-hook'
 
 type Props = {}
 
 const Categories = (props: Props) => {
+    const windowRes = useResponsiveness();
+    const isMobile = windowRes.width && windowRes.width < 768;
+    const onMobile = typeof isMobile == 'boolean' && isMobile;
+    const onDesktop = typeof isMobile == 'boolean' && !isMobile;
+
     const tabs = [
         {
             text: 'Fashion',
@@ -76,7 +81,9 @@ const Categories = (props: Props) => {
 
             <div className={styles.controllerSection}>
 
-                <div className={styles.arrow} onClick={scrollLeft}><LeftArrowIcon /></div>
+              {onDesktop &&
+                    <div className={styles.arrow} onClick={scrollLeft}><LeftArrowIcon /></div>
+              }
                 <div className={styles.controller}>
                     <div className={styles.tab}>
                         {tabs.map((tab, index) => (
@@ -121,7 +128,9 @@ const Categories = (props: Props) => {
                     </div>
 
                 </div>
-                <div className={styles.arrow} onClick={scrollRight}><RightArrowIcon /></div>
+              {onDesktop &&
+                    <div className={styles.arrow} onClick={scrollRight}><RightArrowIcon /></div>
+              }
             </div>
 
             <Link href='/categories' className={styles.btn}>See all Categories <LongArrowIcon /></Link>

@@ -2,7 +2,7 @@
 
 .main {
   @include sectionPadding;
-//   padding-top: 93px;
+  //   padding-top: 93px;
   padding-bottom: 100px;
 
   .storeInfo {
@@ -50,19 +50,29 @@
       .rating {
         display: flex;
         gap: 30px;
+
+        @include tablet {
+          flex-direction: column;
+        }
+
         .average {
           background-color: #ffffff;
           border-radius: 12px;
+          padding: 50px;
+         text-align: center;
           > h4 {
             color: #2c7865;
             font-size: 16px;
             font-weight: 700;
-            padding: 50px;
           }
         }
 
         .ratingProgress {
           width: 70%;
+
+          @include tablet{
+            width: 100%;
+          }
           .value {
             display: flex;
             gap: 30px;
