@@ -57,6 +57,7 @@ export const initializePassport = (passport: PassportStatic) => {
                 password: true,
               },
             });
+            console.log(user)
             if (!user) {
               return done(null, false, {
                 message: req.flash("error", [
@@ -67,7 +68,7 @@ export const initializePassport = (passport: PassportStatic) => {
               });
             }
 
-            if (compareSync(parsed.data?.password, user.password!)) {
+            if (compareSync(parsed.data?.password, user.password! || "")) {
               let newUser = {
                 id: user.id,
                 email: user.email,
@@ -101,7 +102,6 @@ export const initializePassport = (passport: PassportStatic) => {
         passReqToCallback: true,
       },
       async (req, accessToken, refreshToken, profile, done) => {
-        console.log("reg", req.user);
         if (!req.isAuthenticated()) {
           const user = await prisma.user.findFirst({
             where: {
@@ -124,7 +124,6 @@ export const initializePassport = (passport: PassportStatic) => {
           if (!user) {
             if (profile._json.email) {
               try {
-                console.log(profile);
                 const createUser = await prisma.user.create({
                   data: {
                     fullname: profile.displayName,
@@ -134,6 +133,7 @@ export const initializePassport = (passport: PassportStatic) => {
                       ? "VERIFIED"
                       : "PENDING",
                     accountType: "BUYER",
+                    profilePicture:profile._json.picture
                   },
                   select: {
                     id: true,

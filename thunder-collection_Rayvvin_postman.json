@@ -1,0 +1,296 @@
+{
+    "info": {
+        "_postman_id": "a023c017-3fce-4171-b0ab-a8e470db18e7",
+        "name": "Rayvvin",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+        "description": ""
+    },
+    "item": [
+        {
+            "name": "Auth",
+            "item": [
+                {
+                    "name": "Local Login",
+                    "request": {
+                        "method": "POST",
+                        "url": {
+                            "raw": "http://localhost:3000/api/auth/login",
+                            "path": [
+                                "api",
+                                "auth",
+                                "login"
+                            ],
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3000"
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            },
+                            "raw": "{\n  \"email\":\"segunade041@gmail.com\",\n  \"password\":\"123456\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Register Buyer",
+                    "request": {
+                        "method": "POST",
+                        "url": {
+                            "raw": "http://localhost:3000/api/auth/register",
+                            "path": [
+                                "api",
+                                "auth",
+                                "register"
+                            ],
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3000"
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            },
+                            "raw": "{\n  \"email\":\"testnet041@gmail.com\",\n  \"password\":\"123456\",\n  \"fullname\":\"Teejay\",\n  \"confirmPassword\":\"123456\",\n  \"telephone\":\"09078785538\",\n  \"country\":\"canada\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Verify User Email",
+                    "request": {
+                        "method": "POST",
+                        "url": {
+                            "raw": "http://localhost:3000/api/auth/verify",
+                            "query": [
+                                {
+                                    "key": "id",
+                                    "value": "clwtn57h40000eb1wbo92129d",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "code",
+                                    "value": "52635",
+                                    "disabled": true
+                                }
+                            ],
+                            "variable": [],
+                            "path": [
+                                "api",
+                                "auth",
+                                "verify"
+                            ],
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3000"
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            },
+                            "raw": "{\n  \"id\":\"clwtodfcs00003bt61l0m4hai\",\n  \"code\":\"48142\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Resend OTP",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "http://localhost:3000/api/auth/resend?id=clwtn57h40000eb1wbo92129d",
+                            "query": [
+                                {
+                                    "key": "id",
+                                    "value": "clwtn57h40000eb1wbo92129d"
+                                }
+                            ],
+                            "variable": [],
+                            "path": [
+                                "api",
+                                "auth",
+                                "resend"
+                            ],
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3000"
+                        }
+                    }
+                },
+                {
+                    "name": "Account Status",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "http://localhost:3000/api/auth/account/status",
+                            "path": [
+                                "api",
+                                "auth",
+                                "account",
+                                "status"
+                            ],
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3000"
+                        }
+                    }
+                },
+                {
+                    "name": "Logout",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "http://localhost:3000/api/auth/logout",
+                            "path": [
+                                "api",
+                                "auth",
+                                "logout"
+                            ],
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3000"
+                        }
+                    }
+                },
+                {
+                    "name": "Register Seller",
+                    "request": {
+                        "method": "POST",
+                        "url": {
+                            "raw": "http://localhost:3000/api/auth/register/seller",
+                            "path": [
+                                "api",
+                                "auth",
+                                "register",
+                                "seller"
+                            ],
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3000"
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            },
+                            "raw": "{\n  \"email\":\"jehoshaphatadediran041@gmail.com\",\n  \"password\":\"password\",\n  \"fullname\":\"Adediran Jehoshaphat\",\n  \"confirmPassword\":\"password\",\n  \"telephone\":\"07044651989\",\n  \"companyName\":\"Megatron Electronics\",\n  \"country\":\"canada\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Login Google Auth",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "http://localhost:3000/api/auth/google",
+                            "path": [
+                                "api",
+                                "auth",
+                                "google"
+                            ],
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3000"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Categories",
+            "item": [
+                {
+                    "name": "All Categories",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "http://localhost:3000/api/categories/?_limit=3&_page=2",
+                            "query": [
+                                {
+                                    "key": "_limit",
+                                    "value": "3"
+                                },
+                                {
+                                    "key": "_page",
+                                    "value": "2"
+                                }
+                            ],
+                            "variable": [],
+                            "path": [
+                                "api",
+                                "categories"
+                            ],
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3000"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Stores",
+            "item": [
+                {
+                    "name": "All Stores",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "http://localhost:3000/api/stores/all",
+                            "query": [
+                                {
+                                    "key": "_limit",
+                                    "value": "3",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "_page",
+                                    "value": "1",
+                                    "disabled": true
+                                }
+                            ],
+                            "variable": [],
+                            "path": [
+                                "api",
+                                "stores",
+                                "all"
+                            ],
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3000"
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+}

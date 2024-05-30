@@ -9,22 +9,30 @@ import { prisma } from "../prisma";
 import { BadRequest } from "../exceptions/bad-request";
 import { ErrorCode } from "../exceptions/root";
 import { validateRegData, validateSellerRegData } from "../schema/users";
-import { hashSync } from "bcrypt";
+import { compareSync, hashSync } from "bcrypt";
 import { InternalException } from "../exceptions/internal-exception";
 import { NotFound } from "../exceptions/not-found";
 
 export const accountStatus = (req: Request, res: Response) => {
   res.json(req.user);
 };
-export const register = async (req: Request, res: Response) => {
+export const register = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   validateRegData.parse(req.body);
   const findUser = await prisma.user.findFirst({
     where: { email: req.body.email },
   });
+
   if (!findUser) {
     let user = await prisma.user.create({
       data: {
-        ...req.body,
+        email: req.body.email,
+        fullname: req.body.fullname,
+        telephone: req.body.telephone,
+        country: req.body.country,
         password: hashSync(req.body.password, 10),
       },
       select: {
@@ -37,13 +45,63 @@ export const register = async (req: Request, res: Response) => {
     if (id) {
       return returnJSONSuccess(res, { userId: id });
     }
-    throw new InternalException(
-      "Couldnt send mail",
-      ErrorCode.MAIL_ERROR,
-      null
+    next(
+      new InternalException("Couldnt send mail", ErrorCode.MAIL_ERROR, null)
     );
   } else {
-    new BadRequest("User already exist", ErrorCode.USER_ALREADY_EXIST);
+    next(new BadRequest("User already exist", ErrorCode.USER_ALREADY_EXIST));
+  }
+};
+export const resendOTP = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { id } = req.query;
+  if (id) {
+    try {
+      const user = await prisma.user.findFirstOrThrow({
+        where: {
+          AND: [
+            { id: id as string },
+            {
+              NOT: {
+                status: "VERIFIED",
+              },
+            },
+          ],
+        },
+        select: {
+          id: true,
+          email: true,
+          status: true,
+        },
+      });
+      const userId = await sendOtp(user.id, user.email);
+      if (userId) {
+        await prisma.user.update({
+          where: {
+            id: user.id,
+          },
+          data: {
+            status: "PENDING",
+          },
+        });
+        return returnJSONSuccess(res, { userId: id });
+      }
+      next(
+        new InternalException("Couldnt send mail", ErrorCode.MAIL_ERROR, null)
+      );
+    } catch (error) {
+      next(
+        new NotFound(
+          "User not found or Already verified",
+          ErrorCode.USER_NOT_FOUND
+        )
+      );
+    }
+  } else {
+    next(new BadRequest("Invalid Request Parameters", ErrorCode.BAD_REQUEST));
   }
 };
 export const registerSeller = async (req: Request, res: Response) => {
@@ -63,7 +121,7 @@ export const registerSeller = async (req: Request, res: Response) => {
 
         store: {
           create: {
-            name: req.body.companyNam,
+            name: req.body.companyName,
             description: "",
             location: req.body.country,
           },
@@ -108,12 +166,21 @@ const sendOtp = async (id: string, email: string) => {
   const otp = generateRandomNumbers(5);
   let minuteToExpire = 300000; // 5 mins
   if (id) {
-    const otpUser = await prisma.verifyUser.create({
-      data: {
+    const otpUser = await prisma.verifyUser.upsert({
+      where: {
+        userId: id,
+      },
+      update: {
         userId: id,
         expiresAt: new Date(Date.now() + minuteToExpire),
-        otp: "" + otp,
+        otp: hashSync("" + otp, 10),
       },
+      create: {
+        userId: id,
+        expiresAt: new Date(Date.now() + minuteToExpire),
+        otp: hashSync("" + otp, 10),
+      },
+
       select: {
         id: true,
       },
@@ -122,7 +189,7 @@ const sendOtp = async (id: string, email: string) => {
       "Ravyyin",
       "Verify your account",
       email,
-      `Please verify your account. your otp is ${otp} and i will expire in 5 minutes`
+      `Please verify your account. your otp is ${otp} and it will expire in 5 minutes`
     );
     if (mailResponse.status) {
       return id;
@@ -141,15 +208,17 @@ export const verifyOTP = async (
   next: NextFunction
 ) => {
   const { id, code }: { id: string; code: string } = req.body;
-  
+
   if (id && code) {
     try {
       const otp = await prisma.verifyUser.findFirstOrThrow({
         where: {
           userId: id,
-          otp: code,
         },
       });
+      if (!compareSync(code, otp.otp)) {
+        return returnJSONError(res, { message: "Wrong Code" }, 401);
+      }
       if (otp.expiresAt.valueOf() < new Date().valueOf()) {
         // otp expired
         await prisma.$transaction([

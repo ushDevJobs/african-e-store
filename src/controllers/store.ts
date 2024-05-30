@@ -5,6 +5,7 @@ import { returnJSONSuccess } from "../utils/functions";
 import { NotFound } from "../exceptions/not-found";
 import { ErrorCode } from "../exceptions/root";
 import { validateCreateStore } from "../schema/store";
+import { validatePagination } from "../schema/categories";
 
 export const getAllStores = async (
   req: Request,
@@ -12,8 +13,27 @@ export const getAllStores = async (
   next: NextFunction
 ) => {
   try {
-    const stores = await prisma.store.findMany();
-    return returnJSONSuccess(res, { data: stores });
+    const { _limit, _page } = req.query;
+    const validatedPag = validatePagination.safeParse({
+      _limit: +_limit!,
+      _page: +_page!,
+    });
+    const count = await prisma.store.count();
+    const stores = await prisma.store.findMany({
+      skip: validatedPag.data?._page,
+      take: validatedPag.data?._limit,
+      select: {
+        id: true,
+        name: true,
+        description: true,
+        user: {
+          select: {
+            fullname: true,
+          },
+        },
+      },
+    });
+    return returnJSONSuccess(res, { data: stores, count });
   } catch (error) {
     next(new NotFound("Store not found", ErrorCode.STORE_NOT_FOUND));
   }
