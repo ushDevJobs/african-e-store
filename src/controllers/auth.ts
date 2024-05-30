@@ -141,6 +141,7 @@ export const verifyOTP = async (
   next: NextFunction
 ) => {
   const { id, code }: { id: string; code: string } = req.body;
+  
   if (id && code) {
     try {
       const otp = await prisma.verifyUser.findFirstOrThrow({

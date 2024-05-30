@@ -36,7 +36,7 @@ router.get(
     failureRedirect: "google/error",
   })
 );
-router.post("/login/error", rootErrorHandler(loginAuthError));
+router.get("/login/error", rootErrorHandler(loginAuthError));
 router.get("/google/error", rootErrorHandler(googleAuthError));
 router.post("/register", rootErrorHandler(register));
 router.post("/register/seller", rootErrorHandler(registerSeller));
