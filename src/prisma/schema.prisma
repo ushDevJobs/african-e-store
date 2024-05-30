@@ -162,6 +162,8 @@ model Sessions {
   session_id String @id @db.VarChar(128)
   expires    Int    @db.Int()
   data       String @db.MediumText()
+
+  @@map("sessions")
 }
 
 enum UserStatus {
