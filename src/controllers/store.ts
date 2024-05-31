@@ -26,6 +26,8 @@ export const getAllStores = async (
         id: true,
         name: true,
         description: true,
+        image: true,
+        location: true,
         user: {
           select: {
             fullname: true,
@@ -35,7 +37,7 @@ export const getAllStores = async (
     });
     return returnJSONSuccess(res, { data: stores, count });
   } catch (error) {
-    next(new NotFound("Store not found", ErrorCode.STORE_NOT_FOUND));
+    next(new NotFound("Store not found", ErrorCode.NOT_FOUND));
   }
 };
 export const searchForStore = async (req: Request, res: Response) => {
@@ -65,7 +67,7 @@ export const getStoreByUserLogged = async (
     });
     return returnJSONSuccess(res, { data: store });
   } catch (error) {
-    next(new NotFound("Store not found", ErrorCode.STORE_NOT_FOUND));
+    next(new NotFound("Store not found", ErrorCode.NOT_FOUND));
   }
 };
 export const getStoreById = async (
@@ -82,7 +84,7 @@ export const getStoreById = async (
     });
     return returnJSONSuccess(res, { data: store });
   } catch (error) {
-    next(new NotFound("Store not found", ErrorCode.STORE_NOT_FOUND));
+    next(new NotFound("Store not found", ErrorCode.NOT_FOUND));
   }
 };
 export const createStore = async (req: Request, res: Response) => {

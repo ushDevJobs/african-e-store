@@ -72,6 +72,6 @@ export async function checkStore(
   });
   if (checkIfStore) next();
   else {
-    next(new NotFound("Store not found", ErrorCode.STORE_NOT_FOUND));
+    next(new NotFound("Store not found", ErrorCode.NOT_FOUND));
   }
 }
