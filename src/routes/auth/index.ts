@@ -18,7 +18,6 @@ const router = Router();
 router.post(
   "/login",
   passport.authenticate("local", {
-    successRedirect: "/",
     failureRedirect: "login/error",
   }),
   (_, res) =>
