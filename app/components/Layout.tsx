@@ -15,6 +15,7 @@ import { usePathname } from 'next/navigation';
 import RegistrationNav from './RegistrationNav';
 import RegistrationFooter from './RegistrationFooter';
 import NextBreadcrumb from './Breadcrumbs';
+import { Toaster } from 'sonner';
 
 interface LayoutProps {
     children?: ReactNode;
@@ -36,6 +37,15 @@ const Layout: FunctionComponent<LayoutProps> = ({ children }): ReactElement => {
         <>
             {!loaderIsVisible && (
                 <>
+                    <Toaster
+                        position='bottom-center'
+                        richColors
+                        closeButton
+                        toastOptions={{
+                            duration: 3000,
+                            unstyled: false,
+                        }}
+                    />
                     {(pathname.includes('/signup') || pathname.includes('/login') || pathname.includes('/verification')) ? <RegistrationNav /> : <Navbar />}
 
                     {!['/', '/login', '/verification', '/signup', '/seller/signup', '/seller/login'].includes(pathname) &&
@@ -49,7 +59,6 @@ const Layout: FunctionComponent<LayoutProps> = ({ children }): ReactElement => {
                         />}
                     {children}
                     {(pathname.includes('/signup') || pathname.includes('/login') || pathname.includes('/verification')) ? <RegistrationFooter /> : <Footer />}
-
                 </>
             )}
 
