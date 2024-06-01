@@ -33,7 +33,30 @@ export const getCategoryById = async (
         id,
       },
     });
-    console.log(category);
+    if (!category) {
+      return next(new NotFound("Category not found", ErrorCode.NOT_FOUND));
+    }
+    return returnJSONSuccess(res, { data: category });
+  } else {
+    next(new BadRequest("Invalid request parameters", ErrorCode.BAD_REQUEST));
+  }
+};
+export const updateCategory = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { id } = req.params;
+  const { name } = req.body;
+  if (id && name && name !== "") {
+    const category = await prisma.category.update({
+      where: {
+        id,
+      },
+      data: {
+        name: name,
+      },
+    });
     if (!category) {
       return next(new NotFound("Category not found", ErrorCode.NOT_FOUND));
     }

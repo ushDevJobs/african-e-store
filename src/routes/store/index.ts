@@ -12,7 +12,7 @@ import { checkStore, sellerRoleCheck } from "../../middlewares/roles";
 
 const router = Router();
 router.get("/all", getAllStores);
-router.get("/:id", getStoreById);
+router.get("/store/:id", getStoreById);
 router.get("/search/:name", searchForStore);
 router
   .route("/store")
