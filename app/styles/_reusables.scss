@@ -146,25 +146,14 @@
         cursor: pointer;
 }
 
-// .errorMsg,
-// .successMsg {
-//   font-size: 12px;
-//   color: #eb485b;
-//   display: flex;
-//   align-items: center;
-//   gap: 2px;
-
-//   svg {
-//     width: 12px;
-//     height: 12x;
-//     display: inline-flex;
-//     height: fit-content;
-
-//     path {
-//       fill: #eb485b;
-//     }
-//   }
-// }
+.errorMsg,
+.successMsg {
+  font-size: 12px;
+  color: #eb485b;
+  display: flex;
+  align-items: center;
+  gap: 2px
+}
 // .successMsg {
 //   color: $primary-color;
 //   svg {
