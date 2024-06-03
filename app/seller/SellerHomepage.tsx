@@ -8,6 +8,7 @@ import SellerShop from '../seller-store/SellerShop';
 import AboutSeller from '../seller-store/AboutSeller';
 import useResponsiveness from '../components/hooks/responsiveness-hook';
 import SellerProduct from './SellerProduct';
+import AddProductModal from './AddProductModal';
 type Props = {};
 
 enum TabIndex {
@@ -19,6 +20,8 @@ enum TabIndex {
 
 const SellerHomePage = (props: Props) => {
     const [activeTab, setActiveTab] = useState<TabIndex>(TabIndex.Shop);
+    const [isAddProductModalVisible, setIsAddProductModalVisible] = useState(false);
+
     const windowRes = useResponsiveness();
     const isMobile = windowRes.width && windowRes.width < 768;
     const onMobile = typeof isMobile == 'boolean' && isMobile;
@@ -27,6 +30,10 @@ const SellerHomePage = (props: Props) => {
     return (
         <div className={styles.main}>
             <SellerStoreRating />
+            <AddProductModal
+                visibility={isAddProductModalVisible}
+                setVisibility={setIsAddProductModalVisible}
+            />
             {onMobile &&
                 activeTab === TabIndex.Shop &&
                 <div
@@ -37,7 +44,9 @@ const SellerHomePage = (props: Props) => {
                 {activeTab === TabIndex.Shop &&
                     <div
                         style={{ color: '#828282', fontSize: '16px', backgroundColor: '#ecf8f5', padding: '16px', borderRadius: '13px', height: 'fit-content' }}
-                        className={styles.lhs}>
+                        className={styles.lhs}
+                        onClick={() => setIsAddProductModalVisible(true)}
+                    >
                         <p className='cursor-pointer w-fit'> Add Products to store</p>
                     </div>}
                 <div className={styles.rhs}>
