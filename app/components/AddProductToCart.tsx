@@ -6,10 +6,17 @@ import { FavoriteIcon, RatingIcon, ShoppingIcon } from './SVGs/SVGicons'
 import images from '@/public/images'
 import Image from 'next/image'
 import Link from 'next/link'
+import useResponsiveness from './hooks/responsiveness-hook'
 
 type Props = {}
 
 const AddProductToCart = (props: Props) => {
+
+    const windowRes = useResponsiveness();
+    const isMobile = windowRes.width && windowRes.width < 768;
+    const onMobile = typeof isMobile == 'boolean' && isMobile;
+    const onDesktop = typeof isMobile == 'boolean' && !isMobile;
+
     const imageUrl = [
         { url: images.singleProduct },
         { url: images.singleProduct2 },
@@ -40,6 +47,16 @@ const AddProductToCart = (props: Props) => {
 
             </div>
             <div className={styles.rhs}>
+                {onMobile && (
+                    <div className="flex items-center justify-between mt-3 mb-7">
+                        <Link className='border border-[#828282] rounded-3xl py-2 px-16' href={'/cart'} >
+                            <span><ShoppingIcon /></span>
+                        </Link>
+                        <Link className='border border-[#828282] rounded-3xl py-2 px-16' href={'/'}>
+                            <span><FavoriteIcon /></span>
+                        </Link></div>
+                )
+                }
                 <h1 className={styles.productName}>
                     Samsung Galaxy S21 5G SM-G991U Factory Unlocked 128GB Phantom Gray C
                 </h1>
@@ -76,12 +93,16 @@ const AddProductToCart = (props: Props) => {
                     <Link href={'/checkout'}>
                         <button>Buy Now</button>
                     </Link>
-                    <Link className={styles.icon} href={'/cart'}>
-                        <span><ShoppingIcon /></span>
-                    </Link>
-                    <Link className={styles.icon} href={'/'}>
-                        <span><FavoriteIcon /></span>
-                    </Link>
+                    {onDesktop && (
+                        <>
+                            <Link className={styles.icon} href={'/cart'}>
+                                <span><ShoppingIcon /></span>
+                            </Link>
+                            <Link className={styles.icon} href={'/'}>
+                                <span><FavoriteIcon /></span>
+                            </Link>
+                        </>
+                    )}
                 </div>
             </div>
         </div>
