@@ -1,10 +1,18 @@
+'use client'
 import React, { useState } from 'react'
 import styles from './SingleCategory.module.scss'
 import { FavoriteIcon, GreenStarIcon, RatingIcon, UserIcon } from '@/app/components/SVGs/SVGicons'
+import useResponsiveness from '@/app/components/hooks/responsiveness-hook'
+import Link from 'next/link'
 
 type Props = {}
 
 const SingleCategoryReviews = (props: Props) => {
+    const windowRes = useResponsiveness();
+    const isMobile = windowRes.width && windowRes.width < 768;
+    const onMobile = typeof isMobile == 'boolean' && isMobile;
+    const onDesktop = typeof isMobile == 'boolean' && !isMobile;
+
     const data = [
         {
             star: 5,
@@ -44,17 +52,25 @@ const SingleCategoryReviews = (props: Props) => {
             <div className={styles.reviewContents}>
                 <div className={styles.lhs}>
                     <div className={styles.top}>
-                        <div className={styles.top_lhs}>
+
+                        {onMobile && <div className={styles.top_lhs}>
                             <span><UserIcon /></span>
                             <div className={styles.product}>
-                                <h3 className='text-[#828282] text-lg '>Chavo global mobile device store LTD.</h3>
+                                <Link href={'/stores'} className='text-[#828282] text-sm underline cursor-pointer'>Chavo global mobile device store LTD.</Link>
+                                <p className='text-[#828282] text-xs'>98% positive feedback</p>
+                            </div>
+                        </div>}
+                        {onDesktop && <div className={styles.top_lhs}>
+                            <span><UserIcon /></span>
+                            <div className={styles.product}>
+                                <h3 className='text-[#828282] text-lg'>Chavo global mobile device store LTD.</h3>
                                 <p className='text-[#828282] text-base'>98% positive feedback <span className='cursor-pointer text-sm text-[#2C7865] font-bold'>Contact seller </span></p>
                             </div>
-                        </div>
-                        <div className={styles.top_rhs}>
+                        </div>}
+                        {onDesktop && <div className={styles.top_rhs}>
                             <span><FavoriteIcon /></span>
                             <button>Visit store</button>
-                        </div>
+                        </div>}
                     </div>
                     <div className={styles.ratings}>
                         <h3 className='text-[#6F6F6F] text-base font-semibold mb-5'>Product Rating </h3>
@@ -81,7 +97,7 @@ const SingleCategoryReviews = (props: Props) => {
                         </div>
                     </div>
 
-                  <div className={styles.reviewContainer}>
+                    <div className={styles.reviewContainer}>
                         <div className={styles.review}>
                             <span className='flex items-center'>
                                 {[1, 2, 3, 4].map((_, index) => (
@@ -162,7 +178,7 @@ const SingleCategoryReviews = (props: Props) => {
                             <p className='text-base text-[#4B4B4B]'>Good Phone, nice screen resolution, fast charging. All I ever wanted.</p>
                             <p className='text-sm text-[#828282]'>25-09-2023 by Dave</p>
                         </div>
-                  </div>
+                    </div>
                 </div>
                 <div className={styles.rhs}></div>
             </div>
