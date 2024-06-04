@@ -1,4 +1,5 @@
-import logo from './images/logo.png';
+// import logo from './images/logo.png';
+import logo from './images/logo.svg';
 import home_hero_bg from './images/homeHeroBg.png';
 import hero_bg from './images/home-banner.png';
 import explore from './images/explore.png';
@@ -20,7 +21,7 @@ import singleproduct3 from './images/singleproduct3.png';
 import noProduct from './images/noProduct.png';
 
 export default {
-    noProduct,
+  noProduct,
   logo,
   white_logo,
   hero_bg,
@@ -38,6 +39,6 @@ export default {
   cart_prooduct_image,
   header_image,
   singleProduct,
-singleProduct2,
-singleproduct3
+  singleProduct2,
+  singleproduct3,
 };
