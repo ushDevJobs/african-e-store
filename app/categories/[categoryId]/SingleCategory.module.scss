@@ -5,6 +5,10 @@
   //   padding-top: 110px;
   padding-bottom: 100px;
 
+  @include tablet {
+    padding-bottom: 120px;
+  }
+
   .productInfo {
     display: flex;
     gap: 19px;
@@ -330,9 +334,17 @@
         .ratings {
           padding: 22px 40px;
 
+          @include tablet {
+            padding: 16px;
+          }
+
           > .rating {
             display: flex;
             gap: 30px;
+
+            @include tablet {
+              flex-direction: column;
+            }
             .average {
               background-color: #e9e9e9;
               border-radius: 12px;
@@ -346,6 +358,10 @@
 
             .ratingProgress {
               width: 70%;
+
+              @include tablet {
+                width: 100%;
+              }
               .value {
                 display: flex;
                 gap: 30px;
@@ -385,7 +401,6 @@
         .reviewContainer {
           display: flex;
           flex-direction: column;
-          //   gap: 20px;
           overflow-y: auto;
           max-height: 400px;
           > .review {
@@ -393,6 +408,10 @@
             display: flex;
             flex-direction: column;
             gap: 10px;
+
+            @include tablet {
+              padding: 20px 16px;
+            }
 
             span {
               svg {

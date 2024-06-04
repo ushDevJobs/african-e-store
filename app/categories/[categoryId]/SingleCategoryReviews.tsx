@@ -74,7 +74,7 @@ const SingleCategoryReviews = (props: Props) => {
                     </div>
                     <div className={styles.ratings}>
                         <h3 className='text-[#6F6F6F] text-base font-semibold mb-5'>Product Rating </h3>
-                        <div className={styles.rating}>
+                        {onDesktop && <div className={styles.rating}>
                             <div className={styles.average}>
                                 <h4>{averageRating}/5</h4>
                             </div>
@@ -94,7 +94,27 @@ const SingleCategoryReviews = (props: Props) => {
                                     )
                                 })}
                             </div>
-                        </div>
+                        </div>}
+
+                        {onMobile &&
+                            <div className={styles.rating}>
+                                <h3 className='text-[#2C7865] text-lg font-medium -mt-4'>{averageRating}/5</h3>
+                                <div className={`${styles.ratingProgress} -mt-4`}>
+                                    {data.map((item, index) => {
+                                        return (
+                                            <div className={styles.value} key={index}>
+                                                <p>{item.star} <span><GreenStarIcon /></span></p>
+                                                <div className={styles.progress}>
+                                                    <div className={styles.bar} style={{ width: `${(item.count / maxCount) * 100}%` }}></div>
+                                                </div>
+                                                <p className={styles.rangeValue}>
+                                                    {item.count.toLocaleString()}
+                                                </p>
+                                            </div>
+                                        )
+                                    })}
+                                </div>
+                            </div>}
                     </div>
 
                     <div className={styles.reviewContainer}>
@@ -112,7 +132,7 @@ const SingleCategoryReviews = (props: Props) => {
                                 ))}
                             </span>
                             <p className='text-base text-[#4B4B4B]'>Good Phone, nice screen resolution, fast charging. All I ever wanted.</p>
-                            <p className='text-sm text-[#828282]'>25-09-2023 by Dave</p>
+                            <p className='text-xs text-[#828282]'>25-09-2023 by Dave</p>
                         </div>
                         <div className={styles.review}>
                             <span className='flex items-center'>
