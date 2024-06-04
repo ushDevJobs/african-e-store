@@ -51,12 +51,12 @@ const VerificationPage = (props: Props) => {
                 sessionStorage.removeItem(StorageKeys.RegisteredBuyer);
 
                 console.log("Response: ", response.data);
-                // if (response && '/verification?buyer=2') {
-
-                // } else {
-                //     router.push('/seller/login')
-                // }
-                router.push('/login')
+                if (response && '/verification?buyer=2') {
+                    router.push('/login?buyer=2')
+                } else {
+                    router.push('/login?seller=1')
+                }
+               
                 // Display success
                 toast.success("Your account has been verified");
             })

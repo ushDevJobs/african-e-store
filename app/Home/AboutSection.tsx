@@ -12,7 +12,7 @@ const AboutSection = (props: Props) => {
             text: 'Connect with other africans',
             subtext: "Rayvvin let's you connect with Africans all around the globe in exchange for goods and services",
             linkText: 'Create seller account',
-            link: '/'
+            link: '/seller/signup'
         },
         {
             abouticon: <BulkIcon />,

@@ -95,7 +95,11 @@ const LoginPage = (props: Props) => {
                     // Display success
                     toast.success("You have successfully logged in.");
 
-                    router.push('/')
+                    if (response && '/login?buyer=2') {
+                        router.push('/')
+                    } else {
+                        router.push('/seller')
+                    }
                 })
                 .catch((error) => {
                     catchError(error);
