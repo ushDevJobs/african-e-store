@@ -24,9 +24,9 @@ const SingleCategoriesDetails = (props: Props) => {
             {onDesktop && (
                 <div className={styles.categoriesDetails}>
                     <div className={styles.header}>
-                        <span>Product details</span>
-                        <span>Specifications</span>
-                        <span>Shipping & returns</span>
+                        <span className='border border-[#2C7865] text-[#2C7865] rounded-full py-2 px-12'>Product details</span>
+                        <span className='border border-[#828282] text-[#828282] rounded-full py-2 px-12'>Specifications</span>
+                        <span className='border border-[#828282] text-[#828282] rounded-full py-2 px-12'>Shipping & returns</span>
                     </div>
                     <div className={styles.detailContents}>
                         <div className={styles.lhs}>

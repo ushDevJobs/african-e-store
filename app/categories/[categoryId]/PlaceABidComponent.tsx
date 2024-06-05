@@ -16,8 +16,7 @@ const PlaceABidComponent = ({ visibility, setVisibility }: Props) => {
             setVisibility={setVisibility}
             styles={{ backgroundColor: 'transparent' }}
         >
-
-            <form className=" bg-white w-full p-4 rounded-xl md:px-5 md:w-[50vw] lg:w-[40vw] md:py-4 overflow-y-auto min-h-[90%]">
+            <form className="bg-white w-full p-4 rounded-xl md:px-5 md:w-[50vw] lg:w-[40vw] md:py-4 overflow-y-auto max-h-[90vh]">
                 <span className='cursor-pointer ml-auto flex items-end w-full justify-end' onClick={() => setVisibility(false)}><TimesIcon /></span>
                 <div className="flex px-6 mx-auto flex-col items-center justify-center mt-7">
                     <h2 className='mb-3 font-medium text-[#6F6F6F] text-2xl'>Place a bid for this item</h2>
@@ -27,11 +26,11 @@ const PlaceABidComponent = ({ visibility, setVisibility }: Props) => {
                     </div>
                     <p className='text-[#000000] text-base'>Current bidding at</p>
                     <span className='text-xl mb-3 text-[#2C7865] font-semibold'>€220</span>
-                    <div className="flex flex-col w-full gap-3">
+                    <div className="flex flex-col w-full gap-3 mb-8">
                         <input type="text" name="" id="" placeholder='Enter your bidding price here' className='w-full border border-[#ACACAC] rounded-lg outline-none pl-3 py-3 md:w-[80%] md:mx-auto' />
                         <small className='text-center text-xs text-[#FD6A02]'>Bidding should be from €221</small>
                     </div>
-                    <button type="submit">Place bid </button>
+                    <button className='bg-[#2C7865] rounded-full py-3 px-12 cursor-pointer mb-8 text-white' type="submit">Place bid </button>
                 </div>
             </form>
         </ModalWrapper>

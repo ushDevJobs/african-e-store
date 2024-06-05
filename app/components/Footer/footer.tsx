@@ -19,7 +19,7 @@ const Footer = (props: Props) => {
                 <div className={styles.logoArea}>
                     <div className={styles.lhs}>
                         <Link href={'/'}>
-                            <Image src={images.white_logo} alt='logo' /></Link>
+                            <Image src={images.logo} alt='logo' /></Link>
                         <h2>Your catch phrase here </h2>
                     </div>
                     <div className={styles.rhs}>
@@ -96,7 +96,7 @@ const Footer = (props: Props) => {
                 <div className={styles.logoArea}>
                     <div className={styles.lhs}>
                         <Link href={'/'}>
-                            <Image src={images.white_logo} alt='logo' /></Link>
+                            <Image src={images.logo} alt='logo' /></Link>
                         <h2>Your catch phrase here </h2>
                     </div>
                     <div className={styles.rhs}>
