@@ -4,8 +4,9 @@ import styles from './SellerStore.module.scss';
 import SellerStoreRating from './SellerStoreRating';
 import SellerShop from './SellerShop';
 import CategoriesSettingsBar from '../components/CategoriesSettingsBar';
-import { SearchIcon } from '../components/SVGs/SVGicons';
+import { FilterIcon, SearchIcon, SortIcon } from '../components/SVGs/SVGicons';
 import AboutSeller from './AboutSeller';
+import useResponsiveness from '../components/hooks/responsiveness-hook';
 
 type Props = {};
 
@@ -16,11 +17,16 @@ enum TabIndex {
 }
 
 const SellerStorePage = (props: Props) => {
+    const windowRes = useResponsiveness();
+    const isMobile = windowRes.width && windowRes.width < 768;
+    const onMobile = typeof isMobile == 'boolean' && isMobile;
+    const onDesktop = typeof isMobile == 'boolean' && !isMobile;
+
     const [activeTab, setActiveTab] = useState<TabIndex>(TabIndex.Shop);
 
     return (
         <div className={styles.main}>
-            <SellerStoreRating />
+            {onDesktop && <SellerStoreRating />}
             <div className={styles.tab}>
                 {activeTab === TabIndex.Shop && <div className={styles.lhs}><CategoriesSettingsBar /></div>}
                 <div className={styles.rhs}>
@@ -45,14 +51,18 @@ const SellerStorePage = (props: Props) => {
                             Feedback
                         </span>
                     </div>
+                    {onMobile && <SellerStoreRating />}
+                    {onMobile &&
+                        <div className="w-full flex items-center gap-4 justify-end mb-2 ml-auto">
+                            <span className='flex items-center gap-2 cursor-pointer'><SortIcon /> Sort</span>
+                            <span className='flex items-center gap-2 cursor-pointer'><FilterIcon /> Filter </span>
+                        </div>
+                    }
                     {activeTab === TabIndex.Shop && <SellerShop />}
                     {activeTab === TabIndex.About && <AboutSeller />}
                     {activeTab === TabIndex.Feedback && <h1>Feedback</h1>}
                 </div>
             </div>
-
-
-
         </div>
     );
 };

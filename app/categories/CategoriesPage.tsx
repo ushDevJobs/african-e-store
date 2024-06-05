@@ -7,7 +7,7 @@ import CategoriesSettingsBar from '../components/CategoriesSettingsBar'
 import useResponsiveness from '../components/hooks/responsiveness-hook'
 import Image from 'next/image'
 import images from '@/public/images'
-import { LeftArrowIcon, RightArrowIcon } from '../components/SVGs/SVGicons'
+import { FilterIcon, LeftArrowIcon, RightArrowIcon, SortIcon } from '../components/SVGs/SVGicons'
 import PageTransition from '../components/PageTransition'
 import Link from 'next/link'
 
@@ -23,6 +23,12 @@ const CategoriesPage = (props: Props) => {
         <div className={styles.main}>
             {/* <PageTransition previousPage={previousPage} currentPage="/my-page" direction="forward" /> */}
             <CategoriesHeader mainText='Explore different categories' subText='Search for any product in different categories on Rayvinn' />
+            {onMobile &&
+                <div className="w-full flex items-center gap-4 justify-end mb-2 ml-auto">
+                    <span className='flex items-center gap-2 cursor-pointer'><SortIcon /> Sort</span>
+                    <span className='flex items-center gap-2 cursor-pointer'><FilterIcon /> Filter </span>
+                </div>
+            }
             <div className={styles.contents}>
                 {onDesktop &&
                     <div className={styles.lhs}>
@@ -76,7 +82,6 @@ const CategoriesPage = (props: Props) => {
                                 <h4>$250</h4>
                             </div>
                         </Link>
-
                     </div>
                     <div className={styles.pagination}>
                         <button><LeftArrowIcon /></button>
@@ -88,8 +93,6 @@ const CategoriesPage = (props: Props) => {
                         <button><RightArrowIcon /></button>
                     </div>
                 </div>
-
-
             </div>
 
         </div>

@@ -3,11 +3,12 @@ import styles from './Stores.module.scss'
 import CategoriesHeader from '../components/CategoriesHeader'
 import Image from 'next/image'
 import images from '@/public/images'
-import { SearchIcon } from '../components/SVGs/SVGicons'
+import { FavoriteIcon, FilledLoveIcon, SearchIcon, UkIcon } from '../components/SVGs/SVGicons'
 
 type Props = {}
 
 const StorePage = (props: Props) => {
+    const isFavorite = true
     return (
         <div className={styles.main}>
             <CategoriesHeader mainText='Explore different stores on Rayvvin ' subText='Search for any store of your choice, rayvvin ensures the authenticity of vendors ' />
@@ -22,30 +23,86 @@ const StorePage = (props: Props) => {
                     <div className={styles.card}>
                         <div className={styles.image}>
                             <Image fill src={images.cashew} alt='product image' />
+                            {isFavorite ? <span className='absolute right-2 top-2 bg-white p-3 cursor-pointer rounded-full'><FilledLoveIcon /></span>
+                                : <span className='absolute right-2 top-2 bg-white p-3 cursor-pointer rounded-full'><FavoriteIcon /></span>}
                         </div>
-                        <p>Dog food 3 pcs bag </p>
-                        <h4>$250</h4>
+                      <div className="flex flex-col gap-2">
+                            <h4 className='text-[#828282] text-base'>Chuka stores </h4>
+                            <p className='text-[#828282] text-sm'>Specializes in everything fashion style and beauty and...</p>
+                            <span className='flex items-center gap-2'><UkIcon /> Uk</span>
+                      </div>
                     </div>
                     <div className={styles.card}>
                         <div className={styles.image}>
                             <Image fill src={images.cashew} alt='product image' />
+                            {isFavorite ? <span className='absolute right-2 top-2 bg-white p-3 cursor-pointer rounded-full'><FilledLoveIcon /></span>
+                                : <span className='absolute right-2 top-2 bg-white p-3 cursor-pointer rounded-full'><FavoriteIcon /></span>}
                         </div>
-                        <p>Dog food 3 pcs bag </p>
-                        <h4>$250</h4>
+                      <div className="flex flex-col gap-2">
+                            <h4 className='text-[#828282] text-base'>Chuka stores </h4>
+                            <p className='text-[#828282] text-sm'>Specializes in everything fashion style and beauty and...</p>
+                            <span className='flex items-center gap-2'><UkIcon /> Uk</span>
+                      </div>
                     </div>
                     <div className={styles.card}>
                         <div className={styles.image}>
                             <Image fill src={images.cashew} alt='product image' />
+                            {isFavorite ? <span className='absolute right-2 top-2 bg-white p-3 cursor-pointer rounded-full'><FilledLoveIcon /></span>
+                                : <span className='absolute right-2 top-2 bg-white p-3 cursor-pointer rounded-full'><FavoriteIcon /></span>}
                         </div>
-                        <p>Dog food 3 pcs bag </p>
-                        <h4>$250</h4>
+                      <div className="flex flex-col gap-2">
+                            <h4 className='text-[#828282] text-base'>Chuka stores </h4>
+                            <p className='text-[#828282] text-sm'>Specializes in everything fashion style and beauty and...</p>
+                            <span className='flex items-center gap-2'><UkIcon /> Uk</span>
+                      </div>
                     </div>
                     <div className={styles.card}>
                         <div className={styles.image}>
                             <Image fill src={images.cashew} alt='product image' />
+                            {isFavorite ? <span className='absolute right-2 top-2 bg-white p-3 cursor-pointer rounded-full'><FilledLoveIcon /></span>
+                                : <span className='absolute right-2 top-2 bg-white p-3 cursor-pointer rounded-full'><FavoriteIcon /></span>}
                         </div>
-                        <p>Dog food 3 pcs bag </p>
-                        <h4>$250</h4>
+                      <div className="flex flex-col gap-2">
+                            <h4 className='text-[#828282] text-base'>Chuka stores </h4>
+                            <p className='text-[#828282] text-sm'>Specializes in everything fashion style and beauty and...</p>
+                            <span className='flex items-center gap-2'><UkIcon /> Uk</span>
+                      </div>
+                    </div>
+                    <div className={styles.card}>
+                        <div className={styles.image}>
+                            <Image fill src={images.cashew} alt='product image' />
+                            {isFavorite ? <span className='absolute right-2 top-2 bg-white p-3 cursor-pointer rounded-full'><FilledLoveIcon /></span>
+                                : <span className='absolute right-2 top-2 bg-white p-3 cursor-pointer rounded-full'><FavoriteIcon /></span>}
+                        </div>
+                      <div className="flex flex-col gap-2">
+                            <h4 className='text-[#828282] text-base'>Chuka stores </h4>
+                            <p className='text-[#828282] text-sm'>Specializes in everything fashion style and beauty and...</p>
+                            <span className='flex items-center gap-2'><UkIcon /> Uk</span>
+                      </div>
+                    </div>
+                    <div className={styles.card}>
+                        <div className={styles.image}>
+                            <Image fill src={images.cashew} alt='product image' />
+                            {isFavorite ? <span className='absolute right-2 top-2 bg-white p-3 cursor-pointer rounded-full'><FilledLoveIcon /></span>
+                                : <span className='absolute right-2 top-2 bg-white p-3 cursor-pointer rounded-full'><FavoriteIcon /></span>}
+                        </div>
+                      <div className="flex flex-col gap-2">
+                            <h4 className='text-[#828282] text-base'>Chuka stores </h4>
+                            <p className='text-[#828282] text-sm'>Specializes in everything fashion style and beauty and...</p>
+                            <span className='flex items-center gap-2'><UkIcon /> Uk</span>
+                      </div>
+                    </div>
+                    <div className={styles.card}>
+                        <div className={styles.image}>
+                            <Image fill src={images.cashew} alt='product image' />
+                            {isFavorite ? <span className='absolute right-2 top-2 bg-white p-3 cursor-pointer rounded-full'><FilledLoveIcon /></span>
+                                : <span className='absolute right-2 top-2 bg-white p-3 cursor-pointer rounded-full'><FavoriteIcon /></span>}
+                        </div>
+                      <div className="flex flex-col gap-2">
+                            <h4 className='text-[#828282] text-base'>Chuka stores </h4>
+                            <p className='text-[#828282] text-sm'>Specializes in everything fashion style and beauty and...</p>
+                            <span className='flex items-center gap-2'><UkIcon /> Uk</span>
+                      </div>
                     </div>
                 </div>
             </div>
