@@ -2,7 +2,9 @@
 
 .main {
   padding-bottom: 74px;
-
+  @include tablet {
+    padding-bottom: 25px;
+  }
   .image {
     position: relative;
     width: 100%;
@@ -30,6 +32,13 @@
         padding: 16px;
       }
 
+      @include tablet {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        top: 10%;
+      }
+
       h1 {
         font-size: 32px;
         color: #fff;
@@ -44,6 +53,10 @@
         @include bigTablet {
           font-size: 20px;
         }
+
+        @include tablet {
+          font-size: 16px;
+        }
       }
 
       p {
@@ -55,6 +68,10 @@
         }
         @include bigTablet {
           font-size: 16px;
+        }
+
+        @include tablet {
+          font-size: 14px;
         }
       }
     }

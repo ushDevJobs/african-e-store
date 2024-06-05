@@ -1,9 +1,13 @@
 @import '../styles/reusables';
 
 .main {
-//   padding-top: 83px;
+  //   padding-top: 83px;
   padding-bottom: 100px;
   @include sectionPadding;
+
+  @include tablet {
+    padding-bottom: 50px;
+  }
 
   .header {
     display: flex;
@@ -15,12 +19,20 @@
       font-size: 32px;
       color: #828282;
       font-weight: 700;
+
+      @include tablet {
+        font-size: 24px;
+      }
     }
 
     p {
       font-size: 16px;
       line-height: 24px;
       color: #828282;
+
+      @include tablet {
+        font-size: 14px;
+      }
     }
   }
 
@@ -50,6 +62,10 @@
       .card {
         padding: 30px;
         background-color: #f7fafa;
+
+        @include tablet {
+          padding: 20px;
+        }
         .productName {
           display: flex;
           align-items: center;
@@ -128,6 +144,10 @@
             display: flex;
             flex-direction: column;
             gap: 12px;
+
+            // @include tablet {
+            //   gap: 6px;
+            // }
             h3 {
               font-weight: 500;
               color: 14px;
@@ -172,6 +192,10 @@
         .rowField {
           display: flex;
           gap: 30px;
+
+          @include tablet {
+            flex-direction: column;
+          }
         }
 
         .formField {
@@ -220,6 +244,12 @@
           border: 1px solid #2c7865;
           cursor: pointer;
           font-size: 16px;
+
+          @include tablet {
+            padding: 6px;
+            width: 100%;
+            font-size: 14px;
+          }
 
           &:disabled {
             opacity: 0.6;

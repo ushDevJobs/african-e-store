@@ -20,6 +20,7 @@
 
       @include tablet{
         width: 100%;
+        min-width: 0;
       }
 
       svg {
@@ -70,17 +71,18 @@
             border-radius: 22px !important;
           }
         }
-        p {
-          color: #828282;
-          font-size: 18px;
-          margin-bottom: 7px;
-        }
+    //     p {
+    //       color: #828282;
+    //       font-size: 18px;
+    //       margin-bottom: 7px;
+    //     }
 
-        h4 {
-          font-size: 16px;
-          color: #1e1e1e;
-        }
-      }
+    //     h4 {
+    //       font-size: 16px;
+    //       color: #1e1e1e;
+    //     }
+    //   }
     }
+}
   }
 }
