@@ -19,9 +19,9 @@
         gap: 20px;
 
         .formContainer {
-          // display: flex;
-          // align-items: center;
-          // justify-content: space-between;
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
         }
 
         input[type='radio'] {

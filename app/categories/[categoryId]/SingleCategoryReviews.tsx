@@ -64,7 +64,7 @@ const SingleCategoryReviews = (props: Props) => {
                             <span><UserIcon /></span>
                             <div className={styles.product}>
                                 <h3 className='text-[#828282] text-lg'>Chavo global mobile device store LTD.</h3>
-                                <p className='text-[#828282] text-base'>98% positive feedback <span className='cursor-pointer text-sm text-[#2C7865] font-bold'>Contact seller </span></p>
+                                <p className='text-[#828282] text-base'>98% positive feedback <Link href={'/contact-seller'} className='cursor-pointer text-sm text-[#2C7865] font-bold'>Contact seller </Link></p>
                             </div>
                         </div>}
                         {onDesktop && <div className={styles.top_rhs}>

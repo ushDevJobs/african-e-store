@@ -1,6 +1,8 @@
 'use client'
 import React from 'react'
 import styles from './ContactSeller.module.scss'
+import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 
 type Props = {}
 
@@ -10,6 +12,7 @@ enum ContactMessage {
 }
 
 const ContactSellerPage = (props: Props) => {
+    const router = useRouter()
     const [contactMessage, setContactMessage] = React.useState<ContactMessage>(ContactMessage.LeaveMessage)
 
     const handleRadioChange = () => {
@@ -43,7 +46,7 @@ const ContactSellerPage = (props: Props) => {
                                 </label>
 
                                 {contactMessage == ContactMessage.LeaveMessage && (
-                                    <h1>Product contact</h1>
+                                    <Link href={'/message-seller'} className='bg-[#2C7865] w-fit rounded-lg text-sm text-white py-4 px-10 cursor-pointer'>Continue</Link>
                                 )}
                             </div>
 
@@ -65,7 +68,7 @@ const ContactSellerPage = (props: Props) => {
                                         <span className='text-[#1E1E1E] text-base'>Enter product number</span>
                                         <div className="flex border border-[#ACACAC] rounded-lg w-fit p-1 gap-6">
                                             <input className='text-base w-full outline-none pl-5 placeholder:text-xs' type="text" name="" id="" placeholder='Please enter the product number' />
-                                            <button className='bg-[#2C7865] rounded-lg text-sm text-white py-4 px-8 cursor-pointer'>Continue</button>
+                                            <button onClick={() => router.push('/product-contact')} className='bg-[#2C7865] rounded-lg text-sm text-white py-4 px-8 cursor-pointer'>Continue</button>
                                         </div>
                                     </div>
                                 )}

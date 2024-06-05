@@ -31,8 +31,8 @@ const AddProductToCart = (props: Props) => {
     const [mainImage, setMainImage] = useState(imageUrl[0])
 
     return (
-     <>
-     <PlaceABidComponent visibility={isPlaceABidVisible} setVisibility={setIsPlaceABidVisible}/>
+        <>
+            <PlaceABidComponent visibility={isPlaceABidVisible} setVisibility={setIsPlaceABidVisible} />
             <div className={styles.productInfo}>
                 <div className={styles.lhs}>
                     {/* <> */}
@@ -91,7 +91,7 @@ const AddProductToCart = (props: Props) => {
                     {onDesktop &&
                         <div className={styles.bid}>
                             <p>Samsung Galaxy S21 5G SM-G991U Factory Unlocked 128GB Phantom Gray C <span className='text-[#FD6A02] text-base'>7 Bids at US $168 </span>(Bidding ends on 27th May 2024) <button onClick={() => setIsPlaceABidVisible(true)}>Place Bid </button></p>
-                            <button className='mt-1'>Contact seller </button>
+                            <Link href={'/contact-seller'}><button className='mt-1'>Contact seller </button></Link>
                         </div>}
 
                     {onDesktop && <div className={styles.rating}>
@@ -130,11 +130,11 @@ const AddProductToCart = (props: Props) => {
                     {onMobile && <div className={`${styles.bid} mt-4`}>
                         <p>Estimated between Tue, Jun 18 and Tue, Jul 16 to 502001 Please note the delivery estimate is greater than 38 business days. Seller ships within 1 day after receiving cleared payment. <br /> <br />
                             <span className='text-[#FD6A02] text-base'>7 Bids at US $168 </span>(Bidding ends on 27th May 2024) <button onClick={() => setIsPlaceABidVisible(true)}>Place Bid </button></p>
-                        <button className='mt-1'>Contact seller </button>
+                        <Link href={'/contact-seller'}><button className='mt-1'>Contact seller </button></Link>
                     </div>}
                 </div>
             </div>
-     </>
+        </>
     )
 }
 
