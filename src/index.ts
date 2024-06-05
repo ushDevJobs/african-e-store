@@ -18,7 +18,7 @@ import passport from "passport";
 import { initializePassport } from "./config/passport.config";
 import flash from "express-flash";
 
-// express middlewarrrrrrrr
+// express middleware
 process.on("uncaughtException", (error) => {
   if (error.name === "PrismaClientInitializationError") {
     logger.error("Failed to connect to database");

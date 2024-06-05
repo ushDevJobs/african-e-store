@@ -2,7 +2,7 @@ import e, { NextFunction, Request, Response } from "express";
 import { ErrorCode, HttpException } from "./exceptions/root";
 import { InternalException } from "./exceptions/internal-exception";
 import { ZodError } from "zod";
-import { UnprocessableEnity } from "./exceptions/validation";
+import { UnprocessableEntity } from "./exceptions/validation";
 
 export const rootErrorHandler = (method: Function) => {
   return async (req: Request, res: Response, next: NextFunction) => {
@@ -14,7 +14,7 @@ export const rootErrorHandler = (method: Function) => {
         exception = error;
       }
       if (error instanceof ZodError) {
-        exception = new UnprocessableEnity(
+        exception = new UnprocessableEntity(
           "Unprocessed Entity",
           ErrorCode.UNPROCESSABLE_ENTITY,
           error.issues.map((err) => ({ field: err.path, message: err.message }))
