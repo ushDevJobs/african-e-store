@@ -12,11 +12,11 @@ import { checkStore, sellerRoleCheck } from "../../middlewares/roles";
 
 const router = Router();
 router.get("/all", getAllStores);
-router.get("/store/:id", getStoreById);
+router.get("/store/id/:id", getStoreById);
 router.get("/search/:name", searchForStore);
 router
   .route("/store")
   .get(sellerRoleCheck, rootErrorHandler(getStoreByUserLogged))
   .post(sellerRoleCheck, rootErrorHandler(createStore));
-router.get("store/products", [sellerRoleCheck, checkStore], getStoreProduct);
+router.get("/store/products", [sellerRoleCheck, checkStore], getStoreProduct);
 export { router as storeRoutes };

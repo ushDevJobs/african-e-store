@@ -3,11 +3,13 @@ import { authRoute } from "./auth";
 import { productRoutes } from "./products";
 import { checkAuth } from "../middlewares/auth";
 import { storeRoutes } from "./store";
-import { categoryRouter } from "./categories";
+import { categoryRoutes } from "./categories";
+import { cartRoutes } from "./cart";
 const router = Router();
 router.use("/auth", authRoute);
 router.use("/stores", checkAuth, storeRoutes);
 router.use("/products", checkAuth, productRoutes);
-router.use("/categories", categoryRouter);
+router.use("/categories", categoryRoutes);
+router.use("/cart", checkAuth, cartRoutes);
 
 export default router;

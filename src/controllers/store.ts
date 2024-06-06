@@ -6,6 +6,7 @@ import { NotFound } from "../exceptions/not-found";
 import { ErrorCode } from "../exceptions/root";
 import { validateCreateStore } from "../schema/store";
 import { validatePagination } from "../schema/categories";
+import { BadRequest } from "../exceptions/bad-request";
 
 export const getAllStores = async (
   req: Request,
@@ -77,12 +78,16 @@ export const getStoreById = async (
 ) => {
   try {
     const { id } = req.params;
-    const store = await prisma.store.findFirstOrThrow({
-      where: {
-        id: id,
-      },
-    });
-    return returnJSONSuccess(res, { data: store });
+    if (id) {
+      const store = await prisma.store.findFirstOrThrow({
+        where: {
+          id: id as string,
+        },
+      });
+      return returnJSONSuccess(res, { data: store });
+    } else {
+      next(new BadRequest("Invalid Request Parameters", ErrorCode.NOT_FOUND));
+    }
   } catch (error) {
     next(new NotFound("Store not found", ErrorCode.NOT_FOUND));
   }

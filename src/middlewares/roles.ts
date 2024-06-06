@@ -63,6 +63,7 @@ export async function checkStore(
   _: Response,
   next: NextFunction
 ) {
+  console.log("middleware working");
   const user = req.user as RequestUser;
   const checkIfStore = await prisma.store.findFirst({
     where: {
@@ -70,6 +71,7 @@ export async function checkStore(
     },
     select: { id: true },
   });
+  console.log(checkStore);
   if (checkIfStore) next();
   else {
     next(new NotFound("Store not found", ErrorCode.NOT_FOUND));

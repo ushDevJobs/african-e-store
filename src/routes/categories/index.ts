@@ -13,4 +13,4 @@ router.get("/", rootErrorHandler(getAllCategories));
 router.get("/category/:id", rootErrorHandler(getCategoryById));
 router.patch("/category/:id", checkAuth, rootErrorHandler(updateCategory));
 
-export { router as categoryRouter };
+export { router as categoryRoutes };

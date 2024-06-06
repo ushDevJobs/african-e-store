@@ -57,7 +57,6 @@ export const initializePassport = (passport: PassportStatic) => {
                 password: true,
               },
             });
-            console.log(user)
             if (!user) {
               return done(null, false, {
                 message: req.flash("error", [
@@ -133,7 +132,7 @@ export const initializePassport = (passport: PassportStatic) => {
                       ? "VERIFIED"
                       : "PENDING",
                     accountType: "BUYER",
-                    profilePicture:profile._json.picture
+                    profilePicture: profile._json.picture,
                   },
                   select: {
                     id: true,
