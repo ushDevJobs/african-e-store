@@ -1,0 +1,5 @@
+@import '../styles//reusables';
+
+.main {
+  @include sectionPadding;
+}

@@ -1,7 +1,7 @@
 'use client'
 
 import React, { ReactNode } from 'react'
-
+import styles from '../styles/Breadcrumbs.module.scss'
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
 
@@ -21,7 +21,7 @@ const NextBreadcrumb = ({ homeElement, separator, containerClasses, listClasses,
 
     return (
         <div>
-            <ul className={`${containerClasses} pt-24 px-5 md:px-[3%] lg:px-[4%] xl:px-[6%]`} >
+            <ul className={`${containerClasses} ${styles.main} pt-24 px-2`} >
                 <li className={listClasses}><Link href={'/'}>{homeElement}</Link></li>
                 {pathNames.length > 0 && separator}
                 {
