@@ -62,14 +62,7 @@ export const resendOTP = async (
     try {
       const user = await prisma.user.findFirstOrThrow({
         where: {
-          AND: [
-            { id: id as string },
-            {
-              NOT: {
-                status: "VERIFIED",
-              },
-            },
-          ],
+          id: id as string,
         },
         select: {
           id: true,
@@ -77,28 +70,27 @@ export const resendOTP = async (
           status: true,
         },
       });
-      const userId = await sendOtp(user.id, user.email);
-      if (userId) {
-        await prisma.user.update({
-          where: {
-            id: user.id,
-          },
-          data: {
-            status: "PENDING",
-          },
-        });
-        return returnJSONSuccess(res, { userId: id });
+      if (user.status !== "VERIFIED") {
+        const userId = await sendOtp(user.id, user.email);
+        if (userId) {
+          await prisma.user.update({
+            where: {
+              id: user.id,
+            },
+            data: {
+              status: "PENDING",
+            },
+          });
+          return returnJSONSuccess(res, { userId: id });
+        }
+        next(
+          new InternalException("Couldnt send mail", ErrorCode.MAIL_ERROR, null)
+        );
+      } else {
+        next(new BadRequest("Already verified", ErrorCode.BAD_REQUEST));
       }
-      next(
-        new InternalException("Couldnt send mail", ErrorCode.MAIL_ERROR, null)
-      );
     } catch (error) {
-      next(
-        new NotFound(
-          "User not found or Already verified",
-          ErrorCode.USER_NOT_FOUND
-        )
-      );
+      next(new BadRequest("User not found", ErrorCode.BAD_REQUEST));
     }
   } else {
     next(new BadRequest("Invalid Request Parameters", ErrorCode.BAD_REQUEST));

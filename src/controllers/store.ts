@@ -65,8 +65,27 @@ export const getStoreByUserLogged = async (
       where: {
         userId: user.id,
       },
+      select: {
+        name: true,
+        id: true,
+        description: true,
+        image: true,
+      },
     });
-    return returnJSONSuccess(res, { data: store });
+    const ratings = await prisma.rating.groupBy({
+      where: {
+        storeId: store.id,
+      },
+      by: ["rating"],
+      _count: true,
+    });
+    let avg = await prisma.rating.aggregate({
+      _avg: {
+        rating: true,
+      },
+      _count: true,
+    });
+    return returnJSONSuccess(res, { data: store, avg, ratings });
   } catch (error) {
     next(new NotFound("Store not found", ErrorCode.NOT_FOUND));
   }
@@ -123,4 +142,38 @@ export const getStoreProduct = async (req: Request, res: Response) => {
     },
   });
   return res.status(200).json({ status: true, data: store });
+};
+export const getStoreCategories = async (req: Request, res: Response) => {
+  const user = req.user as RequestUser;
+  const categories = await prisma.store.findFirst({
+    where: {
+      userId: user.id,
+    },
+    select: {
+      categories: true,
+    },
+  });
+  return res.status(200).json({ status: true, data: categories });
+};
+export const searchStoreProducts = async (req: Request, res: Response) => {
+  const user = req.user as RequestUser;
+  const { search } = req.params;
+  const store = await prisma.store.findFirstOrThrow({
+    where: {
+      userId: user.id,
+    },
+  });
+  const products = await prisma.product.findMany({
+    where: {
+      AND: [
+        { storeId: store.id },
+        {
+          name: {
+            contains: search,
+          },
+        },
+      ],
+    },
+  });
+  return res.status(200).json({ status: true, data: products });
 };

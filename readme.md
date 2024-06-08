@@ -1,5 +1,9 @@
 # Custom error codes returned from response
 
+# to display dynamic and specific error messages to the user.
+
+# this is very important
+
 INVALID_CREDENTIALS = 1000,
 USER_NOT_FOUND = 1001,
 USER_ALREADY_EXIST = 1002,

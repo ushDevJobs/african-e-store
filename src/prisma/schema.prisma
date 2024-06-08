@@ -54,6 +54,7 @@ model Store {
   user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      String     @unique
   products    Product[]
+  orders      Order[]
   ratings     Rating[]
   categories  Category[]
   createdAt   DateTime   @default(now())
@@ -121,6 +122,8 @@ model Order {
   userId          String?
   products        Product     @relation(fields: [productId], references: [id])
   productId       String
+  store           Store       @relation(fields: [storeId], references: [id])
+  storeId         String
   tracker         Tracker?    @relation(fields: [trackingId], references: [id], onDelete: SetNull)
   trackingId      String?     @unique
   createdAt       DateTime    @default(now())

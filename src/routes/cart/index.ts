@@ -1,8 +1,12 @@
 import { Router } from "express";
-import { getCartDetails } from "../../controllers/cart";
+import { deleteItemFromCart, getCartItems } from "../../controllers/cart";
 import { rootErrorHandler } from "../../root-error-handler";
+import { checkUserAccessibility } from "../../middlewares/roles";
 
 const router = Router();
 
-router.get("/", rootErrorHandler(getCartDetails));
+router
+  .route("/")
+  .get(rootErrorHandler(getCartItems))
+  .delete(checkUserAccessibility, rootErrorHandler(deleteItemFromCart));
 export { router as cartRoutes };

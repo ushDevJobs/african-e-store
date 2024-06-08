@@ -3,24 +3,27 @@ import { RequestUser } from "../types";
 import { prisma } from "../prisma";
 import { returnJSONSuccess } from "../utils/functions";
 
-export const getCartItems = async (req: Request, res: Response) => {
+export const getOrders = async (req: Request, res: Response) => {
   const user = req.user! as RequestUser;
-  const cart = await prisma.user.findMany({
+  const orders = await prisma.user.findMany({
     where: {
       id: user.id,
     },
     select: {
-      cartItems: {
+      orders: {
         select: {
           id: true,
           quantity: true,
+          amount: true,
+          status: true,
+          trackingId: true,
           products: {
             select: {
               name: true,
               id: true,
               details: true,
-              coverImage: true,
               itemCondition: true,
+              coverImage: true,
               store: {
                 select: {
                   name: true,
@@ -35,8 +38,8 @@ export const getCartItems = async (req: Request, res: Response) => {
     },
   });
   returnJSONSuccess(res, {
-    data: cart[0].cartItems,
-    count: cart[0].cartItems.length,
+    data: orders[0].orders,
+    count: orders[0].orders.length,
   });
 };
 export const deleteItemFromCart = async (req: Request, res: Response) => {

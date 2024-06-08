@@ -63,7 +63,6 @@ export async function checkStore(
   _: Response,
   next: NextFunction
 ) {
-  console.log("middleware working");
   const user = req.user as RequestUser;
   const checkIfStore = await prisma.store.findFirst({
     where: {
@@ -71,9 +70,35 @@ export async function checkStore(
     },
     select: { id: true },
   });
-  console.log(checkStore);
   if (checkIfStore) next();
   else {
     next(new NotFound("Store not found", ErrorCode.NOT_FOUND));
+  }
+}
+export async function checkUserAccessibility(
+  req: Request,
+  _: Response,
+  next: NextFunction
+) {
+  const { id } = req.query;
+  if (id) {
+    const user = req.user as RequestUser;
+    const checkCart = await prisma.cart.findFirst({
+      where: {
+        AND: [
+          {
+            id: id as string,
+            userId: user.id,
+          },
+        ],
+      },
+      select: { id: true },
+    });
+    if (checkCart) next();
+    else {
+      next(new NotFound("Cart Item not found", ErrorCode.NOT_FOUND));
+    }
+  } else {
+    next(new BadRequest("Invalid Request Parameters", ErrorCode.BAD_REQUEST));
   }
 }
