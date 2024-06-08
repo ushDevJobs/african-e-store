@@ -14,18 +14,47 @@ const PaymentPage = (props: Props) => {
             <div className={styles.checkoutContainer}>
                 <div className={styles.lhs}>
                     <div className={styles.productInfos}>
-                        <h2>Item</h2>
-                        <p className={styles.seller}>
-                            Seller: Chavo global
-                        </p>
+                        <h2>Item(3)</h2>
+                        
                         <div className={styles.info}>
+                            {/* <p className={styles.seller}>
+                                Seller: Chavo global
+                            </p> */}
                             <div className={styles.image}>
                                 <Image src={images.cart_prooduct_image} alt='product image' fill />
                             </div>
                             <div className={styles.item}>
                                 <p className={styles.name}>Samsung Galaxy S21 5G SM-G991U Factory Unlocked 128GB Phantom Gray C</p>
                                 <p className={styles.price}>US $164.99</p>
-                        <QuantityButton/>
+                                {/* <QuantityButton/> */}
+                                <div className={styles.delivery}>
+                                    <h3>Delivery</h3>
+                                    <p className='mb-4 max-w-[300px]'>Delivery
+                                        Estimated delivery: Jun 19 - Jul 18Est. delivery: Jun 19 - Jul 18
+                                        Rayvvin International Shipping
+                                        US $31.00</p>
+
+                                    <span className={styles.fees}>Authorities may apply duties, fees, and taxes upon delivery</span>
+                                </div>
+                                <div className={styles.delivery}>
+                                    <h3>Ship to </h3>
+                                    <p>User address from google </p>
+                                    <p>Country</p>
+                                    <p>Number</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div className={styles.info}>
+                            {/* <p className={styles.seller}>
+                                Seller: Chavo global
+                            </p> */}
+                            <div className={styles.image}>
+                                <Image src={images.cart_prooduct_image} alt='product image' fill />
+                            </div>
+                            <div className={styles.item}>
+                                <p className={styles.name}>Samsung Galaxy S21 5G SM-G991U Factory Unlocked 128GB Phantom Gray C</p>
+                                <p className={styles.price}>US $164.99</p>
+                                {/* <QuantityButton/> */}
                                 <div className={styles.delivery}>
                                     <h3>Delivery</h3>
                                     <p className='mb-4 max-w-[300px]'>Delivery
