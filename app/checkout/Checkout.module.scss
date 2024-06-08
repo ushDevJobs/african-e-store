@@ -2,8 +2,12 @@
 
 .main {
   @include sectionPadding;
-//   padding-top: 83px;
+  //   padding-top: 83px;
   padding-bottom: 100px;
+
+  @include tablet {
+    padding-bottom: 100px;
+  }
 
   h1 {
     color: #6f6f6f;
@@ -14,16 +18,23 @@
   .checkoutContainer {
     display: flex;
     gap: 68px;
+
+    @include tablet {
+      flex-direction: column;
+    }
+
     .lhs {
       flex: 1.5;
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 30px;
 
       .productInfos {
         background-color: #f7fafa;
         border-radius: 10px;
         padding: 22px 30px;
+        overflow-y: auto;
+        max-height: 400px;
 
         h2 {
           font-size: 20px;
@@ -40,6 +51,7 @@
         .info {
           display: flex;
           gap: 22px;
+          margin-top: 20px;
 
           .image {
             width: 64px;
