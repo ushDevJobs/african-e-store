@@ -6,7 +6,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useResendVerificationCode, useVerifyUser } from '../api/apiClients';
 import { RegisterBuyerRequest, RegisterBuyerResponse } from '../components/models/IRegisterBuyer';
 import { StorageKeys } from '../components/constants/StorageKeys';
-import { catchError } from '../components/constants/catchError';
+import { catchError, createCustomErrorMessages } from '../components/constants/catchError';
 import { toast } from 'sonner';
 
 type Props = {};
@@ -14,13 +14,13 @@ type Props = {};
 const VerificationPage = (props: Props) => {
     const router = useRouter();
     const pathname = usePathname()
-
+    const searchParams = useSearchParams()
+    const userId = searchParams.get('id') ?? ''
+    !userId && router.back()
     const verifyUser = useVerifyUser();
     const resendVerificationCode = useResendVerificationCode();
 
     const [codeLength, setCodeLength] = useState<number>(5);
-    const [userData, setUserData] = useState<RegisterBuyerResponse>();
-    console.log('userData', userData)
     const [verificationCode, setVerificationCode] = useState<string[]>(Array(codeLength).fill(''));
     const [isVerifyingUser, setIsVerifyingUser] = useState<boolean>(false);
     const [hasVerificationCodeBeenResent, setHasVerificationCodeBeenResent] = useState<boolean>(false);
@@ -33,7 +33,7 @@ const VerificationPage = (props: Props) => {
         }
 
         // Ensure userData and userData.userId are defined
-        if (!userData || !userData.userId) {
+        if (!userId || userId === '') {
             console.error('User data or user ID is missing');
             return;
         }
@@ -42,27 +42,23 @@ const VerificationPage = (props: Props) => {
         setIsVerifyingUser(true);
 
         const data = {
-            id: userData.userId,
+            id: userId,
             code: verificationCode.join('')
         }
         await verifyUser(data)
             .then((response) => {
-                // Clear user credentials from session storage
-                sessionStorage.removeItem(StorageKeys.RegisteredBuyer);
 
-                console.log("Response: ", response.data);
-                if (response && '/verification?buyer=2') {
-                    router.push('/login?buyer=2')
-                } else {
-                    router.push('/login?seller=1')
-                }
-               
                 // Display success
                 toast.success("Your account has been verified");
+                if (response.data.status) {
+                    router.push('/')
+                } 
+               
             })
             .catch((error) => {
                 catchError(error);
-                toast.error('Error verifying user. Please try again.');
+                const errorMessage = createCustomErrorMessages(error.response?.data)
+                    toast.error(errorMessage);
             })
             .finally(() => {
                 setIsVerifyingUser(false);
@@ -76,7 +72,7 @@ const VerificationPage = (props: Props) => {
         // Start loader
         setIsResendingVerificationCode(true);
 
-        await resendVerificationCode(userData?.userId as string)
+        await resendVerificationCode(userId as string)
             .then((response) => {
                 console.log("Response: ", response);
                 setHasVerificationCodeBeenResent(true);
@@ -90,19 +86,6 @@ const VerificationPage = (props: Props) => {
             });
     }
 
-    useEffect(() => {
-        const _userCredentials = sessionStorage.getItem(StorageKeys.RegisteredBuyer)
-        const _sellerCredentials = sessionStorage.getItem(StorageKeys.RegisteredSeller)
-
-        if (_userCredentials && _userCredentials !== undefined && _userCredentials !== null && '/verification?buyer=2') {
-            const userCredentials: RegisterBuyerResponse = JSON.parse(_userCredentials);
-            setUserData(userCredentials);
-        }
-        else if(_sellerCredentials && _sellerCredentials !== undefined && _sellerCredentials !== null && '/verification?seller=1') {
-            const userCredentials: RegisterBuyerResponse = JSON.parse(_sellerCredentials);
-            setUserData(userCredentials);
-        }
-    }, [])
 
     //UseEffect to close all toasts after 5 seconds
     useEffect(() => {

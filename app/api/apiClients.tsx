@@ -6,6 +6,7 @@ import { RegisterSellerRequest } from "../components/models/IRegisterSeller";
 
 export const API = axios.create({
     baseURL: ApiRoutes.BASE_URL_DEV,
+    withCredentials:true,
 });
 
 // Api call to create new user(buyer)

@@ -3,12 +3,13 @@ import React, { ChangeEvent, Dispatch, FormEvent, SetStateAction, useEffect, use
 import styles from '../styles/Registration.module.scss'
 import Link from 'next/link'
 import { LineIcon } from '../components/SVGs/SVGicons'
-import { useLoginBuyer } from '../api/apiClients'
+import { API, useLoginBuyer } from '../api/apiClients'
 import { useRouter } from 'next/navigation'
 import { LoginBuyer } from '../components/models/IRegisterBuyer'
 import { emailRegex } from '../components/constants/emailRegex'
 import { toast } from 'sonner'
-import { catchError } from '../components/constants/catchError'
+import { catchError, createCustomErrorMessages } from '../components/constants/catchError'
+import ApiRoutes from '../api/apiRoutes'
 
 type Props = {}
 
@@ -18,7 +19,9 @@ const LoginPage = (props: Props) => {
 
     const [loading, setLoading] = useState(false);
     const [formValues, setFormValues] = useState<LoginBuyer>();
-    console.log(formValues)
+    // console.log(formValues)
+        //  API.get(ApiRoutes.AccountStatus).catch(console.log).then(console.log)
+        
 
     const [emailAddressErrorMsg, setEmailAddressErrorMsg] = useState<
         string | boolean
@@ -90,22 +93,17 @@ const LoginPage = (props: Props) => {
 
             await loginUser(formValues as LoginBuyer)
                 .then((response) => {
-                    console.log(response.data);
 
                     // Display success
                     toast.success("You have successfully logged in.");
-
-                    if (response && '/login?buyer=2') {
-                        router.push('/')
-                    } else {
-                        router.push('/seller')
-                    }
+                    if (response.data.status) {
+                        response.data.data.accountType === 'SELLER' ? router.push('/seller') : router.push('/')
+                    } 
                 })
                 .catch((error) => {
                     catchError(error);
-                    console.log('ERROR loggin in: ', { error });
-
-                    toast.error('Error loggin in. Please try again.');
+                    const errorMessage = createCustomErrorMessages(error.response?.data)
+                    toast.error(errorMessage);
                 })
                 .finally(() => {
                     setLoading(false);

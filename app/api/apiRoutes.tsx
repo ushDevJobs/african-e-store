@@ -8,6 +8,10 @@ export default class ApiRoutes {
      */
     static RegisterBuyer: string = 'api/auth/register';
     /**
+     * Api routes to check if user is logged in
+     */
+    static AccountStatus: string = 'api/auth/account/status';
+    /**
      * Api routes to register new user(buyer)
      */
     static RegisterSeller: string = 'api/auth/register/seller';

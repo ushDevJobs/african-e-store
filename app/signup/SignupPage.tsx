@@ -8,7 +8,7 @@ import { RegisterBuyerRequest } from '../components/models/IRegisterBuyer'
 import { useRouter } from 'next/navigation'
 import { emailRegex } from '../components/constants/emailRegex'
 import { StorageKeys } from '../components/constants/StorageKeys'
-import { catchError } from '../components/constants/catchError'
+import { catchError, createCustomErrorMessages } from '../components/constants/catchError'
 import { toast } from 'sonner'
 
 type Props = {}
@@ -131,27 +131,30 @@ const SignupPage = (props: Props) => {
                     toast.success("You have successfully created an account.");
 
                     // Persist user data in session storage
-                    sessionStorage.setItem(
-                        StorageKeys.RegisteredBuyer,
-                        JSON.stringify(response.data)
-                    );
+                    // sessionStorage.setItem(
+                    //     StorageKeys.RegisteredBuyer,
+                    //     JSON.stringify(response.data)
+                    // );
 
+                    const {userId} = response.data
                     // Redirect to verification
-                    router.push('/verification?buyer=2')
+                    router.push(`/verification?id=${userId}`)
                 })
                 .catch((error) => {
                     catchError(error);
                     // console.log('ERROR CREATING USER: ', { error });
-                    if (
-                        error.response.data.message == 'User already exist'
-                    ) {
-                        // console.log('User already exist');
-                        toast.error(
-                            'User already exist. Please login to continue.'
-                        );
-                        return;
-                    }
-                    toast.error('Error creating user. Please try again.');
+                    // if (
+                    //     error.response.data.message == 'User already exist'
+                    // ) {
+                    //     // console.log('User already exist');
+                    //     toast.error(
+                    //         'User already exist. Please login to continue.'
+                    //     );
+                    //     return;
+                    // }
+                    // toast.error('Error creating user. Please try again.');
+                    const errorMessage = createCustomErrorMessages(error.response?.data)
+                    toast.error(errorMessage);
                 })
                 .finally(() => {
                     setLoading(false);
