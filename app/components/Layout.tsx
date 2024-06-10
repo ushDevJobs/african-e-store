@@ -16,6 +16,7 @@ import RegistrationNav from './RegistrationNav';
 import RegistrationFooter from './RegistrationFooter';
 import NextBreadcrumb from './Breadcrumbs';
 import { Toaster } from 'sonner';
+import { AccountStatusProvider } from '../context/AccountStatusContext';
 
 interface LayoutProps {
     children?: ReactNode;
@@ -37,28 +38,32 @@ const Layout: FunctionComponent<LayoutProps> = ({ children }): ReactElement => {
         <>
             {!loaderIsVisible && (
                 <>
-                    <Toaster
-                        position='bottom-center'
-                        richColors
-                        closeButton
-                        toastOptions={{
-                            duration: 3000,
-                            unstyled: false,
-                        }}
-                    />
-                    {(pathname.includes('/signup') || pathname.includes('/login') || pathname.includes('/verification')) ? <RegistrationNav /> : <Navbar />}
+                
+                    <AccountStatusProvider>
+                        <Toaster
+                            position='bottom-center'
+                            richColors
+                            closeButton
+                            toastOptions={{
+                                duration: 3000,
+                                unstyled: false,
+                            }}
+                        />
+                        {(pathname.includes('/signup') || pathname.includes('/login') || pathname.includes('/verification')) ? <RegistrationNav /> : <Navbar />}
 
-                    {!['/', '/login', '/verification', '/signup', '/seller/signup', '/seller/login'].includes(pathname) &&
-                        <NextBreadcrumb
-                            homeElement={'Home'}
-                            separator={<span>&gt;</span>}
-                            activeClasses='text-[#2c7865]'
-                            containerClasses='flex py-5 bg-white'
-                            listClasses='hover:underline mx-2 font-bold'
-                            capitalizeLinks
-                        />}
-                    {children}
-                    {(pathname.includes('/signup') || pathname.includes('/login') || pathname.includes('/verification')) ? <RegistrationFooter /> : <Footer />}
+                        {!['/', '/login', '/verification', '/signup', '/seller/signup', '/seller/login'].includes(pathname) &&
+                            <NextBreadcrumb
+                                homeElement={'Home'}
+                                separator={<span>&gt;</span>}
+                                activeClasses='text-[#2c7865]'
+                                containerClasses='flex py-5 bg-white'
+                                listClasses='hover:underline mx-2 font-bold'
+                                capitalizeLinks
+                            />}
+                        {children}
+                        {(pathname.includes('/signup') || pathname.includes('/login') || pathname.includes('/verification')) ? <RegistrationFooter /> : <Footer />}
+
+                    </AccountStatusProvider>
                 </>
             )}
 
