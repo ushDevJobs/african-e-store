@@ -42,7 +42,9 @@ export const initializePassport = (passport: PassportStatic) => {
                 message: req.flash("error", [
                   parsed.error.errors[0].message,
                   "422",
-                  "" + ErrorCode.UNPROCESSABLE_ENTITY,
+                  parsed.error.errors[0].message.includes("email")
+                    ? "" + ErrorCode.INVALID_EMAIL
+                    : "" + ErrorCode.UNPROCESSABLE_ENTITY,
                 ]),
               });
             }
@@ -71,7 +73,7 @@ export const initializePassport = (passport: PassportStatic) => {
               let newUser = {
                 id: user.id,
                 email: user.email,
-                AccountType: user.accountType,
+                accountType: user.accountType,
               };
               return done(null, newUser);
             } else {

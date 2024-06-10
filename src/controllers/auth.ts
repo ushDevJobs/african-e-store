@@ -44,11 +44,42 @@ export const register = async (
     const id = await sendOtp(user.id, user.email);
     if (id) {
       return returnJSONSuccess(res, { userId: id });
+    } else {
+      await prisma.user.update({
+        where: {
+          id: user.id,
+        },
+        data: {
+          status: "FAILED",
+        },
+      });
+      next(
+        new InternalException("Could'nt send mail", ErrorCode.MAIL_ERROR, null)
+      );
     }
-    next(
-      new InternalException("Couldnt send mail", ErrorCode.MAIL_ERROR, null)
-    );
   } else {
+    if (findUser.status !== "VERIFIED") {
+      const id = await sendOtp(findUser.id, findUser.email);
+      if (id) {
+        return returnJSONSuccess(res, { userId: id });
+      } else {
+        await prisma.user.update({
+          where: {
+            id: findUser.id,
+          },
+          data: {
+            status: "FAILED",
+          },
+        });
+        next(
+          new InternalException(
+            "Could'nt send mail",
+            ErrorCode.MAIL_ERROR,
+            null
+          )
+        );
+      }
+    }
     next(new BadRequest("User already exist", ErrorCode.USER_ALREADY_EXIST));
   }
 };
@@ -96,7 +127,11 @@ export const resendOTP = async (
     next(new BadRequest("Invalid Request Parameters", ErrorCode.BAD_REQUEST));
   }
 };
-export const registerSeller = async (req: Request, res: Response) => {
+export const registerSeller = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   validateSellerRegData.parse(req.body);
   const findUser = await prisma.user.findFirst({
     where: { email: req.body.email },
@@ -128,14 +163,43 @@ export const registerSeller = async (req: Request, res: Response) => {
     const id = await sendOtp(user.id, user.email);
     if (id) {
       return returnJSONSuccess(res, { userId: id });
+    } else {
+      await prisma.user.update({
+        where: {
+          id: user.id,
+        },
+        data: {
+          status: "FAILED",
+        },
+      });
+      next(
+        new InternalException("Could'nt send mail", ErrorCode.MAIL_ERROR, null)
+      );
     }
-    throw new InternalException(
-      "Couldnt send mail",
-      ErrorCode.MAIL_ERROR,
-      null
-    );
   } else {
-    new BadRequest("User already exist", ErrorCode.USER_ALREADY_EXIST);
+    if (findUser.status !== "VERIFIED") {
+      const id = await sendOtp(findUser.id, findUser.email);
+      if (id) {
+        return returnJSONSuccess(res, { userId: id });
+      } else {
+        await prisma.user.update({
+          where: {
+            id: findUser.id,
+          },
+          data: {
+            status: "FAILED",
+          },
+        });
+        next(
+          new InternalException(
+            "Could'nt send mail",
+            ErrorCode.MAIL_ERROR,
+            null
+          )
+        );
+      }
+    }
+    next(new BadRequest("User already exist", ErrorCode.USER_ALREADY_EXIST));
   }
 };
 
@@ -258,7 +322,7 @@ export const verifyOTP = async (
         });
       }
     } catch (error) {
-      next(new NotFound("Failed to find OTP", ErrorCode.MAIL_ERROR));
+      next(new NotFound("Failed to find OTP", ErrorCode.NOT_FOUND));
     }
   } else {
     next(new BadRequest("Invalid Request Parameters", ErrorCode.BAD_REQUEST));

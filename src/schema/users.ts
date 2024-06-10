@@ -1,6 +1,6 @@
 import { z } from "zod";
 const passwordErrorMessage = "Password must contain at least 4 character(s)";
-const phoneErrorMessage = "Phone number must contain at least 11 character(s)";
+const phoneErrorMessage = "Phone number must contain at least 10 character(s)";
 const countryErrorMessage = "Country must contain at least 11 character(s)";
 export const validateLoginData = z.object({
   email: z.string({ message: "email is required" }).email(),
@@ -21,7 +21,7 @@ export const validateRegData = z
       .min(4, passwordErrorMessage),
     telephone: z
       .string({ message: "telephone is required" })
-      .min(11, phoneErrorMessage),
+      .min(10, phoneErrorMessage),
     country: z.string().min(2, countryErrorMessage).optional(),
   })
   .refine((data) => data.password === data.confirmPassword, {
@@ -41,7 +41,7 @@ export const validateSellerRegData = z
       .min(4, passwordErrorMessage),
     telephone: z
       .string({ message: "telephone is required" })
-      .min(11, phoneErrorMessage),
+      .min(10, phoneErrorMessage),
     country: z.string().min(2, countryErrorMessage).optional(),
   })
   .refine((data) => data.password === data.confirmPassword, {

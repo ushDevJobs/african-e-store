@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { Request, Response, Router } from "express";
 import {
   register,
   loginAuthError,
@@ -20,8 +20,10 @@ router.post(
   passport.authenticate("local", {
     failureRedirect: "login/error",
   }),
-  (_, res) =>
-    res.status(200).json({ status: true, message: "Login Successful" })
+  (req: Request, res: Response) =>
+    res
+      .status(200)
+      .json({ status: true, message: "Login Successful", data: req.user })
 );
 router.get(
   "/google",
