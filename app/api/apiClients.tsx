@@ -6,7 +6,7 @@ import { RegisterSellerRequest } from "../components/models/IRegisterSeller";
 
 export const API = axios.create({
     baseURL: ApiRoutes.BASE_URL_DEV,
-    withCredentials:true,
+    withCredentials: true,
 });
 
 // Api call to create new user(buyer)
@@ -51,7 +51,7 @@ export function useVerifyUser() {
 
     return verifyUser;
 }
-
+// Api call to resend verification code
 export function useResendVerificationCode() {
     async function resendVerificationCode(userId: string) {
         // Fire the request
@@ -77,4 +77,29 @@ export function useLoginBuyer() {
     }
 
     return loginBuyer;
+}
+// Api call to check if user is logged in
+export function useFetchAccountStatus() {
+    async function fetchAccountStatus() {
+        // Fire the request
+        const response = await API.get(ApiRoutes.AccountStatus);
+
+        // Return the response
+        return response;
+    }
+
+    return fetchAccountStatus;
+}
+
+// Api call to logout
+export function useLogout() {
+    async function logOut() {
+        // Fire the request
+        const response = await API.get(ApiRoutes.Logout);
+
+        // Return the response
+        return response;
+    }
+
+    return logOut;
 }

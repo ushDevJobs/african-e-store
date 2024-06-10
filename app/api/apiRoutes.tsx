@@ -27,5 +27,9 @@ export default class ApiRoutes {
      * Api routes to resend verification code
      */
     static ResendVerificationCode: string = 'api/auth/resend';
+    /**
+     * Api routes to logout
+     */
+    static Logout: string = 'api/auth/logout';
 
 }
