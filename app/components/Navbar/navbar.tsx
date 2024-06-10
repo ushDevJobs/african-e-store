@@ -57,9 +57,9 @@ const Navbar = (props: Props) => {
                 setLogoutResponse(response.data);
                 // fetchAccountStatus();
                 if (response.data.status) {
+                    router.push('/')
                     setIsLoggedIn(false);
                     setIsSellerLoggedIn(false);
-                    router.push('/')
                 }
                 toast.success('Logout successful');
             })
