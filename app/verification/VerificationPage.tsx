@@ -47,18 +47,18 @@ const VerificationPage = (props: Props) => {
         }
         await verifyUser(data)
             .then((response) => {
-
+                // console.log(response)
                 // Display success
                 toast.success("Your account has been verified");
                 if (response.data.status) {
-                    router.push('/')
-                } 
-               
+                    router.push('/login')
+                }
+
             })
             .catch((error) => {
                 catchError(error);
                 const errorMessage = createCustomErrorMessages(error.response?.data)
-                    toast.error(errorMessage);
+                toast.error(errorMessage);
             })
             .finally(() => {
                 setIsVerifyingUser(false);
@@ -74,7 +74,7 @@ const VerificationPage = (props: Props) => {
 
         await resendVerificationCode(userId as string)
             .then((response) => {
-                console.log("Response: ", response);
+                // console.log("Response: ", response);
                 setHasVerificationCodeBeenResent(true);
 
             })

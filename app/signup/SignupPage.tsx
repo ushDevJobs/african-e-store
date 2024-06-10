@@ -19,25 +19,16 @@ const SignupPage = (props: Props) => {
 
     const [loading, setLoading] = useState(false);
     const [formValues, setFormValues] = useState<RegisterBuyerRequest>();
-    console.log(formValues)
+    // console.log(formValues)
 
-    const [fullNameErrorMsg, setFullNameErrorMsg] = useState<string | boolean>(
-        false
-    );
-    const [emailAddressErrorMsg, setEmailAddressErrorMsg] = useState<
-        string | boolean
-    >(false);
+    const [fullNameErrorMsg, setFullNameErrorMsg] = useState<string | boolean>(false);
+    const [emailAddressErrorMsg, setEmailAddressErrorMsg] = useState<string | boolean>(false);
     const [phoneErrorMsg, setPhoneErrorMsg] = useState<string | boolean>(false);
-    const [passwordErrorMsg, setPasswordErrorMsg] = useState<string | boolean>(
-        false
-    );
-    const [countryErrorMsg, setCountryErrorMsg] = useState<string | boolean>(
-        false
-    );
-
-    const [cofirmPasswordErrorMsg, setCofirmPasswordErrorMsg] = useState<
-        string | boolean
-    >(false);
+    const [passwordErrorMsg, setPasswordErrorMsg] = useState<string | boolean>(false);
+    const [countryErrorMsg, setCountryErrorMsg] = useState<string | boolean>(false);
+    const [cofirmPasswordErrorMsg, setCofirmPasswordErrorMsg] = useState<string | boolean>(false);
+    const [checkboxChecked, setCheckboxChecked] = useState(false);
+    const [checkboxErrorMsg, setCheckboxErrorMsg] = useState<string | boolean>(false);
 
     function onformValueChange(
         e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>,
@@ -62,7 +53,7 @@ const SignupPage = (props: Props) => {
      * @returns boolean depicting form validation status
      */
     function validateFields() {
-        console.log(formValues);
+        // console.log(formValues);
         if (
             formValues &&
             formValues.fullname &&
@@ -72,11 +63,12 @@ const SignupPage = (props: Props) => {
             formValues.password &&
             formValues.password.length >= 8 &&
             formValues.confirmPassword &&
-            formValues.telephone
+            formValues.telephone &&
+            checkboxChecked
         ) {
             return true;
         } else {
-            console.log('form validation failed');
+            // console.log('form validation failed');
 
             if (!formValues?.fullname) {
                 setFullNameErrorMsg(true);
@@ -110,7 +102,11 @@ const SignupPage = (props: Props) => {
             } else {
                 setCofirmPasswordErrorMsg(false);
             }
-
+            if (!checkboxChecked) {
+                setCheckboxErrorMsg('You must agree to the terms and conditions');
+            } else {
+                setCheckboxErrorMsg(false);
+            }
             return false;
         }
     }
@@ -121,7 +117,7 @@ const SignupPage = (props: Props) => {
         setLoading(true);
 
         if (validateFields()) {
-            console.log(formValues);
+            // console.log(formValues);
 
             await registerBuyer(formValues as RegisterBuyerRequest)
                 .then((response) => {
@@ -136,7 +132,7 @@ const SignupPage = (props: Props) => {
                     //     JSON.stringify(response.data)
                     // );
 
-                    const {userId} = response.data
+                    const { userId } = response.data
                     // Redirect to verification
                     router.push(`/verification?id=${userId}`)
                 })
@@ -294,10 +290,33 @@ const SignupPage = (props: Props) => {
                     </div>
                 </div>
 
-                <div className={styles.acknowledge}>
+                {/* <div className={styles.acknowledge}>
                     <input type="checkbox" name="" id="" />
                     <label htmlFor="">I agree to the <Link href={'/'}>Terms of Use</Link>, and <Link href={'/'}>Privacy Policy</Link>. I agree to receive more information from Rayvvin about its products and services.</label>
+                </div> */}
+                <div className='flex flex-col mb-8 gap-2'>
+                    <div className={styles.acknowledge}>
+                        <input
+                            type="checkbox"
+                            name="acknowledge"
+                            id="acknowledge"
+                            checked={checkboxChecked}
+                            onChange={(e) => {
+                                setCheckboxChecked(e.target.checked);
+                                setCheckboxErrorMsg(false);
+                            }}
+                        />
+                        <label htmlFor="acknowledge">
+                            I agree to the <Link href={'/'}>Terms of Use</Link>, and <Link href={'/'}>Privacy Policy</Link>. I agree to receive more information from Rayvvin about its products and services.
+                        </label>
+                    </div>
+                    {checkboxErrorMsg && (
+                        <span className={styles.errorMsg}>
+                            {checkboxErrorMsg}
+                        </span>
+                    )}
                 </div>
+
                 <button type='submit' disabled={loading} className={styles.btn}
                     style={loading ? { pointerEvents: 'none', opacity: '0.6' } : {}}>
                     {loading ? 'LOADING...' : 'SIGN UP'}

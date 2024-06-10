@@ -20,8 +20,8 @@ const LoginPage = (props: Props) => {
     const [loading, setLoading] = useState(false);
     const [formValues, setFormValues] = useState<LoginBuyer>();
     // console.log(formValues)
-        //  API.get(ApiRoutes.AccountStatus).catch(console.log).then(console.log)
-        
+    //  API.get(ApiRoutes.AccountStatus).catch(console.log).then(console.log)
+
 
     const [emailAddressErrorMsg, setEmailAddressErrorMsg] = useState<
         string | boolean
@@ -30,7 +30,7 @@ const LoginPage = (props: Props) => {
     const [passwordErrorMsg, setPasswordErrorMsg] = useState<string | boolean>(
         false
     );
-    
+
     function onformValueChange(
         e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>,
         setState?: Dispatch<SetStateAction<string | boolean>>
@@ -54,7 +54,7 @@ const LoginPage = (props: Props) => {
      * @returns boolean depicting form validation status
      */
     function validateFields() {
-        console.log(formValues);
+        // console.log(formValues);
         if (
             formValues &&
             formValues.email &&
@@ -64,7 +64,7 @@ const LoginPage = (props: Props) => {
         ) {
             return true;
         } else {
-            console.log('form validation failed');
+            // console.log('form validation failed');
 
             if (!formValues?.email || !emailRegex.test(formValues.email.trim())) {
                 setEmailAddressErrorMsg(true);
@@ -89,19 +89,21 @@ const LoginPage = (props: Props) => {
         setLoading(true);
 
         if (validateFields()) {
-            console.log(formValues);
+            // console.log(formValues);
 
             await loginUser(formValues as LoginBuyer)
                 .then((response) => {
+                    // console.log(response)
 
-                    // Display success
-                    toast.success("You have successfully logged in.");
                     if (response.data.status) {
                         response.data.data.accountType === 'SELLER' ? router.push('/seller') : router.push('/')
+                        // Display success
+                        toast.success("You have successfully logged in.");
                     } 
+
                 })
                 .catch((error) => {
-                    catchError(error);
+                    // catchError(error);
                     const errorMessage = createCustomErrorMessages(error.response?.data)
                     toast.error(errorMessage);
                 })
