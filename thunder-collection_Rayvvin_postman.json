@@ -1,6 +1,6 @@
 {
     "info": {
-        "_postman_id": "a023c017-3fce-4171-b0ab-a8e470db18e7",
+        "_postman_id": "e6921e06-e341-44a5-8a80-84a3a4ccc330",
         "name": "Rayvvin",
         "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
         "description": ""
@@ -33,7 +33,7 @@
                                     "language": "json"
                                 }
                             },
-                            "raw": "{\n  \"email\":\"segunade041@gmail.com\",\n  \"password\":\"123456\"\n}"
+                            "raw": "{\n  \"email\":\"testnet041@gmail.com\",\n  \"password\":\"Segunade041@\"\n}"
                         }
                     }
                 },
@@ -281,6 +281,226 @@
                                 "api",
                                 "stores",
                                 "all"
+                            ],
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3000"
+                        }
+                    }
+                },
+                {
+                    "name": "Get Store for User Logged In",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "http://localhost:3000/api/stores/store",
+                            "path": [
+                                "api",
+                                "stores",
+                                "store"
+                            ],
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3000"
+                        }
+                    }
+                },
+                {
+                    "name": "Products In A Store",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "http://localhost:3000/api/stores/store/products",
+                            "path": [
+                                "api",
+                                "stores",
+                                "store",
+                                "products"
+                            ],
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3000"
+                        }
+                    }
+                },
+                {
+                    "name": "Get Store By Id",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "http://localhost:3000/api/stores/store/id/clx3jsst5000158x6y37q33r",
+                            "path": [
+                                "api",
+                                "stores",
+                                "store",
+                                "id",
+                                "clx3jsst5000158x6y37q33r"
+                            ],
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3000"
+                        }
+                    }
+                },
+                {
+                    "name": "Search Store",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "http://localhost:3000/api/stores/search/mystore",
+                            "path": [
+                                "api",
+                                "stores",
+                                "search",
+                                "mystore"
+                            ],
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3000"
+                        }
+                    }
+                },
+                {
+                    "name": "Create Store",
+                    "request": {
+                        "method": "POST",
+                        "url": {
+                            "raw": "http://localhost:3000/api/stores/store",
+                            "path": [
+                                "api",
+                                "stores",
+                                "store"
+                            ],
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3000"
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            },
+                            "raw": "{\n  \"name\":\"Electrox\",\n  \"description\":\"Get all your electronic gadgets\",\n  \"country\":\"nigeria\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Search Products in Store",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "http://localhost:3000/api/stores/store/search/dell pc",
+                            "path": [
+                                "api",
+                                "stores",
+                                "store",
+                                "search",
+                                "dell pc"
+                            ],
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3000"
+                        }
+                    }
+                },
+                {
+                    "name": "Get Categories of a Store",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "http://localhost:3000/api/stores/store/categories",
+                            "path": [
+                                "api",
+                                "stores",
+                                "store",
+                                "categories"
+                            ],
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3000"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Cart",
+            "item": [
+                {
+                    "name": "Get Cart Items",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "http://localhost:3000/api/cart",
+                            "path": [
+                                "api",
+                                "cart"
+                            ],
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3000"
+                        }
+                    }
+                },
+                {
+                    "name": "Delete Cart Item",
+                    "request": {
+                        "method": "DELETE",
+                        "url": {
+                            "raw": "http://localhost:3000/api/cart?id=a0cd1e5f-5fb8-4e26-9350-887c4f6fab92",
+                            "query": [
+                                {
+                                    "key": "id",
+                                    "value": "a0cd1e5f-5fb8-4e26-9350-887c4f6fab92"
+                                }
+                            ],
+                            "variable": [],
+                            "path": [
+                                "api",
+                                "cart"
+                            ],
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3000"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Orders",
+            "item": [
+                {
+                    "name": "Get Orders",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "http://localhost:3000/api/orders",
+                            "path": [
+                                "api",
+                                "orders"
                             ],
                             "protocol": "http",
                             "host": [
