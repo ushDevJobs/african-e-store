@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from './Categories.module.scss'
 import CategoriesHeader from '../components/CategoriesHeader'
 import CategoriesSettingsBar from '../components/CategoriesSettingsBar'
@@ -10,15 +10,64 @@ import images from '@/public/images'
 import { FilterIcon, LeftArrowIcon, RightArrowIcon, SortIcon } from '../components/SVGs/SVGicons'
 import PageTransition from '../components/PageTransition'
 import Link from 'next/link'
+import { useFetchCategories } from '../api/apiClients'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { createCustomErrorMessages } from '../components/constants/catchError'
+import { toast } from 'sonner'
 
 
-type Props = {}
+type Category = {
+    id: number;
+    name: string;
+};
 
-const CategoriesPage = (props: Props) => {
+type CategoriesResponse = {
+    categories: Category[];
+    totalPages: number;
+};
+
+const CategoriesPage = () => {
+    const fetchCategories = useFetchCategories()
     const windowRes = useResponsiveness();
     const isMobile = windowRes.width && windowRes.width < 768;
     const onMobile = typeof isMobile == 'boolean' && isMobile;
     const onDesktop = typeof isMobile == 'boolean' && !isMobile;
+    const searchParams = useSearchParams()
+    const router = useRouter()
+
+    const [categories, setCategories] = useState<CategoriesResponse[]>([]);
+    const [isFetchingCategories, setIsFetchingCategories] = useState<boolean>(true);
+    const [totalPages, setTotalPages] = useState<number>(0);
+
+    const page = parseInt((searchParams.get('page') as string) || '1', 10);
+    const limit = 3; // Number of categories per page
+
+    async function getCategories() {
+
+        // Start loader
+        setIsFetchingCategories(true);
+
+        await fetchCategories(page, limit)
+            .then((response) => {
+                console.log("Response: ", response);
+                setCategories(response.data);
+            })
+            .catch((error) => {
+                const errorMessage = createCustomErrorMessages(error.response?.data)
+                toast.error(errorMessage);
+            })
+            .finally(() => {
+                setIsFetchingCategories(false);
+            });
+    }
+
+    useEffect(() => {
+        getCategories();
+    }, [page]);
+
+    const goToPage = (page: number) => {
+        router.push(`/categories?page=${page}`);
+    };
     return (
         <div className={styles.main}>
             {/* <PageTransition previousPage={previousPage} currentPage="/my-page" direction="forward" /> */}

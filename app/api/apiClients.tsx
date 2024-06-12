@@ -103,3 +103,16 @@ export function useLogout() {
 
     return logOut;
 }
+
+// Api call to fetch categories
+export function useFetchCategories() {
+    async function categories(page: number, limit: number) {
+        // Fire the request
+        const response = await API.get(`${ApiRoutes.FetchCategories}?_page=${page}&_limit=${limit}`);
+
+        // Return the response
+        return response;
+    }
+
+    return categories;
+}

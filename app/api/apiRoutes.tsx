@@ -31,5 +31,9 @@ export default class ApiRoutes {
      * Api routes to logout
      */
     static Logout: string = 'api/auth/logout';
+    /**
+     * Api routes to fetch categories
+     */
+    static FetchCategories: string = 'api/categories';
 
 }
