@@ -124,6 +124,7 @@ model Order {
   productId       String
   store           Store       @relation(fields: [storeId], references: [id])
   storeId         String
+  Rating          Rating[]
   tracker         Tracker?    @relation(fields: [trackingId], references: [id], onDelete: SetNull)
   trackingId      String?     @unique
   createdAt       DateTime    @default(now())
@@ -149,12 +150,14 @@ model Rating {
   id        String   @id @default(uuid())
   rating    Int
   review    String?
+  order     Order?   @relation(fields: [orderId], references: [id], onDelete: SetNull)
+  orderId   String?
   product   Product  @relation(fields: [productId], references: [id])
   productId String
   store     Store    @relation(fields: [storeId], references: [id], onDelete: Cascade)
   storeId   String
-  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
-  userId    String?
+  user      User     @relation(fields: [userId], references: [id], onDelete: NoAction)
+  userId    String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 

@@ -54,6 +54,58 @@ export const searchForStore = async (req: Request, res: Response) => {
 
   return returnJSONSuccess(res, { data: stores });
 };
+const getStoreFullDetails = async (id: string, isStoreId = false) => {
+  const query = isStoreId ? { id: id } : { userId: id };
+  const store = await prisma.store.findFirstOrThrow({
+    where: {
+      ...query,
+    },
+    select: {
+      name: true,
+      id: true,
+      description: true,
+      image: true,
+    },
+  });
+  const ratings = await prisma.rating.groupBy({
+    where: {
+      storeId: store.id,
+    },
+    by: ["rating"],
+    _count: true,
+  });
+  let avg = await prisma.rating.aggregate({
+    _avg: {
+      rating: true,
+    },
+    _count: true,
+  });
+  const totalItemSold = await prisma.order.count({
+    where: {
+      status: "DELIVERED",
+      storeId: store.id,
+    },
+  });
+  const totalRatingByUsers = await prisma.rating.groupBy({
+    where: {
+      storeId: store.id,
+    },
+    by: ["userId", "orderId"],
+  });
+  const feedback = ((totalRatingByUsers.length || 0) / totalItemSold) * 100;
+  const ratingWithPercent = ratings.map((rating) => ({
+    rating: rating.rating,
+    percentage: (rating._count / avg._count) * 100,
+  }));
+  return {
+    storeDetails: store,
+    avgRating: avg._avg,
+    totalRating: avg._count,
+    ratingWithPercent,
+    feedback: feedback.toFixed(0),
+    totalItemSold,
+  };
+};
 export const getStoreByUserLogged = async (
   req: Request,
   res: Response,
@@ -61,31 +113,7 @@ export const getStoreByUserLogged = async (
 ) => {
   const user = req.user as RequestUser;
   try {
-    const store = await prisma.store.findFirstOrThrow({
-      where: {
-        userId: user.id,
-      },
-      select: {
-        name: true,
-        id: true,
-        description: true,
-        image: true,
-      },
-    });
-    const ratings = await prisma.rating.groupBy({
-      where: {
-        storeId: store.id,
-      },
-      by: ["rating"],
-      _count: true,
-    });
-    let avg = await prisma.rating.aggregate({
-      _avg: {
-        rating: true,
-      },
-      _count: true,
-    });
-    return returnJSONSuccess(res, { data: store, avg, ratings });
+    return returnJSONSuccess(res, { data: await getStoreFullDetails(user.id) });
   } catch (error) {
     next(new NotFound("Store not found", ErrorCode.NOT_FOUND));
   }
@@ -98,12 +126,9 @@ export const getStoreById = async (
   try {
     const { id } = req.params;
     if (id) {
-      const store = await prisma.store.findFirstOrThrow({
-        where: {
-          id: id as string,
-        },
+      return returnJSONSuccess(res, {
+        data: await getStoreFullDetails(id, true),
       });
-      return returnJSONSuccess(res, { data: store });
     } else {
       next(new BadRequest("Invalid Request Parameters", ErrorCode.NOT_FOUND));
     }

@@ -242,10 +242,13 @@ const sendOtp = async (id: string, email: string) => {
       },
     });
     const mailResponse = await sendEmail(
-      "Ravyyin",
-      "Verify your account",
+      "Rayvvin Team",
+      "Welcome to Rayvvin.",
       email,
-      `Please verify your account. your otp is ${otp} and it will expire in 5 minutes`
+      `<p>Welcome to Rayvvin. Please verify your account using the One Time Password provided below. <p><b>${otp}</b></p>. This OTP expires in 5 minutes. <br/>
+      Best Regard.
+      <br /> 
+      Rayvvin Team</p>`
     );
     if (mailResponse.status) {
       return id;
