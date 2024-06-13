@@ -14,9 +14,29 @@ export const getAllCategories = async (req: Request, res: Response) => {
   });
   const count = await prisma.category.count();
   const categories = await prisma.category.findMany({
-    skip: validatedPag.data?._page,
-    take: validatedPag.data?._limit,
-    select: { id: true, name: true, createdAt: true },
+    select: {
+      id: true,
+      name: true,
+      createdAt: true,
+      Product: {
+        skip: validatedPag.data?._page,
+        take: validatedPag.data?._limit,
+        where: {
+          publish: true,
+        },
+        select: {
+          id: true,
+          name: true,
+          details: true,
+          amount: true,
+        },
+      },
+      _count: {
+        select: {
+          Product: true,
+        },
+      },
+    },
   });
 
   return returnJSONSuccess(res, { data: categories, count });
@@ -27,16 +47,27 @@ export const getCategoryById = async (
   next: NextFunction
 ) => {
   const { id } = req.params;
+  const { _limit, _page } = req.query;
+  const validatedPag = validatePagination.safeParse({
+    _limit: +_limit!,
+    _page: +_page!,
+  });
+
   if (id) {
-    const category = await prisma.category.findFirst({
+    const categoryWithProducts = await prisma.category.findFirst({
       where: {
         id,
       },
+      skip: validatedPag.data?._page,
+      take: validatedPag.data?._limit,
+      select: {
+        Product: true,
+      },
     });
-    if (!category) {
+    if (!categoryWithProducts) {
       return next(new NotFound("Category not found", ErrorCode.NOT_FOUND));
     }
-    return returnJSONSuccess(res, { data: category });
+    return returnJSONSuccess(res, { data: categoryWithProducts });
   } else {
     next(new BadRequest("Invalid request parameters", ErrorCode.BAD_REQUEST));
   }

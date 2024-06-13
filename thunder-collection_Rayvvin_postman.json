@@ -1,6 +1,6 @@
 {
     "info": {
-        "_postman_id": "e6921e06-e341-44a5-8a80-84a3a4ccc330",
+        "_postman_id": "2e44bca5-bccb-4346-a70b-487ced6119c6",
         "name": "Rayvvin",
         "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
         "description": ""
@@ -229,7 +229,7 @@
                     "request": {
                         "method": "GET",
                         "url": {
-                            "raw": "http://localhost:3000/api/categories/?_limit=3&_page=2",
+                            "raw": "http://localhost:3000/api/categories/?_limit=3&_page=0",
                             "query": [
                                 {
                                     "key": "_limit",
@@ -237,13 +237,33 @@
                                 },
                                 {
                                     "key": "_page",
-                                    "value": "2"
+                                    "value": "0"
                                 }
                             ],
                             "variable": [],
                             "path": [
                                 "api",
                                 "categories"
+                            ],
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3000"
+                        }
+                    }
+                },
+                {
+                    "name": "Get Category by Id",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "http://localhost:3000/api/categories/category/clwtj53v100025qqjeg8ics62",
+                            "path": [
+                                "api",
+                                "categories",
+                                "category",
+                                "clwtj53v100025qqjeg8ics62"
                             ],
                             "protocol": "http",
                             "host": [
@@ -334,13 +354,13 @@
                     "request": {
                         "method": "GET",
                         "url": {
-                            "raw": "http://localhost:3000/api/stores/store/id/clx3jsst5000158x6y37q33r",
+                            "raw": "http://localhost:3000/api/stores/store/id/clxbq5ox60007b3tei95rjxf1",
                             "path": [
                                 "api",
                                 "stores",
                                 "store",
                                 "id",
-                                "clx3jsst5000158x6y37q33r"
+                                "clxbq5ox60007b3tei95rjxf1"
                             ],
                             "protocol": "http",
                             "host": [
