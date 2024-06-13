@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -25,24 +19,15 @@ model User {
   telephone      String?
   country        String?
   accountType    AccountType @default(BUYER)
-  store          Store?
-  VerifyUser     VerifyUser?
-  cartItems      Cart[]
-  ratings        Rating[]
-  orders         Order[]
   createdAt      DateTime    @default(now())
   updatedAt      DateTime    @updatedAt
+  cartItems      Cart[]
+  orders         Order[]
+  ratings        Rating[]
+  store          Store?
+  verifyUser     verifyUser?
 
   @@map("users")
-}
-
-model VerifyUser {
-  id        String   @id @default(uuid())
-  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId    String   @unique
-  otp       String
-  expiresAt DateTime
-  createdAt DateTime @default(now())
 }
 
 model Store {
@@ -51,23 +36,23 @@ model Store {
   description String     @db.VarChar(255)
   image       String?
   location    String
-  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      String     @unique
-  products    Product[]
-  orders      Order[]
-  ratings     Rating[]
-  categories  Category[]
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
+  orders      Order[]
+  products    Product[]
+  ratings     Rating[]
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  categories  Category[]
 
-  @@map("stores")
+  @@map("store")
 }
 
 model Product {
   id            String     @id @default(cuid())
   name          String     @unique
   itemCondition String?
-  amount        Float      @default(0.00)
+  amount        Float      @default(0)
   quantity      Int        @default(1)
   details       String     @db.VarChar(255)
   publish       Boolean    @default(false)
@@ -75,14 +60,14 @@ model Product {
   images        String?
   returnPolicy  String?
   location      String?
-  store         Store?     @relation(fields: [storeId], references: [id], onDelete: Cascade)
   storeId       String?
-  categories    Category[]
-  carts         Cart[]
-  orders        Order[]
-  ratings       Rating[]
   createdAt     DateTime   @default(now())
   updatedAt     DateTime   @updatedAt
+  carts         Cart[]
+  orders        Order[]
+  store         Store?     @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  ratings       Rating[]
+  categories    Category[]
 
   @@map("products")
 }
@@ -90,10 +75,10 @@ model Product {
 model Category {
   id        String    @id @default(cuid())
   name      String    @unique
-  Product   Product[]
-  Store     Store[]
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
+  products  Product[]
+  stores    Store[]
 
   @@map("categories")
 }
@@ -101,13 +86,13 @@ model Category {
 model Cart {
   id              String   @id @default(uuid())
   quantity        Int
-  shippingDetails Json
-  products        Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  shippingDetails String   @db.LongText
   productId       String
-  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId          String
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
+  products        Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("carts")
 }
@@ -117,18 +102,18 @@ model Order {
   amount          Float
   quantity        Int
   status          OrderStatus @default(PENDING)
-  shippingDetails Json
-  user            User?       @relation(fields: [userId], references: [id], onDelete: SetNull)
+  shippingDetails String      @db.LongText
   userId          String?
-  products        Product     @relation(fields: [productId], references: [id])
   productId       String
-  store           Store       @relation(fields: [storeId], references: [id])
   storeId         String
-  Rating          Rating[]
-  tracker         Tracker?    @relation(fields: [trackingId], references: [id], onDelete: SetNull)
   trackingId      String?     @unique
   createdAt       DateTime    @default(now())
   updatedAt       DateTime    @updatedAt
+  products        Product     @relation(fields: [productId], references: [id])
+  store           Store       @relation(fields: [storeId], references: [id])
+  tracker         Tracker?    @relation(fields: [trackingId], references: [id])
+  user            User?       @relation(fields: [userId], references: [id])
+  Rating          Rating[]
 
   @@map("orders")
 }
@@ -139,9 +124,9 @@ model Tracker {
   currentLocation String?
   description     String?       @db.VarChar(255)
   status          TrackerStatus @default(PENDING)
-  order           Order?
   createdAt       DateTime      @default(now())
   updatedAt       DateTime      @updatedAt
+  order           Order?
 
   @@map("tracks")
 }
@@ -150,26 +135,35 @@ model Rating {
   id        String   @id @default(uuid())
   rating    Int
   review    String?
-  order     Order?   @relation(fields: [orderId], references: [id], onDelete: SetNull)
-  orderId   String?
-  product   Product  @relation(fields: [productId], references: [id])
   productId String
-  store     Store    @relation(fields: [storeId], references: [id], onDelete: Cascade)
   storeId   String
-  user      User     @relation(fields: [userId], references: [id], onDelete: NoAction)
   userId    String
+  orderId   String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  order     Order?   @relation(fields: [orderId], references: [id])
+  product   Product  @relation(fields: [productId], references: [id])
+  store     Store    @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: NoAction)
 
   @@map("ratings")
 }
 
 model Sessions {
   session_id String @id @db.VarChar(128)
-  expires    Int    @db.Int()
-  data       String @db.MediumText()
+  expires    Int
+  data       String @db.MediumText
 
   @@map("sessions")
+}
+
+model verifyUser {
+  id        String   @id @default(cuid())
+  userId    String   @unique(map: "VerifyUser_userId_key")
+  otp       String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  users     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 enum UserStatus {

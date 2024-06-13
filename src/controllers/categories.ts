@@ -18,7 +18,7 @@ export const getAllCategories = async (req: Request, res: Response) => {
       id: true,
       name: true,
       createdAt: true,
-      Product: {
+      products: {
         skip: validatedPag.data?._page,
         take: validatedPag.data?._limit,
         where: {
@@ -33,7 +33,7 @@ export const getAllCategories = async (req: Request, res: Response) => {
       },
       _count: {
         select: {
-          Product: true,
+          products: true,
         },
       },
     },
@@ -61,7 +61,7 @@ export const getCategoryById = async (
       skip: validatedPag.data?._page,
       take: validatedPag.data?._limit,
       select: {
-        Product: true,
+        products: true,
       },
     });
     if (!categoryWithProducts) {
