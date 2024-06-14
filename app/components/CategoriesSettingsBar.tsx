@@ -3,8 +3,8 @@ import styles from '../styles/CategoriesSettingsBar.module.scss'
 import { CategoriesResponse } from './models/AllCategories'
 
 type Props = {
-    categories: CategoriesResponse[];
-    activeCategory: string;
+    categories?: CategoriesResponse[];
+    activeCategory?: string;
 }
 
 const CategoriesSettingsBar = ({ categories, activeCategory }: Props) => {
@@ -14,7 +14,7 @@ const CategoriesSettingsBar = ({ categories, activeCategory }: Props) => {
             <div className={styles.catgoriesFilter}>
                 <h3>Categories</h3>
                 <ul>
-                    {categories.map((category) => (
+                    {categories && categories.map((category) => (
                         <li key={category.id}
                             className={activeCategory === category.name ? styles.active : ''}
                         >

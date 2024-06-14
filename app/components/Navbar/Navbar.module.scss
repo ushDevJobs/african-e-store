@@ -61,19 +61,26 @@
           top: 35px;
           right: 0;
           z-index: 3;
-          height: 400px;
+          //   height: 300px;
           @include modalBumpInAnimation();
           border-radius: 5px;
           display: flex;
           box-shadow: 0px 0px 43.9px 2px rgba(151, 151, 151, 0.17);
+          @include smallLaptop {
+            right: -60px;
+          }
 
           .lhs {
             background-color: #fff;
-            //    border-radius: 5px;
-            display: grid;
-            gap: 30px;
-            grid-template-columns: repeat(4, 1fr);
-            padding: 25px;
+            gap: 20px;
+            padding: 16px;
+            display: flex;
+            flex-wrap: wrap;
+            width: 320px;
+
+            @include smallLaptop {
+              max-width: 260px;
+            }
             .category {
               display: flex;
               flex-direction: column;
@@ -83,28 +90,25 @@
                 font-weight: 500;
                 margin-bottom: 5px;
                 color: #6f6f6f;
+                font-weight: 400;
+                cursor: pointer;
+                white-space: nowrap;
               }
-            }
-
-            li {
-              font-size: 14px;
-              font-weight: 400;
-              color: #828282;
             }
           }
 
           .rhs {
-            flex: 1;
-            width: 100%;
-            height: 100%;
-            //    border-radius: 5px;
+            // flex: 1;
+            position: relative;
+            // width: 100%;
+            // height: 100%;
             img {
               max-width: 300px;
-              height: 400px;
+              height: 100%;
               object-fit: cover;
 
               @include smallLaptop {
-                display: none;
+                max-width: 200px;
               }
             }
           }

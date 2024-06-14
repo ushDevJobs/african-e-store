@@ -7,7 +7,7 @@ import SingleCategoriesDetails from './SingleCategoriesDetails'
 
 type Props = {}
 
-const SingleCategoryPage = (props: Props) => {
+const SingleProductPage = (props: Props) => {
     return (
         <div className={styles.main}>
             <AddProductToCart />
@@ -18,4 +18,4 @@ const SingleCategoryPage = (props: Props) => {
     )
 }
 
-export default SingleCategoryPage
+export default SingleProductPage

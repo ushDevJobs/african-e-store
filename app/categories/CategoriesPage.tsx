@@ -14,6 +14,7 @@ import { toast } from 'sonner'
 import { CategoriesResponse } from '../components/models/AllCategories'
 import ComponentLoader from '../components/Loader/ComponentLoader'
 import CategoriesSkeletonLoader from './CategoriesSketon'
+import { StorageKeys } from '../components/constants/StorageKeys'
 
 const CategoriesPage = () => {
     const fetchCategories = useFetchCategories()
@@ -30,7 +31,13 @@ const CategoriesPage = () => {
 
     const [currentPage, setCurrentPage] = useState<number>(1); // Track current page
     const limit = 4; // // Number of categories per page
+    const totalPages = Math.ceil(categories.length / limit);
 
+    const goToPage = (page: number) => {
+        if (page >= 1 && page <= totalPages) {
+            router.push(`/categories?page=${page}`);
+        }
+    };
     async function handleFetchAllCategories() {
 
         // Start loader
@@ -40,6 +47,11 @@ const CategoriesPage = () => {
             .then((response) => {
                 console.log("Response: ", response.data.data);
                 setCategories(response.data.data);
+                // Persist all categories data in session storage
+                // sessionStorage.setItem(
+                //     StorageKeys.AllCategories,
+                //     JSON.stringify(response.data.data)
+                // );
             })
             .catch((error) => {
                 const errorMessage = createCustomErrorMessages(error.response?.data)
@@ -57,13 +69,6 @@ const CategoriesPage = () => {
         }
     }, [categories, currentPage]);
 
-    const totalPages = Math.ceil(categories.length / limit);
-
-    const goToPage = (page: number) => {
-        if (page >= 1 && page <= totalPages) {
-            router.push(`/categories?page=${page}`);
-        }
-    };
     useEffect(() => {
         handleFetchAllCategories();
     }, [currentPage]);
@@ -149,8 +154,6 @@ const CategoriesPage = () => {
                 </div>
             }
         </>
-
-
     )
 }
 

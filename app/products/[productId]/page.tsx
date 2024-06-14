@@ -1,12 +1,12 @@
 import React from 'react'
-import SingleCategoryPage from './SingleCategoryPage'
+import SingleProductPage from './SingleProductPage'
 
 type Props = {}
 
-const SingleCategory = (props: Props) => {
+const SingleProduct = (props: Props) => {
   return (
-      <SingleCategoryPage/>
+      <SingleProductPage />
   )
 }
 
-export default SingleCategory
+export default SingleProduct

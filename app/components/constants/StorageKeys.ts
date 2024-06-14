@@ -7,7 +7,7 @@ export class StorageKeys {
    */
   static RegisteredBuyer = 'RegisteredBuyer';
   /**
-   * Storage key for a newly registered seller
+   *  Storage key for all categories
    */
-  static RegisteredSeller = 'RegisteredSeller';
+  static AllCategories = 'AllCategories';
 }
