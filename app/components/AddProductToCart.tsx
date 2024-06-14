@@ -1,13 +1,13 @@
 'use client'
 import React, { useState } from 'react'
-import styles from '../categories/[categoryId]/SingleCategory.module.scss'
+import styles from '../products/[productId]/SingleCategory.module.scss'
 import QuantityButton from './QuantityButton'
 import { FavoriteIcon, RatingIcon, ShoppingIcon } from './SVGs/SVGicons'
 import images from '@/public/images'
 import Image from 'next/image'
 import Link from 'next/link'
 import useResponsiveness from './hooks/responsiveness-hook'
-import PlaceABidComponent from '../categories/[productId]/PlaceABidComponent'
+import PlaceABidComponent from '../products/[productId]/PlaceABidComponent'
 
 type Props = {}
 
