@@ -61,6 +61,14 @@ const CategoriesSkeletonLoader: React.FC = () => {
                             <div className="skeleton h-6 w-1/2"></div>
                         </div>
                     </div>
+                    <div className="flex flex-col space-y-5">
+                        <div className="hidden skeleton h-6 w-1/2"></div>
+                        <div className="flex flex-col space-y-5">
+                            <div className="skeleton h-[300px] md:h-[200px] w-[100%] md:w-[250px] lg:w-[200px] rounded-xl"></div>
+                            <div className="skeleton h-6 w-1/2"></div>
+                            <div className="skeleton h-6 w-1/2"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

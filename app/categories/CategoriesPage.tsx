@@ -55,7 +55,7 @@ const CategoriesPage = () => {
             })
             .catch((error) => {
                 const errorMessage = createCustomErrorMessages(error.response?.data)
-                // toast.error(errorMessage);
+                toast.error(errorMessage);
             })
             .finally(() => {
                 setIsFetchingCategories(false);
