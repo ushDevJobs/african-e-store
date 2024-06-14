@@ -44,13 +44,12 @@ const SingleCategoryPage = ({ params }: Props) => {
             })
             .catch((error) => {
                 const errorMessage = createCustomErrorMessages(error.response?.data)
-                toast.error(errorMessage);
+                // toast.error(errorMessage);
             })
             .finally(() => {
                 setIsFetchingCategory(false);
             });
     }
-
 
     useEffect(() => {
         handleFetchCategory();
