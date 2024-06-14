@@ -117,7 +117,6 @@
   }
 }
 
-
 @mixin sectionPadding {
   padding-left: 4%;
   padding-right: 4%;
@@ -136,14 +135,14 @@
   }
 }
 
-@mixin smallButton{
-         background-color: #2c7865;
-        font-size: 14px;
-        color: #fff;
-        padding: 17px 30px;
-        border-radius: 37px;
-        border: 1px solid #2c7865;
-        cursor: pointer;
+@mixin smallButton {
+  background-color: #2c7865;
+  font-size: 14px;
+  color: #fff;
+  padding: 17px 30px;
+  border-radius: 37px;
+  border: 1px solid #2c7865;
+  cursor: pointer;
 }
 
 .errorMsg,
@@ -152,101 +151,28 @@
   color: #eb485b;
   display: flex;
   align-items: center;
-  gap: 2px
+  gap: 2px;
 }
-// .successMsg {
-//   color: $primary-color;
-//   svg {
-//     path {
-//       fill: $success-color;
-//     }
-//   }
-// }
 
-// @mixin primary-button {
-//   width: fit-content;
-//   text-align: center;
-//   background-color: $secondary-color;
-//   border: 1px solid #ff6600;
-//   padding: 16px 47px;
-//   color: $white;
-//   font-size: $font-size-18;
-//   font-weight: $fontWeight-400;
-//   border-radius: 84px;
-//   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.4);
-//   cursor: pointer;
+@mixin tableLoader {
+  width: 100%;
+  height: 35vh;
+  position: relative;
+}
 
-//   @include tablet {
-//     font-size: $font-size-16 - 1px;
-//     white-space: nowrap;
-//   }
+@mixin tableInfoUnavailable {
+  width: 100%;
+  height: 15vh;
+  position: relative;
 
-//   &:hover {
-//     box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.6);
-//   }
-// }
-
-// @mixin formFieldContainer {
-//   display: flex;
-//   flex-direction: column;
-//   gap: 30px;
-
-//   .columnField {
-//     display: flex;
-//     align-items: center;
-//     width: 100%;
-//     gap: 19px;
-//   }
-//   .formField {
-//     width: 100%;
-//     input,
-//     textarea,
-//     select {
-//       width: 100%;
-//       padding: 10px 16px;
-//       color: $black;
-//       font-size: 15px;
-//       color: $black;
-//       background-color: #fffcfc;
-//       border: 1px solid #d6d6d6;
-//       border-radius: 5px;
-//       outline: none;
-
-//       &::placeholder {
-//         color: #949494;
-//         font-size: 14px;
-//       }
-//     }
-
-//     select {
-//       color: #666666;
-//     }
-//     textarea {
-//       resize: none;
-//       min-height: 100px;
-//     }
-//   }
-// }
-// @mixin inputStyle {
-//   width: 100%;
-//   //   font-size: $font-size-16 - 0.125rem;
-//   //   font-weight: $fontWeight-200;
-//   //   color: $dark-grey;
-//   // background-color: transparent;
-//   // border: none;
-//   outline: none;
-
-//   border-radius: 8px;
-//   padding: 12px 24px;
-//   //   border: 1px solid $dark-grey-4;
-//   background: $white;
-
-//   &::placeholder {
-//     // color: $dark-grey-3;
-//   }
-
-//   &:focus {
-//     outline: none;
-//     box-shadow: 0px 0px 0px 4px rgba(168, 168, 168, 0.15);
-//   }
-// }
+  p {
+    position: absolute;
+    margin: auto;
+    opacity: 0.8;
+    white-space: nowrap;
+    top: 40%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 14px;
+  }
+}

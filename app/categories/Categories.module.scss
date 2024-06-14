@@ -9,6 +9,13 @@
     padding-bottom: 40px;
   }
 
+  .tableLoader {
+    @include tableLoader;
+  }
+  .tableInfoUnavailable {
+    @include tableInfoUnavailable;
+  }
+
   .contents {
     display: flex;
     gap: 47px;

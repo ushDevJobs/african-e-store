@@ -7,7 +7,7 @@ import images from '@/public/images'
 import Image from 'next/image'
 import Link from 'next/link'
 import useResponsiveness from './hooks/responsiveness-hook'
-import PlaceABidComponent from '../categories/[categoryId]/PlaceABidComponent'
+import PlaceABidComponent from '../categories/[productId]/PlaceABidComponent'
 
 type Props = {}
 

@@ -1,0 +1,152 @@
+.loader {
+  position: fixed;
+  z-index: 15;
+  width: 100%;
+  height: 100%;
+  background-color: #C59945;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.compLoader {
+  @extend .loader;
+  position: absolute;
+  background-color: transparent;
+}
+
+.loading-spinner {
+  position: relative;
+  margin: 0 auto;
+  width: 75px;
+  height: 300px;
+}
+
+.loadingSpinner:before {
+  content: "";
+  display: block;
+  padding-top: 100%;
+}
+
+.loadingSpinner__circleSvg {
+  animation: loading-spinner-rotate 1.28973s linear infinite;
+  height: 100%;
+  transform-origin: center center;
+  width: 5%;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  // border: 3px solid;
+}
+
+.loadingSpinner__circleStroke {
+  stroke-dasharray: 1, 200;
+  stroke-dashoffset: 0;
+  animation: loading-spinner-dash 2s ease-in-out infinite, loading-spinner-color 8s ease-in-out infinite;
+  strokeLinecap: round;
+  strokeWidth: 4px;
+}
+
+.loadingSpinner__circleStrokeLight {
+  stroke-dasharray: 1, 200;
+  stroke-dashoffset: 0;
+  animation: loading-spinner-dash 2s ease-in-out infinite, loading-spinner-light-color 8s ease-in-out infinite;
+  strokeLinecap: round;
+  strokeWidth: 4px;
+}
+
+@keyframes loading-spinner-rotate {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes loading-spinner-dash {
+  0% {
+    stroke-dasharray: 1, 200;
+    stroke-dashoffset: 0;
+  }
+
+  50% {
+    stroke-dasharray: 89, 200;
+    stroke-dashoffset: -35px;
+  }
+
+  100% {
+    stroke-dasharray: 89, 200;
+    stroke-dashoffset: -124px;
+  }
+}
+
+@keyframes loading-spinner-color {
+
+  100%,
+  0% {
+    stroke: #C59945;
+  }
+
+  40% {
+    stroke: red;
+  }
+
+  66% {
+    stroke: white;
+  }
+
+  80%,
+  90% {
+    stroke: blue;
+  }
+}
+
+@keyframes loading-spinner-light-color {
+
+  100%,
+  0% {
+    stroke: red;
+  }
+
+  40% {
+    stroke: red;
+  }
+
+
+  90% {
+    stroke: blue;
+  }
+}
+
+.btnLoaderBox {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-content: center;
+}
+
+.btnLoader {
+  width: 24px;
+  height: 24px;
+  border: 5px dotted #fff;
+  border-radius: 50%;
+  display: inline-block;
+  position: relative;
+  box-sizing: border-box;
+  animation: rotation 2s linear infinite;
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
