@@ -116,3 +116,15 @@ export function useFetchCategories() {
 
     return categories;
 }
+
+export function useFetchSingleCategory() {
+    async function fetchCategory(id: string) {
+        // Fire the request
+        const response = await API.get(`${ApiRoutes.FetchSingleCategory}/${id}`);
+
+        // Return the response
+        return response;
+    }
+
+    return fetchCategory;
+}
