@@ -41,18 +41,25 @@ export const getAllStores = async (
     next(new NotFound("Store not found", ErrorCode.NOT_FOUND));
   }
 };
-export const searchForStore = async (req: Request, res: Response) => {
-  const { name } = req.params;
-
-  const stores = await prisma.store.findMany({
-    where: {
-      name: {
-        contains: name,
+export const searchForStore = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { q } = req.query;
+  if (q && q !== "") {
+    const stores = await prisma.store.findMany({
+      where: {
+        name: {
+          contains: q as string,
+        },
       },
-    },
-  });
+    });
 
-  return returnJSONSuccess(res, { data: stores });
+    return returnJSONSuccess(res, { data: stores });
+  } else {
+    next(new BadRequest("Invalid request parameters", ErrorCode.BAD_REQUEST));
+  }
 };
 const getStoreFullDetails = async (id: string, isStoreId = false) => {
   const query = isStoreId ? { id: id } : { userId: id };
@@ -92,7 +99,7 @@ const getStoreFullDetails = async (id: string, isStoreId = false) => {
     },
     by: ["userId", "orderId"],
   });
-  const feedback = ((totalRatingByUsers.length || 0) / totalItemSold) * 100;
+  const feedback = (totalRatingByUsers.length || 0) / totalItemSold || 0 * 100;
   const ratingWithPercent = ratings.map((rating) => ({
     rating: rating.rating,
     percentage: (rating._count / avg._count) * 100,
@@ -102,7 +109,7 @@ const getStoreFullDetails = async (id: string, isStoreId = false) => {
     avgRating: avg._avg,
     totalRating: avg._count,
     ratingWithPercent,
-    feedback: feedback.toFixed(0),
+    feedback: parseInt(feedback.toFixed(0)),
     totalItemSold,
   };
 };
@@ -136,6 +143,69 @@ export const getStoreById = async (
     next(new NotFound("Store not found", ErrorCode.NOT_FOUND));
   }
 };
+export const getCategoriesOfStoreById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id } = req.params;
+    if (id) {
+      const categories = await prisma.store.findFirstOrThrow({
+        where: {
+          id,
+        },
+        select: {
+          categories: {
+            select: {
+              id: true,
+              name: true,
+              products: {
+                where: {
+                  publish: true,
+                },
+              },
+            },
+          },
+        },
+      });
+      return returnJSONSuccess(res, { data: categories });
+    } else {
+      next(new BadRequest("Invalid Request Parameters", ErrorCode.NOT_FOUND));
+    }
+  } catch (error) {
+    next(new NotFound("Store not found", ErrorCode.NOT_FOUND));
+  }
+};
+export const getProductByIdOfStoreById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    console.log(req.params);
+    const { storeId, productId } = req.params;
+    if (storeId && productId && storeId !== "" && productId !== "") {
+      const categories = await prisma.store.findFirstOrThrow({
+        where: {
+          id: storeId,
+        },
+        select: {
+          products: {
+            where: {
+              id: productId,
+            },
+          },
+        },
+      });
+      return returnJSONSuccess(res, { data: categories });
+    } else {
+      next(new BadRequest("Invalid Request Parameters", ErrorCode.NOT_FOUND));
+    }
+  } catch (error) {
+    next(new NotFound("Store not found", ErrorCode.NOT_FOUND));
+  }
+};
 export const createStore = async (req: Request, res: Response) => {
   const user = req.user as RequestUser;
   validateCreateStore.parse(req.body);
@@ -156,18 +226,6 @@ export const createStore = async (req: Request, res: Response) => {
   }
   return res.status(200).json({ status: true, data: checkIfStore });
 };
-export const getStoreProduct = async (req: Request, res: Response) => {
-  const user = req.user as RequestUser;
-  const store = await prisma.store.findFirst({
-    where: {
-      userId: user.id,
-    },
-    select: {
-      products: true,
-    },
-  });
-  return res.status(200).json({ status: true, data: store });
-};
 export const getStoreCategories = async (req: Request, res: Response) => {
   const user = req.user as RequestUser;
   const categories = await prisma.store.findFirst({
@@ -175,30 +233,73 @@ export const getStoreCategories = async (req: Request, res: Response) => {
       userId: user.id,
     },
     select: {
-      categories: true,
+      categories: {
+        select: {
+          id: true,
+          name: true,
+          createdAt: true,
+          products: true,
+        },
+      },
     },
   });
   return res.status(200).json({ status: true, data: categories });
 };
-export const searchStoreProducts = async (req: Request, res: Response) => {
+
+export const searchStoreProducts = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const user = req.user as RequestUser;
-  const { search } = req.params;
-  const store = await prisma.store.findFirstOrThrow({
-    where: {
-      userId: user.id,
-    },
-  });
-  const products = await prisma.product.findMany({
-    where: {
-      AND: [
-        { storeId: store.id },
-        {
-          name: {
-            contains: search,
+  const { q } = req.query;
+  if (q && q !== "") {
+    const store = await prisma.store.findFirstOrThrow({
+      where: {
+        userId: user.id,
+      },
+    });
+    const products = await prisma.product.findMany({
+      where: {
+        AND: [
+          { storeId: store.id },
+          {
+            name: {
+              contains: q as string,
+            },
+          },
+        ],
+      },
+    });
+
+    return res.status(200).json({ status: true, data: products });
+  } else {
+    next(new BadRequest("Invalid request parameters", ErrorCode.BAD_REQUEST));
+  }
+};
+export const getStoreProduct = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const user = req.user as RequestUser;
+  const { id } = req.params;
+  if (id && id !== "") {
+    const product = await prisma.store.findFirstOrThrow({
+      where: {
+        userId: user.id,
+      },
+      select: {
+        products: {
+          where: {
+            id: id,
           },
         },
-      ],
-    },
-  });
-  return res.status(200).json({ status: true, data: products });
+      },
+    });
+
+    return res.status(200).json({ status: true, data: product });
+  } else {
+    next(new BadRequest("Invalid request parameters", ErrorCode.BAD_REQUEST));
+  }
 };

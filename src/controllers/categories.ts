@@ -61,6 +61,9 @@ export const getCategoryById = async (
       skip: validatedPag.data?._page,
       take: validatedPag.data?._limit,
       select: {
+        id: true,
+        name: true,
+        createdAt: true,
         products: true,
       },
     });

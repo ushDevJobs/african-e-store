@@ -115,7 +115,11 @@ export const resendOTP = async (
           return returnJSONSuccess(res, { userId: id });
         }
         next(
-          new InternalException("Couldnt send mail", ErrorCode.MAIL_ERROR, null)
+          new InternalException(
+            "Could'nt send mail",
+            ErrorCode.MAIL_ERROR,
+            null
+          )
         );
       } else {
         next(new BadRequest("Already verified", ErrorCode.BAD_REQUEST));
@@ -202,7 +206,9 @@ export const registerSeller = async (
     next(new BadRequest("User already exist", ErrorCode.USER_ALREADY_EXIST));
   }
 };
-
+prisma.user.findMany({
+  select: {},
+});
 export const loginAuthError = (req: Request, res: Response) => {
   let message = req.flash("error");
   res.status(message[1] ? +message[1] : 401).json({

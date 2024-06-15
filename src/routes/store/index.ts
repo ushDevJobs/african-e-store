@@ -2,6 +2,8 @@ import { Router } from "express";
 import {
   createStore,
   getAllStores,
+  getCategoriesOfStoreById,
+  getProductByIdOfStoreById,
   getStoreById,
   getStoreByUserLogged,
   getStoreCategories,
@@ -15,23 +17,26 @@ import { checkStore, sellerRoleCheck } from "../../middlewares/roles";
 const router = Router();
 router.get("/all", getAllStores);
 router.get("/store/id/:id", getStoreById);
-router.get("/search/:name", searchForStore);
+router.get("/store/id/:id/categories", getCategoriesOfStoreById);
+router.get("/store/id/:storeId/product/:productId", getProductByIdOfStoreById);
+router.get("/search", searchForStore);
 router
   .route("/store")
   .get(sellerRoleCheck, rootErrorHandler(getStoreByUserLogged))
   .post(sellerRoleCheck, rootErrorHandler(createStore));
-router.get(
-  "/store/products",
-  [sellerRoleCheck, checkStore],
-  rootErrorHandler(getStoreProduct)
-);
+
 router.get(
   "/store/categories",
   [sellerRoleCheck, checkStore],
   rootErrorHandler(getStoreCategories)
 );
 router.get(
-  "/store/search/:search",
+  "/store/product/:id",
+  [sellerRoleCheck, checkStore],
+  rootErrorHandler(getStoreProduct)
+);
+router.get(
+  "/store/search",
   [sellerRoleCheck, checkStore],
   rootErrorHandler(searchStoreProducts)
 );

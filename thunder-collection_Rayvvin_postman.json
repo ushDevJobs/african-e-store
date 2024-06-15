@@ -1,6 +1,6 @@
 {
     "info": {
-        "_postman_id": "2e44bca5-bccb-4346-a70b-487ced6119c6",
+        "_postman_id": "768510b1-c64e-4407-b717-dae669decb26",
         "name": "Rayvvin",
         "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
         "description": ""
@@ -33,7 +33,7 @@
                                     "language": "json"
                                 }
                             },
-                            "raw": "{\n  \"email\":\"testnet041@gmail.com\",\n  \"password\":\"Segunade041@\"\n}"
+                            "raw": "{\n  \"email\":\"jehoshaphatade041@gmail.com\",\n  \"password\":\"Segunade041@\"\n}"
                         }
                     }
                 },
@@ -196,7 +196,7 @@
                                     "language": "json"
                                 }
                             },
-                            "raw": "{\n  \"email\":\"jehoshaphatadediran041@gmail.com\",\n  \"password\":\"password\",\n  \"fullname\":\"Adediran Jehoshaphat\",\n  \"confirmPassword\":\"password\",\n  \"telephone\":\"07044651989\",\n  \"companyName\":\"Megatron Electronics\",\n  \"country\":\"canada\"\n}"
+                            "raw": "{\n  \"email\":\"capthingjoe@gmail.com\",\n  \"password\":\"segunade041@\",\n  \"fullname\":\"Captain Joe\",\n  \"confirmPassword\":\"password\",\n  \"telephone\":\"07044651989\",\n  \"companyName\":\"Megatron Gamings\",\n  \"country\":\"Nigeria\"\n}"
                         }
                     }
                 },
@@ -229,15 +229,17 @@
                     "request": {
                         "method": "GET",
                         "url": {
-                            "raw": "http://localhost:3000/api/categories/?_limit=3&_page=0",
+                            "raw": "http://localhost:3000/api/categories/",
                             "query": [
                                 {
                                     "key": "_limit",
-                                    "value": "3"
+                                    "value": "3",
+                                    "disabled": true
                                 },
                                 {
                                     "key": "_page",
-                                    "value": "0"
+                                    "value": "0",
+                                    "disabled": true
                                 }
                             ],
                             "variable": [],
@@ -276,40 +278,8 @@
             ]
         },
         {
-            "name": "Stores",
+            "name": "Store (Seller Only)",
             "item": [
-                {
-                    "name": "All Stores",
-                    "request": {
-                        "method": "GET",
-                        "url": {
-                            "raw": "http://localhost:3000/api/stores/all",
-                            "query": [
-                                {
-                                    "key": "_limit",
-                                    "value": "3",
-                                    "disabled": true
-                                },
-                                {
-                                    "key": "_page",
-                                    "value": "1",
-                                    "disabled": true
-                                }
-                            ],
-                            "variable": [],
-                            "path": [
-                                "api",
-                                "stores",
-                                "all"
-                            ],
-                            "protocol": "http",
-                            "host": [
-                                "localhost"
-                            ],
-                            "port": "3000"
-                        }
-                    }
-                },
                 {
                     "name": "Get Store for User Logged In",
                     "request": {
@@ -340,47 +310,6 @@
                                 "stores",
                                 "store",
                                 "products"
-                            ],
-                            "protocol": "http",
-                            "host": [
-                                "localhost"
-                            ],
-                            "port": "3000"
-                        }
-                    }
-                },
-                {
-                    "name": "Get Store By Id",
-                    "request": {
-                        "method": "GET",
-                        "url": {
-                            "raw": "http://localhost:3000/api/stores/store/id/clxbq5ox60007b3tei95rjxf1",
-                            "path": [
-                                "api",
-                                "stores",
-                                "store",
-                                "id",
-                                "clxbq5ox60007b3tei95rjxf1"
-                            ],
-                            "protocol": "http",
-                            "host": [
-                                "localhost"
-                            ],
-                            "port": "3000"
-                        }
-                    }
-                },
-                {
-                    "name": "Search Store",
-                    "request": {
-                        "method": "GET",
-                        "url": {
-                            "raw": "http://localhost:3000/api/stores/search/mystore",
-                            "path": [
-                                "api",
-                                "stores",
-                                "search",
-                                "mystore"
                             ],
                             "protocol": "http",
                             "host": [
@@ -423,13 +352,13 @@
                     "request": {
                         "method": "GET",
                         "url": {
-                            "raw": "http://localhost:3000/api/stores/store/search/dell pc",
+                            "raw": "http://localhost:3000/api/stores/store/search/dell",
                             "path": [
                                 "api",
                                 "stores",
                                 "store",
                                 "search",
-                                "dell pc"
+                                "dell"
                             ],
                             "protocol": "http",
                             "host": [
@@ -450,6 +379,27 @@
                                 "stores",
                                 "store",
                                 "categories"
+                            ],
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3000"
+                        }
+                    }
+                },
+                {
+                    "name": "Get Product By Id",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "http://localhost:3000/api/stores/store/product/clxg6pce40000goqspbxwannr",
+                            "path": [
+                                "api",
+                                "stores",
+                                "store",
+                                "product",
+                                "clxg6pce40000goqspbxwannr"
                             ],
                             "protocol": "http",
                             "host": [
@@ -521,6 +471,135 @@
                             "path": [
                                 "api",
                                 "orders"
+                            ],
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3000"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Stores (Public)",
+            "item": [
+                {
+                    "name": "All Stores",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "http://localhost:3000/api/stores/all",
+                            "query": [
+                                {
+                                    "key": "_limit",
+                                    "value": "3",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "_page",
+                                    "value": "1",
+                                    "disabled": true
+                                }
+                            ],
+                            "variable": [],
+                            "path": [
+                                "api",
+                                "stores",
+                                "all"
+                            ],
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3000"
+                        }
+                    }
+                },
+                {
+                    "name": "Get Store By Id",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "http://localhost:3000/api/stores/store/id/clxg6pce40000goqspbxwannr",
+                            "path": [
+                                "api",
+                                "stores",
+                                "store",
+                                "id",
+                                "clxg6pce40000goqspbxwannr"
+                            ],
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3000"
+                        }
+                    }
+                },
+                {
+                    "name": "Search Store",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "http://localhost:3000/api/stores/search?q=payt",
+                            "query": [
+                                {
+                                    "key": "q",
+                                    "value": "payt"
+                                }
+                            ],
+                            "variable": [],
+                            "path": [
+                                "api",
+                                "stores",
+                                "search"
+                            ],
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3000"
+                        }
+                    }
+                },
+                {
+                    "name": "Get Categories From a Store",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "http://localhost:3000/api/stores/store/id/clxg6pce40000goqspbxwannr/categories",
+                            "path": [
+                                "api",
+                                "stores",
+                                "store",
+                                "id",
+                                "clxg6pce40000goqspbxwannr",
+                                "categories"
+                            ],
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3000"
+                        }
+                    }
+                },
+                {
+                    "name": "Get Product By Id",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "http://localhost:3000/api/stores/store/id/clxg6pce40000goqspbxwannr/product/clxg75on70001goqsbvtgxg2a",
+                            "path": [
+                                "api",
+                                "stores",
+                                "store",
+                                "id",
+                                "clxg6pce40000goqspbxwannr",
+                                "product",
+                                "clxg75on70001goqsbvtgxg2a"
                             ],
                             "protocol": "http",
                             "host": [
