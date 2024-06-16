@@ -44,7 +44,7 @@ const Layout: FunctionComponent<LayoutProps> = ({ children }): ReactElement => {
 
         await fetchCategories(currentPage, limit)
             .then((response) => {
-                console.log("Response: ", response.data.data);
+                // console.log("Response: ", response.data.data);
                 setCategories(response.data.data);
                 // Persist all categories data in session storage
                 sessionStorage.setItem(

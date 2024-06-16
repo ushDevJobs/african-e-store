@@ -1,4 +1,4 @@
-export interface AllStoresResoponse {
+export interface AllStoresResponse {
   id: string;
   name: string;
   description: string;

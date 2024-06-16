@@ -3,8 +3,8 @@
   z-index: 15;
   width: 100%;
   height: 100%;
-  background-color: #C59945;
-  top: 0;
+  background-color: #c59945;
+  top: 50px;
   left: 0;
   overflow: hidden;
   pointer-events: none;
@@ -24,7 +24,7 @@
 }
 
 .loadingSpinner:before {
-  content: "";
+  content: '';
   display: block;
   padding-top: 100%;
 }
@@ -46,17 +46,19 @@
 .loadingSpinner__circleStroke {
   stroke-dasharray: 1, 200;
   stroke-dashoffset: 0;
-  animation: loading-spinner-dash 2s ease-in-out infinite, loading-spinner-color 8s ease-in-out infinite;
-  strokeLinecap: round;
-  strokeWidth: 4px;
+  animation: loading-spinner-dash 2s ease-in-out infinite,
+    loading-spinner-color 8s ease-in-out infinite;
+  strokelinecap: round;
+  strokewidth: 4px;
 }
 
 .loadingSpinner__circleStrokeLight {
   stroke-dasharray: 1, 200;
   stroke-dashoffset: 0;
-  animation: loading-spinner-dash 2s ease-in-out infinite, loading-spinner-light-color 8s ease-in-out infinite;
-  strokeLinecap: round;
-  strokeWidth: 4px;
+  animation: loading-spinner-dash 2s ease-in-out infinite,
+    loading-spinner-light-color 8s ease-in-out infinite;
+  strokelinecap: round;
+  strokewidth: 4px;
 }
 
 @keyframes loading-spinner-rotate {
@@ -83,14 +85,13 @@
 }
 
 @keyframes loading-spinner-color {
-
   100%,
   0% {
-    stroke: #C59945;
+    stroke: #000;
   }
 
   40% {
-    stroke: red;
+    stroke: #2c7865;
   }
 
   66% {
@@ -99,24 +100,22 @@
 
   80%,
   90% {
-    stroke: blue;
+    stroke: #2c7865;
   }
 }
 
 @keyframes loading-spinner-light-color {
-
   100%,
   0% {
-    stroke: red;
+    stroke: #2c7865;
   }
 
   40% {
-    stroke: red;
+    stroke: #2c7865;
   }
 
-
   90% {
-    stroke: blue;
+    stroke: #2c7865;
   }
 }
 
