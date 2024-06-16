@@ -45,12 +45,18 @@
       gap: 16px;
       //   max-height: 250px;
       //   overflow-y: auto;
-
+a{
+    width: fit-content;
+}
       li {
         font-size: 16px;
         color: #828282;
         cursor: pointer;
         width: fit-content;
+         &:hover{
+            color: #2c7865;
+        font-weight: bold;
+      }
       }
 
       .active {

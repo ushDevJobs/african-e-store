@@ -174,20 +174,19 @@
         background-color: #fff;
         position: absolute;
         top: 80px;
-        // left: 0;
-        // width: fit-content;
         right: 80px;
         z-index: 3;
-        // height: 400px;
         @include modalBumpInAnimation();
         border-radius: 5px;
         display: flex;
         flex-direction: column;
         padding: 18px;
         gap: 18px;
+        
 
-        a {
+        a, button {
           color: #6f6f6f;
+          text-align: left;
         }
       }
     }
