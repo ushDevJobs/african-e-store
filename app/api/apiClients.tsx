@@ -128,3 +128,16 @@ export function useFetchSingleCategory() {
 
     return fetchCategory;
 }
+
+// Api call to fetch all stores
+export function useFetchAllStores() {
+    async function fetchAllStores() {
+        // Fire the request
+        const response = await API.get(ApiRoutes.FetchAllStores);
+
+        // Return the response
+        return response;
+    }
+
+    return fetchAllStores;
+}

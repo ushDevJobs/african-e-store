@@ -39,5 +39,9 @@ export default class ApiRoutes {
      * Api routes to fetch category
      */
     static FetchSingleCategory: string = 'api/categories/category';
+    /**
+     * Api routes to fetch all stores
+     */
+    static FetchAllStores: string = 'api/stores/all';
 
 }
