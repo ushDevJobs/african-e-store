@@ -137,44 +137,49 @@ const Navbar = (props: Props) => {
                         <Link href='/'>
                             <li>Home</li>
                         </Link>
-                        {!isLoggedIn &&
+                        {!isLoggedIn && !isSellerLoggedIn &&
                             <Link href='/seller/signup'>
                                 <li>Sell</li>
                             </Link>}
                         <Link href='/faq'>
                             <li>FAQ&apos;s</li>
                         </Link>
-                        <div className={styles.dropdown}>
-                            <li ref={categoryDropdownRef}
-                                onClick={() => setIsCategoryDropdownOpen(!isCategoryDropdownOpen)}>Categories <DownArrowIcon /></li>
-                            {isCategoryDropdownOpen && (
-                                <ul className={styles.dropdownContainer}>
-                                    <div className={styles.lhs}>
-                                        {retrievedCategories?.slice(0, 6).map((category) => (
-                                            <div className={styles.category} key={category.id}>
-                                                <Link href={`/categories/${category.id}`} onClick={() => setIsCategoryDropdownOpen(false)}>
-                                                    <h3>{category.name}</h3>
-                                                </Link>
-                                            </div>
-                                        ))}
+                        {!isSellerLoggedIn && (
+                            <div className={styles.dropdown}>
+                                <li ref={categoryDropdownRef}
+                                    onClick={() => setIsCategoryDropdownOpen(!isCategoryDropdownOpen)}>Categories <DownArrowIcon /></li>
+                                {isCategoryDropdownOpen && (
+                                    <ul className={styles.dropdownContainer}>
+                                        <div className={styles.lhs}>
+                                            {retrievedCategories?.slice(0, 6).map((category) => (
+                                                <div className={styles.category} key={category.id}>
+                                                    <Link
+                                                        href={`/categories/${category.id}?${category.name}`}
+                                                        onClick={() => setIsCategoryDropdownOpen(false)}
+                                                    >
+                                                        <h3>{category.name}</h3>
+                                                    </Link>
+                                                </div>
+                                            ))}
 
-                                        <Link
-                                            className='whitespace-nowrap text-[#2C7865] text-sm'
-                                            href='/categories'
-                                            onClick={() => setIsCategoryDropdownOpen(false)}
-                                        >
-                                            See all
-                                            {/* See all categories */}
-                                        </Link>
-                                    </div>
-                                    <div className={styles.rhs}>
-                                        <Image src={images.category_dropdown_image} alt='category iamge' />
-                                    </div>
-                                </ul>
-                            )}
+                                            <Link
+                                                className='whitespace-nowrap text-[#2C7865] text-sm'
+                                                href='/categories'
+                                                onClick={() => setIsCategoryDropdownOpen(false)}
+                                            >
+                                                See all
+                                                {/* See all categories */}
+                                            </Link>
+                                        </div>
+                                        <div className={styles.rhs}>
+                                            <Image src={images.category_dropdown_image} alt='category iamge' />
+                                        </div>
+                                    </ul>
+                                )}
 
-                        </div>
-                        {!isLoggedIn && (
+                            </div>
+                        )}
+                        {!isLoggedIn && !isSellerLoggedIn && (
                             <>
                                 <Link href='/login'>
                                     <button className={styles.login}>  Login</button>
@@ -201,7 +206,7 @@ const Navbar = (props: Props) => {
                                 </div>
                                 {
                                     isLoginDropdownOpen && (
-                                        <div className={styles.loginDropdownContainer}>
+                                        <div className={`${styles.loginDropdownContainer} shadow-lg`}>
                                             <Link href={'/orders'} onClick={() => setIsLoginDropdownOpen(false)}>
                                                 My orders
                                             </Link>
@@ -232,11 +237,11 @@ const Navbar = (props: Props) => {
                             </>
                         )}
 
-                        {isSellerLoggedIn && <button onClick={() => {
+                        {isSellerLoggedIn && <button className={styles.signup} onClick={() => {
                             setIsLoginDropdownOpen(false)
                             Logout()
                         }}>
-                            Seller Log out
+                            Log out
                         </button>}
                     </ul>
                 </div>
