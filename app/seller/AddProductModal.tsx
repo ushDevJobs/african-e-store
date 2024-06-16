@@ -17,87 +17,80 @@ const AddProductModal = ({ visibility, setVisibility }: Props) => {
             <form action="" className={styles.formFieldContainer}>
                 <div className={styles.rowForm}>
                     <div className={styles.formField}>
-                        <label htmlFor="email"><span>*</span>Email address</label>
+                        <label htmlFor="name"><span>*</span>Name of product</label>
                         <input
-                            type="email"
-                            name="email"
-                            id="email"
-                            placeholder='Please fill in email'
+                            type="name"
+                            name="name"
+                            id="name"
+                            placeholder='Enter the detailed product name '
                         />
                     </div>
                     <div className={styles.formField}>
-                        <label htmlFor="password"><span>*</span>Password</label>
+                        <label htmlFor="quantity"><span>*</span>Product quantity</label>
                         <input
-                            type="password"
-                            name="password"
-                            id="password"
-                            placeholder='Please fill in password'
+                            type="quantity"
+                            name="quantity"
+                            id="quantity"
+                            placeholder='Enter number of the same product'
                         />
                     </div>
                 </div>
                 <div className={styles.rowForm}>
                     <div className={styles.formField}>
-                        <label htmlFor="email"><span>*</span>Email address</label>
+                        <label htmlFor="quality"><span>*</span>Product state/quality</label>
                         <input
-                            type="email"
-                            name="email"
-                            id="email"
-                            placeholder='Please fill in email'
+                            type="quality"
+                            name="quality"
+                            id="quality"
+                            placeholder='Brand new, Fairly used, refurbished '
                         />
                     </div>
                     <div className={styles.formField}>
-                        <label htmlFor="password"><span>*</span>Password</label>
+                        <label htmlFor="price"><span>*</span>Product Price</label>
                         <input
-                            type="password"
-                            name="password"
-                            id="password"
-                            placeholder='Please fill in password'
+                            type="price"
+                            name="price"
+                            id="price"
+                            placeholder='Enter product price'
                         />
                     </div>
                 </div>
                 <div className={styles.rowForm}>
                     <div className={styles.formField}>
-                        <label htmlFor="email"><span>*</span>Email address</label>
+                        <label htmlFor="email"><span>*</span>Sale type</label>
                         <input
-                            type="email"
-                            name="email"
-                            id="email"
-                            placeholder='Please fill in email'
+                            type="type"
+                            name="type"
+                            id="type"
+                            placeholder='Set for auction or one time'
                         />
                     </div>
                     <div className={styles.formField}>
-                        <label htmlFor="password"><span>*</span>Password</label>
-                        <input
-                            type="password"
-                            name="password"
-                            id="password"
-                            placeholder='Please fill in password'
-                        />
+                        <label htmlFor="category"><span>*</span>Select category</label>
+                        <select name="category" id="">
+                            <option value="">Select category</option>
+                        </select>
                     </div>
                 </div>
+
                 <div className={styles.formField}>
-                    <label htmlFor="email"><span>*</span>Images</label>
+                    <label htmlFor="end  date"><span>*</span>End date and time of bidding of bidding </label>
+                    <input type='date' name="" id="" placeholder='Select date and time ' />
                 </div>
-                <div className={styles.rowForm}>
+                <div>image</div>
                     <div className={styles.formField}>
-                        <label htmlFor="email"><span>*</span>Email address</label>
-                        <input
-                            type="email"
-                            name="email"
-                            id="email"
-                            placeholder='Please fill in email'
+                        <label htmlFor="desc"><span>*</span>Product description</label>
+                        <textarea
+                            type="desc"
+                            name="desc"
+                            id="desc"
+                            placeholder='Enter detailed description here'
                         />
                     </div>
-                    <div className={styles.formField}>
-                        <label htmlFor="password"><span>*</span>Password</label>
-                        <input
-                            type="password"
-                            name="password"
-                            id="password"
-                            placeholder='Please fill in password'
-                        />
+                    <div className={styles.btnContainer}>
+                        <button>Upload Product</button>
+                        <button>Save as Draft</button>
                     </div>
-                </div>
             </form>
         </ModalWrapper>
     )

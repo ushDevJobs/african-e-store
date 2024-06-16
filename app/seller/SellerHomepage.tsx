@@ -37,6 +37,7 @@ const SellerHomePage = (props: Props) => {
             {onMobile &&
                 activeTab === TabIndex.Shop &&
                 <div
+                    onClick={() => setIsAddProductModalVisible(true)}
                     style={{ color: '#828282', fontSize: '16px', marginBottom: '1rem', width: 'fit-content', backgroundColor: '#ecf8f5', padding: '16px', borderRadius: '13px', height: 'fit-content' }}>
                     <p className='cursor-pointer w-fit'> Add Products to store</p>
                 </div>}
@@ -74,7 +75,7 @@ const SellerHomePage = (props: Props) => {
                             onClick={() => setActiveTab(TabIndex.Feedback)}
                             className={activeTab === TabIndex.Feedback ? styles.active : ''}
                         >
-                            Feedback
+                            Customer Feedbacks
                         </span>
                     </div>
                     {activeTab === TabIndex.Shop && <SellerProduct />}
