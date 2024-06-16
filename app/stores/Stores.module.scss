@@ -92,10 +92,10 @@
     opacity: 0.8;
     width: 100%;
     white-space: nowrap;
-    transform: translateX(50%);
+    // transform: translateX(50%);
     font-size: 14px;
     text-align: center;
-    margin-left: 20px;
+    // margin-left: 20px;
 
     @include tablet {
       transform: translateX(0%);
