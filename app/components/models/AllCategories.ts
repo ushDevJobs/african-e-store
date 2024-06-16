@@ -34,5 +34,6 @@ export interface SingleProducts {
 }
 
 export interface CategoryResponse {
+  name: string;
   products: SingleProducts[];
 }
