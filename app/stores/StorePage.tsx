@@ -16,6 +16,7 @@ type Props = {}
 const StorePage = (props: Props) => {
     const isFavorite = true
     const fetchStores = useFetchAllStores()
+    const [searchQuery, setSearchQuery] = useState('')
 
     const [stores, setStores] = useState<AllStoresResponse[]>();
     const [isFetchingStores, setIsFetchingStores] = useState<boolean>(true);
@@ -39,6 +40,10 @@ const StorePage = (props: Props) => {
             });
     }
 
+    const filteredStores = stores?.filter(store =>
+        store.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
     useEffect(() => {
         handleFetchStores();
     }, []);
@@ -49,11 +54,15 @@ const StorePage = (props: Props) => {
             <div className={styles.contents}>
                 <div className={styles.fieldContainer}>
                     <SearchIcon />
-                    <input type="text" placeholder='Search name of store ' />
+                    <input type="text"
+                        placeholder='Search name of store'
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                    />
                 </div>
 
                 <div className={styles.cards}>
-                    {stores?.map((store, index) => (
+                    {filteredStores?.map((store, index) => (
                         <div className={styles.card} key={index}>
                             <div className={styles.image}>
                                 <Image fill src={images.cashew} alt='product image' />
@@ -70,11 +79,11 @@ const StorePage = (props: Props) => {
                 </div>
 
             </div>
-            {!stores && isFetchingStores && (
-                <ComponentLoader lightTheme svgStyle={{ width: '62px'}} />
+            {!stores && !filteredStores && isFetchingStores && (
+                <ComponentLoader lightTheme svgStyle={{ width: '62px' }} />
             )}
             {!stores ||
-                (stores.length == 0 && !isFetchingStores && (
+                (filteredStores?.length == 0 && !isFetchingStores && (
                     <p className={styles.loaderText}>There are no stores available</p>
                 ))}
         </div>
