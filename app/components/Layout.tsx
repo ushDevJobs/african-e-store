@@ -33,7 +33,7 @@ const Layout: FunctionComponent<LayoutProps> = ({ children }): ReactElement => {
     const fetchCategories = useFetchCategories()
     const [categories, setCategories] = useState<CategoriesResponse[]>([]);
     const [isFetchingCategories, setIsFetchingCategories] = useState<boolean>(true);
-    const [currentPage, setCurrentPage] = useState<number>(1); // Track current page
+    const [currentPage, setCurrentPage] = useState<number>(0); // Track current page
     const limit = 4; // // Number of categories per page
 
     const iswindow = typeof window !== 'undefined' ? true : false;
@@ -68,16 +68,16 @@ const Layout: FunctionComponent<LayoutProps> = ({ children }): ReactElement => {
     }, [iswindow]);
 
     useEffect(() => {
-    if(router){
+        if (router) {
             handleFetchAllCategories();
-    }
+        }
     }, [router]);
 
     return (
         <>
             {!loaderIsVisible && (
                 <>
-                
+
                     <AccountStatusProvider>
                         <Toaster
                             position='bottom-center'

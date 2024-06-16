@@ -1,19 +1,22 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styles from '../styles/CategoriesSettingsBar.module.scss'
 import { CategoriesResponse } from './models/AllCategories'
+import Link from 'next/link';
 
 type Props = {
     categories?: CategoriesResponse[];
     activeCategory?: string;
+    retrievedCategories?: CategoriesResponse[] | undefined;
 }
 
-const CategoriesSettingsBar = ({ categories, activeCategory }: Props) => {
+const CategoriesSettingsBar = ({ categories, activeCategory, retrievedCategories }: Props) => {
 
     return (
         <div className={styles.settingsBar}>
             <div className={styles.catgoriesFilter}>
                 <h3>Categories</h3>
-                <ul>
+                {categories &&
+                 <ul>
                     {categories && categories.map((category) => (
                         <li key={category.id}
                             className={activeCategory === category.name ? styles.active : ''}
@@ -21,7 +24,18 @@ const CategoriesSettingsBar = ({ categories, activeCategory }: Props) => {
                             {category.name}
                         </li>
                     ))}
-                </ul>
+                </ul>}
+                {retrievedCategories &&
+                 <ul>
+                        {retrievedCategories.map((category) => (
+                            <Link href={`/categories/${category.id}?${category.name}`} key={category.id}>
+                           <li>
+                            {category.name}
+                        </li>    
+                            </Link>
+                     
+                    ))}
+                </ul>}
             </div>
 
             <div className={styles.condition}>

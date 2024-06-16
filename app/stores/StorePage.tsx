@@ -1,9 +1,9 @@
 import React from 'react'
 import styles from './Stores.module.scss'
-import CategoriesHeader from '../components/CategoriesHeader'
 import Image from 'next/image'
 import images from '@/public/images'
 import { FavoriteIcon, FilledLoveIcon, SearchIcon, UkIcon } from '../components/SVGs/SVGicons'
+import { CategoriesHeader } from '../components/CategoriesHeader'
 
 type Props = {}
 

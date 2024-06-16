@@ -3,8 +3,6 @@ import React, { useEffect, useState } from 'react'
 import styles from '../Categories.module.scss'
 import { useRouter } from 'next/navigation'
 import { CategoriesResponse, CategoryResponse } from '@/app/components/models/AllCategories'
-import { StorageKeys } from '@/app/components/constants/StorageKeys'
-import CategoriesHeader from '@/app/components/CategoriesHeader'
 import useResponsiveness from '@/app/components/hooks/responsiveness-hook'
 import { FilterIcon, SortIcon } from '@/app/components/SVGs/SVGicons'
 import { useFetchSingleCategory } from '@/app/api/apiClients'
@@ -13,6 +11,9 @@ import { toast } from 'sonner'
 import CategoriesSettingsBar from '@/app/components/CategoriesSettingsBar'
 import Image from 'next/image'
 import images from '@/public/images'
+import CategoriesSkeletonLoader from '../CategoriesSketon'
+import { CategoriesHeader, SingleCategoriesHeader } from '@/app/components/CategoriesHeader'
+import { StorageKeys } from '@/app/components/constants/StorageKeys'
 type Props = {
     params: { categoryId: string; }
 }
@@ -25,6 +26,7 @@ const SingleCategoryPage = ({ params }: Props) => {
     const onDesktop = typeof isMobile == 'boolean' && !isMobile;
     const router = useRouter()
     const categoryId = params.categoryId;
+    const [retrievedCategories, setRetrievedCategories] = useState<CategoriesResponse[]>();
 
     const [category, setCategory] = useState<CategoryResponse>();
     const [isFetchingCategory, setIsFetchingCategory] = useState<boolean>(true);
@@ -55,11 +57,28 @@ const SingleCategoryPage = ({ params }: Props) => {
         handleFetchCategory();
     }, []);
 
+    useEffect(() => {
+        if (router) {
+            // Get the retrieved categories placed
+            const _retrievedCategories = sessionStorage.getItem(
+                StorageKeys.AllCategories
+            );
+
+            // If we have a retrieved categoriess...
+            if (_retrievedCategories) {
+                // Update the state
+                setRetrievedCategories(JSON.parse(_retrievedCategories) as CategoriesResponse[]);
+            }
+        }
+
+        // Run this effect only when the router is ready, which means: when the page is loaded
+    }, [router]);
+
     return (
         <>
-            {/* {categories.length == 0 && isFetchingCategories ? <CategoriesSkeletonLoader /> : */}
+            {!category && isFetchingCategory ? <CategoriesSkeletonLoader /> :
             <div className={styles.main}>
-                <CategoriesHeader mainText='Explore different categories' subText='Search for any product in different categories on Rayvinn' />
+                <SingleCategoriesHeader mainText={category?.name} subText='Search for any product in different categories on Rayvinn' />
                 {onMobile &&
                     <div className="w-full flex items-center gap-4 justify-end mb-2 ml-auto">
                         <span className='flex items-center gap-2 cursor-pointer'><SortIcon /> Sort</span>
@@ -69,13 +88,13 @@ const SingleCategoryPage = ({ params }: Props) => {
                 <div className={styles.contents}>
                     {onDesktop &&
                           <div className={styles.lhs} style={{ position: 'relative' }}>
-                              <CategoriesSettingsBar/>
+                                <CategoriesSettingsBar retrievedCategories={retrievedCategories}/>
                           </div>}
 
                     <div className={styles.rhs}>
                         <div className='flex flex-col gap-10'>
                             <div className='flex flex-col'>
-                                <h3>Category Name</h3>
+                                <h3>{category?.name}</h3>
                                 <div className={styles.cards}>
                                     {category?.products.map((product, index) => (
                                         <div className={styles.card} key={product.id} >
@@ -107,7 +126,7 @@ const SingleCategoryPage = ({ params }: Props) => {
 
                 </div>
             </div>
-            {/* } */}
+            }
         </>
     )
 }

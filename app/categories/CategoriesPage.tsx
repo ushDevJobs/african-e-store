@@ -1,7 +1,6 @@
 'use client'
 import React, { useEffect, useRef, useState } from 'react'
 import styles from './Categories.module.scss'
-import CategoriesHeader from '../components/CategoriesHeader'
 import CategoriesSettingsBar from '../components/CategoriesSettingsBar'
 import useResponsiveness from '../components/hooks/responsiveness-hook'
 import Image from 'next/image'
@@ -15,6 +14,7 @@ import { CategoriesResponse } from '../components/models/AllCategories'
 import ComponentLoader from '../components/Loader/ComponentLoader'
 import CategoriesSkeletonLoader from './CategoriesSketon'
 import { StorageKeys } from '../components/constants/StorageKeys'
+import { CategoriesHeader } from '../components/CategoriesHeader'
 
 const CategoriesPage = () => {
     const fetchCategories = useFetchCategories()
@@ -29,7 +29,7 @@ const CategoriesPage = () => {
     const [isFetchingCategories, setIsFetchingCategories] = useState<boolean>(true);
     const [activeCategory, setActiveCategory] = useState<string>('');
 
-    const [currentPage, setCurrentPage] = useState<number>(1); // Track current page
+    const [currentPage, setCurrentPage] = useState<number>(0); // Track current page
     const limit = 4; // // Number of categories per page
     const totalPages = Math.ceil(categories.length / limit);
 
