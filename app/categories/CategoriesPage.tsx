@@ -30,7 +30,7 @@ const CategoriesPage = () => {
     const [activeCategory, setActiveCategory] = useState<string>('');
 
     const [currentPage, setCurrentPage] = useState<number>(0); // Track current page
-    const limit = 4; // // Number of categories per page
+    const limit = 6; // // Number of categories per page
     const totalPages = Math.ceil(categories.length / limit);
 
     const goToPage = (page: number) => {
