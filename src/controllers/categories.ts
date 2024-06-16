@@ -14,22 +14,22 @@ export const getAllCategories = async (req: Request, res: Response) => {
   });
   const count = await prisma.category.count();
   const categories = await prisma.category.findMany({
+    skip: validatedPag.data?._page,
+    take: validatedPag.data?._limit,
     select: {
       id: true,
       name: true,
       createdAt: true,
       products: {
-        skip: validatedPag.data?._page,
-        take: validatedPag.data?._limit,
         where: {
           publish: true,
         },
-        select: {
-          id: true,
-          name: true,
-          details: true,
-          amount: true,
-        },
+        // select: {
+        //   id: true,
+        //   name: true,
+        //   details: true,
+        //   amount: true,
+        // },
       },
       _count: {
         select: {
