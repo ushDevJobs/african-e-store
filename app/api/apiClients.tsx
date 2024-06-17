@@ -154,3 +154,18 @@ export function useFetchAStore() {
 
     return fetchStore;
 }
+
+export function useStoreCategories() {
+    async function fetchStoreCategories(id: string) {
+        // Construct the URL with the ID and categories endpoint
+        const url = `${ApiRoutes.FetchCategoriesFromAStore}/${id}/categories`;
+
+        // Fire the request
+        const response = await API.get(url);
+
+        // Return the response
+        return response;
+    }
+
+    return fetchStoreCategories;
+}
