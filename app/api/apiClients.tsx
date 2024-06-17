@@ -141,3 +141,16 @@ export function useFetchAllStores() {
 
     return fetchAllStores;
 }
+
+// Api call to fetch a store
+export function useFetchAStore() {
+    async function fetchStore(id: string) {
+        // Fire the request
+        const response = await API.get(`${ApiRoutes.FetchAStore}/${id}`);
+
+        // Return the response
+        return response;
+    }
+
+    return fetchStore;
+}

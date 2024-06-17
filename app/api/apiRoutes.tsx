@@ -43,5 +43,9 @@ export default class ApiRoutes {
      * Api routes to fetch all stores
      */
     static FetchAllStores: string = 'api/stores/all';
+    /**
+     * Api routes to fetch a store
+     */
+    static FetchAStore: string = 'api/stores/store/id';
 
 }
