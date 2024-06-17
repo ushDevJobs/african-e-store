@@ -8,24 +8,26 @@ datasource db {
 }
 
 model User {
-  id             String      @id @default(cuid())
-  email          String      @unique
-  googleId       String?     @unique
-  facebookId     String?     @unique
-  status         UserStatus  @default(PENDING)
-  profilePicture String?
-  fullname       String
-  password       String?
-  telephone      String?
-  country        String?
-  accountType    AccountType @default(BUYER)
-  createdAt      DateTime    @default(now())
-  updatedAt      DateTime    @updatedAt
-  cartItems      Cart[]
-  orders         Order[]
-  myRatings      Rating[]
-  store          Store?
-  verifyUser     verifyUser?
+  id                String      @id @default(cuid())
+  email             String      @unique
+  googleId          String?     @unique
+  facebookId        String?     @unique
+  status            UserStatus  @default(PENDING)
+  profilePicture    String?
+  fullname          String
+  password          String?
+  telephone         String?
+  country           String?
+  accountType       AccountType @default(BUYER)
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+  cartItems         Cart[]
+  orders            Order[]
+  myRatings         Rating[]
+  store             Store?      @relation(name: "myPersonalStore")
+  favouriteStores   Store[]     @relation(name: "myFavouriteStores")
+  favouriteProducts Product[]
+  verifyUser        verifyUser?
 
   @@map("users")
 }
@@ -42,32 +44,36 @@ model Store {
   orders      Order[]
   products    Product[]
   ratings     Rating[]
-  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade, name: "myPersonalStore")
   categories  Category[]
+  favourite   User[]     @relation(name: "myFavouriteStores")
 
   @@map("store")
 }
 
 model Product {
-  id            String     @id @default(cuid())
-  name          String     @unique
-  itemCondition String?
-  amount        Float      @default(0)
-  quantity      Int        @default(1)
-  details       String     @db.VarChar(255)
-  publish       Boolean    @default(false)
-  coverImage    String
-  images        String?
-  returnPolicy  String?
-  location      String?
-  storeId       String?
-  createdAt     DateTime   @default(now())
-  updatedAt     DateTime   @updatedAt
-  carts         Cart[]
-  orders        Order[]
-  store         Store?     @relation(fields: [storeId], references: [id], onDelete: Cascade)
-  ratings       Rating[]
-  categories    Category[]
+  id                 String         @id @default(cuid())
+  name               String         @unique
+  itemCondition      ItemContitions
+  amount             Float          @default(0)
+  quantity           Int            @default(0)
+  details            String         @db.VarChar(255)
+  publish            Boolean        @default(true)
+  coverImage         String
+  images             String?
+  returnPolicy       String?
+  location           String?
+  storeId            String?
+  discount           Boolean        @default(false)
+  discountPercentage Int            @default(0)
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime       @updatedAt
+  carts              Cart[]
+  orders             Order[]
+  store              Store?         @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  ratings            Rating[]
+  categories         Category[]
+  favourite          User[]
 
   @@map("products")
 }
@@ -189,4 +195,9 @@ enum TrackerStatus {
   DELAYED
   CANCELLED
   PAUSED
+}
+
+enum ItemContitions {
+  NEW
+  USED
 }

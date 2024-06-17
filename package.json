@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "npx prisma generate --schema=./src/prisma/schema.prisma && nodemon src/index.ts"
+    "dev": "npx prisma generate --schema=./src/prisma/schema.prisma && nodemon src/index.ts",
+    "sync": "npx prisma db push --schema=./src/prisma/schema.prisma",
+    "gen": "npx prisma generate --schema=./src/prisma/schema.prisma"
   },
   "keywords": [],
   "author": "",

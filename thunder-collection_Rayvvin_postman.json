@@ -1,6 +1,6 @@
 {
     "info": {
-        "_postman_id": "e3595b1a-c18f-4813-8633-7f2377a088ec",
+        "_postman_id": "b528cd42-d68c-40fe-a8d5-a771325e71a4",
         "name": "Rayvvin",
         "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
         "description": ""
@@ -33,7 +33,7 @@
                                     "language": "json"
                                 }
                             },
-                            "raw": "{\n  \"email\":\"jehoshaphatade041@gmail.com\",\n  \"password\":\"Segunade041@\"\n}"
+                            "raw": "{\n  \"email\":\"testnet041@gmail.com\",\n  \"password\":\"Segunade041@\"\n}"
                         }
                     }
                 },
@@ -229,17 +229,15 @@
                     "request": {
                         "method": "GET",
                         "url": {
-                            "raw": "http://localhost:3000/api/categories/",
+                            "raw": "http://localhost:3000/api/categories?_page=5&_limit=1",
                             "query": [
                                 {
-                                    "key": "_limit",
-                                    "value": "3",
-                                    "disabled": true
+                                    "key": "_page",
+                                    "value": "5"
                                 },
                                 {
-                                    "key": "_page",
-                                    "value": "0",
-                                    "disabled": true
+                                    "key": "_limit",
+                                    "value": "1"
                                 }
                             ],
                             "variable": [],
@@ -406,6 +404,35 @@
                                 "localhost"
                             ],
                             "port": "3000"
+                        }
+                    }
+                },
+                {
+                    "name": "Add Store Description",
+                    "request": {
+                        "method": "PATCH",
+                        "url": {
+                            "raw": "http://localhost:3000/api/stores/store/description",
+                            "path": [
+                                "api",
+                                "stores",
+                                "store",
+                                "description"
+                            ],
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3000"
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            },
+                            "raw": "{\n  \"description\":\"Get all your goodies here\"\n}"
                         }
                     }
                 }

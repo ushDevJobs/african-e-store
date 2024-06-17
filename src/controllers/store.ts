@@ -16,13 +16,12 @@ export const getAllStores = async (
   try {
     const { _limit, _page } = req.query;
     const validatedPag = validatePagination.safeParse({
-      _limit: +_limit!,
       _page: +_page!,
     });
     const count = await prisma.store.count();
     const stores = await prisma.store.findMany({
-      skip: validatedPag.data?._page,
-      take: validatedPag.data?._limit,
+      skip: validatedPag.data?._page! - 1,
+      take: +_limit! || undefined,
       select: {
         id: true,
         name: true,
@@ -301,5 +300,29 @@ export const getStoreProduct = async (
     return res.status(200).json({ status: true, data: product });
   } else {
     next(new BadRequest("Invalid request parameters", ErrorCode.BAD_REQUEST));
+  }
+};
+export const updateStoreDescription = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const user = req.user as RequestUser;
+  const { description } = req.body;
+  if (description && description !== "") {
+    const updateDescription = await prisma.store.update({
+      where: {
+        userId: user.id,
+      },
+      data: {
+        description,
+      },
+      select: {
+        description: true,
+      },
+    });
+    return returnJSONSuccess(res, { data: updateDescription });
+  } else {
+    next(new BadRequest("Invalid Request Parameters", ErrorCode.BAD_REQUEST));
   }
 };

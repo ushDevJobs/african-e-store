@@ -10,6 +10,7 @@ import {
   getStoreProduct,
   searchForStore,
   searchStoreProducts,
+  updateStoreDescription,
 } from "../../controllers/store";
 import { rootErrorHandler } from "../../root-error-handler";
 import { checkStore, sellerRoleCheck } from "../../middlewares/roles";
@@ -39,5 +40,10 @@ router.get(
   "/store/search",
   [sellerRoleCheck, checkStore],
   rootErrorHandler(searchStoreProducts)
+);
+router.patch(
+  "/store/description",
+  [sellerRoleCheck, checkStore],
+  updateStoreDescription
 );
 export { router as storeRoutes };

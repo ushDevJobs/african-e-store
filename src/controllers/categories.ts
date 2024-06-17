@@ -9,13 +9,12 @@ import { NotFound } from "../exceptions/not-found";
 export const getAllCategories = async (req: Request, res: Response) => {
   const { _limit, _page } = req.query;
   const validatedPag = validatePagination.safeParse({
-    _limit: +_limit!,
     _page: +_page!,
   });
   const count = await prisma.category.count();
   const categories = await prisma.category.findMany({
-    skip: validatedPag.data?._page,
-    take: validatedPag.data?._limit,
+    skip: validatedPag.data?._page! - 1,
+    take: +_limit! || undefined,
     select: {
       id: true,
       name: true,
@@ -49,7 +48,6 @@ export const getCategoryById = async (
   const { id } = req.params;
   const { _limit, _page } = req.query;
   const validatedPag = validatePagination.safeParse({
-    _limit: +_limit!,
     _page: +_page!,
   });
 
@@ -58,8 +56,8 @@ export const getCategoryById = async (
       where: {
         id,
       },
-      skip: validatedPag.data?._page,
-      take: validatedPag.data?._limit,
+      skip: validatedPag.data?._page! - 1,
+      take: +_limit! || undefined,
       select: {
         id: true,
         name: true,
