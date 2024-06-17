@@ -1,6 +1,6 @@
 {
     "info": {
-        "_postman_id": "768510b1-c64e-4407-b717-dae669decb26",
+        "_postman_id": "e3595b1a-c18f-4813-8633-7f2377a088ec",
         "name": "Rayvvin",
         "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
         "description": ""
@@ -598,6 +598,31 @@
                                 "store",
                                 "id",
                                 "clxg6pce40000goqspbxwannr",
+                                "product",
+                                "clxg75on70001goqsbvtgxg2a"
+                            ],
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3000"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Products",
+            "item": [
+                {
+                    "name": "Get Product By id",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "http://localhost:3000/api/products/product/clxg75on70001goqsbvtgxg2a",
+                            "path": [
+                                "api",
+                                "products",
                                 "product",
                                 "clxg75on70001goqsbvtgxg2a"
                             ],

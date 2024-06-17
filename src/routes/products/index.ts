@@ -1,11 +1,12 @@
 import { Router } from "express";
 import { adminRoleCheck, sellerRoleCheck } from "../../middlewares/roles";
 import { rootErrorHandler } from "../../root-error-handler";
-import { updateProduct } from "../../controllers/products";
+import { getProductById, updateProduct } from "../../controllers/products";
 
 const router = Router();
 
 router
   .route("/product/:id")
+  .get(getProductById)
   .patch([sellerRoleCheck, adminRoleCheck], rootErrorHandler(updateProduct));
 export { router as productRoutes };
