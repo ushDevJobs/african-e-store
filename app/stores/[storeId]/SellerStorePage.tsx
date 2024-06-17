@@ -7,8 +7,8 @@ import CategoriesSettingsBar from '../../components/CategoriesSettingsBar';
 import { FilterIcon, SearchIcon, SortIcon } from '../../components/SVGs/SVGicons';
 import AboutSeller from './AboutSeller';
 import useResponsiveness from '../../components/hooks/responsiveness-hook';
-import { ASingleStoreResponse } from '@/app/components/models/IStores';
-import { useFetchAStore } from '@/app/api/apiClients';
+import { ASingleStoreResponse, StoreCategoriesResponse } from '@/app/components/models/IStores';
+import { useFetchAStore, useFetchSingleCategory, useStoreCategories } from '@/app/api/apiClients';
 import { createCustomErrorMessages } from '@/app/components/constants/catchError';
 import { toast } from 'sonner';
 
@@ -26,6 +26,7 @@ enum TabIndex {
 
 const SellerStorePage = ({ params }: Props) => {
     const fetchStore = useFetchAStore()
+    const fetchStoreCategories = useStoreCategories()
     const windowRes = useResponsiveness();
     const isMobile = windowRes.width && windowRes.width < 768;
     const onMobile = typeof isMobile == 'boolean' && isMobile;
@@ -36,6 +37,8 @@ const SellerStorePage = ({ params }: Props) => {
     const [activeTab, setActiveTab] = useState<TabIndex>(TabIndex.Shop);
     const [store, setStore] = useState<ASingleStoreResponse>()
     const [isFetchingStore, setIsFetchingStore] = useState<boolean>(true);
+    const [storeCategories, setStoreCategories] = useState<StoreCategoriesResponse>()
+    const [isFetchingStoreCategories, setIsFetchingStoreCategories] = useState<boolean>(true);
 
     async function handleFetchStore() {
 
@@ -56,8 +59,30 @@ const SellerStorePage = ({ params }: Props) => {
             });
     }
 
+    async function handleFetchStoreCategories() {
+
+        // Start loader
+        setIsFetchingStoreCategories(true);
+
+        await fetchStoreCategories(storeId)
+            .then((response) => {
+                console.log("Response: ", response.data.data);
+                setStoreCategories(response.data.data);
+            })
+            .catch((error) => {
+                const errorMessage = createCustomErrorMessages(error.response?.data)
+                toast.error(errorMessage);
+            })
+            .finally(() => {
+                setIsFetchingStoreCategories(false);
+            });
+    }
+
     useEffect(() => {
         handleFetchStore();
+    }, []);
+    useEffect(() => {
+        handleFetchStoreCategories();
     }, []);
 
     return (
@@ -94,7 +119,7 @@ const SellerStorePage = ({ params }: Props) => {
                             <span className='flex items-center gap-2 cursor-pointer'><FilterIcon /> Filter </span>
                         </div>
                     }
-                    {activeTab === TabIndex.Shop && <SellerShop />}
+                    {activeTab === TabIndex.Shop && <SellerShop storeCategories={storeCategories} isFetchingStoreCategories={isFetchingStoreCategories} />}
                     {activeTab === TabIndex.About && <AboutSeller />}
                     {activeTab === TabIndex.Feedback && <h1>Feedback</h1>}
                 </div>
