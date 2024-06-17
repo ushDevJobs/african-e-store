@@ -10,6 +10,7 @@ import { AllStoresResponse } from '../components/models/IStores'
 import { createCustomErrorMessages } from '../components/constants/catchError'
 import { toast } from 'sonner'
 import ComponentLoader from '../components/Loader/ComponentLoader'
+import Link from 'next/link'
 
 type Props = {}
 
@@ -63,7 +64,7 @@ const StorePage = (props: Props) => {
 
                 <div className={styles.cards}>
                     {filteredStores?.map((store, index) => (
-                        <div className={styles.card} key={index}>
+                        <Link href={`/stores/${store.id}`} className={styles.card} key={index}>
                             <div className={styles.image}>
                                 <Image fill src={images.cashew} alt='product image' />
                                 {isFavorite ? <span className='absolute right-2 top-2 bg-white p-3 cursor-pointer rounded-full'><FilledLoveIcon /></span>
@@ -74,7 +75,7 @@ const StorePage = (props: Props) => {
                                 <p className='text-[#828282] text-sm'>{store.description ? store.description : 'lorem ipsum'}</p>
                                 <span className='flex items-center gap-2'>{store.location == 'Nigeria' ? '' : <UkIcon />} {store.location}</span>
                             </div>
-                        </div>
+                        </Link>
                     ))}
                 </div>
 
