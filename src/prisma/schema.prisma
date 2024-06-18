@@ -61,16 +61,17 @@ model Product {
   publish            Boolean        @default(true)
   coverImage         String
   images             String?
-  returnPolicy       String?
+  returnPolicy       String
   location           String?
-  storeId            String?
+  storeId            String
+  shippingDetails    String         @default("{}") @db.LongText
   discount           Boolean        @default(false)
   discountPercentage Int            @default(0)
   createdAt          DateTime       @default(now())
   updatedAt          DateTime       @updatedAt
   carts              Cart[]
   orders             Order[]
-  store              Store?         @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  store              Store          @relation(fields: [storeId], references: [id], onDelete: Cascade)
   ratings            Rating[]
   categories         Category[]
   favourite          User[]
@@ -90,16 +91,16 @@ model Category {
 }
 
 model Cart {
-  id              String   @id @default(uuid())
-  quantity        Int
-  shippingDetails String   @db.LongText
-  productId       String
-  userId          String
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-  products        Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
-  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id        String   @id @default(uuid())
+  quantity  Int      @default(1)
+  productId String
+  userId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  @@unique([productId, userId])
   @@map("carts")
 }
 

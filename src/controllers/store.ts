@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { RequestUser } from "../types";
 import { prisma } from "../prisma";
-import { returnJSONSuccess } from "../utils/functions";
+import { returnJSONError, returnJSONSuccess } from "../utils/functions";
 import { NotFound } from "../exceptions/not-found";
 import { ErrorCode } from "../exceptions/root";
 import { validateCreateStore } from "../schema/store";
@@ -324,5 +324,32 @@ export const updateStoreDescription = async (
     return returnJSONSuccess(res, { data: updateDescription });
   } else {
     next(new BadRequest("Invalid Request Parameters", ErrorCode.BAD_REQUEST));
+  }
+};
+export const addStoreToFavourite = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { id } = req.body;
+
+  const user = req.user as RequestUser;
+  if (id) {
+    try {
+      await prisma.user.update({
+        where: {
+          id: user.id,
+        },
+        data: {
+          favouriteStores: {
+            connect: [{ id }],
+          },
+        },
+      });
+    } catch (error) {
+      return returnJSONError(res, { message: "Unable to add to favourite" });
+    }
+  } else {
+    next(new BadRequest("Invalid Request Parameter", ErrorCode.BAD_REQUEST));
   }
 };

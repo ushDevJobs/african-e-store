@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+  addStoreToFavourite,
   createStore,
   getAllStores,
   getCategoriesOfStoreById,
@@ -21,6 +22,7 @@ router.get("/store/id/:id", getStoreById);
 router.get("/store/id/:id/categories", getCategoriesOfStoreById);
 router.get("/store/id/:storeId/product/:productId", getProductByIdOfStoreById);
 router.get("/search", searchForStore);
+router.route("/store/favourite").post(rootErrorHandler(addStoreToFavourite));
 router
   .route("/store")
   .get(sellerRoleCheck, rootErrorHandler(getStoreByUserLogged))
@@ -44,6 +46,6 @@ router.get(
 router.patch(
   "/store/description",
   [sellerRoleCheck, checkStore],
-  updateStoreDescription
+  rootErrorHandler(updateStoreDescription)
 );
 export { router as storeRoutes };

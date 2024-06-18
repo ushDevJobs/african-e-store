@@ -1,7 +1,9 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { RequestUser } from "../types";
 import { prisma } from "../prisma";
-import { returnJSONSuccess } from "../utils/functions";
+import { returnJSONError, returnJSONSuccess } from "../utils/functions";
+import { BadRequest } from "../exceptions/bad-request";
+import { ErrorCode } from "../exceptions/root";
 
 export const getCartItems = async (req: Request, res: Response) => {
   const user = req.user! as RequestUser;
@@ -14,7 +16,7 @@ export const getCartItems = async (req: Request, res: Response) => {
         select: {
           id: true,
           quantity: true,
-          products: {
+          product: {
             select: {
               name: true,
               id: true,
@@ -47,4 +49,38 @@ export const deleteItemFromCart = async (req: Request, res: Response) => {
     },
   });
   returnJSONSuccess(res);
+};
+export const addItemToCart = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { id } = req.body;
+  const user = req.user as RequestUser;
+  if (id) {
+    try {
+      await prisma.cart.upsert({
+        where: {
+          productId_userId: {
+            productId: id,
+            userId: user.id,
+          },
+        },
+        update: {
+          quantity: {
+            increment: 1,
+          },
+        },
+        create: {
+          productId: id,
+          userId: user.id,
+        },
+      });
+      return returnJSONSuccess(res);
+    } catch (error) {
+      return returnJSONError(res, { message: "Unable to add to cart" });
+    }
+  } else {
+    next(new BadRequest("Invalid Request Parameters", ErrorCode.BAD_REQUEST));
+  }
 };

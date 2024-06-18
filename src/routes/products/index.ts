@@ -7,6 +7,6 @@ const router = Router();
 
 router
   .route("/product/:id")
-  .get(getProductById)
+  .get(rootErrorHandler(getProductById))
   .patch([sellerRoleCheck, adminRoleCheck], rootErrorHandler(updateProduct));
 export { router as productRoutes };
