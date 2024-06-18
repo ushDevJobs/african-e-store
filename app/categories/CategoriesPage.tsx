@@ -29,7 +29,7 @@ const CategoriesPage = () => {
     const [isFetchingCategories, setIsFetchingCategories] = useState<boolean>(true);
     const [activeCategory, setActiveCategory] = useState<string>('');
 
-    const [currentPage, setCurrentPage] = useState<number>(0); // Track current page
+    const [currentPage, setCurrentPage] = useState<number>(1); // Track current page
     const limit = 6; // // Number of categories per page
     const totalPages = Math.ceil(categories.length / limit);
 
