@@ -27,13 +27,13 @@ const SellerShop = ({ filteredStoreCategories, isFetchingStoreCategories, handle
                                 <h3 className='text-lg md:text-xl text-[#2c7865] mb-5 font-semibold underline'>{category.name}</h3>
                                 <div className={styles.cards}>
                                     {category.products.map((product) => (
-                                        <div className={styles.card} key={product.id} id={category.id.toString()}>
+                                        <Link href={`/products/${product.id}`} className={styles.card} key={product.id} id={category.id.toString()}>
                                             <div className={styles.image}>
                                                 <Image fill src={images.cashew} alt='product image' />
                                             </div>
                                             <p>{product.name} </p>
                                             <h4>&#8358;{product.amount.toLocaleString()}</h4>
-                                        </div>
+                                        </Link>
                                     ))}
                                 </div>
                             </div>
