@@ -69,7 +69,7 @@ const SingleCategoryReviews = (props: Props) => {
                         </div>}
                         {onDesktop && <div className={styles.top_rhs}>
                             <span><FavoriteIcon /></span>
-                            <button>Visit store</button>
+                            <Link href={'/stores'}>Visit store</Link>
                         </div>}
                     </div>
                     <div className={styles.ratings}>

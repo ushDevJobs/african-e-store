@@ -1,11 +1,13 @@
 import React from 'react'
 import SingleProductPage from './SingleProductPage'
 
-type Props = {}
+type Props = {
+    params: { productId: string }
+}
 
-const SingleProduct = (props: Props) => {
+const SingleProduct = ({params}: Props) => {
   return (
-      <SingleProductPage />
+      <SingleProductPage params={params}/>
   )
 }
 

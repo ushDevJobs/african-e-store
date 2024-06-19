@@ -8,11 +8,20 @@ import Image from 'next/image'
 import Link from 'next/link'
 import useResponsiveness from './hooks/responsiveness-hook'
 import PlaceABidComponent from '../products/[productId]/PlaceABidComponent'
+import { ProductResponse } from './models/IProduct'
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from '../redux/store'
+import { decrement, increment, productQtyInCartSelector } from '../redux/features/cart/cartSlice'
 
-type Props = {}
+type Props = {
+    product: ProductResponse | undefined
+    isFetchingProduct: boolean
+}
 
-const AddProductToCart = (props: Props) => {
-
+const AddProductToCart = ({ product, isFetchingProduct }: Props) => {
+    const dispatch = useDispatch();
+    const quantityInCart = useSelector((state: RootState) => productQtyInCartSelector(state, product?.id as string))
+    console.log({ quantityInCart })
     const [isPlaceABidVisible, setIsPlaceABidVisible] = useState(false)
 
     const windowRes = useResponsiveness();
@@ -63,14 +72,14 @@ const AddProductToCart = (props: Props) => {
                     )
                     }
                     <h1 className={styles.productName}>
-                        Samsung Galaxy S21 5G SM-G991U Factory Unlocked 128GB Phantom Gray C
+                        {product?.name}
                     </h1>
                     {onDesktop &&
                         <p className={styles.shipping}>
-                            Free Shipping, Free 30 Day Returns Shipping from South Africa specific town
+                            {product?.shippingDetails}
                         </p>}
-                    {onDesktop && <h2 className={styles.price}>US $164.99</h2>}
-                    <p className='text-[#828282] text-base mb-8'>Condition: Brand new  </p>
+                    {onDesktop && <h2 className={styles.price}>&pound; {product?.amount.toLocaleString()}</h2>}
+                    <p className='text-[#828282] text-base mb-8'>Condition: {product?.itemCondition} </p>
                     {onMobile &&
                         <div className={`${styles.rating} -mt-7`}>
                             <span className='flex items-center'>
@@ -109,9 +118,15 @@ const AddProductToCart = (props: Props) => {
                         </span>
                         <p className='text-base text-[#2C7865]'>(121 review)</p>
                     </div>}
-                    {onMobile && <h2 className='text-[#1E1E1E] font-semibold mb-3 text-xl'>US $164.99</h2>}
-                    <QuantityButton />
-
+                    {onMobile && <h2 className='text-[#1E1E1E] font-semibold mb-3 text-xl'>&pound; {product?.amount.toLocaleString()}</h2>}
+                    {/* {
+                        quantityInCart !== undefined &&  */}
+                    <QuantityButton
+                        onIncrease={() => dispatch(increment(product as ProductResponse))}
+                        onDecrease={() => dispatch(decrement(product as ProductResponse))}
+                        qty={quantityInCart ?? 0}
+                    />
+                    {/* } */}
                     <div className={styles.buyNow}>
                         <Link href={'/checkout'}>
                             <button>Buy Now</button>

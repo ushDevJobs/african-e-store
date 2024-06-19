@@ -14,6 +14,7 @@ import images from '@/public/images'
 import CategoriesSkeletonLoader from '../CategoriesSketon'
 import { CategoriesHeader, SingleCategoriesHeader } from '@/app/components/CategoriesHeader'
 import { StorageKeys } from '@/app/components/constants/StorageKeys'
+import Link from 'next/link'
 type Props = {
     params: { categoryId: string; }
 }
@@ -77,38 +78,38 @@ const SingleCategoryPage = ({ params }: Props) => {
     return (
         <>
             {!category && isFetchingCategory ? <CategoriesSkeletonLoader /> :
-            <div className={styles.main}>
-                <SingleCategoriesHeader mainText={category?.name} subText='Search for any product in different categories on Rayvinn' />
-                {onMobile &&
-                    <div className="w-full flex items-center gap-4 justify-end mb-2 ml-auto">
-                        <span className='flex items-center gap-2 cursor-pointer'><SortIcon /> Sort</span>
-                        <span className='flex items-center gap-2 cursor-pointer'><FilterIcon /> Filter </span>
-                    </div>
-                }
-                <div className={styles.contents}>
-                    {onDesktop &&
-                          <div className={styles.lhs} style={{ position: 'relative' }}>
-                                <CategoriesSettingsBar retrievedCategories={retrievedCategories}/>
-                          </div>}
+                <div className={styles.main}>
+                    <SingleCategoriesHeader mainText={category?.name} subText='Search for any product in different categories on Rayvinn' />
+                    {onMobile &&
+                        <div className="w-full flex items-center gap-4 justify-end mb-2 ml-auto">
+                            <span className='flex items-center gap-2 cursor-pointer'><SortIcon /> Sort</span>
+                            <span className='flex items-center gap-2 cursor-pointer'><FilterIcon /> Filter </span>
+                        </div>
+                    }
+                    <div className={styles.contents}>
+                        {onDesktop &&
+                            <div className={styles.lhs} style={{ position: 'relative' }}>
+                                <CategoriesSettingsBar retrievedCategories={retrievedCategories} />
+                            </div>}
 
-                    <div className={styles.rhs}>
-                        <div className='flex flex-col gap-10'>
-                            <div className='flex flex-col'>
-                                <h3>{category?.name}</h3>
-                                <div className={styles.cards}>
-                                    {category?.products.map((product, index) => (
-                                        <div className={styles.card} key={product.id} >
-                                            <div className={styles.image}>
-                                                <Image fill src={images.cashew} alt='product image' />
-                                            </div>
-                                            <p>{product.name} </p>
-                                            <h4>&#8358;{product.amount.toLocaleString()}</h4>
-                                        </div>
-                                    ))}
+                        <div className={styles.rhs}>
+                            <div className='flex flex-col gap-10'>
+                                <div className='flex flex-col'>
+                                    <h3>{category?.name}</h3>
+                                    <div className={styles.cards}>
+                                        {category?.products.map((product, index) => (
+                                            <Link href={`/products/${product.id}`} className={styles.card} key={product.id} >
+                                                <div className={styles.image}>
+                                                    <Image fill src={images.cashew} alt='product image' />
+                                                </div>
+                                                <p>{product.name} </p>
+                                                <h4>&#8358;{product.amount.toLocaleString()}</h4>
+                                            </Link>
+                                        ))}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        {/* {categories.length > 0 && categories && (
+                            {/* {categories.length > 0 && categories && (
                               <div className={styles.pagination}>
                                   <button onClick={() => goToPage(currentPage - 1)} disabled={currentPage === 1} style={currentPage === 1 ? { cursor: 'not-allowed', opacity: '0.5' } : { cursor: 'pointer' }}><LeftArrowIcon /></button>
                                   <div className={styles.value}>
@@ -121,11 +122,11 @@ const SingleCategoryPage = ({ params }: Props) => {
                                   <button onClick={() => goToPage(currentPage + 1)} disabled={currentPage >= totalPages} style={currentPage >= totalPages ? { cursor: 'not-allowed', opacity: '0.5' } : { cursor: 'pointer' }}><RightArrowIcon /></button>
                               </div>
                           )} */}
+                        </div>
+
+
                     </div>
-
-
                 </div>
-            </div>
             }
         </>
     )

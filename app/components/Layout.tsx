@@ -21,6 +21,8 @@ import { useFetchCategories } from '../api/apiClients';
 import { CategoriesResponse } from './models/AllCategories';
 import { StorageKeys } from './constants/StorageKeys';
 import { createCustomErrorMessages } from './constants/catchError';
+import { store } from '../redux/store';
+import { Provider } from "react-redux";
 
 interface LayoutProps {
     children?: ReactNode;
@@ -77,8 +79,8 @@ const Layout: FunctionComponent<LayoutProps> = ({ children }): ReactElement => {
         <>
             {!loaderIsVisible && (
                 <>
-
                     <AccountStatusProvider>
+                        <Provider store={store}>
                         <Toaster
                             position='bottom-center'
                             richColors
@@ -101,7 +103,7 @@ const Layout: FunctionComponent<LayoutProps> = ({ children }): ReactElement => {
                             />}
                         {children}
                         {(pathname.includes('/signup') || pathname.includes('/login') || pathname.includes('/verification')) ? <RegistrationFooter /> : <Footer />}
-
+                        </Provider>
                     </AccountStatusProvider>
                 </>
             )}

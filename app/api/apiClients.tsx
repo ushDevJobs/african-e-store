@@ -170,3 +170,29 @@ export function useStoreCategories() {
 
     return fetchStoreCategories;
 }
+
+// Api call to fetch product
+export function useFetchProduct() {
+    async function fetchProduct(id: string) {
+        // Fire the request
+        const response = await API.get(`${ApiRoutes.FetchProduct}/${id}`);
+
+        // Return the response
+        return response;
+    }
+
+    return fetchProduct;
+}
+
+// Api call to fetch cart items
+export function useFetchCartItems() {
+    async function fetchCartItems() {
+        // Fire the request
+        const response = await API.get(ApiRoutes.FetchCartItems);
+
+        // Return the response
+        return response;
+    }
+
+    return fetchCartItems;
+}

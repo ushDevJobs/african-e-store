@@ -15,11 +15,15 @@ import { createCustomErrorMessages } from '../constants/catchError';
 import { toast } from 'sonner';
 import { CategoriesResponse } from '../models/AllCategories';
 import { StorageKeys } from '../constants/StorageKeys';
+import { RootState } from '@/app/redux/store';
+import { useDispatch, useSelector } from 'react-redux';
 
 type Props = {}
 
 const Navbar = (props: Props) => {
     const router = useRouter()
+    const cartItems = useSelector((state: RootState) => state.cart.cartItems);
+
     const [navIsOpen, setNavIsOpen] = useState(false);
     const logout = useLogout()
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -194,7 +198,7 @@ const Navbar = (props: Props) => {
                             <div className={styles.cart}>
                                 <div className={styles.cartIcon}>
                                     <p><CartIcon /></p>
-                                    <span>0</span>
+                                    <span> {cartItems.length > 0 && <>{cartItems.length}</>}</span>
                                 </div>
                                 <h4>My cart</h4>
                             </div></Link>}

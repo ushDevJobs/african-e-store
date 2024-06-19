@@ -1,16 +1,20 @@
 import React from 'react'
 import styles from '../styles/QuantityButton.module.scss'
 
-type Props = {}
+type Props = {
+    onIncrease: () => void;
+    onDecrease: () => void;
+    qty: number;
+}
 
-const QuantityButton = (props: Props) => {
+const QuantityButton = ({onDecrease, onIncrease, qty}: Props) => {
   return (
       <div className={styles.qty}>
           <h4>Quantity</h4>
           <div className={styles.qtyBtn}>
-              <button>-</button>
-              <p>2</p>
-              <button>+</button>
+              <button onClick={onDecrease}>-</button>
+              <p>{qty}</p>
+              <button onClick={onIncrease}>+</button>
           </div>
       </div>
   )
