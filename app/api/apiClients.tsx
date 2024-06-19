@@ -141,3 +141,32 @@ export function useFetchAllStores() {
 
     return fetchAllStores;
 }
+
+// Api call to fetch a store
+export function useFetchAStore() {
+    async function fetchStore(id: string) {
+        // Fire the request
+        const response = await API.get(`${ApiRoutes.FetchAStore}/${id}`);
+
+        // Return the response
+        return response;
+    }
+
+    return fetchStore;
+}
+
+// Api call to fetch categories from a store
+export function useStoreCategories() {
+    async function fetchStoreCategories(id: string) {
+        // Construct the URL with the ID and categories endpoint
+        // const url = `${ApiRoutes.FetchCategoriesFromAStore}/${id}/categories`;
+        const url = `api/stores/store/id/${id}/categories`;
+
+        // Fire the request
+        const response = await API.get(url);
+        // Return the response
+        return response;
+    }
+
+    return fetchStoreCategories;
+}
