@@ -1,6 +1,6 @@
 {
     "info": {
-        "_postman_id": "b528cd42-d68c-40fe-a8d5-a771325e71a4",
+        "_postman_id": "141de9b3-6666-4b39-b5d7-ce779de84426",
         "name": "Rayvvin",
         "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
         "description": ""
@@ -229,11 +229,11 @@
                     "request": {
                         "method": "GET",
                         "url": {
-                            "raw": "http://localhost:3000/api/categories?_page=5&_limit=1",
+                            "raw": "http://localhost:3000/api/categories?_page=4&_limit=1",
                             "query": [
                                 {
                                     "key": "_page",
-                                    "value": "5"
+                                    "value": "4"
                                 },
                                 {
                                     "key": "_limit",
@@ -464,11 +464,11 @@
                     "request": {
                         "method": "DELETE",
                         "url": {
-                            "raw": "http://localhost:3000/api/cart?id=a0cd1e5f-5fb8-4e26-9350-887c4f6fab92",
+                            "raw": "http://localhost:3000/api/cart?id=abe0c22f-3aef-4373-965a-07bdbece0f68",
                             "query": [
                                 {
                                     "key": "id",
-                                    "value": "a0cd1e5f-5fb8-4e26-9350-887c4f6fab92"
+                                    "value": "abe0c22f-3aef-4373-965a-07bdbece0f68"
                                 }
                             ],
                             "variable": [],
@@ -481,6 +481,33 @@
                                 "localhost"
                             ],
                             "port": "3000"
+                        }
+                    }
+                },
+                {
+                    "name": "Add To Cart",
+                    "request": {
+                        "method": "POST",
+                        "url": {
+                            "raw": "http://localhost:3000/api/cart",
+                            "path": [
+                                "api",
+                                "cart"
+                            ],
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3000"
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            },
+                            "raw": "{\n  \"id\":\"clxk0nphn00008ulzlt4qiwgy\"\n}"
                         }
                     }
                 }
@@ -634,6 +661,12 @@
                             ],
                             "port": "3000"
                         }
+                    }
+                },
+                {
+                    "name": "Add Store As Favourite",
+                    "request": {
+                        "method": "GET"
                     }
                 }
             ]

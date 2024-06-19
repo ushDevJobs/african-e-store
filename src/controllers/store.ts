@@ -19,8 +19,9 @@ export const getAllStores = async (
       _page: +_page!,
     });
     const count = await prisma.store.count();
+    const page = (+validatedPag.data?._page! - 1) * (_limit ? +_limit : count);
     const stores = await prisma.store.findMany({
-      skip: validatedPag.data?._page! - 1,
+      skip: page,
       take: +_limit! || undefined,
       select: {
         id: true,
@@ -35,7 +36,11 @@ export const getAllStores = async (
         },
       },
     });
-    return returnJSONSuccess(res, { data: stores, count });
+    return returnJSONSuccess(res, {
+      data: stores,
+      totalPages: Math.ceil(count / (_limit ? +_limit : count)),
+      hasMore: validatedPag.data?._page! * (_limit ? +_limit : count) < count,
+    });
   } catch (error) {
     next(new NotFound("Store not found", ErrorCode.NOT_FOUND));
   }
@@ -107,7 +112,6 @@ const getStoreFullDetails = async (id: string, isStoreId = false) => {
   return {
     storeDetails: store,
     avgRating: avg._avg,
-    totalRating: avg._count,
     ratingWithPercent,
     feedback: parseInt(feedback.toFixed(0)),
     totalItemSold,
