@@ -31,16 +31,9 @@ const CategoriesPage = () => {
     const [totalCategories, setTotalCategories] = useState<number>(0)
     const [hasMore, setHasMore] = useState<boolean>(false)
 
-<<<<<<< HEAD
     const [currentPage, setCurrentPage] = useState<number>(() => parseInt(searchParams.get("page") ?? "1")); // Track current page
-=======
-    const [currentPage, setCurrentPage] = useState<number>(1); // Track current page
->>>>>>> 9f59aa169fa24c3f8e43940a5d530de96c6753f5
     const limit = 6; // // Number of categories per page
     const totalPages = totalCategories;
-
-    // const totalProductCount = categories.reduce((sum, category) => sum + category._count.products, 0);
-    // const totalPages = Math.ceil(totalProductCount / limit);
 
     const goToPage = (page: number) => {
         if (page >= 1 && page <= totalPages) {
