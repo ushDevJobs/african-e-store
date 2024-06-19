@@ -1,14 +1,14 @@
 'use client';
 import React, { useState } from 'react';
-import styles from '../seller-store/SellerStore.module.scss';
+import styles from '../stores/[storeId]/SellerStore.module.scss';
 import CategoriesSettingsBar from '../components/CategoriesSettingsBar';
 import { SearchIcon } from '../components/SVGs/SVGicons';
-import SellerStoreRating from '../stores/[storeId]/SellerStoreRating';
 import SellerShop from '../stores/[storeId]/SellerShop';
-import AboutSeller from '../stores/[storeId]/AboutSeller';
 import useResponsiveness from '../components/hooks/responsiveness-hook';
 import SellerProduct from './SellerProduct';
 import AddProductModal from './AddProductModal';
+import SellerStoreRating from './SellerStoreRating';
+import AboutSeller from './AboutSeller';
 type Props = {};
 
 enum TabIndex {

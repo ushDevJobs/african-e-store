@@ -6,8 +6,8 @@ import { ASingleStoreResponse } from '@/app/components/models/IStores'
 import { StoreStoreRatingSkeletonLoader } from '../StoresSkeleton'
 
 type Props = {
-    store: ASingleStoreResponse | undefined;
-    isFetchingStore: boolean
+    store?: ASingleStoreResponse | undefined;
+    isFetchingStore?: boolean
 }
 
 const SellerStoreRating = ({store, isFetchingStore}: Props) => {
