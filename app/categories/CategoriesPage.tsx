@@ -33,6 +33,9 @@ const CategoriesPage = () => {
     const limit = 6; // // Number of categories per page
     const totalPages = Math.ceil(categories.length / limit);
 
+    // const totalProductCount = categories.reduce((sum, category) => sum + category._count.products, 0);
+    // const totalPages = Math.ceil(totalProductCount / limit);
+
     const goToPage = (page: number) => {
         if (page >= 1 && page <= totalPages) {
             router.push(`/categories?page=${page}`);

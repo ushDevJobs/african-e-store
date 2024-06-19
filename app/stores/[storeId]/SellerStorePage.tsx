@@ -11,6 +11,8 @@ import { ASingleStoreResponse, StoreCategoriesResponse } from '@/app/components/
 import { useFetchAStore, useFetchSingleCategory, useStoreCategories } from '@/app/api/apiClients';
 import { createCustomErrorMessages } from '@/app/components/constants/catchError';
 import { toast } from 'sonner';
+import StoreCategoriesSettingsBar from '@/app/components/StoreCategoriesSettingsBar';
+import { StoreInputSkeletonLoader, StoreTabsSkeletonLoader } from '../StoresSkeleton';
 
 type Props = {
     params: {
@@ -32,8 +34,8 @@ const SellerStorePage = ({ params }: Props) => {
     const onMobile = typeof isMobile == 'boolean' && isMobile;
     const onDesktop = typeof isMobile == 'boolean' && !isMobile;
     const storeId = params.storeId;
-    console.log(storeId)
-
+    // console.log(storeId)
+    const [searchQuery, setSearchQuery] = useState('')
     const [activeTab, setActiveTab] = useState<TabIndex>(TabIndex.Shop);
     const [store, setStore] = useState<ASingleStoreResponse>()
     const [isFetchingStore, setIsFetchingStore] = useState<boolean>(true);
@@ -78,6 +80,10 @@ const SellerStorePage = ({ params }: Props) => {
             });
     }
 
+    const filteredStoreCategories = storeCategories?.categories.filter(storeCategory =>
+        storeCategory.products.some((product) => product.name.toLowerCase().includes(searchQuery.toLowerCase()))
+    );
+
     useEffect(() => {
         handleFetchStore();
     }, []);
@@ -85,14 +91,47 @@ const SellerStorePage = ({ params }: Props) => {
         handleFetchStoreCategories();
     }, []);
 
+    const [activeCategory, setActiveCategory] = useState<string>('');
+    // Useeffect to set active category on scroll
+    useEffect(() => {
+        const handleScroll = () => {
+            storeCategories?.categories.forEach((category) => {
+                const element = document.getElementById(category.id.toString());
+                if (element && element.getBoundingClientRect().top < window.innerHeight && element.getBoundingClientRect().bottom > 0) {
+                    setActiveCategory(category.name);
+                }
+            });
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, [storeCategories?.categories]);
+
     return (
         <div className={styles.main}>
-            {onDesktop && <SellerStoreRating store={store} />}
+            {onDesktop && <SellerStoreRating store={store} isFetchingStore={isFetchingStore} />}
             <div className={styles.tab}>
-                {activeTab === TabIndex.Shop && <div className={styles.lhs}><CategoriesSettingsBar /></div>}
+                {activeTab === TabIndex.Shop && <div className={styles.lhs}>
+                    <StoreCategoriesSettingsBar
+                        storeCategories={storeCategories}
+                        isFetchingStoreCategories={isFetchingStoreCategories}
+                        activeCategory={activeCategory}
+                    />
+                </div>}
                 <div className={styles.rhs}>
-                    {activeTab === TabIndex.Shop && <div className={styles.search}><SearchIcon /> <input type="text" placeholder='Search items in shop' /></div>}
-                    <div className={styles.tabSection}>
+                    {!storeCategories && isFetchingStoreCategories ? <StoreInputSkeletonLoader /> : (
+                        activeTab === TabIndex.Shop &&
+                        <div className={styles.search}><SearchIcon />
+                            <input type="text"
+                                placeholder='Search items in shop'
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                            />
+                        </div>
+                    )}
+                    {!storeCategories && isFetchingStoreCategories ? <StoreTabsSkeletonLoader /> : <div className={styles.tabSection}>
                         <span
                             onClick={() => setActiveTab(TabIndex.Shop)}
                             className={activeTab === TabIndex.Shop ? styles.active : ''}
@@ -111,15 +150,15 @@ const SellerStorePage = ({ params }: Props) => {
                         >
                             Feedback
                         </span>
-                    </div>
-                    {onMobile && <SellerStoreRating store={store} />}
+                    </div>}
+                    {onMobile && <SellerStoreRating store={store} isFetchingStore={isFetchingStore} />}
                     {onMobile &&
                         <div className="w-full flex items-center gap-4 justify-end mb-2 ml-auto">
                             <span className='flex items-center gap-2 cursor-pointer'><SortIcon /> Sort</span>
                             <span className='flex items-center gap-2 cursor-pointer'><FilterIcon /> Filter </span>
                         </div>
                     }
-                    {activeTab === TabIndex.Shop && <SellerShop storeCategories={storeCategories} isFetchingStoreCategories={isFetchingStoreCategories} />}
+                    {activeTab === TabIndex.Shop && <SellerShop filteredStoreCategories={filteredStoreCategories} isFetchingStoreCategories={isFetchingStoreCategories} handleFetchStoreCategories={handleFetchStoreCategories} />}
                     {activeTab === TabIndex.About && <AboutSeller />}
                     {activeTab === TabIndex.Feedback && <h1>Feedback</h1>}
                 </div>
