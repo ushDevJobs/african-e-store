@@ -98,7 +98,8 @@ const getStoreFullDetails = async (id: string, isStoreId = false) => {
     },
     by: ["userId", "orderId"],
   });
-  const feedback = (totalRatingByUsers.length || 0) / totalItemSold || 0 * 100;
+  const feedback =
+    ((totalRatingByUsers.length || 0) / totalItemSold || 0) * 100;
   const ratingWithPercent = ratings.map((rating) => ({
     rating: rating.rating,
     percentage: (rating._count / avg._count) * 100,

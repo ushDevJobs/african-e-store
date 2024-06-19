@@ -8,37 +8,53 @@ import { NotFound } from "../exceptions/not-found";
 
 export const getAllCategories = async (req: Request, res: Response) => {
   const { _limit, _page } = req.query;
+  let products =
+    req.query.products === undefined
+      ? true
+      : req.query.products === null
+      ? true
+      : req.query.products;
   const validatedPag = validatePagination.safeParse({
     _page: +_page!,
   });
   const count = await prisma.category.count();
+  const page = (+validatedPag.data?._page! - 1) * (_limit ? +_limit : count);
+  const fetchProduct = !!products
+    ? {
+        products: {
+          where: {
+            publish: true,
+          },
+        },
+      }
+    : {};
+
+  const countProducts = !!products
+    ? {
+        _count: {
+          select: {
+            products: true,
+          },
+        },
+      }
+    : {};
   const categories = await prisma.category.findMany({
-    skip: validatedPag.data?._page! - 1,
+    skip: page,
     take: +_limit! || undefined,
     select: {
       id: true,
       name: true,
       createdAt: true,
-      products: {
-        where: {
-          publish: true,
-        },
-        // select: {
-        //   id: true,
-        //   name: true,
-        //   details: true,
-        //   amount: true,
-        // },
-      },
-      _count: {
-        select: {
-          products: true,
-        },
-      },
+      ...fetchProduct,
+      ...countProducts,
     },
   });
 
-  return returnJSONSuccess(res, { data: categories, count });
+  return returnJSONSuccess(res, {
+    data: categories,
+    totalPages: Math.ceil(count / (_limit ? +_limit : count)),
+    hasMore: validatedPag.data?._page! * (_limit ? +_limit : count) < count,
+  });
 };
 export const getCategoryById = async (
   req: Request,
