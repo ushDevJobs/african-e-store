@@ -28,10 +28,12 @@ const CategoriesPage = () => {
     const [categories, setCategories] = useState<CategoriesResponse[]>([]);
     const [isFetchingCategories, setIsFetchingCategories] = useState<boolean>(true);
     const [activeCategory, setActiveCategory] = useState<string>('');
+    const [totalCategories, setTotalCategories] = useState<number>(0)
+    const [hasMore, setHasMore] = useState<boolean>(false)
 
-    const [currentPage, setCurrentPage] = useState<number>(0); // Track current page
+    const [currentPage, setCurrentPage] = useState<number>(() => parseInt(searchParams.get("page") ?? "1")); // Track current page
     const limit = 6; // // Number of categories per page
-    const totalPages = Math.ceil(categories.length / limit);
+    const totalPages = totalCategories;
 
     const goToPage = (page: number) => {
         if (page >= 1 && page <= totalPages) {
@@ -47,6 +49,8 @@ const CategoriesPage = () => {
             .then((response) => {
                 console.log("Response: ", response.data.data);
                 setCategories(response.data.data);
+                setTotalCategories(response.data.totalPages)
+                setHasMore(response.data.hasMore)
                 // Persist all categories data in session storage
                 // sessionStorage.setItem(
                 //     StorageKeys.AllCategories,
@@ -63,7 +67,7 @@ const CategoriesPage = () => {
     }
 
     useEffect(() => {
-        const totalPages = Math.ceil(categories.length / limit);
+        const totalPages = totalCategories
         if (currentPage > totalPages && totalPages > 0) {
             goToPage(totalPages); // Redirect to the last page if current page exceeds total pages
         }
@@ -144,7 +148,7 @@ const CategoriesPage = () => {
                                             >{index + 1}</span>
                                         ))}
                                     </div>
-                                    <button onClick={() => goToPage(currentPage + 1)} disabled={currentPage >= totalPages} style={currentPage >= totalPages ? { cursor: 'not-allowed', opacity: '0.5' } : { cursor: 'pointer' }}><RightArrowIcon /></button>
+                                    <button onClick={() => goToPage(currentPage + 1)} disabled={hasMore} style={hasMore ? { cursor: 'not-allowed', opacity: '0.5' } : { cursor: 'pointer' }}><RightArrowIcon /></button>
                                 </div>
                             )}
                         </div>
