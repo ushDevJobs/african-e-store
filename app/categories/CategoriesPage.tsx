@@ -29,7 +29,6 @@ const CategoriesPage = () => {
     const [isFetchingCategories, setIsFetchingCategories] = useState<boolean>(true);
     const [activeCategory, setActiveCategory] = useState<string>('');
     const [totalCategories, setTotalCategories] = useState<number>(0)
-    const [hasMore, setHasMore] = useState<boolean>(false)
 
     const [currentPage, setCurrentPage] = useState<number>(() => parseInt(searchParams.get("page") ?? "1")); // Track current page
     const limit = 6; // // Number of categories per page
@@ -50,7 +49,6 @@ const CategoriesPage = () => {
                 console.log("Response: ", response.data.data);
                 setCategories(response.data.data);
                 setTotalCategories(response.data.totalPages)
-                setHasMore(response.data.hasMore)
                 // Persist all categories data in session storage
                 // sessionStorage.setItem(
                 //     StorageKeys.AllCategories,
@@ -148,7 +146,7 @@ const CategoriesPage = () => {
                                             >{index + 1}</span>
                                         ))}
                                     </div>
-                                    <button onClick={() => goToPage(currentPage + 1)} disabled={hasMore} style={hasMore ? { cursor: 'not-allowed', opacity: '0.5' } : { cursor: 'pointer' }}><RightArrowIcon /></button>
+                                    <button onClick={() => goToPage(currentPage + 1)} disabled={currentPage >= totalPages} style={currentPage >= totalPages ? { cursor: 'not-allowed', opacity: '0.5' } : { cursor: 'pointer' }}><RightArrowIcon /></button>
                                 </div>
                             )}
                         </div>
