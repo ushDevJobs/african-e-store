@@ -7,62 +7,89 @@ import images from '@/public/images'
 import RecentlyViewed from '../components/RecentlyViewed'
 import Recommendations from '../components/Recommendations'
 import SummarySection from '../components/SummarySection'
-import { CartResponse } from '../components/models/IProduct'
-import { useFetchCartItems } from '../api/apiClients'
-import { createCustomErrorMessages } from '../components/constants/catchError'
-import { toast } from 'sonner'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../redux/store'
+import QuantityButton from '../components/QuantityButton'
+import { decrement, increment, productQtyInCartSelector, removeProduct } from '../redux/features/cart/cartSlice'
+import Link from 'next/link'
 
 type Props = {}
 
 const CartPage = (props: Props) => {
     const cartItems = useSelector((state: RootState) => state.cart.cartItems);
-
+    const dispatch = useDispatch()
     return (
-        <div className={styles.cartSection}>
-            <h1>My Cart({cartItems.length > 0 && <>{cartItems.length}</>})</h1>
-            <div className={styles.cartContainer}>
-                <div className={styles.lhs}>
-                    {cartItems.map((item, index) => (
-                        <div className={styles.card} key={index}>
-                            <p className={styles.productName}><UserIcon /><span>Store name</span></p>
-                            <div className={styles.cartItem}>
-                                <div className={styles.item}>
-                                    <div className={styles.image}>
-                                        <Image src={images.cart_prooduct_image} fill alt='product image' />
-                                    </div>
-                                    <div className={styles.name}>
-                                        <h3>Samsung Galaxy S21 5G SM-G991U Factory Unlocked 128GB Phantom Gray C</h3>
-                                        <p className={styles.condition}>Condition: Brand new</p>
-                                        <p className={styles.qty}>
-                                            Quantity: <span>{item.qty}</span>
-                                        </p>
-                                    </div>
+        <>
+            <div className={styles.cartSection}>
+                {
+                    cartItems && cartItems.length > 0 ? (
+                        <>
+                            <h1>My Cart({cartItems.length > 0 && <>{cartItems.length}</>})</h1>
+                            <div className={styles.cartContainer}>
+                                <div className={styles.lhs}>
+                                    {cartItems.map((item, index) => (
+                                        <div className={styles.card} key={index}>
+                                            <p className={styles.productName}><UserIcon /><span>Store name</span></p>
+                                            <div className={styles.cartItem}>
+                                                <div className={styles.item}>
+                                                    <div className={styles.image}>
+                                                        <Image src={images.cart_prooduct_image} fill alt='product image' />
+                                                    </div>
+                                                    <div className={styles.name}>
+                                                        <h3>{item.product.name}</h3>
+                                                        <p className={styles.condition}>Condition: {item.product.itemCondition}</p>
+                                                        <QuantityButton
+                                                            onIncrease={() => dispatch(increment(item.product))}
+                                                            onDecrease={() => dispatch(decrement(item.product))}
+                                                            qty={item.qty}
+                                                        />
+                                                    </div>
+                                                </div>
+                                                <div className={styles.price}>
+                                                    <h3>&pound;{item.product.amount.toLocaleString()}</h3>
+                                                    <p className={styles.shipping}>
+                                                        shipping fee here
+                                                    </p>
+                                                    <p className={styles.returns}>
+                                                        {item.product.returnPolicy == 'true' ? 'Returns accepted' : 'Returns not accepted'}
+                                                    </p>
+                                                    <p className='text-black font-semibold'>
+                                                        Total:
+                                                        <span className='text-gray-700'> &pound;{(item.qty * item.product.amount).toLocaleString()}</span>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div className={`${styles.actions} -mt-6 mb-3`}>
+                                                <button onClick={() => dispatch(removeProduct(item.product))}>Remove Item</button>
+                                                <button>Save for later </button>
+                                            </div>
+                                        </div>
+                                    ))}
                                 </div>
-                                <div className={styles.price}>
-                                    <h3>US $164.99</h3>
-                                    <p className={styles.shipping}>
-                                        Shipping US $164.99
-                                    </p>
-                                    <p className={styles.returns}>
-                                        Returns accepted
-                                    </p>
-                                </div>
+                                <SummarySection />
                             </div>
-                            <div className={styles.actions}>
-                                <button>Remove Item</button>
-                                <button>Save for later </button>
+                        </>
+                    ) :
+                        (
+                            <div className={styles.emptyCart}>
+                                <Image src={images.emptyCart} alt='empty cart image' />
+                                <p>
+                                    It seems your cart is empty at the moment. Click the button
+                                    below to start your order now.
+                                </p>
+                                <Link href='/products'>
+                                    <button>Continue</button>
+                                </Link>
                             </div>
-                        </div>
-                    ))}
-                </div>
-                <SummarySection />
-            </div>
+                        )
+                }
 
-            <RecentlyViewed />
-            <Recommendations />
-        </div>
+
+                <RecentlyViewed />
+                <Recommendations />
+            </div>
+        </>
+
     )
 }
 
