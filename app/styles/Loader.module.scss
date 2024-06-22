@@ -1,3 +1,4 @@
+@import '../styles//reusables';
 .loader {
   position: fixed;
   z-index: 15;
@@ -8,6 +9,10 @@
   left: 0;
   overflow: hidden;
   pointer-events: none;
+
+  @include tablet {
+    top: 10px;
+  }
 }
 
 .compLoader {
