@@ -132,11 +132,11 @@ const AddProductToCart = ({ product, isFetchingProduct }: Props) => {
                                 />
                             }
                             <div className={styles.buyNow}>
-                                    <button onClick={() => {
-                                        accountStatus && accountStatus.accountType == 'BUYER' ?
-                                            router.push('/checkout') :
-                                            router.push('/login')
-                                    }}>Buy Now</button>
+                                <button onClick={() => {
+                                    accountStatus && accountStatus.accountType == 'BUYER' ?
+                                        router.push('/checkout') :
+                                        router.push('/login')
+                                }}>Buy Now</button>
                                 {onDesktop && (
                                     <>
                                         {!quantityInCart && (
