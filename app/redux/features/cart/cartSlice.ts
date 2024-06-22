@@ -2,6 +2,7 @@ import { CartItem, ProductResponse } from '@/app/components/models/IProduct';
 import { PayloadAction, createSelector, createSlice } from '@reduxjs/toolkit';
 import { LocalStorageKeys } from '@/app/components/constants/LocalStorageKeys';
 import { RootState } from '../../store';
+import { toast } from 'sonner';
 
 export interface CartState {
   cartItems: CartItem[];
@@ -28,7 +29,6 @@ export const cartSlice = createSlice({
   initialState,
   reducers: {
     increment: (state, action: PayloadAction<ProductResponse>) => {
-
       // check to see if the item added already exist in the cart
       const selectedItem = state.cartItems.find(
         (cartItem) => cartItem.product.id === action.payload.id
@@ -42,6 +42,7 @@ export const cartSlice = createSlice({
           product: action.payload,
           qty: 1,
         });
+        toast.success('Item added to cart');
       }
 
       // Save cart items to local storage after each modification
@@ -107,7 +108,8 @@ export const totalCartItemSelector = createSelector([cartItems], (cartItems) =>
 // Selector which returns the total price of all items in the cart
 export const totalPriceSelector = createSelector([cartItems], (cartItems) =>
   cartItems.reduce(
-    (total: number, curr: CartItem) => (total += curr.qty * curr.product.amount),
+    (total: number, curr: CartItem) =>
+      (total += curr.qty * curr.product.amount),
     0
   )
 );
