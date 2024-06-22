@@ -196,3 +196,15 @@ export function useFetchCartItems() {
 
     return fetchCartItems;
 }
+// Api call to fetch seller store
+export function useFetchSellerStore() {
+    async function fetchSellerStore() {
+        // Fire the request
+        const response = await API.get(ApiRoutes.FetchSellerStore);
+
+        // Return the response
+        return response;
+    }
+
+    return fetchSellerStore;
+}

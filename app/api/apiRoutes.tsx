@@ -55,5 +55,9 @@ export default class ApiRoutes {
      * Api routes to fetch cart
      */
     static FetchCartItems: string = 'api/cart';
+    /**
+     * Api routes to fetch seller store
+     */
+    static FetchSellerStore: string = 'api/stores/store';
 
 }
