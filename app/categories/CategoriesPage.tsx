@@ -136,6 +136,8 @@ const CategoriesPage = () => {
                                     </div>
                                 ))}
 
+                                {categories && categories.length === 0 &&
+                                    <p className='text-center flex flex-col items-center justify-center h-[40vh] text-gray-400 text-base'>No Product available</p>}
                             </div>
                             {categories.length > 0 && categories && (
                                 <div className={styles.pagination}>

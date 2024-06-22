@@ -16,26 +16,34 @@ const CategoriesSettingsBar = ({ categories, activeCategory, retrievedCategories
             <div className={styles.catgoriesFilter}>
                 <h3>Categories</h3>
                 {categories &&
-                 <ul>
-                    {categories && categories.map((category) => (
-                        <li key={category.id}
-                            className={activeCategory === category.name ? styles.active : ''}
-                        >
-                            {category.name}
-                        </li>
-                    ))}
-                </ul>}
+                    <ul>
+                        {categories && categories.map((category) => (
+                            <li key={category.id}
+                                className={activeCategory === category.name ? styles.active : ''}
+                            >
+                                {category.name}
+                            </li>
+                        ))}
+
+                        {categories && categories.length === 0 &&
+                            <li className='text-center flex flex-col items-center justify-center mt-4 text-gray-400 text-base'>
+                                No category available</li>
+                        }
+                    </ul>}
                 {retrievedCategories &&
-                 <ul>
+                    <ul>
                         {retrievedCategories.map((category) => (
                             <Link href={`/categories/${category.id}?${category.name}`} key={category.id}>
-                           <li>
-                            {category.name}
-                        </li>    
+                                <li>
+                                    {category.name}
+                                </li>
                             </Link>
-                     
-                    ))}
-                </ul>}
+                        ))}
+                        {categories && categories.length === 0 &&
+                            <li className='text-center flex flex-col items-center justify-center mt-4 text-gray-400 text-base'>
+                                No category available</li>
+                        }
+                    </ul>}
             </div>
 
             <div className={styles.condition}>
