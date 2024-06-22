@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from '../products/[productId]/SingleCategory.module.scss'
 import QuantityButton from './QuantityButton'
 import { FavoriteIcon, RatingIcon, ShoppingIcon } from './SVGs/SVGicons'
@@ -13,6 +13,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from '../redux/store'
 import { decrement, increment, productQtyInCartSelector } from '../redux/features/cart/cartSlice'
 import ComponentLoader from './Loader/ComponentLoader'
+import { useAccountStatus } from '../context/AccountStatusContext'
+import { useRouter } from 'next/navigation'
 
 type Props = {
     product: ProductResponse | undefined
@@ -21,8 +23,10 @@ type Props = {
 
 const AddProductToCart = ({ product, isFetchingProduct }: Props) => {
     const dispatch = useDispatch();
+    const { accountStatus, fetchAccountStatus } = useAccountStatus();
     const quantityInCart = useSelector((state: RootState) => productQtyInCartSelector(state, product?.id as string))
     // console.log({ quantityInCart })
+    const router = useRouter();
     const [isPlaceABidVisible, setIsPlaceABidVisible] = useState(false)
 
     const windowRes = useResponsiveness();
@@ -39,7 +43,9 @@ const AddProductToCart = ({ product, isFetchingProduct }: Props) => {
     ]
 
     const [mainImage, setMainImage] = useState(imageUrl[0])
-
+    useEffect(() => {
+        fetchAccountStatus();
+    }, []);
     return (
         <>
             <PlaceABidComponent visibility={isPlaceABidVisible} setVisibility={setIsPlaceABidVisible} />
@@ -126,9 +132,11 @@ const AddProductToCart = ({ product, isFetchingProduct }: Props) => {
                                 />
                             }
                             <div className={styles.buyNow}>
-                                <Link href={'/checkout'}>
-                                    <button>Buy Now</button>
-                                </Link>
+                                    <button onClick={() => {
+                                        accountStatus && accountStatus.accountType == 'BUYER' ?
+                                            router.push('/checkout') :
+                                            router.push('/login')
+                                    }}>Buy Now</button>
                                 {onDesktop && (
                                     <>
                                         {!quantityInCart && (
