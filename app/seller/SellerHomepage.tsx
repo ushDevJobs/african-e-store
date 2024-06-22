@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from '../stores/[storeId]/SellerStore.module.scss';
 import CategoriesSettingsBar from '../components/CategoriesSettingsBar';
 import { SearchIcon } from '../components/SVGs/SVGicons';
@@ -7,8 +7,12 @@ import SellerShop from '../stores/[storeId]/SellerShop';
 import useResponsiveness from '../components/hooks/responsiveness-hook';
 import SellerProduct from './SellerProduct';
 import AddProductModal from './AddProductModal';
-import SellerStoreRating from './SellerStoreRating';
 import AboutSeller from './AboutSeller';
+import SellerPageStoreRating from './SellerStoreRating';
+import { useFetchSellerStore } from '../api/apiClients';
+import { SellerStoreResponse } from '../components/models/ISellerStore';
+import { toast } from 'sonner';
+import { createCustomErrorMessages } from '../components/constants/catchError';
 type Props = {};
 
 enum TabIndex {
@@ -19,17 +23,42 @@ enum TabIndex {
 }
 
 const SellerHomePage = (props: Props) => {
+    const fetchSellerStore = useFetchSellerStore()
     const [activeTab, setActiveTab] = useState<TabIndex>(TabIndex.Shop);
     const [isAddProductModalVisible, setIsAddProductModalVisible] = useState(false);
-
     const windowRes = useResponsiveness();
     const isMobile = windowRes.width && windowRes.width < 768;
     const onMobile = typeof isMobile == 'boolean' && isMobile;
     const onDesktop = typeof isMobile == 'boolean' && !isMobile;
 
+    const [store, setStore] = useState<SellerStoreResponse>()
+    const [isFetchingStore, setIsFetchingStore] = useState<boolean>(true);
+
+    async function handleFetchStore() {
+
+        // Start loader
+        setIsFetchingStore(true);
+
+        await fetchSellerStore()
+            .then((response) => {
+                console.log("Response: ", response.data.data);
+                setStore(response.data.data);
+            })
+            .catch((error) => {
+                const errorMessage = createCustomErrorMessages(error.response?.data)
+                toast.error(errorMessage);
+            })
+            .finally(() => {
+                setIsFetchingStore(false);
+            });
+    }
+
+    useEffect(() => {
+        handleFetchStore();
+    }, []);
     return (
         <div className={styles.main}>
-            <SellerStoreRating />
+            <SellerPageStoreRating store={store} isFetchingStore={isFetchingStore} />
             <AddProductModal
                 visibility={isAddProductModalVisible}
                 setVisibility={setIsAddProductModalVisible}

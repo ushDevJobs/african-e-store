@@ -26,7 +26,7 @@ enum TabIndex {
     Feedback = '3',
 }
 
-const SellerStorePage = ({ params }: Props) => {
+const   SellerStorePage = ({ params }: Props) => {
     const fetchStore = useFetchAStore()
     const fetchStoreCategories = useStoreCategories()
     const windowRes = useResponsiveness();
@@ -68,7 +68,7 @@ const SellerStorePage = ({ params }: Props) => {
 
         await fetchStoreCategories(storeId)
             .then((response) => {
-                console.log("Response: ", response.data.data);
+                console.log("Cat Response: ", response.data.data);
                 setStoreCategories(response.data.data);
             })
             .catch((error) => {
