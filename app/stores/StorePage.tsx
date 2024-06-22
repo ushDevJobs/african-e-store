@@ -83,10 +83,12 @@ const StorePage = (props: Props) => {
             {!stores && !filteredStores && isFetchingStores && (
                 <ComponentLoader lightTheme svgStyle={{ width: '62px' }} />
             )}
-            {!stores ||
-                (filteredStores?.length == 0 && !isFetchingStores && (
-                    <p className={styles.loaderText}>There are no stores available</p>
-                ))}
+           {!stores && !isFetchingStores &&
+           <p className={styles.loaderText}>No stores found</p>
+           }
+           {filteredStores?.length == 0 && !isFetchingStores &&
+           <p className={styles.loaderText}>No result found</p>
+           }
         </div>
     )
 }
