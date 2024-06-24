@@ -1,79 +1,64 @@
+'use client'
 import React from 'react'
 import styles from '../checkout/Checkout.module.scss'
 import Image from 'next/image'
 import images from '@/public/images'
 import { RectangleIcon } from '../components/SVGs/SVGicons'
 import QuantityButton from '../components/QuantityButton'
+import { useDispatch, useSelector } from 'react-redux'
+import { totalPriceSelector } from '../redux/features/cart/cartSlice'
+import { RootState } from '../redux/store'
 
 type Props = {}
 
 const PaymentPage = (props: Props) => {
+    const dispatch = useDispatch()
+    const cartItems = useSelector((state: RootState) => state.cart.cartItems);
+    const totalPrice = useSelector(totalPriceSelector);
     return (
         <div className={styles.main}>
             <h1>Pay with card </h1>
             <div className={styles.checkoutContainer}>
                 <div className={styles.lhs}>
                     <div className={styles.productInfos}>
-                        <h2>Item(3)</h2>
-                        
-                        <div className={styles.info}>
-                            {/* <p className={styles.seller}>
-                                Seller: Chavo global
-                            </p> */}
-                            <div className={styles.image}>
-                                <Image src={images.cart_prooduct_image} alt='product image' fill />
-                            </div>
-                            <div className={styles.item}>
-                                <p className={styles.name}>Samsung Galaxy S21 5G SM-G991U Factory Unlocked 128GB Phantom Gray C</p>
-                                <p className={styles.price}>US $164.99</p>
-                                {/* <QuantityButton/> */}
-                                <div className={styles.delivery}>
-                                    <h3>Delivery</h3>
-                                    <p className='mb-4 max-w-[300px]'>Delivery
-                                        Estimated delivery: Jun 19 - Jul 18Est. delivery: Jun 19 - Jul 18
-                                        Rayvvin International Shipping
-                                        US $31.00</p>
+                        {/* <h2>Item</h2> */}
+                        {cartItems && cartItems.length > 0 && cartItems.map((item, index) => (
+                            <div className={styles.card} key={index}>
+                                <p className={styles.seller}>
+                                    Seller: Chavo global
+                                </p>
+                                <div className={styles.info}>
+                                    <div className={styles.image}>
+                                        <Image src={images.cart_prooduct_image} alt='product image' fill />
+                                    </div>
+                                    <div className={styles.item}>
+                                        <p className={styles.name}>{item.product.name}</p>
+                                        <p className={styles.price}>&pound;{item.product.amount.toLocaleString()}</p>
+                                        {/* <QuantityButton
+                                            onIncrease={() => dispatch(increment(item.product))}
+                                            onDecrease={() => dispatch(decrement(item.product))}
+                                            qty={item.qty}
+                                        /> */}
+                                        <div className={`${styles.delivery} -mt-2`}>
+                                            <h3 className='mb-1'>Delivery</h3>
+                                            <p className='mb-4 max-w-[300px]'>Delivery
+                                                Estimated delivery: Jun 19 - Jul 18Est. delivery: Jun 19 - Jul 18
+                                                Rayvvin International Shipping
+                                                US $31.00</p>
 
-                                    <span className={styles.fees}>Authorities may apply duties, fees, and taxes upon delivery</span>
-                                </div>
-                                <div className={styles.delivery}>
-                                    <h3>Ship to </h3>
-                                    <p>User address from google </p>
-                                    <p>Country</p>
-                                    <p>Number</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div className={styles.info}>
-                            {/* <p className={styles.seller}>
-                                Seller: Chavo global
-                            </p> */}
-                            <div className={styles.image}>
-                                <Image src={images.cart_prooduct_image} alt='product image' fill />
-                            </div>
-                            <div className={styles.item}>
-                                <p className={styles.name}>Samsung Galaxy S21 5G SM-G991U Factory Unlocked 128GB Phantom Gray C</p>
-                                <p className={styles.price}>US $164.99</p>
-                                {/* <QuantityButton/> */}
-                                <div className={styles.delivery}>
-                                    <h3>Delivery</h3>
-                                    <p className='mb-4 max-w-[300px]'>Delivery
-                                        Estimated delivery: Jun 19 - Jul 18Est. delivery: Jun 19 - Jul 18
-                                        Rayvvin International Shipping
-                                        US $31.00</p>
-
-                                    <span className={styles.fees}>Authorities may apply duties, fees, and taxes upon delivery</span>
-                                </div>
-                                <div className={styles.delivery}>
-                                    <h3>Ship to </h3>
-                                    <p>User address from google </p>
-                                    <p>Country</p>
-                                    <p>Number</p>
+                                            <span className={styles.fees}>Authorities may apply duties, fees, and taxes upon delivery</span>
+                                        </div>
+                                        <div className={styles.delivery}>
+                                            <h3>Ship to </h3>
+                                            <p>User address from google </p>
+                                            <p>Country</p>
+                                            <p>Number</p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        ))}
                     </div>
-
                 </div>
                 <div className={styles.rhs}>
                     <form action="" className={styles.formContainer}>

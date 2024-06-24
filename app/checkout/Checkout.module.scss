@@ -66,10 +66,14 @@
 
               img {
                 object-fit: cover;
+
+                @include tablet{
+                    object-fit: contain;
+                }
               }
 
               @include tablet {
-                width: 150px;
+                // width: 100px;
                 //   margin-bottom: 20px;
               }
             }
