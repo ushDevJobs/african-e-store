@@ -12,12 +12,17 @@ import { RootState } from '../redux/store'
 import QuantityButton from '../components/QuantityButton'
 import { decrement, increment, productQtyInCartSelector, removeProduct } from '../redux/features/cart/cartSlice'
 import Link from 'next/link'
+import useResponsiveness from '../components/hooks/responsiveness-hook'
 
 type Props = {}
 
 const CartPage = (props: Props) => {
     const cartItems = useSelector((state: RootState) => state.cart.cartItems);
     const dispatch = useDispatch()
+    const windowRes = useResponsiveness();
+    const isMobile = windowRes.width && windowRes.width < 768;
+    const onMobile = typeof isMobile == 'boolean' && isMobile;
+    const onDesktop = typeof isMobile == 'boolean' && !isMobile;
     return (
         <>
             <div className={styles.cartSection}>
@@ -38,6 +43,22 @@ const CartPage = (props: Props) => {
                                                     <div className={styles.name}>
                                                         <h3>{item.product.name}</h3>
                                                         <p className={styles.condition}>Condition: {item.product.itemCondition}</p>
+                                                        {onMobile && (
+                                                            <div className={styles.price}>
+                                                                <h3 className='font-semibold text-sm'>&pound;{item.product.amount.toLocaleString()}</h3>
+                                                                {/* <p className='font-semibold text-sm'>
+                                                                    shipping fee here
+                                                                </p> */}
+                                                                <p className='text-sm text-gray-500'>
+                                                                    {item.product.returnPolicy == 'true' ? 'Returns accepted' : 'Returns not accepted'}
+                                                                </p>
+                                                                {/* <p className='text-black font-semibold text-sm mb-4 md:mb-0'>
+                                                                    Total:
+                                                                    <span className='text-gray-600'> &pound;{(item.qty * item.product.amount).toLocaleString()}</span>
+                                                                </p> */}
+                                                            </div>
+                                                        )}
+
                                                         <QuantityButton
                                                             onIncrease={() => dispatch(increment(item.product))}
                                                             onDecrease={() => dispatch(decrement(item.product))}
@@ -45,21 +66,23 @@ const CartPage = (props: Props) => {
                                                         />
                                                     </div>
                                                 </div>
-                                                <div className={styles.price}>
-                                                    <h3>&pound;{item.product.amount.toLocaleString()}</h3>
-                                                    <p className={styles.shipping}>
-                                                        shipping fee here
-                                                    </p>
-                                                    <p className={styles.returns}>
-                                                        {item.product.returnPolicy == 'true' ? 'Returns accepted' : 'Returns not accepted'}
-                                                    </p>
-                                                    <p className='text-black font-semibold'>
-                                                        Total:
-                                                        <span className='text-gray-700'> &pound;{(item.qty * item.product.amount).toLocaleString()}</span>
-                                                    </p>
-                                                </div>
+                                                {onDesktop && (
+                                                    <div className={styles.price}>
+                                                        <h3>&pound;{item.product.amount.toLocaleString()}</h3>
+                                                        <p className={styles.shipping}>
+                                                            shipping fee here
+                                                        </p>
+                                                        <p className={styles.returns}>
+                                                            {item.product.returnPolicy == 'true' ? 'Returns accepted' : 'Returns not accepted'}
+                                                        </p>
+                                                        <p className='text-black font-semibold mb-4 md:mb-0'>
+                                                            Total:
+                                                            <span className='text-gray-700'> &pound;{(item.qty * item.product.amount).toLocaleString()}</span>
+                                                        </p>
+                                                    </div>
+                                                )}
                                             </div>
-                                            <div className={`${styles.actions} -mt-6 mb-3`}>
+                                            <div className={`${styles.actions} -mt-12 md:-mt-6 mb-3`}>
                                                 <button onClick={() => dispatch(removeProduct(item.product))}>Remove Item</button>
                                                 <button>Save for later </button>
                                             </div>
@@ -83,8 +106,6 @@ const CartPage = (props: Props) => {
                             </div>
                         )
                 }
-
-
                 <RecentlyViewed />
                 <Recommendations />
             </div>

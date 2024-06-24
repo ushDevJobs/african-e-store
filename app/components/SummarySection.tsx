@@ -17,7 +17,7 @@ const SummarySection = (props: Props) => {
                 <h3>&pound;{totalPrice.toLocaleString()}</h3>
             </div>
             <div className={styles.summaryItem}>
-                <p>Shipping to Nigeria </p>
+                <p>Shipping</p>
                 <h3>Shipping fee here</h3>
             </div>
             <div className={styles.total}>

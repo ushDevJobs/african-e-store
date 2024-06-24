@@ -4,11 +4,16 @@ import styles from './SingleCategory.module.scss'
 import { CartIcon, DeliveryIcon, PaymentIcon, ReturnIcon, ReturnsIcon, ShippingIcon } from '@/app/components/SVGs/SVGicons'
 import useResponsiveness from '@/app/components/hooks/responsiveness-hook'
 import { FaShippingFast, FaTruck, FaUndo, FaCreditCard, FaCartPlus, FaChevronDown } from 'react-icons/fa';
+import { increment } from '@/app/redux/features/cart/cartSlice'
+import { useDispatch } from 'react-redux'
+import { ProductResponse } from '@/app/components/models/IProduct'
 
-type Props = {}
+type Props = {
+    product: ProductResponse | undefined
+}
 
-const SingleCategoriesDetails = (props: Props) => {
-
+const SingleCategoriesDetails = ({ product }: Props) => {
+    const dispatch = useDispatch();
     const windowRes = useResponsiveness();
     const isMobile = windowRes.width && windowRes.width < 768;
     const onMobile = typeof isMobile == 'boolean' && isMobile;
@@ -98,7 +103,7 @@ const SingleCategoriesDetails = (props: Props) => {
                                 </p>
                             </div>
 
-                            <button>Add to cart <CartIcon /></button>
+                            <button onClick={() => dispatch(increment(product as ProductResponse))}>Add to cart <CartIcon /></button>
                         </div>
                     </div>
                 </div>
@@ -195,7 +200,7 @@ const SingleCategoriesDetails = (props: Props) => {
                                     <span className="flex items-center"><FaCreditCard className="mr-2" /> Payment</span>
                                     <p className="text-sm text-gray-700">Payment</p>
                                 </div>
-                                <button className="flex items-center justify-center px-4 py-2 border border-[#2C7865] text-[#2C7865] rounded-full w-full text-center mx-auto">
+                                <button onClick={() => dispatch(increment(product as ProductResponse))} className="flex items-center justify-center px-4 py-2 border border-[#2C7865] text-[#2C7865] rounded-full w-full text-center mx-auto">
                                     Add to cart <FaCartPlus className="ml-2" />
                                 </button>
                             </div>

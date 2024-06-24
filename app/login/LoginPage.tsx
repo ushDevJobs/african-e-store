@@ -100,7 +100,9 @@ const LoginPage = (props: Props) => {
                         // Display success
                         toast.success("You have successfully logged in.");
                     } 
-
+                    // if (response.data.status && response.data.data.accountType === 'BUYER' && '/login?checkout') {
+                    //     router.push('checkout')
+                    // }
                 })
                 .catch((error) => {
                     // catchError(error);
