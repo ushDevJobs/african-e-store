@@ -34,6 +34,7 @@ const CategoriesPage = () => {
     const [currentPage, setCurrentPage] = useState<number>(() => parseInt(searchParams.get("page") ?? "1")); // Track current page
     const limit = 6; // // Number of categories per page
     const totalPages = totalCategories;
+    const categoryRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
 
     const goToPage = (page: number) => {
         if (page >= 1 && page <= totalPages) {
@@ -98,6 +99,20 @@ const CategoriesPage = () => {
         };
     }, [categories]);
 
+
+    // const handleCategoryClick = (categoryId: string) => {
+    //     const element = categoryRefs.current[categoryId];
+    //     if (element) {
+    //         element.scrollIntoView({ behavior: 'smooth' });
+    //     }
+    // };
+
+    const handleCategoryClick = (categoryId: string) => {
+        const element = categoryRefs.current[categoryId];
+        if (element) {
+            element.scrollIntoView({ behavior: 'smooth' });
+        }
+    };
     return (
         <>
             {categories.length == 0 && isFetchingCategories ? <CategoriesSkeletonLoader /> :
@@ -112,7 +127,7 @@ const CategoriesPage = () => {
                     <div className={styles.contents}>
                         {onDesktop &&
                             <div className={styles.lhs} style={{ position: 'relative' }}>
-                                <CategoriesSettingsBar categories={categories} activeCategory={activeCategory} />
+                                <CategoriesSettingsBar categories={categories} activeCategory={activeCategory} onCategoryClick={handleCategoryClick} />
                             </div>}
 
                         <div className={styles.rhs}>
@@ -120,11 +135,11 @@ const CategoriesPage = () => {
                                 {categories.map((category, index) => (
                                     <div className='flex flex-col'
                                         key={category.id}
-                                    >
+                                        ref={(el) => { categoryRefs.current[category.id.toString()] = el; }}>
                                         <h3>{category.name}</h3>
                                         <div className={styles.cards}>
                                             {category.products.map((product, index) => (
-                                                <Link href={`/products/${product.id}`} className={styles.card} key={product.id} id={category.id.toString()}>
+                                                <Link href={`/products/${product.id}`} className={styles.card} key={product.id}>
                                                     <div className={styles.image}>
                                                         <Image fill src={images.cashew} alt='product image' />
                                                     </div>

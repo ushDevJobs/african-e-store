@@ -7,9 +7,10 @@ type Props = {
     categories?: CategoriesResponse[];
     activeCategory?: string;
     retrievedCategories?: CategoriesResponse[] | undefined;
+    onCategoryClick: (categoryId: string) => void;
 }
 
-const CategoriesSettingsBar = ({ categories, activeCategory, retrievedCategories }: Props) => {
+const CategoriesSettingsBar = ({ categories, activeCategory, retrievedCategories, onCategoryClick }: Props) => {
 
     return (
         <div className={styles.settingsBar}>
@@ -20,7 +21,8 @@ const CategoriesSettingsBar = ({ categories, activeCategory, retrievedCategories
                         {categories && categories.map((category) => (
                             <li key={category.id}
                                 className={activeCategory === category.name ? styles.active : ''}
-                            >
+                                onClick={() => onCategoryClick(category.id)}
+                           >
                                 {category.name}
                             </li>
                         ))}
