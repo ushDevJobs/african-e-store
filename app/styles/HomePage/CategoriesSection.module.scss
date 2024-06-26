@@ -66,13 +66,13 @@
 
       .cards {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(20%, 1fr));
-        gap: 30px;
+        grid-template-columns: repeat(auto-fill, minmax(30%, 1fr));
+        gap: 20px;
         width: 100%;
 
-        @include smallLaptop {
-          grid-template-columns: repeat(auto-fill, minmax(30%, 1fr));
-        }
+        // @include smallLaptop {
+        //   grid-template-columns: repeat(auto-fill, minmax(30%, 1fr));
+        // }
         @include bigTablet {
           display: flex;
           width: 100%;
@@ -91,7 +91,7 @@
             border-radius: 22px;
             height: 206px;
             margin-bottom: 20px;
-
+            // width: 300px;
             @include bigTablet {
               width: 300px;
             }
@@ -101,6 +101,7 @@
             img {
               object-fit: cover;
               border-radius: 22px !important;
+              width: 100%;
             }
           }
           span {

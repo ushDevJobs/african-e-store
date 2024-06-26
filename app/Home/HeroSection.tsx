@@ -43,10 +43,10 @@ const HeroSection = (props: Props) => {
                     <div className={styles.contents}>
                         <h1>An African Goods market place </h1>
                         <p>Buy and sell to Africans all over the globe with Rayvinn, create a buyer or seller account on our platform to get started.</p>
-                        <div className={styles.search}>
+                        {/* <div className={styles.search}>
                             <SearchIcon />
                             <input type="text" placeholder='Search for your items ' />
-                        </div>
+                        </div> */}
                         <div className={styles.categories}>
                             <h3>Suggested categories</h3>
                             <div className={styles.links}>

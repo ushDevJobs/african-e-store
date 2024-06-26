@@ -45,7 +45,6 @@ const Categories = (props: Props) => {
         });
     };
 
-
     useEffect(() => {
         if (router) {
             // Get the retrieved categories placed

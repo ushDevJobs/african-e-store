@@ -17,6 +17,7 @@ import { CategoriesResponse } from '../models/AllCategories';
 import { StorageKeys } from '../constants/StorageKeys';
 import { RootState } from '@/app/redux/store';
 import { useDispatch, useSelector } from 'react-redux';
+import MobileNavBar from './MobileNavBar';
 
 type Props = {}
 
@@ -28,14 +29,9 @@ const Navbar = (props: Props) => {
     const logout = useLogout()
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const pathname = usePathname();
-    const handleToggle = () => {
-        setIsDropdownOpen(!isDropdownOpen);
-    };
     const { accountStatus, fetchAccountStatus } = useAccountStatus();
     const [retrievedCategories, setRetrievedCategories] = useState<CategoriesResponse[]>();
     // console.log({ retrievedCategories })
-    const dropdownRef = useRef<HTMLLIElement>(null);
-
     const windowRes = useResponsiveness();
     const isMobile = windowRes.width && windowRes.width < 768;
     const onMobile = typeof isMobile == 'boolean' && isMobile;
@@ -252,178 +248,14 @@ const Navbar = (props: Props) => {
             )
             }
             {onMobile && (
-                <div className={styles.mobileNavbarContainer}>
-                    <div className={styles.navbar}>
-                        <Link href="/">
-                            <div className={styles.navbar__img}>
-                                <Image src={images.logo} alt="Logo" />
-                            </div>
-                        </Link>
-                        <div
-                            className={styles.icon}
-                            onClick={() => setNavIsOpen(!navIsOpen)}
-                        >
-                            {navIsOpen ? <TimesIcon /> : <HamburgerIcon />}
-                        </div>
-                    </div>
-                    {navIsOpen && (
-                        <div className={styles.navbarOverlay}>
-                            <ul>
-                                <Link href="/" onClick={() => setNavIsOpen(false)}>
-                                    <li className={pathname == "/" ? styles.active : ""}>Home</li>
-                                </Link>
-                                <Link href='/seller/signup' onClick={() => setNavIsOpen(false)}>
-                                    <li className={pathname == '/seller/signup' ? styles.active : ""}>
-                                        Sell
-                                    </li>
-                                </Link>
-                                <li
-                                    className={`${styles.dropdown} ${isDropdownOpen ? styles.open : styles.close
-                                        }`}
-                                    ref={dropdownRef}
-                                    onClick={handleToggle}
-                                >
-                                    Services{" "}
-                                    {isDropdownOpen ? <DropDownIcon2 /> : <DropDownIcon />}
-                                </li>
-
-                                {isDropdownOpen && (
-                                    <ul className={styles.dropdownContainer}>
-                                        <Link
-                                            href="/procurement"
-                                            onClick={() => {
-                                                setIsDropdownOpen(false);
-                                                setNavIsOpen(false);
-                                            }}
-                                        >
-                                            <li
-                                                className={` ${styles.dropdownLi} ${pathname == "/procurement" ? styles.active : ""
-                                                    }`}
-                                            >
-                                                Procurement
-                                            </li>
-                                        </Link>
-
-                                        <Link
-                                            href="/recruitment"
-                                            onClick={() => {
-                                                setIsDropdownOpen(false);
-                                                setNavIsOpen(false);
-                                            }}
-                                        >
-                                            <li
-                                                className={` ${styles.dropdownLi} ${pathname == "/recruitment" ? styles.active : ""
-                                                    }`}
-                                            >
-                                                Recruitment & Selection
-                                            </li>
-                                        </Link>
-
-                                        <Link
-                                            href="/people-development"
-                                            onClick={() => {
-                                                setIsDropdownOpen(false);
-                                                setNavIsOpen(false);
-                                            }}
-                                        >
-                                            <li
-                                                className={` ${styles.dropdownLi} ${pathname == "/people-development" ? styles.active : ""
-                                                    }`}
-                                            >
-                                                People Development
-                                            </li>
-                                        </Link>
-
-                                        <Link
-                                            href="/compensation-benefits"
-                                            onClick={() => {
-                                                setIsDropdownOpen(false);
-                                                setNavIsOpen(false);
-                                            }}
-                                        >
-                                            <li
-                                                className={` ${styles.dropdownLi} ${pathname == "/compensation-benefits"
-                                                    ? styles.active
-                                                    : ""
-                                                    }`}
-                                            >
-                                                Compensation Benefits <br /> & Outsourcing
-                                            </li>
-                                        </Link>
-
-                                        <Link
-                                            href="/engineering"
-                                            onClick={() => {
-                                                setIsDropdownOpen(false);
-                                                setNavIsOpen(false);
-                                            }}
-                                        >
-                                            <li
-                                                className={` ${styles.dropdownLi} ${pathname == "/engineering" ? styles.active : ""
-                                                    }`}
-                                            >
-                                                HR Process Design & <br /> Engineering
-                                            </li>
-                                        </Link>
-
-                                        <Link
-                                            href="/regulatory-services"
-                                            onClick={() => {
-                                                setIsDropdownOpen(false);
-                                                setNavIsOpen(false);
-                                            }}
-                                        >
-                                            <li
-                                                className={` ${styles.dropdownLi} ${pathname == "/regulatory-services"
-                                                    ? styles.active
-                                                    : ""
-                                                    }`}
-                                            >
-                                                Regulatory Services & <br /> Company Secretarial
-                                            </li>
-                                        </Link>
-
-                                        <Link
-                                            href="/e-learning"
-                                            onClick={() => {
-                                                setIsDropdownOpen(false);
-
-                                                setNavIsOpen(false);
-                                            }}
-                                        >
-                                            <li
-                                                className={` ${styles.dropdownLi} ${pathname == "/e-learning" ? styles.active : ""
-                                                    }`}
-                                            >
-                                                E-Learning
-                                            </li>
-                                        </Link>
-                                    </ul>
-                                )}
-
-                                <Link href="/trainings" onClick={() => setNavIsOpen(false)}>
-                                    <li className={pathname == "/trainings" ? styles.active : ""}>
-                                        Trainings
-                                    </li>
-                                </Link>
-                                <Link href="/careers" onClick={() => setNavIsOpen(false)}>
-                                    <li className={pathname == "/careers" ? styles.active : ""}>
-                                        Careers
-                                    </li>
-                                </Link>
-                            </ul>
-
-                            {/* <button
-                                onClick={() => {
-                                    router.push("/contact-us");
-                                    setNavIsOpen(false);
-                                }}
-                            >
-                                Contact Us
-                            </button> */}
-                        </div>
-                    )}
-                </div>
+                <MobileNavBar navIsOpen={navIsOpen} setNavIsOpen={setNavIsOpen} isDropdownOpen={isDropdownOpen}
+                    setIsDropdownOpen={setIsDropdownOpen}
+                     retrievedCategories={retrievedCategories}
+                    isLoggedIn={isLoggedIn}
+                    isSellerLoggedIn={isSellerLoggedIn}
+                    cartItems={cartItems}
+                    Logout={Logout}
+                    />
             )}
         </div >
     )

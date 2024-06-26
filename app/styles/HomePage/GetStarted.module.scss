@@ -2,8 +2,8 @@
 
 .main {
   @include sectionPadding;
- padding-top: 80px;
- padding-bottom: 80px;
+  padding-top: 80px;
+  padding-bottom: 80px;
 
   h2 {
     text-align: center;
@@ -31,6 +31,7 @@
     }
     .rhs {
       flex: 1;
+
       h3 {
         color: #828282;
         font-size: 16px;
@@ -45,6 +46,10 @@
         margin-bottom: 30px;
         max-width: 478px;
         text-align: left;
+
+        @include tablet {
+          max-width: 100%;
+        }
       }
 
       a {

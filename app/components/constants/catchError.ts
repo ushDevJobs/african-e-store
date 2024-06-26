@@ -55,7 +55,7 @@ export const createCustomErrorMessages = (response: responseData) => {
       }
       break;
     case 2003:
-      message = "Not Authenticated";
+      message = "You're not looged in, kindly log in";
       break;
     case 2004:
       message = "Not Found";

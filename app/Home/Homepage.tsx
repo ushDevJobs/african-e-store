@@ -19,7 +19,7 @@ const Homepage = (props: Props) => {
             <Categories />
             <GetStarted />
             <Products />
-            <ExclusiveItemSection />
+            {/* <ExclusiveItemSection /> */}
             <Diversity/>
         </>
     )
