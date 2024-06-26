@@ -137,6 +137,15 @@
       flex-direction: column;
       gap: 20px;
 
+      @include tablet {
+        overflow-x: auto;
+
+        &::-webkit-scrollbar {
+          display: none;
+        //   scrollbar-width: thin;
+        }
+      }
+
       .search {
         display: flex;
         border-radius: 42px;
