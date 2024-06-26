@@ -9,6 +9,9 @@ export const getProductById = async (req: Request, res: Response) => {
     where: {
       id,
     },
+include:{
+store:true,
+}
   });
   return returnJSONSuccess(res, { data: product });
 };
