@@ -4,6 +4,7 @@ import { Request } from "express";
 dotenv.config({ path: "../../.env" });
 import session from "express-session";
 import multer from "multer";
+import {resolve} from "path";
 const MysqlStore = require("express-mysql-session")(session);
 export const corsConfig: CorsOptions = {
   origin: [process.env.CLIENT_URL as string, "http://localhost:2500"],
@@ -48,16 +49,16 @@ export const sessionMiddleware = session({
     maxAge: 1000 * 60 * 60 * 24,
   },
 });
-// const storage = multer.diskStorage({
-//   destination: (req: Request, file, cb) => {
-//     cb(null, "./dist/images");
-//   },
-//   filename: (req: Request, file, cb) => {
-//     const uniqueSuffix = Date.now();
-//     cb(
-//       null,
-//       `${uniqueSuffix}_${file.originalname.toLowerCase().replace(/ /g, "_")}`
-//     );
-//   },
-// });
-// export const upload = multer({ storage });
+const storage = multer.diskStorage({
+destination: (req: Request, file, cb) => {
+  cb(null, resolve(__dirname,"../../images");
+},
+ filename: (req: Request, file, cb) => {
+   const uniqueSuffix = Date.now();
+cb(
+       null,
+       `${uniqueSuffix}_${file.originalname.toLowerCase().replace(/ /g, "_")}`
+     );
+   },
+ });
+ export const upload = multer({ storage });
