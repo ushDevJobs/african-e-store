@@ -55,6 +55,8 @@ model Product {
   id                 String         @id @default(cuid())
   name               String         @unique
   itemCondition      ItemContitions
+  salesType          SalesType @default(ONCE)
+endBiddingDate       DateTime
   amount             Float          @default(0)
   quantity           Int            @default(0)
   details            String         @db.VarChar(255)
@@ -201,4 +203,9 @@ enum TrackerStatus {
 enum ItemContitions {
   NEW
   USED
+  REFURBISHED
+}
+enum SalesType {
+  BIDDING
+  ONCE
 }
