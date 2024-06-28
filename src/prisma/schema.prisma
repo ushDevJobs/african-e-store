@@ -56,17 +56,17 @@ model Product {
   name               String         @unique
   itemCondition      ItemContitions
   salesType          SalesType @default(ONCE)
-endBiddingDate       DateTime
+  endBiddingDate     DateTime?
   amount             Float          @default(0)
   quantity           Int            @default(0)
   details            String         @db.VarChar(255)
   publish            Boolean        @default(true)
   coverImage         String
-  images             String?
-  returnPolicy       String
+  images             String
+  returnPolicy       String?
   location           String?
   storeId            String
-  shippingDetails    String         @default("{}") @db.LongText
+  shippingDetails    String?         @default("{}") @db.LongText
   discount           Boolean        @default(false)
   discountPercentage Int            @default(0)
   createdAt          DateTime       @default(now())

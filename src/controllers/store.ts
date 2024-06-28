@@ -105,10 +105,26 @@ const getStoreFullDetails = async (id: string, isStoreId = false) => {
   });
   const feedback =
     ((totalRatingByUsers.length || 0) / totalItemSold || 0) * 100;
-  const ratingWithPercent = ratings.map((rating) => ({
-    rating: rating.rating,
-    percentage: (rating._count / avg._count) * 100,
-  }));
+  // const ratingWithPercent = ratings.map((rating) => ({
+  //   rating: rating.rating,
+  //   percentage: (rating._count / avg._count) * 100,
+  // }));
+  const findRating = (number: number) => {
+    const rate = ratings.find((rating) => rating.rating === number);
+    return {
+      percentage: ((rate?._count || 0) / avg._count) * 100,
+      total: rate?._count || 0,
+      rating: rate?.rating || 0,
+    };
+  };
+  const ratingWithPercent = {
+    1: findRating(1),
+    2: findRating(2),
+    3: findRating(3),
+    4: findRating(4),
+    5: findRating(5),
+  };
+
   return {
     storeDetails: store,
     avgRating: avg._avg,
@@ -330,6 +346,46 @@ export const updateStoreDescription = async (
   } else {
     next(new BadRequest("Invalid Request Parameters", ErrorCode.BAD_REQUEST));
   }
+};
+export const updateStoreProfile = async (req: Request, res: Response) => {
+  const user = req.user as RequestUser;
+  const { name, description } = req.body;
+  const image = req.file;
+  let tempName =
+    !!name && name !== ""
+      ? {
+          name: name,
+        }
+      : {};
+  let tempDescription =
+    !!description && description !== ""
+      ? {
+          description: description,
+        }
+      : {};
+  let tempImage =
+    !!image?.filename && image?.filename !== ""
+      ? {
+          image: image?.filename,
+        }
+      : {};
+  const data = {
+    ...tempName,
+    ...tempDescription,
+    ...tempImage,
+  };
+  const store = await prisma.store.update({
+    where: {
+      userId: user.id,
+    },
+    data,
+    select: {
+      name: true,
+      description: true,
+      image: true,
+    },
+  });
+  returnJSONSuccess(res);
 };
 export const addStoreToFavourite = async (
   req: Request,
