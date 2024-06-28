@@ -51,7 +51,7 @@ export const sessionMiddleware = session({
 });
 const storage = multer.diskStorage({
 destination: (req: Request, file, cb) => {
-  cb(null, resolve(__dirname,"../../images");
+  cb(null, resolve(__dirname,"../../images"));
 },
  filename: (req: Request, file, cb) => {
    const uniqueSuffix = Date.now();
