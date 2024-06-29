@@ -151,8 +151,8 @@ model Rating {
   orderId   String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  order     Order?   @relation(fields: [orderId], references: [id])
-  product   Product  @relation(fields: [productId], references: [id])
+  order     Order?   @relation(fields: [orderId], references: [id], onDelete: SetNull)
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
   store     Store    @relation(fields: [storeId], references: [id], onDelete: Cascade)
   user      User     @relation(fields: [userId], references: [id], onDelete: NoAction)
 

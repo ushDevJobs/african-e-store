@@ -27,7 +27,7 @@ export const initializePassport = (passport: PassportStatic) => {
       });
       done(null, user);
     } catch (error) {
-      done(error);
+      done(error, null);
     }
   });
   passport.use(

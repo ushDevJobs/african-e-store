@@ -114,16 +114,16 @@ const getStoreFullDetails = async (id: string, isStoreId = false) => {
     return {
       percentage: ((rate?._count || 0) / avg._count) * 100 || 0,
       total: rate?._count || 0,
-      rating: rate?.rating || 0,
+      rating: number,
     };
   };
-  const ratingWithPercent = {
-    1: findRating(1),
-    2: findRating(2),
-    3: findRating(3),
-    4: findRating(4),
-    5: findRating(5),
-  };
+  const ratingWithPercent = [
+    { ...findRating(1) },
+    { ...findRating(2) },
+    { ...findRating(3) },
+    { ...findRating(4) },
+    { ...findRating(5) },
+  ];
 
   return {
     storeDetails: store,
