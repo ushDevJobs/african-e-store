@@ -62,4 +62,8 @@ export default class ApiRoutes {
    * Api routes to fetch seller store
    */
   static FetchSellerStore: string = "api/stores/store";
+  /**
+   * Api routes to add product
+   */
+    static AddProduct: string = "api/products/product";
 }

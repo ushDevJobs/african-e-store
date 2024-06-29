@@ -2,6 +2,7 @@ import axios from "axios";
 import ApiRoutes from "./apiRoutes";
 import { LoginBuyer, RegisterBuyerRequest } from "../components/models/IRegisterBuyer";
 import { RegisterSellerRequest } from "../components/models/IRegisterSeller";
+import { AddProductRequest } from "../components/models/IProduct";
 
 
 export const API = axios.create({
@@ -207,4 +208,23 @@ export function useFetchSellerStore() {
     }
 
     return fetchSellerStore;
+}
+
+export function useAddProduct() {
+
+    /**
+     * Send request to API server to add product
+     * @returns The response for the API request
+     */
+    async function addProduct(data: AddProductRequest) {
+
+        // Send request to add product
+        let response = await API.post(ApiRoutes.AddProduct, data);
+
+        // Return response
+        return response;
+    }
+
+    // Return function to add product
+    return addProduct;
 }
