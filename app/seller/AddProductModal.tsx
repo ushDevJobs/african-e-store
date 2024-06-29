@@ -364,7 +364,7 @@ const AddProductModal = ({ visibility, setVisibility }: Props) => {
 
                 <div className={styles.formField}>
                     <label htmlFor="date">
-                        <span>*</span>End date and time of bidding of bidding 
+                        <span>*</span>End date of bidding 
                     </label>
                     <div className={styles.datePickerContainer} ref={departureDateRef}>
                         <DatePicker
@@ -404,7 +404,9 @@ const AddProductModal = ({ visibility, setVisibility }: Props) => {
                     {endDateErrorMsg && <span className='text-red-500'>Please input the bidding end date</span>}
                 </div>
                 <div className={styles.additionalImage}>
-                    <p>Additional Images <span> (They&apos;ll appear under the product overview)</span></p>
+                    <label className='mb-3' htmlFor="image">
+                        <span className='text-[#fd6a02] text-sm'>*</span>Upload Image file
+                    </label>
                     <div className={styles.cardContainer}>
                         <div className={styles.card}>
                             {image1 ?
@@ -437,7 +439,6 @@ const AddProductModal = ({ visibility, setVisibility }: Props) => {
                                 </button> : <button type='button' className={styles.changeButton}>
                                     <input type="file" onChange={(e) => handleFileUpload(e, 'imageTwo')} />
                                     Change Image</button>}
-
                             </div>
                         </div>
 
