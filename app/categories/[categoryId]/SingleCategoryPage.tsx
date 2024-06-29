@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import styles from '../Categories.module.scss'
 import { useRouter } from 'next/navigation'
 import { CategoriesResponse, CategoryResponse } from '@/app/components/models/AllCategories'
@@ -15,6 +15,8 @@ import CategoriesSkeletonLoader from '../CategoriesSketon'
 import { CategoriesHeader, SingleCategoriesHeader } from '@/app/components/CategoriesHeader'
 import { StorageKeys } from '@/app/components/constants/StorageKeys'
 import Link from 'next/link'
+import { motion } from "framer-motion";
+import MobileSettingsBar from '../MobileSettingsBar'
 type Props = {
     params: { categoryId: string; }
 }
@@ -34,6 +36,10 @@ const SingleCategoryPage = ({ params }: Props) => {
 
     const [currentPage, setCurrentPage] = useState<number>(1); // Track current page
     const limit = 4; // // Number of categories per page
+    const categoryRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
+
+    const [isFilterOpen, setIsFilterOpen] = useState<boolean>(false)
+
 
     async function handleFetchCategory() {
 
@@ -53,6 +59,13 @@ const SingleCategoryPage = ({ params }: Props) => {
                 setIsFetchingCategory(false);
             });
     }
+
+    const handleCategoryClick = (categoryId: string) => {
+        const element = categoryRefs.current[categoryId];
+        if (element) {
+            element.scrollIntoView({ behavior: 'smooth' });
+        }
+    };
 
     useEffect(() => {
         handleFetchCategory();
@@ -76,20 +89,25 @@ const SingleCategoryPage = ({ params }: Props) => {
     }, [router]);
 
     return (
-        <>
+        <motion.div
+            initial="closed"
+            animate={isFilterOpen ? "opened" : "closed"}
+        >
+            {isFilterOpen && <MobileSettingsBar setIsFilterOpen={setIsFilterOpen} retrievedCategories={retrievedCategories} onCategoryClick={handleCategoryClick} />}
+
             {!category && isFetchingCategory ? <CategoriesSkeletonLoader /> :
                 <div className={styles.main}>
                     <SingleCategoriesHeader mainText={category?.name} subText='Search for any product in different categories on Rayvinn' />
                     {onMobile &&
                         <div className="w-full flex items-center gap-4 justify-end mb-2 ml-auto">
                             <span className='flex items-center gap-2 cursor-pointer'><SortIcon /> Sort</span>
-                            <span className='flex items-center gap-2 cursor-pointer'><FilterIcon /> Filter </span>
+                            <span onClick={() => setIsFilterOpen(true)} className='flex items-center gap-2 cursor-pointer'><FilterIcon /> Filter </span>
                         </div>
                     }
                     <div className={styles.contents}>
                         {onDesktop &&
                             <div className={styles.lhs} style={{ position: 'relative' }}>
-                                <CategoriesSettingsBar retrievedCategories={retrievedCategories} />
+                                <CategoriesSettingsBar retrievedCategories={retrievedCategories} onCategoryClick={handleCategoryClick} />
                             </div>}
 
                         <div className={styles.rhs}>
@@ -128,7 +146,7 @@ const SingleCategoryPage = ({ params }: Props) => {
                     </div>
                 </div>
             }
-        </>
+        </motion.div>
     )
 }
 

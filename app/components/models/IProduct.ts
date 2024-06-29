@@ -7,15 +7,18 @@ export interface ProductResponse {
   details: string;
   publish: boolean;
   coverImage: string;
-  images: null;
+  images: string[];
   returnPolicy: string;
-  location: string;
+  location: null;
   storeId: string;
-  shippingDetails: string;
+  shippingDetails: ShippingDetails;
   discount: boolean;
   discountPercentage: number;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface ShippingDetails {
 }
 
 export interface CartItem {
