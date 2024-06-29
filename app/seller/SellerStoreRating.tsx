@@ -47,7 +47,7 @@ const SellerPageStoreRating = ({ store, isFetchingStore }: Props) => {
     // const averageRating = totalCount === 0 ? 0 : (weightedSum / totalCount).toFixed(1);
 
     // Find the maximum count among all ratings
-    const maxCount = Math.max(...(store?.ratingWithPercent.map(item => item.percentage) || [0]));
+    // const maxCount = Math.max(...(store?.ratingWithPercent.map(item => item.percentage) || [0]));
 
     return (
         <>
@@ -70,7 +70,7 @@ const SellerPageStoreRating = ({ store, isFetchingStore }: Props) => {
                                 {onDesktop && <p className='text-[#828282]'>Rating</p>}
                             </div>
 
-                            <div className={styles.ratingProgress}>
+                            {/* <div className={styles.ratingProgress}>
                                 {store?.ratingWithPercent.map((item, index) => {
                                     return (
                                         <div className={styles.value} key={index}>
@@ -84,7 +84,7 @@ const SellerPageStoreRating = ({ store, isFetchingStore }: Props) => {
                                         </div>
                                     )
                                 })}
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                 </div>

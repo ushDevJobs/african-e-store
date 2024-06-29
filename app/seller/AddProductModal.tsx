@@ -81,7 +81,6 @@ const AddProductModal = ({ visibility, setVisibility }: Props) => {
                     <div className={styles.formField}>
                         <label htmlFor="desc"><span>*</span>Product description</label>
                         <textarea
-                            type="desc"
                             name="desc"
                             id="desc"
                             placeholder='Enter detailed description here'
