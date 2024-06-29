@@ -26,7 +26,7 @@ const CheckoutPage = (props: Props) => {
                         {cartItems && cartItems.length > 0 && cartItems.map((item, index) => (
                             <div className={styles.card} key={index}>
                                 <p className={styles.seller}>
-                                    Seller: Chavo global
+                                    Seller: {item.product.store ? item.product.store.name : 'Store Name Needed'}
                                 </p>
                                 <div className={styles.info}>
                                     <div className={styles.image}>

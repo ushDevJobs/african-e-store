@@ -34,7 +34,7 @@ const CartPage = (props: Props) => {
                                 <div className={styles.lhs}>
                                     {cartItems.map((item, index) => (
                                         <div className={styles.card} key={index}>
-                                            <p className={styles.productName}><UserIcon /><span>Store name</span></p>
+                                            <p className={styles.productName}><UserIcon /><span>{item.product.store ? item.product.store.name : 'Store Name Needed'}</span></p>
                                             <div className={styles.cartItem}>
                                                 <div className={styles.item}>
                                                     <div className={styles.image}>
@@ -69,9 +69,9 @@ const CartPage = (props: Props) => {
                                                 {onDesktop && (
                                                     <div className={styles.price}>
                                                         <h3>&pound;{item.product.amount.toLocaleString()}</h3>
-                                                        <p className={styles.shipping}>
-                                                            shipping fee here
-                                                        </p>
+                                                        {/* <p className={styles.shipping}>
+                                                            {item.product.shippingDetails ?? 'Shipping details needed'}
+                                                        </p> */}
                                                         <p className={styles.returns}>
                                                             {item.product.returnPolicy == 'true' ? 'Returns accepted' : 'Returns not accepted'}
                                                         </p>

@@ -15,6 +15,7 @@ import { decrement, increment, productQtyInCartSelector } from '../redux/feature
 import ComponentLoader from './Loader/ComponentLoader'
 import { useAccountStatus } from '../context/AccountStatusContext'
 import { useRouter } from 'next/navigation'
+import moment from 'moment'
 
 type Props = {
     product: ProductResponse | undefined
@@ -80,8 +81,7 @@ const AddProductToCart = ({ product, isFetchingProduct }: Props) => {
                             </h1>
                             {onDesktop &&
                                 <p className={styles.shipping}>
-                                    {/* {product?.shippingDetails} */}
-                                    shipping details here
+                                    {product?.shippingDetails}
                                 </p>}
                             {onDesktop && <h2 className={styles.price}>&pound;{product?.amount.toLocaleString()}</h2>}
                             <p className='text-[#828282] text-base mb-8 md:mb-5'>Condition: {product?.itemCondition} </p>
@@ -104,7 +104,7 @@ const AddProductToCart = ({ product, isFetchingProduct }: Props) => {
 
                             {onDesktop &&
                                 <div className={styles.bid}>
-                                    <p>{product.name} <span className='text-[#FD6A02] text-base'>7 Bids at US $168 </span>(Bidding ends on 27th May 2024) <button onClick={() => setIsPlaceABidVisible(true)}>Place Bid </button></p>
+                                    <p>{product.name} <span className='text-[#FD6A02] text-base'>7 Bids at US $168 </span>(Bidding ends on {moment(product.endBiddingDate).format('DD-MM-YYYY')}) <button onClick={() => setIsPlaceABidVisible(true)}>Place Bid </button></p>
                                     <Link href={'/contact-seller'}><button className='mt-1'>Contact seller </button></Link>
                                 </div>}
 

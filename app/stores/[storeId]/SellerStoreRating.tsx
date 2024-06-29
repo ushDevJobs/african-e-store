@@ -16,11 +16,11 @@ const SellerStoreRating = ({store, isFetchingStore}: Props) => {
     const onMobile = typeof isMobile == 'boolean' && isMobile;
     const onDesktop = typeof isMobile == 'boolean' && !isMobile;
     
-    const totalCount = store?.ratingWithPercent.reduce((sum, item) => sum + item.percentage, 0);
-    const weightedSum = store?.ratingWithPercent.reduce((sum, item) => sum + (item.rating * item.percentage), 0);
+    // const totalCount = store?.ratingWithPercent.reduce((sum, item) => sum + item.percentage, 0);
+    // const weightedSum = store?.ratingWithPercent.reduce((sum, item) => sum + (item.rating * item.percentage), 0);
 
     // Find the maximum count among all ratings
-    const maxCount = Math.max(...(store?.ratingWithPercent.map(item => item.percentage) || [0]));
+    // const maxCount = Math.max(...(store?.ratingWithPercent.map(item => item.percentage) || [0]));
 
     return (
         <>
@@ -44,19 +44,19 @@ const SellerStoreRating = ({store, isFetchingStore}: Props) => {
                             </div>
 
                             <div className={styles.ratingProgress}>
-                                {store?.ratingWithPercent.map((item, index) => {
-                                    return (
-                                        <div className={styles.value} key={index}>
-                                            <p>{item.rating} <span><GreenStarIcon /></span></p>
+                                {/* {store?.ratingWithPercent.map((item, index) => {
+                                    return ( */}
+                                        {/* <div className={styles.value}>
+                                            <p>{store?.ratingWithPercent.} <span><GreenStarIcon /></span></p>
                                             <div className={styles.progress}>
                                                 <div className={styles.bar} style={{ width: `${(item.percentage / maxCount) * 100}%` }}></div>
                                             </div>
                                             <p className={styles.rangeValue}>
                                                 {item.percentage.toLocaleString()}
                                             </p>
-                                        </div>
-                                    )
-                                })}
+                                        </div> */}
+                                {/* //     )
+                                // })} */}
                             </div>
                         </div>
                     </div>

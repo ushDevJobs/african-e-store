@@ -2,23 +2,34 @@ export interface ProductResponse {
   id: string;
   name: string;
   itemCondition: string;
+  salesType: string;
+  endBiddingDate: string;
   amount: number;
   quantity: number;
   details: string;
-  publish: boolean;
+  publish: true;
   coverImage: string;
-  images: string[];
+  images: 'image1.jpg,image2.jpg';
   returnPolicy: string;
-  location: null;
+  location: string;
   storeId: string;
-  shippingDetails: ShippingDetails;
-  discount: boolean;
+  shippingDetails: string;
+  discount: true;
   discountPercentage: number;
   createdAt: string;
   updatedAt: string;
+  store: StoreResponse;
 }
 
-export interface ShippingDetails {
+export interface StoreResponse {
+  id: string;
+  name: string;
+  description: string;
+  image: null;
+  location: string;
+  userId: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface CartItem {

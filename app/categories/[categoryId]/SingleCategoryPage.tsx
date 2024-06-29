@@ -121,7 +121,7 @@ const SingleCategoryPage = ({ params }: Props) => {
                                                     <Image fill src={images.cashew} alt='product image' />
                                                 </div>
                                                 <p>{product.name} </p>
-                                                <h4>&#8358;{product.amount.toLocaleString()}</h4>
+                                                <h4>&pound;{product.amount.toLocaleString()}</h4>
                                             </Link>
                                         ))}
                                     </div>
