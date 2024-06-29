@@ -57,6 +57,30 @@ const SellerStoreRating = ({store, isFetchingStore}: Props) => {
                                         </div> */}
                                 {/* //     )
                                 // })} */}
+
+                                <div className={styles.ratingProgress}>
+                                    {store?.ratingWithPercent.map((item, index) => {
+                                        return (
+                                            <div className={styles.value} key={index}>
+                                                <p>
+                                                    {item.rating}{" "}
+                                                    <span>
+                                                        <GreenStarIcon />
+                                                    </span>
+                                                </p>
+                                                <div className={styles.progress}>
+                                                    <div
+                                                        className={styles.bar}
+                                                        style={{ width: `${item.percentage}%` }}
+                                                    ></div>
+                                                </div>
+                                                <p className={styles.rangeValue}>
+                                                    {item.total!.toLocaleString()}
+                                                </p>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
                             </div>
                         </div>
                     </div>
