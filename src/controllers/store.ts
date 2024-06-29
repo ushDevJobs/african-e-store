@@ -14,6 +14,7 @@ export const getAllStores = async (
   next: NextFunction
 ) => {
   try {
+    const user = req.user as RequestUser;
     const { _limit, _page } = req.query;
     const validatedPag = validatePagination.safeParse({
       _page: +_page!,
@@ -32,6 +33,14 @@ export const getAllStores = async (
         user: {
           select: {
             fullname: true,
+          },
+        },
+        favourite: {
+          where: {
+            id: user.id,
+          },
+          select: {
+            id: true,
           },
         },
       },
@@ -163,62 +172,43 @@ export const getStoreById = async (
     next(new NotFound("Store not found", ErrorCode.NOT_FOUND));
   }
 };
-export const getCategoriesOfStoreById = async (
+export const getProductsOfStoreById = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const { id } = req.params;
-    if (id) {
-      const categories = await prisma.store.findFirstOrThrow({
+    const { storeId } = req.params;
+    const user = req.user as RequestUser;
+    if (storeId && storeId !== "") {
+      const categories = await prisma.store.findFirst({
         where: {
-          id,
+          id: storeId,
         },
         select: {
-          categories: {
+          products: {
             select: {
               id: true,
               name: true,
-              products: {
+              itemCondition: true,
+              salesType: true,
+              amount: true,
+              quantity: true,
+              details: true,
+              coverImage: true,
+              favourite: {
                 where: {
-                  publish: true,
+                  id: user.id,
+                },
+                select: {
+                  id: true,
                 },
               },
             },
           },
         },
       });
-      return returnJSONSuccess(res, { data: categories });
-    } else {
-      next(new BadRequest("Invalid Request Parameters", ErrorCode.NOT_FOUND));
-    }
-  } catch (error) {
-    next(new NotFound("Store not found", ErrorCode.NOT_FOUND));
-  }
-};
-export const getProductByIdOfStoreById = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    console.log(req.params);
-    const { storeId, productId } = req.params;
-    if (storeId && productId && storeId !== "" && productId !== "") {
-      const categories = await prisma.store.findFirstOrThrow({
-        where: {
-          id: storeId,
-        },
-        select: {
-          products: {
-            where: {
-              id: productId,
-            },
-          },
-        },
-      });
-      return returnJSONSuccess(res, { data: categories });
+      return returnJSONSuccess(res, { data: categories?.products });
     } else {
       next(new BadRequest("Invalid Request Parameters", ErrorCode.NOT_FOUND));
     }
@@ -246,26 +236,6 @@ export const createStore = async (req: Request, res: Response) => {
   }
   return res.status(200).json({ status: true, data: checkIfStore });
 };
-export const getStoreCategories = async (req: Request, res: Response) => {
-  const user = req.user as RequestUser;
-  const categories = await prisma.store.findFirst({
-    where: {
-      userId: user.id,
-    },
-    select: {
-      categories: {
-        select: {
-          id: true,
-          name: true,
-          createdAt: true,
-          products: true,
-        },
-      },
-    },
-  });
-  return res.status(200).json({ status: true, data: categories });
-};
-
 export const searchStoreProducts = async (
   req: Request,
   res: Response,
@@ -297,31 +267,22 @@ export const searchStoreProducts = async (
     next(new BadRequest("Invalid request parameters", ErrorCode.BAD_REQUEST));
   }
 };
-export const getStoreProduct = async (
+export const getStoreProducts = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   const user = req.user as RequestUser;
-  const { id } = req.params;
-  if (id && id !== "") {
-    const product = await prisma.store.findFirstOrThrow({
-      where: {
-        userId: user.id,
-      },
-      select: {
-        products: {
-          where: {
-            id: id,
-          },
-        },
-      },
-    });
+  const product = await prisma.store.findFirstOrThrow({
+    where: {
+      userId: user.id,
+    },
+    select: {
+      products: true,
+    },
+  });
 
-    return res.status(200).json({ status: true, data: product });
-  } else {
-    next(new BadRequest("Invalid request parameters", ErrorCode.BAD_REQUEST));
-  }
+  return res.status(200).json({ status: true, data: product.products });
 };
 export const updateStoreDescription = async (
   req: Request,
@@ -434,4 +395,43 @@ export const getFavouriteStores = async (
   } catch (error) {
     next(new NotFound("User not found", ErrorCode.NOT_FOUND));
   }
+};
+export const getStoreCategories = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const user = req.user as RequestUser;
+  const categories = await getCategory(user.id, false);
+  return returnJSONSuccess(res, { data: categories });
+};
+export const getCategoriesfromStoreById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { id } = req.params;
+  if (id && id !== "") {
+    const categories = await getCategory(id);
+    return returnJSONSuccess(res, { data: categories });
+  } else {
+    next(new BadRequest("Invalid request parameters", ErrorCode.BAD_REQUEST));
+  }
+};
+const getCategory = async (id: string, store = true) => {
+  const condition = store ? { id: id } : { userId: id };
+  const categories = await prisma.store.findFirstOrThrow({
+    where: condition,
+    select: {
+      products: {
+        select: {
+          categories: true,
+        },
+      },
+    },
+  });
+  return categories.products
+    .flat()
+    .map((categ) => categ.categories)
+    .flat();
 };

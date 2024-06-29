@@ -19,6 +19,7 @@ router.post(
   "/login",
   passport.authenticate("local", {
     failureRedirect: "login/error",
+    failureFlash: true,
   }),
   (req: Request, res: Response) =>
     res
@@ -36,6 +37,7 @@ router.get(
   passport.authenticate("google", {
     successRedirect: "/",
     failureRedirect: "google/error",
+    failureFlash: true,
   })
 );
 router.get("/login/error", rootErrorHandler(loginAuthError));

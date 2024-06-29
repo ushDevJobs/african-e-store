@@ -33,20 +33,19 @@ model User {
 }
 
 model Store {
-  id          String     @id @default(cuid())
-  name        String     @unique
-  description String     @db.VarChar(255)
+  id          String    @id @default(cuid())
+  name        String    @unique
+  description String    @db.VarChar(255)
   image       String?
   location    String
-  userId      String     @unique
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
+  userId      String    @unique
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
   orders      Order[]
   products    Product[]
   ratings     Rating[]
-  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade, name: "myPersonalStore")
-  categories  Category[]
-  favourite   User[]     @relation(name: "myFavouriteStores")
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade, name: "myPersonalStore")
+  favourite   User[]    @relation(name: "myFavouriteStores")
 
   @@map("store")
 }
@@ -55,18 +54,18 @@ model Product {
   id                 String         @id @default(cuid())
   name               String
   itemCondition      ItemContitions
-  salesType          SalesType @default(ONCE)
+  salesType          SalesType      @default(ONCE)
   endBiddingDate     DateTime?
   amount             Float          @default(0)
   quantity           Int            @default(0)
   details            String         @db.VarChar(255)
   publish            Boolean        @default(true)
   coverImage         String
-  images             String
+  images             String         @default("[]") @db.LongText
   returnPolicy       String?
   location           String?
   storeId            String
-  shippingDetails    String?         @default("{}") @db.LongText
+  shippingDetails    String?        @default("{}") @db.LongText
   discount           Boolean        @default(false)
   discountPercentage Int            @default(0)
   createdAt          DateTime       @default(now())
@@ -78,8 +77,8 @@ model Product {
   categories         Category[]
   favourite          User[]
 
-  @@map("products")
   @@unique([id, name])
+  @@map("products")
 }
 
 model Category {
@@ -88,7 +87,6 @@ model Category {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   products  Product[]
-  stores    Store[]
 
   @@map("categories")
 }
@@ -206,6 +204,7 @@ enum ItemContitions {
   USED
   REFURBISHED
 }
+
 enum SalesType {
   BIDDING
   ONCE
