@@ -25,6 +25,10 @@ const StoreCategoriesSettingsBar = ({ storeCategories, isFetchingStoreCategories
                                     {category.name}
                                 </li>
                             ))}
+                            {storeCategories &&
+                                <li className='text-center flex flex-col items-center justify-center mt-4 text-gray-400 text-base'>
+                                    No category available</li>
+                            }
                         </ul>
 
                     </div>

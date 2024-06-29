@@ -23,15 +23,37 @@ export interface AverageRating {
 }
 
 export interface RatingWithPercent {
-  rating: number;
-  percentage: number;
+  1: {
+    percentage: number;
+    total: number;
+    rating: number;
+  };
+  2: {
+    percentage: number;
+    total: number;
+    rating: number;
+  };
+  3: {
+    percentage: number;
+    total: number;
+    rating: number;
+  };
+  4: {
+    percentage: number;
+    total: number;
+    rating: number;
+  };
+  5: {
+    percentage: number;
+    total: number;
+    rating: number;
+  };
 }
 
 export interface ASingleStoreResponse {
   storeDetails: StoreDetails;
   avgRating: AverageRating;
-  totalRating: number;
-  ratingWithPercent: RatingWithPercent[];
+  ratingWithPercent: RatingWithPercent;
   feedback: number;
   totalItemSold: number;
 }
