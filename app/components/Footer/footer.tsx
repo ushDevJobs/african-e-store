@@ -20,7 +20,7 @@ const Footer = (props: Props) => {
                     <div className={styles.lhs}>
                         <Link href={'/'}>
                             <Image src={images.logo} alt='logo' /></Link>
-                        <h2>Your catch phrase here </h2>
+                        {/* <h2>Your catch phrase here </h2> */}
                     </div>
                     <div className={styles.rhs}>
                         <Link href={'/'}><FacebookIcon /></Link>
@@ -97,7 +97,7 @@ const Footer = (props: Props) => {
                     <div className={styles.lhs}>
                         <Link href={'/'}>
                             <Image src={images.logo} alt='logo' /></Link>
-                        <h2>Your catch phrase here </h2>
+                        {/* <h2>Your catch phrase here </h2> */}
                     </div>
                     <div className={styles.rhs}>
                         <Link href={'/'}><FacebookIcon /></Link>

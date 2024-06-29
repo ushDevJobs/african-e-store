@@ -10,7 +10,7 @@ const RegistrationFooter = (props: Props) => {
     return (
         <div className={styles.footer}>
             <Link href={'/'}> <Image src={images.logo} alt='logo' /></Link>
-            <h3>Your catch phrase here </h3>
+            {/* <h3>Your catch phrase here </h3> */}
             <div className={styles.icons}>
                 <Link href={'/'}><GreenFacebookIcon /></Link>
                 <Link href={'/'}><GreenTwitterIcon /></Link>
