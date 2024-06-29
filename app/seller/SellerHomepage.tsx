@@ -1,9 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import styles from '../stores/[storeId]/SellerStore.module.scss';
-import CategoriesSettingsBar from '../components/CategoriesSettingsBar';
-import { SearchIcon } from '../components/SVGs/SVGicons';
-import SellerShop from '../stores/[storeId]/SellerShop';
 import useResponsiveness from '../components/hooks/responsiveness-hook';
 import SellerProduct from './SellerProduct';
 import AddProductModal from './AddProductModal';

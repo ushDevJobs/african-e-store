@@ -16,39 +16,6 @@ const SellerPageStoreRating = ({ store, isFetchingStore }: Props) => {
   const onMobile = typeof isMobile == "boolean" && isMobile;
   const onDesktop = typeof isMobile == "boolean" && !isMobile;
 
-  const data = [
-    {
-      star: 5,
-      count: 98000,
-    },
-    {
-      star: 4,
-      count: 80000,
-    },
-    {
-      star: 3,
-      count: 60000,
-    },
-    {
-      star: 2,
-      count: 40000,
-    },
-    {
-      star: 1,
-      count: 20000,
-    },
-  ];
-
-  // Calculate total count and weighted sum for average
-  // const totalCount = data.reduce((sum, item) => sum + item.count, 0);
-  // const weightedSum = data.reduce((sum, item) => sum + (item.star * item.count), 0);
-
-  // // Calculate average rating
-  // const averageRating = totalCount === 0 ? 0 : (weightedSum / totalCount).toFixed(1);
-
-  // Find the maximum count among all ratings
-  // const maxCount = Math.max(...(store?.ratingWithPercent.map(item => item.percentage) || [0]));
-
   return (
     <>
       {!store && isFetchingStore ? (
@@ -80,7 +47,7 @@ const SellerPageStoreRating = ({ store, isFetchingStore }: Props) => {
             <div className={styles.rating}>
               <div className={styles.average}>
                 <h4 className="flex items-center gap-2">
-                  {store?.avgRating.rating}/5{" "}
+                  {store?.avgRating.rating ?? 0}/5{" "}
                   {onMobile && (
                     <span className="text-[#828282] font-normal">Rating</span>
                   )}

@@ -39,25 +39,11 @@ const SellerStoreRating = ({store, isFetchingStore}: Props) => {
                     <div className={styles.ratings}>
                         <div className={styles.rating}>
                             <div className={styles.average}>
-                                <h4 className='flex items-center gap-2'>{store?.avgRating.rating}/5 {onMobile && <span className='text-[#828282] font-normal'>Rating</span>}</h4>
+                                <h4 className='flex items-center gap-2'>{store?.avgRating.rating ?? 0}/5 {onMobile && <span className='text-[#828282] font-normal'>Rating</span>}</h4>
                                 {onDesktop && <p className='text-[#828282]'>Rating</p>}
                             </div>
 
                             <div className={styles.ratingProgress}>
-                                {/* {store?.ratingWithPercent.map((item, index) => {
-                                    return ( */}
-                                        {/* <div className={styles.value}>
-                                            <p>{store?.ratingWithPercent.} <span><GreenStarIcon /></span></p>
-                                            <div className={styles.progress}>
-                                                <div className={styles.bar} style={{ width: `${(item.percentage / maxCount) * 100}%` }}></div>
-                                            </div>
-                                            <p className={styles.rangeValue}>
-                                                {item.percentage.toLocaleString()}
-                                            </p>
-                                        </div> */}
-                                {/* //     )
-                                // })} */}
-
                                 <div className={styles.ratingProgress}>
                                     {store?.ratingWithPercent.map((item, index) => {
                                         return (
