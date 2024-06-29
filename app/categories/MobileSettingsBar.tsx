@@ -1,28 +1,45 @@
-import React, { useState } from 'react'
-import styles from '../styles/CategoriesSettingsBar.module.scss'
-import { CategoriesResponse } from './models/AllCategories'
+import React from 'react'
+import { CategoriesResponse } from '../components/models/AllCategories';
+import styles from '../styles/MobileCategoriesSettingsBar.module.scss'
 import Link from 'next/link';
+import { motion } from "framer-motion";
+import { mobileMenuVariant } from '../components/animations/navbarAnimations';
+import { TimesIcon } from '../components/SVGs/SVGicons';
 
 type Props = {
     categories?: CategoriesResponse[];
     activeCategory?: string;
     retrievedCategories?: CategoriesResponse[] | undefined;
     onCategoryClick: (categoryId: string) => void;
+    setIsFilterOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const CategoriesSettingsBar = ({ categories, activeCategory, retrievedCategories, onCategoryClick }: Props) => {
-
+const MobileSettingsBar = ({
+    categories,
+    activeCategory,
+    retrievedCategories,
+    onCategoryClick,
+    setIsFilterOpen
+}: Props) => {
     return (
-        <div className={`${styles.settingsBar} hidden md:block`}>
-            <div className={styles.catgoriesFilter}>
+        <motion.div className={`${styles.settingsBar}`} variants={mobileMenuVariant({ direction: "fromLeft" })}>
+            <span onClick={() => setIsFilterOpen(false)} className='ml-auto cursor-pointer flex items-end justify-end mb-4 w-fit'>
+                <TimesIcon />
+            </span>
+
+            <div className={`${styles.catgoriesFilter} mb-3`}>
                 <h3>Categories</h3>
                 {categories &&
                     <ul>
                         {categories && categories.map((category) => (
                             <li key={category.id}
                                 className={activeCategory === category.name ? styles.active : ''}
-                                onClick={() => onCategoryClick(category.id)}
-                           >
+                                onClick={() => {
+                                    onCategoryClick(category.id)
+                                    setIsFilterOpen(false)
+                                }
+                                }
+                            >
                                 {category.name}
                             </li>
                         ))}
@@ -35,7 +52,7 @@ const CategoriesSettingsBar = ({ categories, activeCategory, retrievedCategories
                 {retrievedCategories &&
                     <ul>
                         {retrievedCategories.map((category) => (
-                            <Link href={`/categories/${category.id}?${category.name}`} key={category.id}>
+                            <Link href={`/categories/${category.id}?${category.name}`} key={category.id} onClick={() => setIsFilterOpen(false)}>
                                 <li>
                                     {category.name}
                                 </li>
@@ -73,8 +90,8 @@ const CategoriesSettingsBar = ({ categories, activeCategory, retrievedCategories
                     <label htmlFor="">Pickup</label>
                 </div>
             </div>
-        </div>
+        </motion.div >
     )
 }
 
-export default CategoriesSettingsBar
+export default MobileSettingsBar

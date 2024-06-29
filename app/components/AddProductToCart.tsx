@@ -35,11 +35,11 @@ const AddProductToCart = ({ product, isFetchingProduct }: Props) => {
     const onDesktop = typeof isMobile == 'boolean' && !isMobile;
 
     const imageUrl = [
-        { url: images.singleProduct },
-        { url: images.singleProduct2 },
-        { url: images.singleproduct3 },
-        { url: images.singleProduct2 },
-        { url: images.singleproduct3 },
+         images.singleProduct,
+         images.singleProduct2,
+         images.singleproduct3,
+         images.singleProduct2,
+         images.singleproduct3,
     ]
 
     const [mainImage, setMainImage] = useState(imageUrl[0])
@@ -53,13 +53,13 @@ const AddProductToCart = ({ product, isFetchingProduct }: Props) => {
                 {product && (
                     <>
                         <div className={styles.lhs}>
-                            <Image className={styles.mainImage} src={mainImage.url} alt='product image' />
+                            <Image className={styles.mainImage} src={mainImage} alt='product image' />
                             <div className={styles.gallery}>
                                 {imageUrl.map((image, index) => (
-                                    <Image src={image.url}
+                                    <Image src={image}
                                         alt='product image'
                                         key={index}
-                                        className={`${image.url === mainImage.url ? styles.active : ''}`}
+                                        className={`${image === mainImage ? styles.active : ''}`}
                                         onClick={() => setMainImage(imageUrl[index])} />
                                 ))}
                             </div>
