@@ -9,10 +9,11 @@ export interface AvgRating {
   rating: number;
 }
 
-export interface Rating{
-      rating: number;
-      percentage: number;
-    }
+export interface Rating {
+  rating: number;
+  percentage: number;
+  total?: number;
+}
 
 export interface SellerStoreResponse {
   storeDetails: StoreDetails;
