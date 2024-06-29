@@ -13,11 +13,11 @@ const router = Router();
 router
   .route("/product/:id")
   .get(rootErrorHandler(getProductById))
-  .patch([sellerRoleCheck, adminRoleCheck], rootErrorHandler(updateProduct));
+  .patch([sellerRoleCheck], rootErrorHandler(updateProduct));
 
 router.post(
   "/product",
-  [sellerRoleCheck, adminRoleCheck, uploadProductImage.array("images")],
+  [sellerRoleCheck, uploadProductImage.array("images")],
   rootErrorHandler(addProduct)
 );
 export { router as productRoutes };

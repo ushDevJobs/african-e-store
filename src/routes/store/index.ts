@@ -4,6 +4,7 @@ import {
   createStore,
   getAllStores,
   getCategoriesOfStoreById,
+  getFavouriteStores,
   getProductByIdOfStoreById,
   getStoreById,
   getStoreByUserLogged,
@@ -24,7 +25,10 @@ router.get("/store/id/:id", getStoreById);
 router.get("/store/id/:id/categories", getCategoriesOfStoreById);
 router.get("/store/id/:storeId/product/:productId", getProductByIdOfStoreById);
 router.get("/search", searchForStore);
-router.route("/store/favourite").post(rootErrorHandler(addStoreToFavourite));
+router
+  .route("/favourite")
+  .get(rootErrorHandler(getFavouriteStores))
+  .post(rootErrorHandler(addStoreToFavourite));
 router
   .route("/store")
   .get(sellerRoleCheck, rootErrorHandler(getStoreByUserLogged))

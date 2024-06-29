@@ -13,4 +13,5 @@ export const validatecreateProduct = z.object({
   category: z.string(),
   date: z.coerce.date().optional(),
   description: z.string(),
+  publish: z.coerce.boolean().catch(true),
 });

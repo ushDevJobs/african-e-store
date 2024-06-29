@@ -32,8 +32,12 @@ export const addProduct = async (
         endBiddingDate: validatedProduct.date,
         images: JSON.stringify(images),
         details: validatedProduct.description,
-        returnPolicy: "",
+        quantity: validatedProduct.quantity,
+        publish: validatedProduct.publish,
         storeId: storeId.id,
+        categories: {
+          connect: [{ id: req.body.category }],
+        },
       },
     });
     return returnJSONSuccess(res);

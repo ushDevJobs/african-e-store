@@ -1,6 +1,6 @@
 {
     "info": {
-        "_postman_id": "141de9b3-6666-4b39-b5d7-ce779de84426",
+        "_postman_id": "785509dc-a245-4f59-94b9-479cebd61fce",
         "name": "Rayvvin",
         "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
         "description": ""
@@ -102,7 +102,7 @@
                                     "language": "json"
                                 }
                             },
-                            "raw": "{\n  \"id\":\"clwtodfcs00003bt61l0m4hai\",\n  \"code\":\"48142\"\n}"
+                            "raw": "{\n  \"id\": \"clxzbyp030000n7p9t9exo1st\",\n  \"code\": \"41382\"\n}"
                         }
                     }
                 },
@@ -196,7 +196,7 @@
                                     "language": "json"
                                 }
                             },
-                            "raw": "{\n  \"email\":\"capthingjoe@gmail.com\",\n  \"password\":\"segunade041@\",\n  \"fullname\":\"Captain Joe\",\n  \"confirmPassword\":\"password\",\n  \"telephone\":\"07044651989\",\n  \"companyName\":\"Megatron Gamings\",\n  \"country\":\"Nigeria\"\n}"
+                            "raw": "{\n  \"email\":\"segunade041@gmail.com\",\n  \"password\":\"password\",\n  \"fullname\":\"Captain Joe\",\n  \"confirmPassword\":\"password\",\n  \"telephone\":\"07044651989\",\n  \"companyName\":\"Megatron Gamings\",\n  \"country\":\"Nigeria\"\n}"
                         }
                     }
                 },
@@ -435,6 +435,48 @@
                             "raw": "{\n  \"description\":\"Get all your goodies here\"\n}"
                         }
                     }
+                },
+                {
+                    "name": "Update Store Profile",
+                    "request": {
+                        "method": "PATCH",
+                        "url": {
+                            "raw": "http://localhost:3000/api/stores/store/profile",
+                            "path": [
+                                "api",
+                                "stores",
+                                "store",
+                                "profile"
+                            ],
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3000"
+                        },
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": [
+                                {
+                                    "key": "name",
+                                    "value": "Joe Gamings",
+                                    "disabled": true,
+                                    "type": "default"
+                                },
+                                {
+                                    "key": "description",
+                                    "value": "everything games",
+                                    "disabled": true,
+                                    "type": "default"
+                                },
+                                {
+                                    "key": "image",
+                                    "src": "c:\\Users\\jamaikah alabi\\Pictures\\nafdac\\image\\academic-calendar.png",
+                                    "type": "file"
+                                }
+                            ]
+                        }
+                    }
                 }
             ]
         },
@@ -525,6 +567,26 @@
                             "path": [
                                 "api",
                                 "orders"
+                            ],
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3000"
+                        }
+                    }
+                },
+                {
+                    "name": "Get Order By Id",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "http://localhost:3000/api/orders/order/cxkosoawepaoeiw",
+                            "path": [
+                                "api",
+                                "orders",
+                                "order",
+                                "cxkosoawepaoeiw"
                             ],
                             "protocol": "http",
                             "host": [
@@ -666,7 +728,48 @@
                 {
                     "name": "Add Store As Favourite",
                     "request": {
-                        "method": "GET"
+                        "method": "POST",
+                        "url": {
+                            "raw": "http://localhost:3000/api/stores/favourite",
+                            "path": [
+                                "api",
+                                "stores",
+                                "favourite"
+                            ],
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3000"
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            },
+                            "raw": "{\n  \"id\":\"clxz0e5sy0004519exvf5593z\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Get favourite Stores",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "http://localhost:3000/api/stores/favourite",
+                            "path": [
+                                "api",
+                                "stores",
+                                "favourite"
+                            ],
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3000"
+                        }
                     }
                 }
             ]
@@ -679,18 +782,92 @@
                     "request": {
                         "method": "GET",
                         "url": {
-                            "raw": "http://localhost:3000/api/products/product/clxg75on70001goqsbvtgxg2a",
+                            "raw": "http://localhost:3000/api/products/product/clxzcnizw0001ekoc53wh1950",
                             "path": [
                                 "api",
                                 "products",
                                 "product",
-                                "clxg75on70001goqsbvtgxg2a"
+                                "clxzcnizw0001ekoc53wh1950"
                             ],
                             "protocol": "http",
                             "host": [
                                 "localhost"
                             ],
                             "port": "3000"
+                        }
+                    }
+                },
+                {
+                    "name": "Add Product",
+                    "request": {
+                        "method": "POST",
+                        "url": {
+                            "raw": "http://localhost:3000/api/products/product",
+                            "path": [
+                                "api",
+                                "products",
+                                "product"
+                            ],
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3000"
+                        },
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": [
+                                {
+                                    "key": "price",
+                                    "value": "250",
+                                    "type": "default"
+                                },
+                                {
+                                    "key": "name",
+                                    "value": "Samsung 43 Mp 50 64GB ram 1TB ROM",
+                                    "type": "default"
+                                },
+                                {
+                                    "key": "quantity",
+                                    "value": "14",
+                                    "type": "default"
+                                },
+                                {
+                                    "key": "condition",
+                                    "value": "NEW",
+                                    "type": "default"
+                                },
+                                {
+                                    "key": "salesType",
+                                    "value": "BIDDING",
+                                    "type": "default"
+                                },
+                                {
+                                    "key": "category",
+                                    "value": "793e6b2c-3599-11ef-b974-bc",
+                                    "type": "default"
+                                },
+                                {
+                                    "key": "date",
+                                    "value": "2024-7-25",
+                                    "type": "default"
+                                },
+                                {
+                                    "key": "description",
+                                    "value": "Very good phone. bla bla bla",
+                                    "type": "default"
+                                },
+                                {
+                                    "key": "images",
+                                    "src": "c:\\Users\\jamaikah alabi\\Pictures\\nafdac\\image\\contact-us.png",
+                                    "type": "file"
+                                },
+                                {
+                                    "key": "images",
+                                    "src": "c:\\Users\\jamaikah alabi\\Pictures\\nafdac\\image\\005.jpg",
+                                    "type": "file"
+                                }
+                            ]
                         }
                     }
                 }

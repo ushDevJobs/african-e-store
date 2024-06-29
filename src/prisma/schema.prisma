@@ -53,7 +53,7 @@ model Store {
 
 model Product {
   id                 String         @id @default(cuid())
-  name               String         @unique
+  name               String
   itemCondition      ItemContitions
   salesType          SalesType @default(ONCE)
   endBiddingDate     DateTime?
@@ -79,6 +79,7 @@ model Product {
   favourite          User[]
 
   @@map("products")
+  @@unique([id, name])
 }
 
 model Category {

@@ -112,7 +112,7 @@ const getStoreFullDetails = async (id: string, isStoreId = false) => {
   const findRating = (number: number) => {
     const rate = ratings.find((rating) => rating.rating === number);
     return {
-      percentage: ((rate?._count || 0) / avg._count) * 100,
+      percentage: ((rate?._count || 0) / avg._count) * 100 || 0,
       total: rate?._count || 0,
       rating: rate?.rating || 0,
     };
@@ -407,10 +407,31 @@ export const addStoreToFavourite = async (
           },
         },
       });
+      return returnJSONSuccess(res);
     } catch (error) {
       return returnJSONError(res, { message: "Unable to add to favourite" });
     }
   } else {
     next(new BadRequest("Invalid Request Parameter", ErrorCode.BAD_REQUEST));
+  }
+};
+export const getFavouriteStores = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const user = req.user as RequestUser;
+  try {
+    const favourite = await prisma.user.findFirstOrThrow({
+      where: {
+        id: user.id,
+      },
+      select: {
+        favouriteStores: true,
+      },
+    });
+    returnJSONSuccess(res, { data: favourite.favouriteStores });
+  } catch (error) {
+    next(new NotFound("User not found", ErrorCode.NOT_FOUND));
   }
 };
