@@ -57,3 +57,18 @@ export interface CartResponse {
   quantity: number;
   product: Product;
 }
+
+export interface AddProductRequest {
+  price: number;
+  name: string;
+  quantity: number;
+  condition: string;
+  salesType: string;
+  category: string;
+  date: string;
+  description: string;
+  imageOne: string;
+  imageTwo: string;
+  imageThree: string;
+  imageFour: string;
+}

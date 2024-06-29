@@ -1,3 +1,5 @@
+import { Rating } from "./ISellerStore";
+
 export interface AllStoresResponse {
   id: string;
   name: string;
@@ -53,7 +55,7 @@ export interface RatingWithPercent {
 export interface ASingleStoreResponse {
   storeDetails: StoreDetails;
   avgRating: AverageRating;
-  ratingWithPercent: RatingWithPercent;
+  ratingWithPercent: Rating[];
   feedback: number;
   totalItemSold: number;
 }

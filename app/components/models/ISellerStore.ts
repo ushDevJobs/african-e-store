@@ -12,7 +12,7 @@ export interface AvgRating {
 export interface Rating {
   rating: number;
   percentage: number;
-  total?: number;
+  total: number;
 }
 
 export interface SellerStoreResponse {
