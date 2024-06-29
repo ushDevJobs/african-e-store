@@ -5,6 +5,7 @@ import { validatecreateProduct } from "../schema/products";
 import { RequestUser } from "../types";
 import { InternalException } from "../exceptions/internal-exception";
 import { ErrorCode } from "../exceptions/root";
+import { BadRequest } from "../exceptions/bad-request";
 
 export const updateProduct = async () => {};
 
@@ -16,6 +17,9 @@ export const addProduct = async (
   const user = req.user as RequestUser;
   const imagesArray = req.files as any[];
   const images = imagesArray.map((image) => image.filename);
+  if (images.length === 0) {
+    next(new BadRequest("Upload one or more image(s)", ErrorCode.BAD_REQUEST));
+  }
   const validatedProduct = validatecreateProduct.parse(req.body);
   const storeId = await prisma.store.findFirstOrThrow({
     where: { userId: user.id },

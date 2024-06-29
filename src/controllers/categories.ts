@@ -19,25 +19,27 @@ export const getAllCategories = async (req: Request, res: Response) => {
   });
   const count = await prisma.category.count();
   const page = (+validatedPag.data?._page! - 1) * (_limit ? +_limit : count);
-  const fetchProduct = !!products
-    ? {
-        products: {
-          where: {
-            publish: true,
+  const fetchProduct =
+    products === true || products === "true"
+      ? {
+          products: {
+            where: {
+              publish: true,
+            },
           },
-        },
-      }
-    : {};
+        }
+      : {};
 
-  const countProducts = !!products
-    ? {
-        _count: {
-          select: {
-            products: true,
+  const countProducts =
+    products === true || products === "true"
+      ? {
+          _count: {
+            select: {
+              products: true,
+            },
           },
-        },
-      }
-    : {};
+        }
+      : {};
   const categories = await prisma.category.findMany({
     skip: page,
     take: +_limit! || undefined,
