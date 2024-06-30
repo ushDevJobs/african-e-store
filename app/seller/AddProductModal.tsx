@@ -25,6 +25,8 @@ const AddProductModal = ({ visibility, setVisibility }: Props) => {
     const [image2, setImage2] = useState<string>();
     const [image3, setImage3] = useState<string>();
     const [image4, setImage4] = useState<string>();
+    const [selectedConditions, setSelectedConditions] = useState<string>('');
+    const [selectedSalesType, setSelectedSalesType] = useState<string>('');
 
     const [priceErrorMsg, setPriceErrorMsg] = useState(false);
     const [imageErrorMsg, setImageErrorMsg] = useState<boolean | string>(false);
@@ -41,70 +43,6 @@ const AddProductModal = ({ visibility, setVisibility }: Props) => {
     * @param e is the event handler
     * @returns void
     */
-    // const handleFileUpload = (e: any, name: string) => {
-
-    //     // Get the selected file
-    //     const selectedFile: File = e.target.files[0];
-
-    //     // If a valid file was selected...
-    //     if (selectedFile.type === "image/jpg" || selectedFile.type === "image/png" || selectedFile.type === 'image/jpeg' || selectedFile.type === 'image/webp') {
-
-    //         // Unset validation message
-    //         setImageErrorMsg(false);
-
-    //         const file = e.target.files[0]; // Get the selected file
-
-    //         if (file) {
-    //             const reader = new FileReader();
-
-    //             reader.onload = (e) => {
-    //                 const base64URL: string = e.target?.result as string; // This is the base64 URL of the image
-
-    //                 if (base64URL) {
-    //                     // Extract only the base64 string (remove "data:image/jpeg;base64," prefix)
-    //                     const base64String = base64URL.split(',')[1];
-
-    //                     console.log('base64URL: ', base64String);
-
-    //                     // Update form values 
-    //                     setFormValues({ ...formValues as AddProductRequest, [name]: base64String });
-    //                 }
-    //             };
-
-    //             // Read the file as a data URL (base64-encoded)
-    //             reader.readAsDataURL(file);
-    //         }
-    //     }
-    //     // Otherwise...
-    //     else {
-    //         // Set appropriate validation message
-    //         setImageErrorMsg('Please select a valid photo');
-
-    //         // Exit this method
-    //         return;
-    //     }
-
-    //     // Set the image url
-    //     const imgURL = URL.createObjectURL(selectedFile);
-
-    //     // Update the image url state
-    //     if (name === 'image') {
-    //         setFile(imgURL);
-    //     }
-    //     if (name === 'imageOne') {
-    //         setImage1(imgURL);
-    //     }
-    //     if (name === 'imageTwo') {
-    //         setImage2(imgURL);
-    //     }
-    //     if (name === 'imageThree') {
-    //         setImage3(imgURL);
-    //     }
-    //     if (name === 'imageFour') {
-    //         setImage4(imgURL);
-    //     }
-    // };
-
 
     const handleFileUpload = (e: any, name: string) => {
         // Get the selected file
@@ -168,6 +106,25 @@ const AddProductModal = ({ visibility, setVisibility }: Props) => {
 
         stateFunction && stateFunction(false)
     };
+
+    // Implement a function to handle changes in the conditions selection
+    function handleProductCondition(e: ChangeEvent<HTMLSelectElement>) {
+        const selectedValue = e.target.value;
+        setSelectedConditions(selectedValue);
+        setFormValues((prevFormValues) => ({
+            ...prevFormValues,
+            conditions: selectedValue,
+        } as AddProductRequest));
+    }
+    // Implement a function to handle changes in the sales type selection
+    function handleSalesType(e: ChangeEvent<HTMLSelectElement>) {
+        const selectedValue = e.target.value;
+        setSelectedSalesType(selectedValue);
+        setFormValues((prevFormValues) => ({
+            ...prevFormValues,
+            salesType: selectedValue,
+        } as AddProductRequest));
+    }
 
     function validateFields() {
         return true
@@ -255,8 +212,23 @@ const AddProductModal = ({ visibility, setVisibility }: Props) => {
 
         if (validateFields()) {
 
+            const data: AddProductRequest = {
+                price: formValues?.price as number,
+                name: formValues?.name as string,
+                quantity: formValues?.quantity as number,
+                condition: selectedConditions,
+                salesType: selectedSalesType,
+                category: formValues?.category as string,
+                date: formValues?.date as string,
+                description: formValues?.description as string,
+                imageOne: formValues?.imageOne as string,
+                imageTwo: formValues?.imageTwo as string,
+                imageThree: formValues?.imageThree as string,
+                imageFour: formValues?.imageFour as string,
+            };
+
             // Send request to create product
-            await addProduct(formValues as AddProductRequest)
+            await addProduct(data)
                 .then((response) => {
 
                     // Log response 
@@ -283,6 +255,26 @@ const AddProductModal = ({ visibility, setVisibility }: Props) => {
     };
 
     const departureDateRef = useRef<HTMLDivElement>(null);
+
+    const conditions = [
+        {
+            condition: 'NEW'
+        },
+        {
+            condition: 'USED'
+        },
+        {
+            condition: 'REFURBISHED'
+        }
+    ]
+    const salesType = [
+        {
+            sale: 'ONCE'
+        },
+        {
+            sale: 'BIDDING'
+        }
+    ]
 
     return (
         <ModalWrapper
@@ -321,14 +313,27 @@ const AddProductModal = ({ visibility, setVisibility }: Props) => {
                 <div className={styles.rowForm}>
                     <div className={styles.formField}>
                         <label htmlFor="condition"><span>*</span>Product state/condition</label>
-                        <input
+                        {/* <input
                             type="text"
                             name="condition"
                             id="condition"
                             placeholder='Brand new, Fairly used, refurbished '
                             value={formValues ? formValues.condition : ''}
                             onChange={(e) => onFormValueChange(e, setConditionErrorMsg)}
-                        />
+                        /> */}
+                        <select
+                            name="conditions"
+                            value={selectedConditions ?? ''}
+                            onChange={(e) => {
+                                handleProductCondition(e);
+                                onFormValueChange(e, setConditionErrorMsg);
+                            }}
+                        >
+                            <option value="">Select your product condition</option>
+                            {conditions.map((item, index) => (
+                                <option value={item.condition} key={index}>{item.condition}</option>
+                            ))}
+                        </select>
                     </div>
                     <div className={styles.formField}>
                         <label htmlFor="price"><span>*</span>Product Price</label>
@@ -345,14 +350,27 @@ const AddProductModal = ({ visibility, setVisibility }: Props) => {
                 <div className={styles.rowForm}>
                     <div className={styles.formField}>
                         <label htmlFor="salesType"><span>*</span>Sale type</label>
-                        <input
+                        {/* <input
                             type="text"
                             name="salesType"
                             id="salesType"
                             placeholder='Set for auction or one time'
                             value={formValues ? formValues.salesType : ''}
                             onChange={(e) => onFormValueChange(e, setSaleTypeErrorMsg)}
-                        />
+                        /> */}
+                        <select
+                            name="salesType"
+                            value={selectedSalesType ?? ''}
+                            onChange={(e) => {
+                                handleSalesType(e);
+                                onFormValueChange(e, setSaleTypeErrorMsg);
+                            }}
+                        >
+                            <option value="">Select your sales type</option>
+                            {salesType.map((item, index) => (
+                                <option value={item.sale} key={index}>{item.sale}</option>
+                            ))}
+                        </select>
                     </div>
                     <div className={styles.formField}>
                         <label htmlFor="category"><span>*</span>Select category</label>
@@ -364,7 +382,7 @@ const AddProductModal = ({ visibility, setVisibility }: Props) => {
 
                 <div className={styles.formField}>
                     <label htmlFor="date">
-                        <span>*</span>End date of bidding 
+                        <span>*</span>End date of bidding
                     </label>
                     <div className={styles.datePickerContainer} ref={departureDateRef}>
                         <DatePicker
