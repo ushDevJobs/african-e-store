@@ -40,7 +40,7 @@ const SavedStorePage = (props: Props) => {
         <div className={styles.main}>
             <h2 className='text-2xl text-[#828282] mb-4 font-medium'>Saved Sellers </h2>
             <p className='text-[#828282] text-base mb-8'>See sellers that you have saved </p>
-            <div className='flex flex-col gap-4 max-h-[100px] overflow-y-auto'>
+            <div className='flex flex-col gap-4 max-h-[500px] overflow-y-auto'>
                {savedStoreStores?.map((store) => (
                    <div className='flex items-center justify-between bg-[#F7FAFA] rounded-lg py-5 px-7' key={store.id}>
                        <div className="flex items-center gap-8">
