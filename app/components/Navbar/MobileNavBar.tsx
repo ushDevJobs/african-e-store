@@ -42,21 +42,29 @@ const MobileNavBar = ({ navIsOpen, setNavIsOpen, isDropdownOpen,
             {navIsOpen && (
                 <div className={styles.navbarOverlay}>
                     <ul>
-                        <Link href="/" onClick={() => setNavIsOpen(false)}>
-                            <li className={pathname == "/" ? styles.active : ""}>Home</li>
-                        </Link>
-                        <Link href='/seller/signup' onClick={() => setNavIsOpen(false)}>
-                            <li className={pathname == '/seller/signup' ? styles.active : ""}>
-                                Sell
-                            </li>
-                        </Link>
-                        <Link href="/faqs" onClick={() => setNavIsOpen(false)}>
-                            <li className={pathname == "/faqs" ? styles.active : ""}>
-                                FAQ&apos;s
-                            </li>
-                        </Link>
-                      {!isSellerLoggedIn && (
-                        <>
+                        {!isSellerLoggedIn &&
+                            <Link href="/" onClick={() => setNavIsOpen(false)}>
+                                <li className={pathname == "/" ? styles.active : ""}>Home</li>
+                            </Link>
+                        }
+
+                        {
+                            !isSellerLoggedIn &&
+                            <Link href='/seller/signup' onClick={() => setNavIsOpen(false)}>
+                                <li className={pathname == '/seller/signup' ? styles.active : ""}>
+                                    Sell
+                                </li>
+                            </Link>
+                        }
+                        {!isSellerLoggedIn &&
+                            <Link href="/faqs" onClick={() => setNavIsOpen(false)}>
+                                <li className={pathname == "/faqs" ? styles.active : ""}>
+                                    FAQ&apos;s
+                                </li>
+                            </Link>
+                        }
+                        {!isSellerLoggedIn && (
+                            <>
                                 <li
                                     className={`${styles.dropdown} ${isDropdownOpen ? styles.open : styles.close
                                         }`}
@@ -103,8 +111,8 @@ const MobileNavBar = ({ navIsOpen, setNavIsOpen, isDropdownOpen,
                                         </Link>
                                     </ul>
                                 )}
-                        </>
-                      )}
+                            </>
+                        )}
 
 
                         {/* <Link href="/careers" onClick={() => setNavIsOpen(false)}>
@@ -176,8 +184,8 @@ const MobileNavBar = ({ navIsOpen, setNavIsOpen, isDropdownOpen,
                                         </div>
                                     )
                                 } */}
-                                <span 
-                                    className='bg-[#2c7865] w-fit px-6 py-2 cursor-pointer text-sm text-white rounded-xl' 
+                                <span
+                                    className='bg-[#2c7865] w-fit px-6 py-2 cursor-pointer text-sm text-white rounded-xl'
                                     onClick={() => {
                                         setIsDropdownOpen(false);
                                         setNavIsOpen(false);
@@ -189,8 +197,8 @@ const MobileNavBar = ({ navIsOpen, setNavIsOpen, isDropdownOpen,
                             </>
                         )}
 
-                        {isSellerLoggedIn  &&
-                            <span className='bg-[#2c7865] cursor-pointer w-fit px-6 py-2 text-sm text-white rounded-xl' 
+                        {isSellerLoggedIn &&
+                            <span className='bg-[#2c7865] cursor-pointer w-fit px-6 py-2 text-sm text-white rounded-xl'
                                 onClick={() => {
                                     Logout()
                                     // setIsDropdownOpen(false);

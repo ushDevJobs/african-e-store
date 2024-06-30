@@ -134,16 +134,22 @@ const Navbar = (props: Props) => {
                         <Image src={images.logo} alt='rayvvin logo' />
                     </Link>
                     <ul className={styles.links}>
-                        <Link href='/'>
-                            <li>Home</li>
-                        </Link>
+                        {
+                            !isSellerLoggedIn &&
+                            <Link href='/'>
+                                <li>Home</li>
+                            </Link>
+                        }
+
                         {!isLoggedIn && !isSellerLoggedIn &&
                             <Link href='/seller/signup'>
                                 <li>Sell</li>
                             </Link>}
-                        <Link href='/faq'>
+                        {!isSellerLoggedIn && 
+                         <Link href='/faq'>
                             <li>FAQ&apos;s</li>
                         </Link>
+                        }
                         {!isSellerLoggedIn && (
                             <div className={styles.dropdown}>
                                 <li ref={categoryDropdownRef}
@@ -250,12 +256,12 @@ const Navbar = (props: Props) => {
             {onMobile && (
                 <MobileNavBar navIsOpen={navIsOpen} setNavIsOpen={setNavIsOpen} isDropdownOpen={isDropdownOpen}
                     setIsDropdownOpen={setIsDropdownOpen}
-                     retrievedCategories={retrievedCategories}
+                    retrievedCategories={retrievedCategories}
                     isLoggedIn={isLoggedIn}
                     isSellerLoggedIn={isSellerLoggedIn}
                     cartItems={cartItems}
                     Logout={Logout}
-                    />
+                />
             )}
         </div >
     )
