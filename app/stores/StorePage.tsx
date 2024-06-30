@@ -1,11 +1,11 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, { FormEvent, useEffect, useState } from 'react'
 import styles from './Stores.module.scss'
 import Image from 'next/image'
 import images from '@/public/images'
 import { FavoriteIcon, FilledLoveIcon, SearchIcon, UkIcon } from '../components/SVGs/SVGicons'
 import { CategoriesHeader } from '../components/CategoriesHeader'
-import { useFetchAllStores } from '../api/apiClients'
+import { useAddStoreToFavorite, useFetchAllStores } from '../api/apiClients'
 import { AllStoresResponse } from '../components/models/IStores'
 import { createCustomErrorMessages } from '../components/constants/catchError'
 import { toast } from 'sonner'
@@ -17,6 +17,7 @@ type Props = {}
 const StorePage = (props: Props) => {
     const isFavorite = true
     const fetchStores = useFetchAllStores()
+    const addStoreToFavorite = useAddStoreToFavorite()
     const [searchQuery, setSearchQuery] = useState('')
 
     const [stores, setStores] = useState<AllStoresResponse[]>();
@@ -45,6 +46,29 @@ const StorePage = (props: Props) => {
         store.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
+    async function handleAddStoreToFavorite(storeId: string) {
+
+        await addStoreToFavorite(storeId)
+                .then((response) => {
+
+                    // Log response 
+                    console.log(response);
+
+                    // Display success 
+                    toast.success('Store added successfully.');
+                })
+                .catch((error) => {
+                    // Display error
+                    const errorMessage = createCustomErrorMessages(error.response?.data)
+                    toast.error(errorMessage)
+                })
+                .finally(() => {
+
+                    // Close laoder 
+                    // setIsLoading(false);
+                })
+    };
+
     useEffect(() => {
         handleFetchStores();
     }, []);
@@ -64,21 +88,38 @@ const StorePage = (props: Props) => {
 
                 <div className={styles.cards}>
                     {filteredStores?.map((store, index) => (
-                        <Link href={`/stores/${store.id}`} className={styles.card} key={index}>
+                        <div className={styles.card} key={index}>
                             <div className={styles.image}>
                                 <Image fill src={images.cashew} alt='product image' />
-                                {isFavorite ? <span className='absolute right-2 top-2 bg-white p-3 cursor-pointer rounded-full'><FilledLoveIcon /></span>
-                                    : <span className='absolute right-2 top-2 bg-white p-3 cursor-pointer rounded-full'><FavoriteIcon /></span>}
+                                {isFavorite ?
+                                    <span
+                                        className='absolute right-2 top-2 bg-white p-3 cursor-pointer rounded-full'
+                                        onClick={(e) => {
+                                            e.preventDefault(); // Prevent navigation on click
+                                            handleAddStoreToFavorite(store.id);
+                                        }}
+                                    >
+                                        <FilledLoveIcon />
+                                    </span>
+                                    :
+                                    <span
+                                        className='absolute right-2 top-2 bg-white p-3 cursor-pointer rounded-full'
+                                        onClick={(e) => {
+                                            e.preventDefault(); // Prevent navigation on click
+                                            handleAddStoreToFavorite(store.id);
+                                        }}
+                                    >
+                                        <FavoriteIcon />
+                                    </span>}
                             </div>
-                            <div className="flex flex-col gap-2">
+                            <Link href={`/stores/${store.id}`} className="flex flex-col gap-2 w-fit">
                                 <h4 className='text-[#828282] text-base'>{store.name} </h4>
                                 <p className='text-[#828282] text-sm'>{store.description ? store.description : 'lorem ipsum'}</p>
                                 <span className='flex items-center gap-2'>{store.location == 'Nigeria' ? '' : <UkIcon />} {store.location}</span>
-                            </div>
-                        </Link>
+                            </Link>
+                        </div>
                     ))}
                 </div>
-
             </div>
             {!stores && !filteredStores && isFetchingStores && (
                 <ComponentLoader lightTheme svgStyle={{ width: '62px' }} />

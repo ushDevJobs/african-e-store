@@ -255,7 +255,7 @@ const AddProductModal = ({ visibility, setVisibility }: Props) => {
 
         if (validateFields()) {
 
-            // Send request to create tour
+            // Send request to create product
             await addProduct(formValues as AddProductRequest)
                 .then((response) => {
 

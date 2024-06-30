@@ -1,0 +1,27 @@
+@import '../styles/reusables';
+
+.main {
+    @include sectionPadding;
+    padding-bottom: 100px;
+
+    @include tablet{
+        padding-bottom: 100px;
+    }
+
+     .loaderText {
+    margin: 0 auto;
+    opacity: 0.8;
+    width: 100%;
+    height: 50vh;
+    white-space: nowrap;
+    // transform: translateX(50%);
+    font-size: 14px;
+    text-align: center;
+    // margin-left: 20px;
+
+    @include tablet {
+      transform: translateX(0%);
+      margin-left: 0px;
+    }
+  }
+}
