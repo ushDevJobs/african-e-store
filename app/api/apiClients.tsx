@@ -210,6 +210,7 @@ export function useFetchSellerStore() {
     return fetchSellerStore;
 }
 
+// Api call to add product
 export function useAddProduct() {
 
     /**
@@ -227,4 +228,36 @@ export function useAddProduct() {
 
     // Return function to add product
     return addProduct;
+}
+// Api call to add store to favorite
+export function useAddStoreToFavorite() {
+
+    /**
+     * Send request to API server to add store to favorite
+     * @returns The response for the API request
+     */
+    async function addStoreToFavorite(id: string) {
+
+        // Send request to add store to favorite
+        let response = await API.post(ApiRoutes.AddStoreToFavorite, { id: id });
+
+        // Return response
+        return response;
+    }
+
+    // Return function to add StoreToFavorite
+    return addStoreToFavorite;
+}
+
+// Api call to fetch favorite stores
+export function useFetchFavoriteStores() {
+    async function fetchFavoriteStores() {
+        // Fire the request
+        const response = await API.get(ApiRoutes.FetchFavoriteStores);
+
+        // Return the response
+        return response;
+    }
+
+    return fetchFavoriteStores;
 }
