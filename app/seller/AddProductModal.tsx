@@ -313,14 +313,6 @@ const AddProductModal = ({ visibility, setVisibility }: Props) => {
                 <div className={styles.rowForm}>
                     <div className={styles.formField}>
                         <label htmlFor="condition"><span>*</span>Product state/condition</label>
-                        {/* <input
-                            type="text"
-                            name="condition"
-                            id="condition"
-                            placeholder='Brand new, Fairly used, refurbished '
-                            value={formValues ? formValues.condition : ''}
-                            onChange={(e) => onFormValueChange(e, setConditionErrorMsg)}
-                        /> */}
                         <select
                             name="conditions"
                             value={selectedConditions ?? ''}
@@ -350,14 +342,6 @@ const AddProductModal = ({ visibility, setVisibility }: Props) => {
                 <div className={styles.rowForm}>
                     <div className={styles.formField}>
                         <label htmlFor="salesType"><span>*</span>Sale type</label>
-                        {/* <input
-                            type="text"
-                            name="salesType"
-                            id="salesType"
-                            placeholder='Set for auction or one time'
-                            value={formValues ? formValues.salesType : ''}
-                            onChange={(e) => onFormValueChange(e, setSaleTypeErrorMsg)}
-                        /> */}
                         <select
                             name="salesType"
                             value={selectedSalesType ?? ''}
