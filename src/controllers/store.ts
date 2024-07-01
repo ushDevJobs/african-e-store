@@ -289,28 +289,11 @@ export const getStoreProducts = async (
       id:store.id,
     },
     select: {
-      products: {
-        select: {
-          categories: {
-            select: {
-              id:true,
-              name:true,
-              products: {
-                where: {
-                  storeId:store.id
-                }
-              }
-            }
-          },
-        },
-      },
+      products: true,
     },
   });
 
-  return res.status(200).json({ status: true, data: categories.products
-    .flat()
-    .map((categ) => categ.categories)
-    .flat() });
+  return res.status(200).json({ status: true, data: categories.products });
 };
 export const updateStoreDescription = async (
   req: Request,
