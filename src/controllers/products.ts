@@ -38,7 +38,7 @@ export const addProduct = async (
         images: JSON.stringify(images),
         details: validatedProduct.description,
         quantity: validatedProduct.quantity,
-        publish: validatedProduct.publish,
+        publish: validatedProduct.publish === 'false' ? false : true,
         storeId: storeId.id,
         categories: {
           connect: [{ id: req.body.category }],
