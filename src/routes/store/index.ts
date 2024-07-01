@@ -10,6 +10,7 @@ import {
   getStoreByUserLogged,
   getStoreCategories,
   getStoreProducts,
+  removeStoreFromFavourite,
   searchForStore,
   searchStoreProducts,
   updateStoreDescription,
@@ -41,7 +42,8 @@ router.get(
 router
   .route("/favourite")
   .get(rootErrorHandler(getFavouriteStores))
-  .post(rootErrorHandler(addStoreToFavourite));
+  .post(rootErrorHandler(addStoreToFavourite))
+  router.delete("/favourite/:id", rootErrorHandler(removeStoreFromFavourite));
 router
   .route("/store")
   .get(sellerRoleCheck, rootErrorHandler(getStoreByUserLogged))

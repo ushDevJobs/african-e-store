@@ -1,6 +1,6 @@
 {
     "info": {
-        "_postman_id": "df902d7c-33c6-4208-be92-579d7f3f8b9e",
+        "_postman_id": "fedfd922-dd39-4f74-a0df-c9c190490f50",
         "name": "Rayvvin",
         "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
         "description": ""
@@ -456,25 +456,6 @@
                             ]
                         }
                     }
-                },
-                {
-                    "name": "Get favourite Stores",
-                    "request": {
-                        "method": "GET",
-                        "url": {
-                            "raw": "http://localhost:3000/api/stores/favourite",
-                            "path": [
-                                "api",
-                                "stores",
-                                "favourite"
-                            ],
-                            "protocol": "http",
-                            "host": [
-                                "localhost"
-                            ],
-                            "port": "3000"
-                        }
-                    }
                 }
             ]
         },
@@ -600,6 +581,25 @@
             "name": "Stores (Public)",
             "item": [
                 {
+                    "name": "Get favourite Stores",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "http://localhost:3000/api/stores/favourite",
+                            "path": [
+                                "api",
+                                "stores",
+                                "favourite"
+                            ],
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3000"
+                        }
+                    }
+                },
+                {
                     "name": "All Stores",
                     "request": {
                         "method": "GET",
@@ -689,7 +689,7 @@
                                     "language": "json"
                                 }
                             },
-                            "raw": "{\n  \"id\":\"clxz0e5sy0004519exvf5593z\"\n}"
+                            "raw": "{\n  \"id\":\"clxzo8tld0004bh1anjkhru02\"\n}"
                         }
                     }
                 },
@@ -728,6 +728,26 @@
                                 "id",
                                 "clxzbyp0q0001n7p96lu2xg1w",
                                 "products"
+                            ],
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3000"
+                        }
+                    }
+                },
+                {
+                    "name": "Remove Store As Favourite",
+                    "request": {
+                        "method": "DELETE",
+                        "url": {
+                            "raw": "http://localhost:3000/api/stores/favourite/clxzo8tld0004bh1anjkhru02",
+                            "path": [
+                                "api",
+                                "stores",
+                                "favourite",
+                                "clxzo8tld0004bh1anjkhru02"
                             ],
                             "protocol": "http",
                             "host": [
@@ -833,6 +853,73 @@
                                     "type": "file"
                                 }
                             ]
+                        }
+                    }
+                },
+                {
+                    "name": "Add Product As Favourite",
+                    "request": {
+                        "method": "POST",
+                        "url": {
+                            "raw": "http://localhost:3000/api/products/favourite",
+                            "path": [
+                                "api",
+                                "products",
+                                "favourite"
+                            ],
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3000"
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            },
+                            "raw": "{\n  \"id\":\"cly04oeuj0001ecf0xwdv4813\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Remove Product As Favourite",
+                    "request": {
+                        "method": "DELETE",
+                        "url": {
+                            "raw": "http://localhost:3000/api/products/favourite/cly04oeuj0001ecf0xwdv4813",
+                            "path": [
+                                "api",
+                                "products",
+                                "favourite",
+                                "cly04oeuj0001ecf0xwdv4813"
+                            ],
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3000"
+                        }
+                    }
+                },
+                {
+                    "name": "Get favourite Products",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "http://localhost:3000/api/products/favourite",
+                            "path": [
+                                "api",
+                                "products",
+                                "favourite"
+                            ],
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3000"
                         }
                     }
                 }

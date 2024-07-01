@@ -114,10 +114,7 @@ const getStoreFullDetails = async (id: string, isStoreId = false) => {
   });
   const feedback =
     ((totalRatingByUsers.length || 0) / totalItemSold || 0) * 100;
-  // const ratingWithPercent = ratings.map((rating) => ({
-  //   rating: rating.rating,
-  //   percentage: (rating._count / avg._count) * 100,
-  // }));
+
   const findRating = (number: number) => {
     const rate = ratings.find((rating) => rating.rating === number);
     return {
@@ -188,21 +185,34 @@ export const getProductsOfStoreById = async (
         select: {
           products: {
             select: {
-              id: true,
-              name: true,
-              itemCondition: true,
-              salesType: true,
-              amount: true,
-              quantity: true,
-              details: true,
-              coverImage: true,
-              favourite: {
-                where: {
-                  id: user.id,
-                },
+              categories: {
                 select: {
-                  id: true,
-                },
+                  id:true,
+                  name:true,
+                  products: {
+                    where: {
+                      storeId:storeId
+                    },
+                    select: {
+                      id: true,
+                      name: true,
+                      itemCondition: true,
+                      salesType: true,
+                      amount: true,
+                      quantity: true,
+                      details: true,
+                      coverImage: true,
+                      favourite: {
+                        where: {
+                          id: user.id,
+                        },
+                        select: {
+                          id: true,
+                        },
+                      },
+                    },
+                  }
+                }
               },
             },
           },
@@ -296,14 +306,6 @@ export const getStoreProducts = async (
       },
     },
   });
-  // const product = await prisma.store.findFirstOrThrow({
-  //   where: {
-  //     userId: user.id,
-  //   },
-  //   select: {
-  //     products: true,
-  //   },
-  // });
 
   return res.status(200).json({ status: true, data: categories.products
     .flat()
@@ -402,6 +404,34 @@ export const addStoreToFavourite = async (
     next(new BadRequest("Invalid Request Parameter", ErrorCode.BAD_REQUEST));
   }
 };
+export const removeStoreFromFavourite = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { id } = req.params;
+
+  const user = req.user as RequestUser;
+  if (id) {
+    try {
+      await prisma.user.update({
+        where: {
+          id: user.id,
+        },
+        data: {
+          favouriteStores: {
+            disconnect: [{ id }],
+          },
+        },
+      });
+      return returnJSONSuccess(res);
+    } catch (error) {
+      return returnJSONError(res, { message: "Unable to add to favourite" });
+    }
+  } else {
+    next(new BadRequest("Invalid Request Parameter", ErrorCode.BAD_REQUEST));
+  }
+};
 export const getFavouriteStores = async (
   req: Request,
   res: Response,
@@ -417,7 +447,9 @@ export const getFavouriteStores = async (
         favouriteStores: true,
       },
     });
-    returnJSONSuccess(res, { data: favourite.favouriteStores });
+    const superFavStore = await Promise.all(favourite.favouriteStores.map( (fav) => getStoreFullDetails(fav.userId)))
+    const favouriteStores = superFavStore.every((store) => Object.keys(store).length > 1) ? superFavStore : [] 
+    returnJSONSuccess(res, { data: favouriteStores });
   } catch (error) {
     next(new NotFound("User not found", ErrorCode.NOT_FOUND));
   }

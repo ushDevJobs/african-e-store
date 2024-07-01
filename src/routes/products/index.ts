@@ -6,6 +6,9 @@ import {
   updateProduct,
   addProduct,
   deleteProductById,
+  getFavouriteProducts,
+  addProductToFavourite,
+  removeProductFromFavourite,
 } from "../../controllers/products";
 import { uploadProductImage } from "../../config/configOptions";
 
@@ -22,4 +25,9 @@ router.post(
   [sellerRoleCheck, uploadProductImage.array("images")],
   rootErrorHandler(addProduct)
 );
+router
+  .route("/favourite")
+  .get(rootErrorHandler(getFavouriteProducts))
+  .post(rootErrorHandler(addProductToFavourite))
+  router.delete("/favourite/:id", rootErrorHandler(removeProductFromFavourite));
 export { router as productRoutes };

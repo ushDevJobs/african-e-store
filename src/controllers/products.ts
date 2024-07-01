@@ -1,11 +1,12 @@
 import { Request, Response, NextFunction } from "express";
 import { prisma } from "../prisma";
-import { returnJSONSuccess } from "../utils/functions";
+import { returnJSONError, returnJSONSuccess } from "../utils/functions";
 import { validatecreateProduct } from "../schema/products";
 import { RequestUser } from "../types";
 import { InternalException } from "../exceptions/internal-exception";
 import { ErrorCode } from "../exceptions/root";
 import { BadRequest } from "../exceptions/bad-request";
+import { NotFound } from "../exceptions/not-found";
 
 export const updateProduct = async () => {};
 
@@ -76,4 +77,84 @@ export const deleteProductById = async (req: Request, res: Response) => {
     },
   });
   return returnJSONSuccess(res);
+};
+export const getFavouriteProducts = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const user = req.user as RequestUser;
+  try {
+    const favourite = await prisma.user.findFirstOrThrow({
+      where: {
+        id: user.id,
+      },
+      select: {
+        favouriteProducts: {
+          include: {
+            store:true,
+          }
+        },
+      },
+    });
+    returnJSONSuccess(res, { data: favourite.favouriteProducts });
+  } catch (error) {
+    next(new NotFound("User not found", ErrorCode.NOT_FOUND));
+  }
+};
+export const addProductToFavourite = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { id } = req.body;
+
+  const user = req.user as RequestUser;
+  if (id) {
+    try {
+      await prisma.user.update({
+        where: {
+          id: user.id,
+        },
+        data: {
+          favouriteProducts: {
+            connect: [{ id }],
+          },
+        },
+      });
+      return returnJSONSuccess(res);
+    } catch (error) {
+      return returnJSONError(res, { message: "Unable to add to favourite" });
+    }
+  } else {
+    next(new BadRequest("Invalid Request Parameter", ErrorCode.BAD_REQUEST));
+  }
+};
+export const removeProductFromFavourite = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { id } = req.params;
+
+  const user = req.user as RequestUser;
+  if (id) {
+    try {
+      await prisma.user.update({
+        where: {
+          id: user.id,
+        },
+        data: {
+          favouriteProducts: {
+            disconnect: [{ id }],
+          },
+        },
+      });
+      return returnJSONSuccess(res);
+    } catch (error) {
+      return returnJSONError(res, { message: "Unable to add to favourite" });
+    }
+  } else {
+    next(new BadRequest("Invalid Request Parameter", ErrorCode.BAD_REQUEST));
+  }
 };
