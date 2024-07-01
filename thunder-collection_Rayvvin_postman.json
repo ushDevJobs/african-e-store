@@ -1,6 +1,6 @@
 {
     "info": {
-        "_postman_id": "785509dc-a245-4f59-94b9-479cebd61fce",
+        "_postman_id": "df902d7c-33c6-4208-be92-579d7f3f8b9e",
         "name": "Rayvvin",
         "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
         "description": ""
@@ -33,7 +33,7 @@
                                     "language": "json"
                                 }
                             },
-                            "raw": "{\n  \"email\":\"testnet041@gmail.com\",\n  \"password\":\"Segunade041@\"\n}"
+                            "raw": "{\n  \"email\":\"segunade041@gmail.com\",\n  \"password\":\"password\"\n}"
                         }
                     }
                 },
@@ -387,27 +387,6 @@
                     }
                 },
                 {
-                    "name": "Get Product By Id",
-                    "request": {
-                        "method": "GET",
-                        "url": {
-                            "raw": "http://localhost:3000/api/stores/store/product/clxg6pce40000goqspbxwannr",
-                            "path": [
-                                "api",
-                                "stores",
-                                "store",
-                                "product",
-                                "clxg6pce40000goqspbxwannr"
-                            ],
-                            "protocol": "http",
-                            "host": [
-                                "localhost"
-                            ],
-                            "port": "3000"
-                        }
-                    }
-                },
-                {
                     "name": "Add Store Description",
                     "request": {
                         "method": "PATCH",
@@ -475,6 +454,25 @@
                                     "type": "file"
                                 }
                             ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get favourite Stores",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "http://localhost:3000/api/stores/favourite",
+                            "path": [
+                                "api",
+                                "stores",
+                                "favourite"
+                            ],
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3000"
                         }
                     }
                 }
@@ -607,19 +605,6 @@
                         "method": "GET",
                         "url": {
                             "raw": "http://localhost:3000/api/stores/all",
-                            "query": [
-                                {
-                                    "key": "_limit",
-                                    "value": "3",
-                                    "disabled": true
-                                },
-                                {
-                                    "key": "_page",
-                                    "value": "1",
-                                    "disabled": true
-                                }
-                            ],
-                            "variable": [],
                             "path": [
                                 "api",
                                 "stores",
@@ -681,51 +666,6 @@
                     }
                 },
                 {
-                    "name": "Get Categories From a Store",
-                    "request": {
-                        "method": "GET",
-                        "url": {
-                            "raw": "http://localhost:3000/api/stores/store/id/clxg6pce40000goqspbxwannr/categories",
-                            "path": [
-                                "api",
-                                "stores",
-                                "store",
-                                "id",
-                                "clxg6pce40000goqspbxwannr",
-                                "categories"
-                            ],
-                            "protocol": "http",
-                            "host": [
-                                "localhost"
-                            ],
-                            "port": "3000"
-                        }
-                    }
-                },
-                {
-                    "name": "Get Product By Id",
-                    "request": {
-                        "method": "GET",
-                        "url": {
-                            "raw": "http://localhost:3000/api/stores/store/id/clxg6pce40000goqspbxwannr/product/clxg75on70001goqsbvtgxg2a",
-                            "path": [
-                                "api",
-                                "stores",
-                                "store",
-                                "id",
-                                "clxg6pce40000goqspbxwannr",
-                                "product",
-                                "clxg75on70001goqsbvtgxg2a"
-                            ],
-                            "protocol": "http",
-                            "host": [
-                                "localhost"
-                            ],
-                            "port": "3000"
-                        }
-                    }
-                },
-                {
                     "name": "Add Store As Favourite",
                     "request": {
                         "method": "POST",
@@ -754,15 +694,40 @@
                     }
                 },
                 {
-                    "name": "Get favourite Stores",
+                    "name": "Get Categories of a Store",
                     "request": {
                         "method": "GET",
                         "url": {
-                            "raw": "http://localhost:3000/api/stores/favourite",
+                            "raw": "http://localhost:3000/api/stores/store/id/clxzbyp0q0001n7p96lu2xg1w/categories",
                             "path": [
                                 "api",
                                 "stores",
-                                "favourite"
+                                "store",
+                                "id",
+                                "clxzbyp0q0001n7p96lu2xg1w",
+                                "categories"
+                            ],
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3000"
+                        }
+                    }
+                },
+                {
+                    "name": "Get Products of a Store",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "http://localhost:3000/api/stores/store/id/clxzbyp0q0001n7p96lu2xg1w/products",
+                            "path": [
+                                "api",
+                                "stores",
+                                "store",
+                                "id",
+                                "clxzbyp0q0001n7p96lu2xg1w",
+                                "products"
                             ],
                             "protocol": "http",
                             "host": [
