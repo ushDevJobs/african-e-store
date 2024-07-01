@@ -273,16 +273,42 @@ export const getStoreProducts = async (
   next: NextFunction
 ) => {
   const user = req.user as RequestUser;
-  const product = await prisma.store.findFirstOrThrow({
+  const store = await prisma.store.findFirstOrThrow({where: {userId:user.id}, select: {id:true}})
+  const categories = await prisma.store.findFirstOrThrow({
     where: {
-      userId: user.id,
+      id:store.id,
     },
     select: {
-      products: true,
+      products: {
+        select: {
+          categories: {
+            select: {
+              id:true,
+              name:true,
+              products: {
+                where: {
+                  storeId:store.id
+                }
+              }
+            }
+          },
+        },
+      },
     },
   });
+  // const product = await prisma.store.findFirstOrThrow({
+  //   where: {
+  //     userId: user.id,
+  //   },
+  //   select: {
+  //     products: true,
+  //   },
+  // });
 
-  return res.status(200).json({ status: true, data: product.products });
+  return res.status(200).json({ status: true, data: categories.products
+    .flat()
+    .map((categ) => categ.categories)
+    .flat() });
 };
 export const updateStoreDescription = async (
   req: Request,

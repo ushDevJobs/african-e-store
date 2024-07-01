@@ -161,7 +161,6 @@ export const initializePassport = (passport: PassportStatic) => {
               },
             });
           }
-          console.log(user);
           return done(null, {
             id: user.id,
             email: user.email,

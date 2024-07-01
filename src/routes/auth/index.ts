@@ -12,6 +12,7 @@ import {
 import passport from "passport";
 import { rootErrorHandler } from "../../root-error-handler";
 import { checkAuth } from "../../middlewares/auth";
+import { RequestUser } from "../../types";
 
 const router = Router();
 
@@ -35,10 +36,11 @@ router.get(
 router.get(
   "/google/callback",
   passport.authenticate("google", {
-    successRedirect: "http://localhost:2500/",
     failureRedirect: "google/error",
     failureFlash: true,
-  })
+  }), (req, res) => {
+    res.redirect(`http://localhost:2500${(req.user as RequestUser).accountType === "SELLER" ? "/seller" : "/"}`)
+  }
 );
 router.get("/login/error", rootErrorHandler(loginAuthError));
 router.get("/google/error", rootErrorHandler(googleAuthError));
