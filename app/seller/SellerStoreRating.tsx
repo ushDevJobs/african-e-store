@@ -4,6 +4,8 @@ import { DotIcon, GreenStarIcon, UserIcon } from "../components/SVGs/SVGicons";
 import useResponsiveness from "../components/hooks/responsiveness-hook";
 import { SellerStoreResponse } from "../components/models/ISellerStore";
 import { StoreStoreRatingSkeletonLoader } from "../stores/StoresSkeleton";
+import Image from "next/image";
+import ApiRoutes from "../api/apiRoutes";
 
 type Props = {
   store: SellerStoreResponse | undefined;
@@ -24,7 +26,16 @@ const SellerPageStoreRating = ({ store, isFetchingStore }: Props) => {
         <div className={styles.storeInfo}>
           <div className={styles.storelhs}>
             <span className="bg-[#2C7865] h-fit p-3 rounded-full">
-              <UserIcon />
+              {store!.storeDetails.image === "" ? (
+                <UserIcon />
+              ) : (
+                <Image
+                  src={`${ApiRoutes.BASE_URL_DEV}/${ApiRoutes.storeImages}/${store?.storeDetails.image}`}
+                  alt="Logo"
+                  width={50}
+                  height={50}
+                />
+              )}
             </span>
             <div className={styles.info}>
               <h3 className="text-lg md:text-xl lg:text-2xl text-[#828282] mb-1 font-semibold underline">
@@ -55,29 +66,29 @@ const SellerPageStoreRating = ({ store, isFetchingStore }: Props) => {
                 {onDesktop && <p className="text-[#828282]">Rating</p>}
               </div>
 
-                <div className={styles.ratingProgress}>
-                    {store?.ratingWithPercent.map((item, index) => {
-                    return (
-                        <div className={styles.value} key={index}>
-                        <p>
-                            {item.rating}{" "}
-                            <span>
-                            <GreenStarIcon />
-                            </span>
-                        </p>
-                        <div className={styles.progress}>
-                            <div
-                            className={styles.bar}
-                            style={{ width: `${item.percentage}%` }}
-                            ></div>
-                        </div>
-                        <p className={styles.rangeValue}>
-                            {item.total!.toLocaleString()}
-                        </p>
-                        </div>
-                    );
-                    })}
-                </div>
+              <div className={styles.ratingProgress}>
+                {store?.ratingWithPercent.map((item, index) => {
+                  return (
+                    <div className={styles.value} key={index}>
+                      <p>
+                        {item.rating}{" "}
+                        <span>
+                          <GreenStarIcon />
+                        </span>
+                      </p>
+                      <div className={styles.progress}>
+                        <div
+                          className={styles.bar}
+                          style={{ width: `${item.percentage}%` }}
+                        ></div>
+                      </div>
+                      <p className={styles.rangeValue}>
+                        {item.total!.toLocaleString()}
+                      </p>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           </div>
         </div>
