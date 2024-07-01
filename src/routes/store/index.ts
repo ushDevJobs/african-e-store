@@ -18,7 +18,7 @@ import {
 } from "../../controllers/store";
 import { rootErrorHandler } from "../../root-error-handler";
 import { checkStore, sellerRoleCheck } from "../../middlewares/roles";
-import { uploadUsertImage } from "../../config/configOptions";
+import { uploadStoreImage, uploadUsertImage } from "../../config/configOptions";
 
 const router = Router();
 router.get("/all", rootErrorHandler(getAllStores));
@@ -65,7 +65,7 @@ router.patch(
 );
 router.patch(
   "/store/profile",
-  [sellerRoleCheck, checkStore, uploadUsertImage.single("image")],
+  [sellerRoleCheck, checkStore, uploadStoreImage.single("image")],
   rootErrorHandler(updateStoreProfile)
 );
 export { router as storeRoutes };
