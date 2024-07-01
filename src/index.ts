@@ -17,6 +17,7 @@ import logger from "./utils/logger";
 import passport from "passport";
 import { initializePassport } from "./config/passport.config";
 import flash from "express-flash";
+import path from "path";
 
 // express middleware
 process.on("uncaughtException", (error) => {
@@ -38,6 +39,8 @@ app.use(morgan("dev"));
 initializePassport(passport);
 app.use(passport.initialize());
 app.use(passport.session());
+// images route
+app.use("/images", express.static(path.join(__dirname, "images")))
 app.use("/api", router);
 app.use(errorHandler);
 server.listen(PORT, () => logger.info(`Live on http://localhost:${PORT}`));

@@ -40,8 +40,8 @@ router.get(
 );
 router
   .route("/favourite")
-  .get(checkStore, rootErrorHandler(getFavouriteStores))
-  .post(checkStore, rootErrorHandler(addStoreToFavourite));
+  .get(rootErrorHandler(getFavouriteStores))
+  .post(rootErrorHandler(addStoreToFavourite));
 router
   .route("/store")
   .get(sellerRoleCheck, rootErrorHandler(getStoreByUserLogged))

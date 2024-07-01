@@ -68,3 +68,12 @@ export const getProductById = async (req: Request, res: Response) => {
   });
   return returnJSONSuccess(res, { data: product });
 };
+export const deleteProductById = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const product = await prisma.product.delete({
+    where: {
+      id,
+    },
+  });
+  return returnJSONSuccess(res);
+};
