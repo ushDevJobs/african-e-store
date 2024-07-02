@@ -185,6 +185,18 @@ export function useStoreCategories() {
 
   return fetchStoreCategories;
 }
+export function useStoreProducts() {
+  async function fetchStoreProducts(id: string) {
+    // Construct the URL with the ID and categories endpoint
+      const url = `api/stores/store/id/${id}/products`;
+    // Fire the request
+    const response = await API.get(url);
+    // Return the response
+    return response;
+  }
+
+  return fetchStoreProducts;
+}
 
 // Api call to fetch product
 export function useFetchProduct() {
@@ -224,6 +236,18 @@ export function useFetchSellerStore() {
   return fetchSellerStore;
 }
 
+export function useFetchSellerProducts() {
+    async function fetchSellerProducts() {
+        // Fire the request
+        const response = await API.get(ApiRoutes.FetchSellerProducts);
+
+        // Return the response
+        return response;
+    }
+
+    return fetchSellerProducts;
+}
+
 // Api call to add product
 export function useAddProduct() {
   /**
@@ -257,6 +281,22 @@ export function useAddStoreToFavorite() {
 
   // Return function to add StoreToFavorite
   return addStoreToFavorite;
+}
+export function useRemoveStoreFromFavorite() {
+  /**
+   * Send request to API server to removr store from favorite
+   * @returns The response for the API request
+   */
+  async function RemoveFavoriteStore(id: string) {
+    // Send request to add store to favorite
+      let response = await API.delete(`${ApiRoutes.RemoveFavoriteStore}/${id}`);
+
+    // Return response
+    return response;
+  }
+
+  // Return function to add StoreToFavorite
+  return RemoveFavoriteStore;
 }
 
 // Api call to fetch favorite stores
