@@ -4,10 +4,13 @@ import styles from './SingleCategory.module.scss'
 import { FavoriteIcon, GreenStarIcon, RatingIcon, UserIcon } from '@/app/components/SVGs/SVGicons'
 import useResponsiveness from '@/app/components/hooks/responsiveness-hook'
 import Link from 'next/link'
+import { ProductResponse } from '@/app/components/models/IProduct'
 
-type Props = {}
+type Props = {
+    product: ProductResponse | undefined
+}
 
-const SingleCategoryReviews = (props: Props) => {
+const SingleCategoryReviews = ({ product }: Props) => {
     const windowRes = useResponsiveness();
     const isMobile = windowRes.width && windowRes.width < 768;
     const onMobile = typeof isMobile == 'boolean' && isMobile;
@@ -56,23 +59,23 @@ const SingleCategoryReviews = (props: Props) => {
                         {onMobile && <div className={styles.top_lhs}>
                             <span><UserIcon /></span>
                             <div className={styles.product}>
-                                <Link href={'/stores'} className='text-[#828282] text-sm underline cursor-pointer'>Chavo global mobile device store LTD.</Link>
+                                <Link href={'/stores'} className='text-[#828282] text-sm underline cursor-pointer'>{product?.store.name}</Link>
                                 <p className='text-[#828282] text-xs'>98% positive feedback</p>
                             </div>
                         </div>}
                         {onDesktop && <div className={styles.top_lhs}>
                             <span><UserIcon /></span>
                             <div className={styles.product}>
-                                <h3 className='text-[#828282] text-lg'>Chavo global mobile device store LTD.</h3>
+                                <h3 className='text-[#828282] text-lg'>{product?.store.name}</h3>
                                 <p className='text-[#828282] text-base'>98% positive feedback <Link href={'/contact-seller'} className='cursor-pointer text-sm text-[#2C7865] font-bold'>Contact seller </Link></p>
                             </div>
                         </div>}
                         {onDesktop && <div className={styles.top_rhs}>
-                            <span><FavoriteIcon /></span>
-                            <Link href={'/stores'}>Visit store</Link>
+                            {/* <span><FavoriteIcon /></span> */}
+                            <Link href={`/stores/${product?.store.id}`}>Visit store</Link>
                         </div>}
                     </div>
-                    <div className={styles.ratings}>
+                    {/* <div className={styles.ratings}>
                         <h3 className='text-[#6F6F6F] text-base font-semibold mb-5'>Product Rating </h3>
                         {onDesktop && <div className={styles.rating}>
                             <div className={styles.average}>
@@ -115,7 +118,7 @@ const SingleCategoryReviews = (props: Props) => {
                                     })}
                                 </div>
                             </div>}
-                    </div>
+                    </div> */}
 
                     <div className={styles.reviewContainer}>
                         <div className={styles.review}>

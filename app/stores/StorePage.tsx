@@ -5,7 +5,7 @@ import Image from 'next/image'
 import images from '@/public/images'
 import { FavoriteIcon, FilledLoveIcon, SearchIcon, UkIcon } from '../components/SVGs/SVGicons'
 import { CategoriesHeader } from '../components/CategoriesHeader'
-import { useAddStoreToFavorite, useFetchAllStores } from '../api/apiClients'
+import { useAddStoreToFavorite, useFetchAllStores, useRemoveStoreFromFavorite } from '../api/apiClients'
 import { AllStoresResponse } from '../components/models/IStores'
 import { createCustomErrorMessages } from '../components/constants/catchError'
 import { toast } from 'sonner'
@@ -15,13 +15,14 @@ import Link from 'next/link'
 type Props = {}
 
 const StorePage = (props: Props) => {
-    const isFavorite = true
     const fetchStores = useFetchAllStores()
     const addStoreToFavorite = useAddStoreToFavorite()
+    const removeStoreFromFavorite = useRemoveStoreFromFavorite()
     const [searchQuery, setSearchQuery] = useState('')
 
     const [stores, setStores] = useState<AllStoresResponse[]>();
     const [isFetchingStores, setIsFetchingStores] = useState<boolean>(true);
+
 
     async function handleFetchStores() {
 
@@ -31,6 +32,7 @@ const StorePage = (props: Props) => {
         await fetchStores()
             .then((response) => {
                 console.log("Response: ", response.data.data);
+
                 setStores(response.data.data);
             })
             .catch((error) => {
@@ -49,24 +51,54 @@ const StorePage = (props: Props) => {
     async function handleAddStoreToFavorite(storeId: string) {
 
         await addStoreToFavorite(storeId)
-                .then((response) => {
+            .then((response) => {
 
-                    // Log response 
-                    console.log(response);
+                // Log response 
+                console.log(response);
+                const updatedStores = stores?.map(store =>
+                    store.id === storeId ? { ...store, favourite: [response.data] } : store
+                );
+                setStores(updatedStores);
+                handleFetchStores()
+                // Display success 
+                toast.success('Store added successfully.');
+            })
+            .catch((error) => {
+                // Display error
+                const errorMessage = createCustomErrorMessages(error.response?.data)
+                toast.error(errorMessage)
+            })
+            .finally(() => {
 
-                    // Display success 
-                    toast.success('Store added successfully.');
-                })
-                .catch((error) => {
-                    // Display error
-                    const errorMessage = createCustomErrorMessages(error.response?.data)
-                    toast.error(errorMessage)
-                })
-                .finally(() => {
+                // Close laoder 
+                // setIsLoading(false);
+            })
+    };
+    async function handleRemoveStoreFromFavorite(storeId: string) {
 
-                    // Close laoder 
-                    // setIsLoading(false);
-                })
+        await removeStoreFromFavorite(storeId)
+            .then((response) => {
+
+                // Log response 
+                console.log(response);
+                const updatedStores = stores?.map(store =>
+                    store.id === storeId ? { ...store, favourite: [response.data] } : store
+                );
+                setStores(updatedStores);
+                handleFetchStores()
+                // Display success 
+                toast.success('Store removed from favorites successfully.');
+            })
+            .catch((error) => {
+                // Display error
+                const errorMessage = createCustomErrorMessages(error.response?.data)
+                toast.error(errorMessage)
+            })
+            .finally(() => {
+
+                // Close laoder 
+                // setIsLoading(false);
+            })
     };
 
     useEffect(() => {
@@ -91,26 +123,17 @@ const StorePage = (props: Props) => {
                         <div className={styles.card} key={index}>
                             <div className={styles.image}>
                                 <Image fill src={images.cashew} alt='product image' />
-                                {isFavorite ?
-                                    <span
-                                        className='absolute right-2 top-2 bg-white p-3 cursor-pointer rounded-full'
-                                        onClick={(e) => {
-                                            e.preventDefault(); // Prevent navigation on click
+                                <span
+                                    className='absolute right-2 top-2 bg-white p-3 cursor-pointer rounded-full'
+                                    onClick={(e) => {
+                                        e.preventDefault(); // Prevent navigation on click
+                                        if (store.favourite.length === 0) {
                                             handleAddStoreToFavorite(store.id);
-                                        }}
-                                    >
-                                        <FilledLoveIcon />
-                                    </span>
-                                    :
-                                    <span
-                                        className='absolute right-2 top-2 bg-white p-3 cursor-pointer rounded-full'
-                                        onClick={(e) => {
-                                            e.preventDefault(); // Prevent navigation on click
-                                            handleAddStoreToFavorite(store.id);
-                                        }}
-                                    >
-                                        <FavoriteIcon />
-                                    </span>}
+                                        } else {
+                                            handleRemoveStoreFromFavorite(store.id);
+                                        }
+                                    }}>
+                                    {store.favourite.length === 0 ? <FavoriteIcon /> : <FilledLoveIcon />}                                </span>
                             </div>
                             <Link href={`/stores/${store.id}`} className="flex flex-col gap-2 w-fit">
                                 <h4 className='text-[#828282] text-base'>{store.name} </h4>
@@ -124,12 +147,12 @@ const StorePage = (props: Props) => {
             {!stores && !filteredStores && isFetchingStores && (
                 <ComponentLoader lightTheme svgStyle={{ width: '62px' }} />
             )}
-           {!stores && !isFetchingStores &&
-           <p className={styles.loaderText}>No stores found</p>
-           }
-           {filteredStores?.length == 0 && !isFetchingStores &&
-           <p className={styles.loaderText}>No result found</p>
-           }
+            {!stores && !isFetchingStores &&
+                <p className={styles.loaderText}>No stores found</p>
+            }
+            {filteredStores?.length == 0 && !isFetchingStores &&
+                <p className={styles.loaderText}>No result found</p>
+            }
         </div>
     )
 }

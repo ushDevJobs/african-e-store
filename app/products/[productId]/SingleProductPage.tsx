@@ -48,7 +48,7 @@ const SingleProductPage = ({params}: Props) => {
         <div className={styles.main}>
             <AddProductToCart product={product} isFetchingProduct={isFetchingProduct} />
             <SingleCategoriesDetails product={product} />
-            <SingleCategoryReviews />
+            <SingleCategoryReviews product={product} />
             <Recommendations />
         </div>
     )

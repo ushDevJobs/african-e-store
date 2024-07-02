@@ -6,8 +6,8 @@ import SellerProduct from './SellerProduct';
 import AddProductModal from './AddProductModal';
 import AboutSeller from './AboutSeller';
 import SellerPageStoreRating from './SellerStoreRating';
-import { useFetchSellerStore } from '../api/apiClients';
-import { SellerStoreResponse } from '../components/models/ISellerStore';
+import { useFetchSellerProducts, useFetchSellerStore } from '../api/apiClients';
+import { SellerProductsResponse, SellerStoreResponse } from '../components/models/ISellerStore';
 import { toast } from 'sonner';
 import { createCustomErrorMessages } from '../components/constants/catchError';
 type Props = {};
@@ -21,6 +21,7 @@ enum TabIndex {
 
 const SellerHomePage = (props: Props) => {
     const fetchSellerStore = useFetchSellerStore()
+    const fetchSellerProducts = useFetchSellerProducts()
     const [activeTab, setActiveTab] = useState<TabIndex>(TabIndex.Shop);
     const [isAddProductModalVisible, setIsAddProductModalVisible] = useState(false);
     const windowRes = useResponsiveness();
@@ -29,7 +30,9 @@ const SellerHomePage = (props: Props) => {
     const onDesktop = typeof isMobile == 'boolean' && !isMobile;
 
     const [store, setStore] = useState<SellerStoreResponse>()
+    const [products, setProducts] = useState<SellerProductsResponse[]>()
     const [isFetchingStore, setIsFetchingStore] = useState<boolean>(true);
+    const [isFetchingProducts, setIsFetchingProducts] = useState<boolean>(true);
 
     async function handleFetchStore() {
 
@@ -49,9 +52,28 @@ const SellerHomePage = (props: Props) => {
                 setIsFetchingStore(false);
             });
     }
+    async function handleFetchProducts() {
+
+        // Start loader
+        setIsFetchingProducts(true);
+
+        await fetchSellerProducts()
+            .then((response) => {
+                console.log("Response: ", response.data.data);
+                setProducts(response.data.data);
+            })
+            .catch((error) => {
+                const errorMessage = createCustomErrorMessages(error.response?.data)
+                toast.error(errorMessage);
+            })
+            .finally(() => {
+                setIsFetchingProducts(false);
+            });
+    }
 
     useEffect(() => {
         handleFetchStore();
+        handleFetchProducts()
     }, []);
     return (
         <div className={styles.main}>
@@ -59,6 +81,7 @@ const SellerHomePage = (props: Props) => {
             <AddProductModal
                 visibility={isAddProductModalVisible}
                 setVisibility={setIsAddProductModalVisible}
+                handleFetchProducts={handleFetchProducts}
             />
             {onMobile &&
                 activeTab === TabIndex.Shop &&
@@ -83,7 +106,7 @@ const SellerHomePage = (props: Props) => {
                             onClick={() => setActiveTab(TabIndex.Shop)}
                             className={activeTab === TabIndex.Shop ? styles.active : ''}
                         >
-                            Shop
+                            My products
                         </span>
                         <span
                             onClick={() => setActiveTab(TabIndex.About)}
@@ -104,7 +127,8 @@ const SellerHomePage = (props: Props) => {
                             Customer Feedbacks
                         </span>
                     </div>
-                    {activeTab === TabIndex.Shop && <SellerProduct />}
+                    {activeTab === TabIndex.Shop && <SellerProduct products={products}
+                        isFetchingProducts={isFetchingProducts} setIsAddProductModalVisible={setIsAddProductModalVisible} />}
                     {activeTab === TabIndex.About && <AboutSeller />}
                     {activeTab === TabIndex.Draft && <AboutSeller />}
                     {activeTab === TabIndex.Feedback && <h1>Feedback</h1>}

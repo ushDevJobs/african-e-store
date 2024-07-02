@@ -134,7 +134,7 @@ const SignupPage = (props: Props) => {
                     // Display success
                     toast.success("You have successfully created an account.");
 
-                    const {userId} = response.data
+                    const { userId } = response.data
                     // Redirect to verification
                     router.push(`/verification?id=${userId}`)
                 })
@@ -270,9 +270,9 @@ const SignupPage = (props: Props) => {
                     <div className={styles.formField}>
                         <label htmlFor="telephone"><span>*</span>Tel</label>
                         <div className={styles.dial}>
-                            <select name="" id="">
+                            {/* <select name="" id="">
                                 <option value="+234">+234</option>
-                            </select>
+                            </select> */}
                             <input
                                 type="text"
                                 name="telephone"

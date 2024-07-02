@@ -4,7 +4,7 @@ import { StoreSettingsBarSkeletonLoader } from '../stores/StoresSkeleton';
 import { StoreCategoriesResponse } from './models/IStores';
 
 type Props = {
-    storeCategories: StoreCategoriesResponse | undefined
+    storeCategories: StoreCategoriesResponse[] | undefined
     isFetchingStoreCategories: boolean
     activeCategory: string
 }
@@ -13,19 +13,19 @@ const StoreCategoriesSettingsBar = ({ storeCategories, isFetchingStoreCategories
 
     return (
         <>
-            {!storeCategories?.categories && isFetchingStoreCategories ? <StoreSettingsBarSkeletonLoader /> : (
+            {!storeCategories && isFetchingStoreCategories ? <StoreSettingsBarSkeletonLoader /> : (
                 <div className={styles.settingsBar}>
                     <div className={styles.catgoriesFilter}>
                         <h3>Categories</h3>
                         <ul>
-                            {storeCategories?.categories && storeCategories.categories.map((category) => (
+                            {storeCategories && storeCategories.map((category) => (
                                 <li key={category.id}
                                     className={activeCategory === category.name ? styles.active : ''}
                                 >
                                     {category.name}
                                 </li>
                             ))}
-                            {storeCategories &&
+                            {!storeCategories &&
                                 <li className='text-center flex flex-col items-center justify-center mt-4 text-gray-400 text-base'>
                                     No category available</li>
                             }
