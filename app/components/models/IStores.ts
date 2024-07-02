@@ -1,4 +1,4 @@
-import { Rating } from "./ISellerStore";
+import { Rating } from './ISellerStore';
 
 export interface AllStoresResponse {
   id: string;
@@ -7,6 +7,11 @@ export interface AllStoresResponse {
   image: string | null;
   location: string;
   user: User;
+  favourite: Favorite[];
+}
+
+export interface Favorite {
+  id: string;
 }
 
 export interface User {
@@ -60,29 +65,38 @@ export interface ASingleStoreResponse {
   totalItemSold: number;
 }
 
+// export interface StoreProducts {
+//   id: string;
+//   name: string;
+//   itemCondition: string;
+//   amount: number;
+//   quantity: number;
+//   details: string;
+//   publish: true;
+//   coverImage: string;
+//   images: null;
+//   returnPolicy: string;
+//   location: string;
+//   storeId: string;
+//   createdAt: string;
+//   updatedAt: string;
+// }
+
 export interface StoreProducts {
   id: string;
   name: string;
   itemCondition: string;
+  salesTypenumber: string;
   amount: number;
   quantity: number;
   details: string;
-  publish: true;
   coverImage: string;
-  images: null;
-  returnPolicy: string;
-  location: string;
-  storeId: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface StoreCategories {
-  id: string;
-  name: string;
-  products: StoreProducts[];
+  favourite: Favorite[];
 }
 
 export interface StoreCategoriesResponse {
-  categories: StoreCategories[];
+  id: string;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
 }

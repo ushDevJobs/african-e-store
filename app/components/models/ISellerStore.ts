@@ -2,7 +2,7 @@ export interface StoreDetails {
   name: string;
   id: string;
   description: string;
-  image: null;
+  image: string;
 }
 
 export interface AvgRating {
@@ -21,4 +21,26 @@ export interface SellerStoreResponse {
   ratingWithPercent: Rating[];
   feedback: number;
   totalItemSold: number;
+}
+
+export interface SellerProductsResponse {
+  id: string;
+  name: string;
+  itemCondition: string;
+  salesType: string;
+  endBiddingDate: string;
+  amount: number;
+  quantity: number;
+  details: string;
+  publish: boolean;
+  coverImage: string;
+  images: string[];
+  returnPolicy: null;
+  location: null;
+  storeId: string;
+  shippingDetails: '{}';
+  discount: false;
+  discountPercentage: number;
+  createdAt: string;
+  updatedAt: string;
 }

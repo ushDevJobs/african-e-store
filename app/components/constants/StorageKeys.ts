@@ -10,4 +10,5 @@ export class StorageKeys {
    *  Storage key for all categories
    */
   static AllCategories = 'AllCategories';
+  static SavedStore = 'SavedStore';
 }

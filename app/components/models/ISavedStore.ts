@@ -1,10 +1,10 @@
+import { StoreDetails } from "./ISellerStore";
+import { AverageRating, RatingWithPercent } from "./IStores";
+
 export interface SavedStoreResponse {
-  id: string;
-  name: string;
-  description: string;
-  image: string;
-  location: string;
-  userId: string;
-  createdAt: string;
-  updatedAt: string;
+  storeDetails: StoreDetails;
+  avgRating: AverageRating;
+  ratingWithPercent: RatingWithPercent[];
+  feedback: number;
+  totalItemSold: number;
 }
