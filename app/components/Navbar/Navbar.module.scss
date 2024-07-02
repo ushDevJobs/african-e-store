@@ -182,11 +182,14 @@
         flex-direction: column;
         padding: 18px;
         gap: 18px;
-        
 
-        a, button {
+        a,
+        button {
           color: #6f6f6f;
           text-align: left;
+          &:hover {
+            color: #2c7865;
+          }
         }
       }
     }
