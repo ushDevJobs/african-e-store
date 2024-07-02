@@ -37,13 +37,17 @@ export const addProduct = async (
   });
 
   try {
+    console.log(req.body.date);
     await prisma.product.create({
       data: {
         coverImage: images.length > 0 ? images[0] : "",
         itemCondition: validatedProduct.condition,
         name: validatedProduct.name,
         amount: validatedProduct.price,
-        endBiddingDate: validatedProduct.date ? validatedProduct.date : null,
+        endBiddingDate:
+          req.body.data && req.body.date !== ""
+            ? new Date(req.body.date) || null
+            : null,
         images: JSON.stringify(images),
         details: validatedProduct.description,
         quantity: validatedProduct.quantity,
