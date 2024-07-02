@@ -30,7 +30,7 @@ const SellerPageStoreRating = ({ store, isFetchingStore }: Props) => {
                 <UserIcon />
               ) : (
                 <Image
-                  src={`${ApiRoutes.BASE_URL_DEV}/${ApiRoutes.storeImages}/${store?.storeDetails.image}`}
+                  src={store!.storeDetails.image}
                   alt="Logo"
                   width={50}
                   height={50}
