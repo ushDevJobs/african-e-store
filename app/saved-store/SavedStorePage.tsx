@@ -13,7 +13,7 @@ type Props = {}
 const SavedStorePage = (props: Props) => {
     const fetchSavedStores = useFetchFavoriteStores()
     const [savedStoreStores, setSavedStoreStores] = useState<SavedStoreResponse[]>()
-    const [isFetchingSavedStores, setIsFetchingSavedStores] = useState<boolean>(false);
+    const [isFetchingSavedStores, setIsFetchingSavedStores] = useState<boolean>(true);
     const removeStoreFromFavorite = useRemoveStoreFromFavorite()
 
     async function handleFetchSavedStores() {
@@ -46,9 +46,10 @@ const SavedStorePage = (props: Props) => {
                     store.storeDetails.id === storeId ? { ...store, favourite: [response.data] } : store
                 );
                 setSavedStoreStores(updatedStores);
-                handleFetchSavedStores()
+
                 // Display success 
                 toast.success('Store removed from favorites successfully.');
+                handleFetchSavedStores()
             })
             .catch((error) => {
                 // Display error
