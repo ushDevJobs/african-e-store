@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { prisma } from "../prisma";
 import {
+  createPrismaError,
   extractFullUrlProducts,
   returnJSONError,
   returnJSONSuccess,
@@ -11,6 +12,8 @@ import { InternalException } from "../exceptions/internal-exception";
 import { ErrorCode } from "../exceptions/root";
 import { BadRequest } from "../exceptions/bad-request";
 import { NotFound } from "../exceptions/not-found";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
+import { DatabaseException } from "../exceptions/datebase-exception";
 
 export const updateProduct = async () => {};
 
@@ -52,14 +55,27 @@ export const addProduct = async (
       },
     });
     return returnJSONSuccess(res);
-  } catch (error) {
-    next(
-      new InternalException(
-        "Failed to create product",
-        ErrorCode.FAILED_TO_ADD_PRODUCT,
-        error
-      )
-    );
+  } catch (error: any) {
+    const generatedError = createPrismaError(error);
+    if (generatedError) {
+      next(
+        new DatabaseException(
+          generatedError,
+          400,
+          ErrorCode.DUPLICATE_FIELD,
+          error
+        )
+      );
+    } else {
+      next(
+        new DatabaseException(
+          "Failed to create product",
+          ErrorCode.FAILED_TO_ADD_PRODUCT,
+          500,
+          error
+        )
+      );
+    }
   }
 };
 

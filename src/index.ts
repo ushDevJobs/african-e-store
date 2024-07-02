@@ -40,7 +40,7 @@ initializePassport(passport);
 app.use(passport.initialize());
 app.use(passport.session());
 // images route
-app.use("/images", express.static(path.join(__dirname, "images")))
+app.use("/images", express.static(path.join(__dirname, "images")));
 app.use("/api", router);
 app.use(errorHandler);
 server.listen(PORT, () => logger.info(`Live on http://localhost:${PORT}`));

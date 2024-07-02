@@ -6,8 +6,28 @@ import { Request, Response } from "express";
 import { MailOptions } from "nodemailer/lib/sendmail-transport";
 import { Transporter } from "nodemailer";
 import nodemailer from "nodemailer";
+import {
+  PrismaClientKnownRequestError,
+  PrismaClientValidationError,
+} from "@prisma/client/runtime/library";
 // import { SendMail, cash, people, settings, tasks } from "../types";
-
+export const createPrismaError = (error: Error) => {
+  if (error instanceof PrismaClientKnownRequestError) {
+    let errorMessage;
+    switch (error.code) {
+      case "P2002":
+        errorMessage = "Cannot create multiple product with same name";
+        break;
+      default:
+        errorMessage = "Unable to perform request";
+    }
+    return errorMessage;
+  }
+  if (error instanceof PrismaClientValidationError) {
+    return "Invalid Data Sent";
+  }
+  return null;
+};
 export const generateRandomId = function (): string {
   let randomValues: string =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
