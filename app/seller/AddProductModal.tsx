@@ -69,11 +69,6 @@ const AddProductModal = ({
       .then((response) => {
         console.log("Response: ", response.data.data);
         setCategories(response.data.data);
-        // Persist all categories data in session storage
-        // sessionStorage.setItem(
-        //     StorageKeys.AllCategories,
-        //     JSON.stringify(response.data.data)
-        // );
       })
       .catch((error) => {
         const errorMessage = createCustomErrorMessages(error.response?.data);

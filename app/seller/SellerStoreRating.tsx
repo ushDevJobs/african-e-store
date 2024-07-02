@@ -26,7 +26,7 @@ const SellerPageStoreRating = ({ store, isFetchingStore }: Props) => {
         <div className={styles.storeInfo}>
           <div className={styles.storelhs}>
             <span className="bg-[#2C7865] h-fit p-3 rounded-full">
-              {store!.storeDetails.image === "" ? (
+              {/* {store!.storeDetails.image === "" ? (
                 <UserIcon />
               ) : (
                 <Image
@@ -35,7 +35,7 @@ const SellerPageStoreRating = ({ store, isFetchingStore }: Props) => {
                   width={50}
                   height={50}
                 />
-              )}
+              )} */}
             </span>
             <div className={styles.info}>
               <h3 className="text-lg md:text-xl lg:text-2xl text-[#828282] mb-1 font-semibold underline">

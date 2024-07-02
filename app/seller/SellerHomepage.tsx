@@ -97,7 +97,7 @@ const SellerHomePage = (props: Props) => {
                         className={styles.lhs}
                         onClick={() => setIsAddProductModalVisible(true)}
                     >
-                        <p className='cursor-pointer w-fit'> Add Products to store</p>
+                        <p className='cursor-pointer w-fit whitespace-nowrap'> Add Products to store</p>
                     </div>}
                 <div className={styles.rhs}>
                     {/* {activeTab === TabIndex.Shop && <div className={styles.search}><SearchIcon /> <input type="text" placeholder='Search items in shop' /></div>} */}
