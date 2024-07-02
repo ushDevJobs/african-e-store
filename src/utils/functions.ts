@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 import mysql from "mysql";
 dotenv.config({ path: "../.env" });
 
-import { Response } from "express";
+import { Request, Response } from "express";
 import { MailOptions } from "nodemailer/lib/sendmail-transport";
 import { Transporter } from "nodemailer";
 import nodemailer from "nodemailer";
@@ -16,7 +16,15 @@ export const generateRandomId = function (): string {
     .sort(() => 0.5 - Math.random())
     .join("");
 };
-
+export const extractFullUrlProducts = (req: Request) => {
+  return `${req.protocol}://${req["headers"].host}/images/product/`;
+};
+export const extractFullUrlStore = (req: Request) => {
+  return `${req.protocol}://${req["headers"].host}/images/store/`;
+};
+export const extractFullUrlUer = (req: Request) => {
+  return `${req.protocol}://${req["headers"].host}/images/store/`;
+};
 const transporter: Transporter = nodemailer.createTransport({
   service: "gmail",
   host: "smtp.gmail.com",

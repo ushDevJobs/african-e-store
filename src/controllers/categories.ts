@@ -19,17 +19,42 @@ export const getAllCategories = async (req: Request, res: Response) => {
   });
   const count = await prisma.category.count();
   const page = (+validatedPag.data?._page! - 1) * (_limit ? +_limit : count);
+  const condition =
+    req.query.condition === undefined
+      ? null
+      : req.query.condition === null
+      ? null
+      : req.query.condition === ""
+      ? null
+      : req.query.condition;
+  let addCondition = {};
+  if (condition) {
+    if ((condition as string).toLocaleLowerCase() === "1") {
+      addCondition = {
+        itemCondition: "NEW",
+      };
+    } else if ((condition as string).toLocaleLowerCase() === "2") {
+      addCondition = {
+        itemCondition: "USED",
+      };
+    } else if ((condition as string).toLocaleLowerCase() === "3") {
+      addCondition = {
+        itemCondition: "REFURBISHED",
+      };
+    }
+  }
   const fetchProduct =
     products === true || products === "true"
       ? {
           products: {
             where: {
               publish: true,
+              ...addCondition,
             },
           },
         }
       : {};
-
+  console.log(fetchProduct, condition);
   const countProducts =
     products === true || products === "true"
       ? {

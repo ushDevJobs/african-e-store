@@ -11,7 +11,7 @@ export const validatecreateProduct = z.object({
   price: z.coerce.number().min(0),
   salesType: z.enum(["ONCE", "BIDDING"]),
   category: z.string(),
-  date: z.coerce.date().optional(),
+  date: z.coerce.date().optional().nullable(),
   description: z.string(),
-  publish: z.enum(['true', 'false']),
+  publish: z.enum(["true", "false"]).catch("true"),
 });

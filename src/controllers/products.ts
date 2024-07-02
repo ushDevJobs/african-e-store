@@ -1,6 +1,10 @@
 import { Request, Response, NextFunction } from "express";
 import { prisma } from "../prisma";
-import { returnJSONError, returnJSONSuccess } from "../utils/functions";
+import {
+  extractFullUrlProducts,
+  returnJSONError,
+  returnJSONSuccess,
+} from "../utils/functions";
 import { validatecreateProduct } from "../schema/products";
 import { RequestUser } from "../types";
 import { InternalException } from "../exceptions/internal-exception";
@@ -17,7 +21,9 @@ export const addProduct = async (
 ) => {
   const user = req.user as RequestUser;
   const imagesArray = req.files as any[];
-  const images = imagesArray.map((image) => image.filename);
+  const images = imagesArray.map(
+    (image) => extractFullUrlProducts(req) + image.filename
+  );
   if (images.length === 0) {
     next(new BadRequest("Upload one or more image(s)", ErrorCode.BAD_REQUEST));
   }
@@ -30,15 +36,15 @@ export const addProduct = async (
   try {
     await prisma.product.create({
       data: {
-        coverImage: images.length > 0 ? images[0] : null,
+        coverImage: images.length > 0 ? images[0] : "",
         itemCondition: validatedProduct.condition,
         name: validatedProduct.name,
         amount: validatedProduct.price,
-        endBiddingDate: validatedProduct.date,
+        endBiddingDate: validatedProduct.date ? validatedProduct.date : null,
         images: JSON.stringify(images),
         details: validatedProduct.description,
         quantity: validatedProduct.quantity,
-        publish: validatedProduct.publish === 'false' ? false : true,
+        publish: validatedProduct.publish === "false" ? false : true,
         storeId: storeId.id,
         categories: {
           connect: [{ id: req.body.category }],
@@ -92,8 +98,8 @@ export const getFavouriteProducts = async (
       select: {
         favouriteProducts: {
           include: {
-            store:true,
-          }
+            store: true,
+          },
         },
       },
     });

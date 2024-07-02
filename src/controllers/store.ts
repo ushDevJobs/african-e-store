@@ -1,7 +1,11 @@
 import { NextFunction, Request, Response } from "express";
 import { RequestUser } from "../types";
 import { prisma } from "../prisma";
-import { returnJSONError, returnJSONSuccess } from "../utils/functions";
+import {
+  extractFullUrlStore,
+  returnJSONError,
+  returnJSONSuccess,
+} from "../utils/functions";
 import { NotFound } from "../exceptions/not-found";
 import { ErrorCode } from "../exceptions/root";
 import { validateCreateStore } from "../schema/store";
@@ -187,11 +191,11 @@ export const getProductsOfStoreById = async (
             select: {
               categories: {
                 select: {
-                  id:true,
-                  name:true,
+                  id: true,
+                  name: true,
                   products: {
                     where: {
-                      storeId:storeId
+                      storeId: storeId,
                     },
                     select: {
                       id: true,
@@ -211,8 +215,8 @@ export const getProductsOfStoreById = async (
                         },
                       },
                     },
-                  }
-                }
+                  },
+                },
               },
             },
           },
@@ -283,10 +287,13 @@ export const getStoreProducts = async (
   next: NextFunction
 ) => {
   const user = req.user as RequestUser;
-  const store = await prisma.store.findFirstOrThrow({where: {userId:user.id}, select: {id:true}})
+  const store = await prisma.store.findFirstOrThrow({
+    where: { userId: user.id },
+    select: { id: true },
+  });
   const categories = await prisma.store.findFirstOrThrow({
     where: {
-      id:store.id,
+      id: store.id,
     },
     select: {
       products: true,
@@ -338,7 +345,7 @@ export const updateStoreProfile = async (req: Request, res: Response) => {
   let tempImage =
     !!image?.filename && image?.filename !== ""
       ? {
-          image: image?.filename,
+          image: extractFullUrlStore(req) + image?.filename,
         }
       : {};
   const data = {
@@ -430,8 +437,14 @@ export const getFavouriteStores = async (
         favouriteStores: true,
       },
     });
-    const superFavStore = await Promise.all(favourite.favouriteStores.map( (fav) => getStoreFullDetails(fav.userId)))
-    const favouriteStores = superFavStore.every((store) => Object.keys(store).length > 1) ? superFavStore : [] 
+    const superFavStore = await Promise.all(
+      favourite.favouriteStores.map((fav) => getStoreFullDetails(fav.userId))
+    );
+    const favouriteStores = superFavStore.every(
+      (store) => Object.keys(store).length > 1
+    )
+      ? superFavStore
+      : [];
     returnJSONSuccess(res, { data: favouriteStores });
   } catch (error) {
     next(new NotFound("User not found", ErrorCode.NOT_FOUND));

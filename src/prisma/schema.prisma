@@ -77,7 +77,7 @@ model Product {
   categories         Category[]
   favourite          User[]
 
-  @@unique([id, name])
+  @@unique([storeId, name])
   @@map("products")
 }
 
