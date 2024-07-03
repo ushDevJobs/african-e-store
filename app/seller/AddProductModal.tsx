@@ -310,12 +310,14 @@ const AddProductModal = ({
 
     if (validateFields()) {
       const formData = new FormData();
+        console.log({ formData })
       formData.append("price", "" + formValues?.price!);
       formData.append("name", formValues?.name as string);
       formData.append("category", formValues?.category as string);
       formData.append("quantity", "" + formValues?.quantity!);
       formData.append("condition", selectedConditions);
       formData.append("salesType", selectedSalesType);
+    //   formData.append("publish", false);
       formData.append("date", formValues?.date as string);
       formData.append("description", formValues?.description as string);
       formData.append("images", formValues?.imageOne as string);

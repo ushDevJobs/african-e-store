@@ -25,7 +25,8 @@ const EditProfileModal = ({ visibility, setVisibility, handleFetchStore, selecte
     const [isUpdatingProfile, setIsUpdatingProfile] = useState(false);
     const [userPhoto, setUserPhoto] = useState<string>();
     const [selectedImageFile, setSelectedImageFile] = useState<File | null>(null);
-
+    console.log(formValues)
+console.log({updatedFormValues})
 
     function onFormValueChange(e: ChangeEvent<HTMLSelectElement | HTMLTextAreaElement | HTMLInputElement>) {
 
@@ -37,7 +38,7 @@ const EditProfileModal = ({ visibility, setVisibility, handleFetchStore, selecte
 
     const handleFileUpload = (e: any) => {
         const selectedFile: File = e.target.files[0];
-
+        console.log({ selectedFile })
         if (selectedFile && (selectedFile.type === "image/jpg" || selectedFile.type === "image/png" || selectedFile.type === 'image/jpeg' || selectedFile.type === 'image/webp')) {
             setSelectedImageFile(selectedFile);
             const imgURL = URL.createObjectURL(selectedFile);
@@ -101,7 +102,7 @@ const EditProfileModal = ({ visibility, setVisibility, handleFetchStore, selecte
                 <div className='flex flex-col items-center mb-4 relative w-fit h-fit mx-auto justify-center'>
                     <div className='w-[120px] h-[120px] rounded-full bg-gray-300 grid place-items-center overflow-hidden mb-3 relative '>
                         <span className='inline-flex'><ImageIcon /></span>
-                        {userPhoto && <Image src={userPhoto} alt="User photo" fill />}
+                        {/* {userPhoto && <Image src={userPhoto} alt="User photo" fill />} */}
                     </div>
                     <button type='button' className='text-white text-sm font-medium cursor-pointer bg-primary w-10 h-10 grid place-items-center rounded-full absolute bottom-0 right-0 '>
                         <input type="file" className='absolute w-full h-full top-0 left-0 cursor-pointer opacity-0' onChange={(e) => handleFileUpload(e)} />
