@@ -1,6 +1,6 @@
 {
     "info": {
-        "_postman_id": "fedfd922-dd39-4f74-a0df-c9c190490f50",
+        "_postman_id": "385ab088-4f93-4b0b-a218-df996888a19c",
         "name": "Rayvvin",
         "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
         "description": ""
@@ -229,15 +229,22 @@
                     "request": {
                         "method": "GET",
                         "url": {
-                            "raw": "http://localhost:3000/api/categories?_page=4&_limit=1",
+                            "raw": "http://localhost:3000/api/categories",
                             "query": [
                                 {
                                     "key": "_page",
-                                    "value": "4"
+                                    "value": "4",
+                                    "disabled": true
                                 },
                                 {
                                     "key": "_limit",
-                                    "value": "1"
+                                    "value": "1",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "condition",
+                                    "value": "2",
+                                    "disabled": true
                                 }
                             ],
                             "variable": [],
@@ -450,7 +457,7 @@
                                 },
                                 {
                                     "key": "image",
-                                    "src": "c:\\Users\\jamaikah alabi\\Pictures\\nafdac\\image\\academic-calendar.png",
+                                    "src": "c:\\Users\\USER\\Downloads\\ulcer img2.jpg",
                                     "type": "file"
                                 }
                             ]
@@ -835,6 +842,7 @@
                                 {
                                     "key": "date",
                                     "value": "2024-7-25",
+                                    "disabled": true,
                                     "type": "default"
                                 },
                                 {
@@ -843,13 +851,20 @@
                                     "type": "default"
                                 },
                                 {
+                                    "key": "publish",
+                                    "value": "false",
+                                    "disabled": true,
+                                    "type": "default"
+                                },
+                                {
                                     "key": "images",
-                                    "src": "c:\\Users\\jamaikah alabi\\Pictures\\nafdac\\image\\contact-us.png",
+                                    "src": "c:\\Users\\USER\\Downloads\\ulcer img2.jpg",
                                     "type": "file"
                                 },
                                 {
                                     "key": "images",
-                                    "src": "c:\\Users\\jamaikah alabi\\Pictures\\nafdac\\image\\005.jpg",
+                                    "src": "c:\\Users\\USER\\Downloads\\ulcer illness.jpg",
+                                    "disabled": true,
                                     "type": "file"
                                 }
                             ]
@@ -880,7 +895,7 @@
                                     "language": "json"
                                 }
                             },
-                            "raw": "{\n  \"id\":\"cly04oeuj0001ecf0xwdv4813\"\n}"
+                            "raw": "{\n  \"id\":\"cly0d5ywn0005kfryhsuycuxt\"\n}"
                         }
                     }
                 },
