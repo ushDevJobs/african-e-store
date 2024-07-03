@@ -9,7 +9,7 @@ export interface ProductResponse {
   details: string;
   publish: true;
   coverImage: string;
-  images: 'image1.jpg,image2.jpg';
+  images: string[];
   returnPolicy: string;
   location: string;
   storeId: string;

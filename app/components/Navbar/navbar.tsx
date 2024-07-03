@@ -145,10 +145,10 @@ const Navbar = (props: Props) => {
                             <Link href='/seller/signup'>
                                 <li>Sell</li>
                             </Link>}
-                        {!isSellerLoggedIn && 
-                         <Link href='/faq'>
-                            <li>FAQ&apos;s</li>
-                        </Link>
+                        {!isSellerLoggedIn &&
+                            <Link href='/faq'>
+                                <li>FAQ&apos;s</li>
+                            </Link>
                         }
                         {!isSellerLoggedIn && (
                             <div className={styles.dropdown}>
@@ -222,11 +222,11 @@ const Navbar = (props: Props) => {
                                             <Link href={'/stores'} onClick={() => setIsLoginDropdownOpen(false)}>
                                                 Stores
                                             </Link>
-                                            <Link href={'/'} onClick={() => setIsLoginDropdownOpen(false)}>
-                                                Purchase history
+                                            <Link href={'/saved-store'} onClick={() => setIsLoginDropdownOpen(false)}>
+                                                Saved Store
                                             </Link>
-                                            <Link href={'/'}>
-                                                Track order
+                                            <Link href={'/saved-items'}>
+                                                Saved Items
                                             </Link>
                                             <Link href={'/'}>
                                                 Track order

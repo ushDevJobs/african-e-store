@@ -16,6 +16,8 @@ import ComponentLoader from './Loader/ComponentLoader'
 import { useAccountStatus } from '../context/AccountStatusContext'
 import { useRouter } from 'next/navigation'
 import moment from 'moment'
+import { useAddProductsToFavorite } from '../api/apiClients'
+import { toast } from 'sonner'
 
 type Props = {
     product: ProductResponse | undefined
@@ -23,6 +25,7 @@ type Props = {
 }
 
 const AddProductToCart = ({ product, isFetchingProduct }: Props) => {
+    const addProductsToFavorite = useAddProductsToFavorite()
     const dispatch = useDispatch();
     const { accountStatus, fetchAccountStatus } = useAccountStatus();
     const quantityInCart = useSelector((state: RootState) => productQtyInCartSelector(state, product?.id as string))
@@ -36,14 +39,42 @@ const AddProductToCart = ({ product, isFetchingProduct }: Props) => {
     const onDesktop = typeof isMobile == 'boolean' && !isMobile;
 
     const imageUrl = [
-         images.singleProduct,
-         images.singleProduct2,
-         images.singleproduct3,
-         images.singleProduct2,
-         images.singleproduct3,
+        images.singleProduct,
+        images.singleProduct2,
+        images.singleproduct3,
+        images.singleProduct2,
+        images.singleproduct3,
     ]
 
     const [mainImage, setMainImage] = useState(imageUrl[0])
+
+    // async function handleAddProductsToFavorite(storeId: string) {
+
+    //     await addProductsToFavorite(storeId)
+    //         .then((response) => {
+
+    //             // Log response 
+    //             console.log(response);
+    //             const updatedStores = stores?.map(store =>
+    //                 store.id === storeId ? { ...store, favourite: [response.data] } : store
+    //             );
+    //             setStores(updatedStores);
+    //             handleFetchStores()
+    //             // Display success 
+    //             toast.success('Product added successfully.');
+    //         })
+    //         .catch((error) => {
+    //             // Display error
+    //             const errorMessage = createCustomErrorMessages(error.response?.data)
+    //             toast.error(errorMessage)
+    //         })
+    //         .finally(() => {
+
+    //             // Close laoder 
+    //             // setIsLoading(false);
+    //         })
+    // };
+
     useEffect(() => {
         fetchAccountStatus();
     }, []);

@@ -116,7 +116,7 @@ const SellerStorePage = ({ params }: Props) => {
     }
 
       const filteredStoreProducts = storeProducts?.filter(
-          (item) => item.name.toLowerCase().includes(searchQuery.toLowerCase())
+          (item) => item.name && item.name.toLowerCase().includes(searchQuery.toLowerCase())
       );
 
     useEffect(() => {

@@ -81,7 +81,7 @@ const SavedStorePage = (props: Props) => {
                                 <p className='text-sm mb-2'>{store.storeDetails.description}</p>
                                 <div className="flex gap-2 items-center">
                                     <span className='flex items-center gap-1'><DotIcon />{store.feedback}&#37; Feedback </span>
-                                    <span className='flex items-center gap-1'><DotIcon />{store?.totalItemSold === 1 ? "Item Sold" : "Items Sold"}</span>
+                                    <span className='flex items-center gap-1'><DotIcon />{store?.totalItemSold == 0 ? '0' : store?.totalItemSold} {store?.totalItemSold > 1 ? "Items Sold" : "Item Sold"}</span>
                                 </div>
                             </div>
                         </div>
