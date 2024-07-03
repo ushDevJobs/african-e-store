@@ -72,6 +72,7 @@ export default class ApiRoutes {
     static AddStoreToFavorite: string = "api/stores/favourite";
     static AddProductsToFavorite: string = "api/products/favourite";
     static RemoveFavoriteStore: string = "api/stores/favourite";
+    static UpdateProfile: string = 'api/stores/store/profile';
     /**
      * Api routes to fetch favorite stores
      */

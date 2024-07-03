@@ -30,6 +30,7 @@ const SellerHomePage = (props: Props) => {
     const onDesktop = typeof isMobile == 'boolean' && !isMobile;
 
     const [store, setStore] = useState<SellerStoreResponse>()
+    const [selectedStore, setSelectedStore] = useState<SellerStoreResponse>();
     const [products, setProducts] = useState<SellerProductsResponse[]>()
     const [isFetchingStore, setIsFetchingStore] = useState<boolean>(true);
     const [isFetchingProducts, setIsFetchingProducts] = useState<boolean>(true);
@@ -55,7 +56,7 @@ const SellerHomePage = (props: Props) => {
     async function handleFetchProducts({ clearPreviousProducts = false }) {
 
         // Start loader
-       
+
         if (clearPreviousProducts) {
             // Clear previous configurations
             setProducts(undefined);
@@ -82,7 +83,7 @@ const SellerHomePage = (props: Props) => {
     }, []);
     return (
         <div className={styles.main}>
-            <SellerPageStoreRating store={store} isFetchingStore={isFetchingStore} />
+            <SellerPageStoreRating selectedStore={selectedStore} setSelectedStore={setSelectedStore} handleFetchStore={handleFetchStore} store={store} isFetchingStore={isFetchingStore} />
             <AddProductModal
                 visibility={isAddProductModalVisible}
                 setVisibility={setIsAddProductModalVisible}

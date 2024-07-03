@@ -4,6 +4,11 @@ export interface StoreDetails {
   description: string;
   image: string;
 }
+export interface ProfileRequest {
+  name: string;
+  description: string;
+  image: string;
+}
 
 export interface AvgRating {
   rating: number;
@@ -15,7 +20,7 @@ export interface Rating {
   total: number;
 }
 
-export interface SellerStoreResponse {
+export interface SellerStoreResponse extends ProfileRequest {
   storeDetails: StoreDetails;
   avgRating: AvgRating;
   ratingWithPercent: Rating[];

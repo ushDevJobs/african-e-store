@@ -4,7 +4,7 @@ import styles from '../categories/Categories.module.scss'
 export const StoreStoreRatingSkeletonLoader: React.FC = () => {
     return (
         <div className='-mt-10 animate-pulse'>
-            <div className="skeleton h-44 mb-10 rounded-xl" style={{ marginTop: "40px" }}></div>
+            <div className="skeleton h-40 mb-10 rounded-xl" style={{ marginTop: "40px" }}></div>
         </div>
     );
 };

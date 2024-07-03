@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "../stores/[storeId]/SellerStore.module.scss";
 import { DotIcon, GreenStarIcon, UserIcon } from "../components/SVGs/SVGicons";
 import useResponsiveness from "../components/hooks/responsiveness-hook";
@@ -6,41 +6,53 @@ import { SellerStoreResponse } from "../components/models/ISellerStore";
 import { StoreStoreRatingSkeletonLoader } from "../stores/StoresSkeleton";
 import Image from "next/image";
 import ApiRoutes from "../api/apiRoutes";
+import EditProfileModal from "../components/Modal/EditProfileModal";
 
 type Props = {
     store: SellerStoreResponse | undefined;
     isFetchingStore: boolean;
+    handleFetchStore: () => Promise<void>
+    setSelectedStore: React.Dispatch<React.SetStateAction<SellerStoreResponse | undefined>>
+    selectedStore: SellerStoreResponse | undefined
 };
 
-const SellerPageStoreRating = ({ store, isFetchingStore }: Props) => {
+const SellerPageStoreRating = ({ store, isFetchingStore, handleFetchStore, setSelectedStore, selectedStore }: Props) => {
     const windowRes = useResponsiveness();
     const isMobile = windowRes.width && windowRes.width < 768;
     const onMobile = typeof isMobile == "boolean" && isMobile;
     const onDesktop = typeof isMobile == "boolean" && !isMobile;
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
     return (
         <>
+            <EditProfileModal
+                visibility={isEditModalOpen}
+                setVisibility={setIsEditModalOpen}
+                handleFetchStore={handleFetchStore}
+                selectedStore={selectedStore}
+            />
             {!store && isFetchingStore ? (
                 <StoreStoreRatingSkeletonLoader />
             ) : (
                 <div className={styles.storeInfo}>
                     <div className={styles.storelhs}>
                         <span className="bg-[#2C7865] h-fit p-3 rounded-full">
-                                {store?.storeDetails?.image ? (
-                                    <Image
-                                        src={store.storeDetails.image}
-                                        alt="Logo"
-                                        width={50}
-                                        height={50}
-                                    />
-                                ) : (
-                                    <UserIcon />
-                                )}
+                            {store?.storeDetails?.image ? (
+                                <Image
+                                    src={store.storeDetails.image}
+                                    alt="Logo"
+                                    width={50}
+                                    height={50}
+                                />
+                            ) : (
+                                <UserIcon />
+                            )}
                         </span>
                         <div className={styles.info}>
                             <h3 className="text-lg md:text-xl lg:text-2xl text-[#828282] mb-1 font-semibold underline">
                                 {store?.storeDetails.name}
                             </h3>
+                            <p className="text-sm text-[#333333] mb-1">{store?.storeDetails.description}</p>
                             <div className="flex gap-2 text-[#1E1E1E] text-sm">
                                 <span className="flex text-sm md:text-base items-center gap-1">
                                     <DotIcon />
@@ -52,6 +64,10 @@ const SellerPageStoreRating = ({ store, isFetchingStore }: Props) => {
                                     {store?.totalItemSold === 1 ? "Item Sold" : "Items Sold"}
                                 </span>
                             </div>
+                            <button onClick={() => {
+                                setSelectedStore(store)
+                                setIsEditModalOpen(true)
+                            }} className="border mt-5 border-[#2C7865] text-[#2C7865] text-sm cursor-pointer px-8 py-2 rounded-[37px]">Edit profile details</button>
                         </div>
                     </div>
                     <div className={styles.ratings}>

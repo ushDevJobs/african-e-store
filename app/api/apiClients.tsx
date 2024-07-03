@@ -6,6 +6,7 @@ import {
 } from "../components/models/IRegisterBuyer";
 import { RegisterSellerRequest } from "../components/models/IRegisterSeller";
 import { AddProductRequest } from "../components/models/IProduct";
+import { ProfileRequest } from "../components/models/ISellerStore";
 
 export const API = axios.create({
     baseURL: ApiRoutes.BASE_URL_DEV,
@@ -327,4 +328,20 @@ export function useFetchFavoriteStores() {
     }
 
     return fetchFavoriteStores;
+}
+export function useUpdateProfile() {
+    /**
+     * Send request to API server to update a Profile
+     * @returns The response for the API request
+     */
+    async function updateProfile(data: ProfileRequest) {
+        // Send request to update a Profile
+        let response = await API.patch(`${ApiRoutes.UpdateProfile}`, data);
+
+        // Return response
+        return response;
+    }
+
+    // Return function to update a Profile
+    return updateProfile;
 }
