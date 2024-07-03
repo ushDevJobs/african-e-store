@@ -71,4 +71,5 @@ export interface AddProductRequest {
   imageTwo: string;
   imageThree: string;
   imageFour: string;
+  publish: boolean;
 }

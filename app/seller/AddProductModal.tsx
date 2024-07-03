@@ -23,7 +23,9 @@ import { CategoriesResponse } from "../components/models/AllCategories";
 type Props = {
   visibility: boolean;
   setVisibility: React.Dispatch<React.SetStateAction<boolean>>;
-  handleFetchProducts: () => Promise<void>;
+    handleFetchProducts({ clearPreviousProducts }: {
+        clearPreviousProducts?: boolean | undefined;
+    }): Promise<void>
 };
 
 const AddProductModal = ({
@@ -330,7 +332,7 @@ const AddProductModal = ({
           // Display success
           toast.success("Product has been created successfully.");
           setVisibility(false);
-          handleFetchProducts();
+            handleFetchProducts({ clearPreviousProducts: true });
           resetForm();
         })
         .catch((error) => {

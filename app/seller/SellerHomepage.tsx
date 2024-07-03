@@ -52,11 +52,16 @@ const SellerHomePage = (props: Props) => {
                 setIsFetchingStore(false);
             });
     }
-    async function handleFetchProducts() {
+    async function handleFetchProducts({ clearPreviousProducts = false }) {
 
         // Start loader
-        setIsFetchingProducts(true);
-
+       
+        if (clearPreviousProducts) {
+            // Clear previous configurations
+            setProducts(undefined);
+            // Show loader
+            setIsFetchingProducts(true);
+        }
         await fetchSellerProducts()
             .then((response) => {
                 console.log("Response: ", response.data.data);
@@ -73,7 +78,7 @@ const SellerHomePage = (props: Props) => {
 
     useEffect(() => {
         handleFetchStore();
-        handleFetchProducts()
+        handleFetchProducts({ clearPreviousProducts: true });
     }, []);
     return (
         <div className={styles.main}>
