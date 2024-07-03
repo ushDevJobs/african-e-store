@@ -38,7 +38,7 @@ const CartPage = (props: Props) => {
                                             <div className={styles.cartItem}>
                                                 <div className={styles.item}>
                                                     <div className={styles.image}>
-                                                        <Image src={images.cart_prooduct_image} fill alt='product image' />
+                                                        <Image src={item.product.coverImage} fill alt='product image' />
                                                     </div>
                                                     <div className={styles.name}>
                                                         <h3>{item.product.name}</h3>

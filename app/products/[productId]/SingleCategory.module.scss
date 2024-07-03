@@ -11,7 +11,7 @@
 
   .productInfo {
     display: flex;
-    gap: 19px;
+    gap: 60px;
     border-bottom: 1px solid #d7d7d7;
     padding-bottom: 50px;
 
@@ -56,7 +56,7 @@
         }
 
         .active {
-          border: 2px solid var(--clr-primary-5);
+          border: 2px solid #2c7865;
         }
       }
     }

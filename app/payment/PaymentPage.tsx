@@ -29,7 +29,7 @@ const PaymentPage = (props: Props) => {
                                 </p>
                                 <div className={styles.info}>
                                     <div className={styles.image}>
-                                        <Image src={images.cart_prooduct_image} alt='product image' fill />
+                                        <Image src={item.product.coverImage} alt='product image' fill />
                                     </div>
                                     <div className={styles.item}>
                                         <p className={styles.name}>{item.product.name}</p>

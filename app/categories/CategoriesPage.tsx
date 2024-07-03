@@ -139,7 +139,7 @@ const CategoriesPage = () => {
                                             {category.products.map((product, index) => (
                                                 <Link href={`/products/${product.id}`} className={styles.card} key={product.id} id={category.id.toString()}>
                                                     <div className={styles.image}>
-                                                        <Image fill src={images.cashew} alt='product image' />
+                                                        <Image fill src={product.coverImage} alt='product image' />
                                                     </div>
                                                     <p>{product.name} </p>
                                                     <h4>&pound;{product.amount.toLocaleString()}</h4>
