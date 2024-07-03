@@ -35,7 +35,7 @@ const AddProductToCart = ({ product, isFetchingProduct }: Props) => {
     const isMobile = windowRes.width && windowRes.width < 768;
     const onMobile = typeof isMobile === 'boolean' && isMobile;
     const onDesktop = typeof isMobile === 'boolean' && !isMobile;
-
+console.log({product})
     let imagesUrls: string[] = [];
 
     if (product && product.images) {
@@ -117,7 +117,7 @@ const AddProductToCart = ({ product, isFetchingProduct }: Props) => {
                             )}
                             {onDesktop && (
                                 <div className={styles.bid}>
-                                    <p>{product.name} <span className='text-[#FD6A02] text-base'>7 Bids at US $168 </span>(Bidding ends on {moment(product.endBiddingDate).format('DD-MM-YYYY')}) <button onClick={() => setIsPlaceABidVisible(true)}>Place Bid </button></p>
+                                    {product.endBiddingDate && <p>{product.name} <span className='text-[#FD6A02] text-base'>7 Bids at US $168 </span>(Bidding ends on {moment(product.endBiddingDate).format('DD-MM-YYYY')}) <button onClick={() => setIsPlaceABidVisible(true)}>Place Bid </button></p>}                                  
                                     <Link href={'/contact-seller'}><button className='mt-1'>Contact seller</button></Link>
                                 </div>
                             )}
