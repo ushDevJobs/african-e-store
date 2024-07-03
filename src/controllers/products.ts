@@ -84,13 +84,35 @@ export const addProduct = async (
 };
 
 export const getProductById = async (req: Request, res: Response) => {
+  const user = req.user as RequestUser;
   const { id } = req.params;
   const product = await prisma.product.findFirst({
     where: {
-      id,
+      AND: [{ id }, { publish: true }],
     },
-    include: {
+    select: {
+      id: true,
+      name: true,
+      itemCondition: true,
+      salesType: true,
+      amount: true,
+      quantity: true,
+      details: true,
+      coverImage: true,
       store: true,
+      discount: true,
+      discountPercentage: true,
+      images: true,
+      favourite: {
+        where: {
+          id: user.id,
+        },
+        select: {
+          id: true,
+        },
+      },
+      endBiddingDate: true,
+      returnPolicy: true,
     },
   });
   return returnJSONSuccess(res, { data: product });

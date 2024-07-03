@@ -80,7 +80,6 @@ export const getAllCategories = async (req: Request, res: Response) => {
           },
         }
       : {};
-  console.log(fetchProduct, condition);
   const countProducts =
     products === true || products === "true"
       ? {

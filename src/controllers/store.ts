@@ -11,7 +11,9 @@ import { ErrorCode } from "../exceptions/root";
 import { validateCreateStore } from "../schema/store";
 import { validatePagination } from "../schema/categories";
 import { BadRequest } from "../exceptions/bad-request";
-
+import fs from "fs";
+import path from "path";
+import logger from "../utils/logger";
 export const getAllStores = async (
   req: Request,
   res: Response,
@@ -329,6 +331,10 @@ export const updateStoreDescription = async (
 export const updateStoreProfile = async (req: Request, res: Response) => {
   const user = req.user as RequestUser;
   const { name, description } = req.body;
+  const storeImage = await prisma.store.findFirstOrThrow({
+    where: { userId: user.id },
+    select: { image: true },
+  });
   const image = req.file;
   let tempName =
     !!name && name !== ""
@@ -353,6 +359,7 @@ export const updateStoreProfile = async (req: Request, res: Response) => {
     ...tempDescription,
     ...tempImage,
   };
+
   const store = await prisma.store.update({
     where: {
       userId: user.id,
@@ -364,6 +371,16 @@ export const updateStoreProfile = async (req: Request, res: Response) => {
       image: true,
     },
   });
+  if (storeImage.image && storeImage.image !== "") {
+    fs.unlink(
+      path.resolve(__dirname, `../images/store/${storeImage.image}`),
+      (error) => {
+        if (error) {
+          logger.error("Unable to delete image");
+        }
+      }
+    );
+  }
   returnJSONSuccess(res);
 };
 export const addStoreToFavourite = async (
