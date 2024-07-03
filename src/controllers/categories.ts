@@ -5,9 +5,33 @@ import { validatePagination } from "../schema/categories";
 import { BadRequest } from "../exceptions/bad-request";
 import { ErrorCode } from "../exceptions/root";
 import { NotFound } from "../exceptions/not-found";
+import { RequestUser } from "../types";
 
 export const getAllCategories = async (req: Request, res: Response) => {
   const { _limit, _page } = req.query;
+  const user = req.user as RequestUser;
+  const addFavourite = req.isAuthenticated()
+    ? {
+        select: {
+          id: true,
+          name: true,
+          itemCondition: true,
+          salesType: true,
+          amount: true,
+          quantity: true,
+          details: true,
+          coverImage: true,
+          favourite: {
+            where: {
+              id: user.id,
+            },
+            select: {
+              id: true,
+            },
+          },
+        },
+      }
+    : {};
   let products =
     req.query.products === undefined
       ? true
@@ -49,8 +73,10 @@ export const getAllCategories = async (req: Request, res: Response) => {
           products: {
             where: {
               publish: true,
+
               ...addCondition,
             },
+            ...addFavourite,
           },
         }
       : {};
