@@ -116,7 +116,10 @@ export const getProductById = async (req: Request, res: Response) => {
       returnPolicy: true,
       ratings: {
         where: {
-          AND: [{ NOT: { orderId: null } }, { NOT: { productId: undefined } }],
+          AND: [
+            { NOT: { orderId: undefined } },
+            { NOT: { productId: undefined } },
+          ],
         },
       },
     },

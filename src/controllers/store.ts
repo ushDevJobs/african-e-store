@@ -97,7 +97,7 @@ const getStoreFullDetails = async (id: string, isStoreId = false) => {
     where: {
       AND: [
         { storeId: store.id },
-        { NOT: { orderId: null } },
+        { NOT: { orderId: undefined } },
         { NOT: { productId: undefined } },
       ],
     },
@@ -108,7 +108,7 @@ const getStoreFullDetails = async (id: string, isStoreId = false) => {
     where: {
       AND: [
         { storeId: store.id },
-        { NOT: { orderId: null } },
+        { NOT: { orderId: undefined } },
         { NOT: { productId: undefined } },
       ],
     },
@@ -127,7 +127,7 @@ const getStoreFullDetails = async (id: string, isStoreId = false) => {
   });
   const totalRatingByUsers = await prisma.rating.groupBy({
     where: {
-      AND: [{ storeId: store.id }, { NOT: { orderId: null } }],
+      AND: [{ storeId: store.id }, { NOT: { orderId: undefined } }],
     },
     by: ["userId", "orderId"],
   });
@@ -162,7 +162,7 @@ export const getPositiveReview = async (id: string) => {
     where: {
       AND: [
         { storeId: id },
-        { NOT: { orderId: null } },
+        { NOT: { orderId: undefined } },
         { NOT: { productId: undefined } },
         {
           rating: {
