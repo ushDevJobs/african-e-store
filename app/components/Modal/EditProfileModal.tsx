@@ -29,7 +29,7 @@ const EditProfileModal = ({ visibility, setVisibility, handleFetchStore, selecte
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [isUpdatingProfile, setIsUpdatingProfile] = useState(false);
     const [userPhoto, setUserPhoto] = useState<string>('');
-    console.log(formValues)
+    // console.log(formValues)
 
     const handleInputChange = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>) => {
         const { name, value } = e.target;

@@ -51,7 +51,7 @@ const CategoriesPage = () => {
 
         await fetchCategories(currentPage, limit)
             .then((response) => {
-                console.log("Response: ", response.data.data);
+                // console.log("Response: ", response.data.data);
                 setCategories(response.data.data);
                 setTotalCategories(response.data.totalPages)
                 // Persist all categories data in session storage

@@ -38,7 +38,7 @@ const AddProductModal = ({
   const addProduct = useAddProduct();
   const fetchCategories = useFetchCategoriesWithoutProducts();
   const [formValues, setFormValues] = useState<AddProductRequest>();
-  console.log("formValues", formValues);
+//   console.log("formValues", formValues);
   const [isLoading, setIsLoading] = useState(false);
   const [file, setFile] = useState<File>();
   const [image1, setImage1] = useState<File>();
@@ -71,7 +71,7 @@ const AddProductModal = ({
 
     await fetchCategories()
       .then((response) => {
-        console.log("Response: ", response.data.data);
+        // console.log("Response: ", response.data.data);
         setCategories(response.data.data);
       })
       .catch((error) => {
@@ -99,7 +99,7 @@ const AddProductModal = ({
       // Unset validation message
       setImageErrorMsg(false);
 
-      console.log("working", name);
+    //   console.log("working", name);
       // Set the image URL
       const imgURL = URL.createObjectURL(selectedFile);
 
@@ -108,7 +108,7 @@ const AddProductModal = ({
         setFile(selectedFile);
       }
       if (name === "imageOne") {
-        console.log("nice");
+        // console.log("nice");
         setImage1(selectedFile);
       }
       if (name === "imageTwo") {
@@ -214,7 +214,7 @@ const AddProductModal = ({
     ) {
       return true;
     } else {
-      console.log("form validation failed");
+    //   console.log("form validation failed");
 
       if (!formValues?.name) {
         setNameErrorMsg(true);
@@ -312,7 +312,7 @@ const AddProductModal = ({
 
     if (validateFields()) {
       const formData = new FormData();
-      console.log({ formData });
+    //   console.log({ formData });
       formData.append("price", "" + formValues?.price!);
       formData.append("name", formValues?.name as string);
       formData.append("category", formValues?.category as string);
@@ -332,7 +332,7 @@ const AddProductModal = ({
       await addProduct(formData)
         .then((response) => {
           // Log response
-          console.log({ response });
+        //   console.log({ response });
 
           // Display success
           toast.success("Product has been created successfully.");

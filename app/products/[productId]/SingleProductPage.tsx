@@ -29,7 +29,7 @@ const SingleProductPage = ({params}: Props) => {
 
         await fetchProduct(productId)
             .then((response) => {
-                console.log("Response: ", response.data.data);
+                // console.log("Response: ", response.data.data);
                 setProduct(response.data.data);
             })
             .catch((error) => {

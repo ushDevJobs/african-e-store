@@ -23,7 +23,7 @@ const SavedStorePage = (props: Props) => {
 
         await fetchSavedStores()
             .then((response) => {
-                console.log("Response: ", response.data.data);
+                // console.log("Response: ", response.data.data);
                 setSavedStoreStores(response.data.data);
             })
             .catch((error) => {
@@ -41,7 +41,7 @@ const SavedStorePage = (props: Props) => {
             .then((response) => {
 
                 // Log response 
-                console.log(response);
+                // console.log(response);
                 const updatedStores = savedStoreStores?.map(store =>
                     store.storeDetails.id === storeId ? { ...store, favourite: [response.data] } : store
                 );

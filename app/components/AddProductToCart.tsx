@@ -35,7 +35,7 @@ const AddProductToCart = ({ product, isFetchingProduct }: Props) => {
     const isMobile = windowRes.width && windowRes.width < 768;
     const onMobile = typeof isMobile === 'boolean' && isMobile;
     const onDesktop = typeof isMobile === 'boolean' && !isMobile;
-console.log({product})
+// console.log({product})
     let imagesUrls: string[] = [];
 
     if (product && product.images) {
@@ -50,10 +50,10 @@ console.log({product})
         imagesUrls = imageUrlsArray.map(image => image);
     }
 
-    console.log("imagesUrls", imagesUrls);
+    // console.log("imagesUrls", imagesUrls);
 
     const [mainImage, setMainImage] = useState(imagesUrls[0]);
-    console.log({ mainImage })
+    // console.log({ mainImage })
     useEffect(() => {
         fetchAccountStatus();
     }, []);
@@ -70,11 +70,10 @@ console.log({product})
                             </div>
                             <div className={styles.gallery}>
                                 {imagesUrls.map((image, index) => (
-                                    <div className="h-[100px] w-full rounded-[14px] cursor-pointer border border-[#ede9e9] relative">
+                                    <div className="h-[100px] w-full rounded-[14px] cursor-pointer border border-[#ede9e9] relative" key={index}>
                                         <Image
                                             src={image}
                                             alt='product image'
-                                            key={index}
                                             fill
                                             className={`${image === mainImage ? styles.active : 'object-cover'}`}
                                             onClick={() => setMainImage(image)}

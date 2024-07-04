@@ -68,7 +68,7 @@ const SellerStorePage = ({ params }: Props) => {
 
         await fetchStore(storeId)
             .then((response) => {
-                console.log("Response: ", response.data.data);
+                // console.log("Response: ", response.data.data);
                 setStore(response.data.data);
             })
             .catch((error) => {
@@ -86,7 +86,7 @@ const SellerStorePage = ({ params }: Props) => {
 
         await fetchStoreCategories(storeId)
             .then((response) => {
-                console.log("Cat Response: ", response.data.data);
+                // console.log("Cat Response: ", response.data.data);
                 setStoreCategories(response.data.data);
             })
             .catch((error) => {
@@ -103,7 +103,7 @@ const SellerStorePage = ({ params }: Props) => {
 
         await fetchStoreProducts(storeId)
             .then((response) => {
-                console.log("product Response: ", response.data.data);
+                // console.log("product Response: ", response.data.data);
                 setStoreProducts(response.data.data);
             })
             .catch((error) => {

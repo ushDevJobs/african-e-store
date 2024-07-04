@@ -42,7 +42,7 @@ const SellerHomePage = (props: Props) => {
 
         await fetchSellerStore()
             .then((response) => {
-                console.log("Response: ", response.data.data);
+                // console.log("Response: ", response.data.data);
                 setStore(response.data.data);
             })
             .catch((error) => {
@@ -65,7 +65,7 @@ const SellerHomePage = (props: Props) => {
         }
         await fetchSellerProducts()
             .then((response) => {
-                console.log("Response: ", response.data.data);
+                // console.log("Response: ", response.data.data);
                 setProducts(response.data.data);
             })
             .catch((error) => {

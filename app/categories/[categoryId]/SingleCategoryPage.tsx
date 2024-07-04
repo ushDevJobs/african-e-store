@@ -48,7 +48,7 @@ const SingleCategoryPage = ({ params }: Props) => {
 
         await fetchCategory(categoryId)
             .then((response) => {
-                console.log("Response: ", response.data.data);
+                // console.log("Response: ", response.data.data);
                 setCategory(response.data.data);
             })
             .catch((error) => {

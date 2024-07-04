@@ -31,7 +31,7 @@ const StorePage = (props: Props) => {
 
         await fetchStores()
             .then((response) => {
-                console.log("Response: ", response.data.data);
+                // console.log("Response: ", response.data.data);
 
                 setStores(response.data.data);
             })
@@ -54,7 +54,7 @@ const StorePage = (props: Props) => {
             .then((response) => {
 
                 // Log response 
-                console.log(response);
+                // console.log(response);
                 const updatedStores = stores?.map(store =>
                     store.id === storeId ? { ...store, favourite: [response.data] } : store
                 );
@@ -80,7 +80,7 @@ const StorePage = (props: Props) => {
             .then((response) => {
 
                 // Log response 
-                console.log(response);
+                // console.log(response);
                 const updatedStores = stores?.map(store =>
                     store.id === storeId ? { ...store, favourite: [response.data] } : store
                 );
