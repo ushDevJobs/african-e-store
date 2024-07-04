@@ -12,22 +12,12 @@ export const getAllCategories = async (req: Request, res: Response) => {
   const user = req.user as RequestUser;
   const addFavourite = req.isAuthenticated()
     ? {
-        select: {
-          id: true,
-          name: true,
-          itemCondition: true,
-          salesType: true,
-          amount: true,
-          quantity: true,
-          details: true,
-          coverImage: true,
-          favourite: {
-            where: {
-              id: user.id,
-            },
-            select: {
-              id: true,
-            },
+        favourite: {
+          where: {
+            id: user.id,
+          },
+          select: {
+            id: true,
           },
         },
       }
@@ -41,7 +31,28 @@ export const getAllCategories = async (req: Request, res: Response) => {
   const validatedPag = validatePagination.safeParse({
     _page: +_page!,
   });
-  const count = await prisma.category.count();
+  const count = await prisma.category.count({
+    where: {
+      AND: [
+        {
+          products: {
+            some: {
+              id: {
+                not: undefined,
+              },
+            },
+          },
+        },
+        {
+          products: {
+            some: {
+              publish: true,
+            },
+          },
+        },
+      ],
+    },
+  });
   const page = (+validatedPag.data?._page! - 1) * (_limit ? +_limit : count);
   const condition =
     req.query.condition === undefined
@@ -76,7 +87,17 @@ export const getAllCategories = async (req: Request, res: Response) => {
 
               ...addCondition,
             },
-            ...addFavourite,
+            select: {
+              id: true,
+              name: true,
+              itemCondition: true,
+              salesType: true,
+              amount: true,
+              quantity: true,
+              details: true,
+              coverImage: true,
+              ...addFavourite,
+            },
           },
         }
       : {};
@@ -93,6 +114,26 @@ export const getAllCategories = async (req: Request, res: Response) => {
   const categories = await prisma.category.findMany({
     skip: page,
     take: +_limit! || undefined,
+    where: {
+      AND: [
+        {
+          products: {
+            some: {
+              id: {
+                not: undefined,
+              },
+            },
+          },
+        },
+        {
+          products: {
+            some: {
+              publish: true,
+            },
+          },
+        },
+      ],
+    },
     select: {
       id: true,
       name: true,
@@ -115,6 +156,19 @@ export const getCategoryById = async (
 ) => {
   const { id } = req.params;
   const { _limit, _page } = req.query;
+  const user = req.user as RequestUser;
+  const addFavourite = req.isAuthenticated()
+    ? {
+        favourite: {
+          where: {
+            id: user.id,
+          },
+          select: {
+            id: true,
+          },
+        },
+      }
+    : {};
   const validatedPag = validatePagination.safeParse({
     _page: +_page!,
   });
@@ -130,7 +184,22 @@ export const getCategoryById = async (
         id: true,
         name: true,
         createdAt: true,
-        products: true,
+        products: {
+          where: {
+            publish: true,
+          },
+          select: {
+            id: true,
+            name: true,
+            itemCondition: true,
+            salesType: true,
+            amount: true,
+            quantity: true,
+            details: true,
+            coverImage: true,
+            ...addFavourite,
+          },
+        },
       },
     });
     if (!categoryWithProducts) {

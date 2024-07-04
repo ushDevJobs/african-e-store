@@ -14,6 +14,7 @@ import { BadRequest } from "../exceptions/bad-request";
 import { NotFound } from "../exceptions/not-found";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import { DatabaseException } from "../exceptions/datebase-exception";
+import { getPositiveReview } from "./store";
 
 export const updateProduct = async () => {};
 
@@ -86,7 +87,7 @@ export const addProduct = async (
 export const getProductById = async (req: Request, res: Response) => {
   const user = req.user as RequestUser;
   const { id } = req.params;
-  const product = await prisma.product.findFirst({
+  let product = await prisma.product.findFirst({
     where: {
       AND: [{ id }, { publish: true }],
     },
@@ -113,9 +114,17 @@ export const getProductById = async (req: Request, res: Response) => {
       },
       endBiddingDate: true,
       returnPolicy: true,
+      ratings: {
+        where: {
+          AND: [{ NOT: { orderId: null } }, { NOT: { productId: undefined } }],
+        },
+      },
     },
   });
-  return returnJSONSuccess(res, { data: product });
+  return returnJSONSuccess(res, {
+    data: product,
+    positiveFeeback: await getPositiveReview(product?.store.id!),
+  });
 };
 export const deleteProductById = async (req: Request, res: Response) => {
   const { id } = req.params;
@@ -139,6 +148,9 @@ export const getFavouriteProducts = async (
       },
       select: {
         favouriteProducts: {
+          where: {
+            publish: true,
+          },
           include: {
             store: true,
           },

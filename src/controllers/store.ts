@@ -95,32 +95,44 @@ const getStoreFullDetails = async (id: string, isStoreId = false) => {
   });
   const ratings = await prisma.rating.groupBy({
     where: {
-      storeId: store.id,
+      AND: [
+        { storeId: store.id },
+        { NOT: { orderId: null } },
+        { NOT: { productId: undefined } },
+      ],
     },
     by: ["rating"],
     _count: true,
   });
   let avg = await prisma.rating.aggregate({
+    where: {
+      AND: [
+        { storeId: store.id },
+        { NOT: { orderId: null } },
+        { NOT: { productId: undefined } },
+      ],
+    },
     _avg: {
       rating: true,
     },
     _count: true,
+    _sum: {
+      rating: true,
+    },
   });
   const totalItemSold = await prisma.order.count({
     where: {
-      status: "DELIVERED",
-      storeId: store.id,
+      AND: [{ status: "DELIVERED" }, { storeId: store.id }],
     },
   });
   const totalRatingByUsers = await prisma.rating.groupBy({
     where: {
-      storeId: store.id,
+      AND: [{ storeId: store.id }, { NOT: { orderId: null } }],
     },
     by: ["userId", "orderId"],
   });
   const feedback =
-    ((totalRatingByUsers.length || 0) / totalItemSold || 0) * 100;
-
+    (((avg._sum.rating || 0) / totalRatingByUsers.length || 0) * 100) / 5;
   const findRating = (number: number) => {
     const rate = ratings.find((rating) => rating.rating === number);
     return {
@@ -144,6 +156,34 @@ const getStoreFullDetails = async (id: string, isStoreId = false) => {
     feedback: parseInt(feedback.toFixed(0)),
     totalItemSold,
   };
+};
+export const getPositiveReview = async (id: string) => {
+  let positiveReview = await prisma.rating.aggregate({
+    where: {
+      AND: [
+        { storeId: id },
+        { NOT: { orderId: null } },
+        { NOT: { productId: undefined } },
+        {
+          rating: {
+            gte: 4,
+          },
+        },
+      ],
+    },
+    _count: {
+      rating: true,
+    },
+    _sum: {
+      rating: true,
+    },
+  });
+
+  const positiveFeedback =
+    (((positiveReview._sum.rating || 0) / (positiveReview._count.rating || 0)) *
+      100) /
+    5;
+  return positiveFeedback ? positiveFeedback : 0;
 };
 export const getStoreByUserLogged = async (
   req: Request,
@@ -190,6 +230,9 @@ export const getProductsOfStoreById = async (
         },
         select: {
           products: {
+            where: {
+              publish: true,
+            },
             select: {
               categories: {
                 select: {
@@ -197,7 +240,7 @@ export const getProductsOfStoreById = async (
                   name: true,
                   products: {
                     where: {
-                      storeId: storeId,
+                      AND: [{ storeId: storeId }, { publish: true }],
                     },
                     select: {
                       id: true,
@@ -269,6 +312,7 @@ export const searchStoreProducts = async (
       where: {
         AND: [
           { storeId: store.id },
+          { publish: true },
           {
             name: {
               contains: q as string,
@@ -298,7 +342,23 @@ export const getStoreProducts = async (
       id: store.id,
     },
     select: {
-      products: true,
+      products: {
+        where: {
+          publish: true,
+        },
+        select: {
+          id: true,
+          name: true,
+          itemCondition: true,
+          salesType: true,
+          amount: true,
+          quantity: true,
+          details: true,
+          coverImage: true,
+          images: true,
+          publish: true,
+        },
+      },
     },
   });
 
@@ -491,18 +551,40 @@ export const getCategoriesfromStoreById = async (
 };
 const getCategory = async (id: string, store = true) => {
   const condition = store ? { id: id } : { userId: id };
-  const categories = await prisma.store.findFirstOrThrow({
-    where: condition,
-    select: {
-      products: {
-        select: {
-          categories: true,
+  const categories = await prisma.category.findMany({
+    where: {
+      AND: [
+        {
+          products: {
+            some: {
+              OR: [
+                { storeId: id },
+                {
+                  store: {
+                    userId: id,
+                  },
+                },
+              ],
+            },
+          },
         },
-      },
+        {
+          products: {
+            some: {
+              id: {
+                not: undefined,
+              },
+            },
+          },
+        },
+      ],
+    },
+    select: {
+      name: true,
+      id: true,
+      createdAt: true,
+      products: true,
     },
   });
-  return categories.products
-    .flat()
-    .map((categ) => categ.categories)
-    .flat();
+  return categories;
 };
