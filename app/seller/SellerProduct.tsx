@@ -34,6 +34,7 @@ const SellerProduct = ({
                         </div>
                         <div className="flex flex-col">
                             <h2 className="text-[#828282] text-lg">{product.name}</h2>
+                            <p className="text-[#1E1E1E] text-sm mb-1">{product.details}</p>
                             <h3 className="font-medium text-base text-[#1E1E1E] mb-14">
                                 &pound;{product.amount.toLocaleString()}
                             </h3>
