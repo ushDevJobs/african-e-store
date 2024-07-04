@@ -114,19 +114,44 @@ export const getProductById = async (req: Request, res: Response) => {
       },
       endBiddingDate: true,
       returnPolicy: true,
-      ratings: {
-        where: {
-          AND: [
-            { NOT: { orderId: undefined } },
-            { NOT: { productId: undefined } },
-          ],
-        },
-      },
     },
   });
+  const rating = await prisma.rating.aggregate({
+    where: {
+      AND: [{ NOT: { orderId: undefined } }, { productId: id }],
+    },
+    _avg: {
+      rating: true,
+    },
+    _count: {
+      rating: true,
+    },
+  });
+  const productRatings = await prisma.rating.findMany({
+    where: {
+      AND: [{ NOT: { orderId: undefined } }, { productId: id }],
+    },
+    select: {
+      user: {
+        select: {
+          fullname: true,
+        },
+      },
+      rating: true,
+      createdAt: true,
+      id: true,
+      review: true,
+    },
+  });
+  let avgRating = (rating._avg.rating || 0).toString().includes(".")
+    ? (rating._avg.rating || 0).toFixed(1)
+    : (rating._avg.rating || 0).toFixed(0);
   return returnJSONSuccess(res, {
     data: product,
-    positiveFeeback: await getPositiveReview(product?.store.id!),
+    avgRating: parseFloat(avgRating),
+    totalRating: rating._count.rating || 0,
+    storePositiveFeeback: await getPositiveReview(product?.store.id!),
+    productRatings,
   });
 };
 export const deleteProductById = async (req: Request, res: Response) => {
