@@ -334,7 +334,7 @@ export function useUpdateProfile() {
      * Send request to API server to update a Profile
      * @returns The response for the API request
      */
-    async function updateProfile(data: ProfileRequest) {
+    async function updateProfile(data: FormData) {
         // Send request to update a Profile
         let response = await API.patch(`${ApiRoutes.UpdateProfile}`, data);
 

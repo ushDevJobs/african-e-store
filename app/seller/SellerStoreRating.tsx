@@ -36,18 +36,21 @@ const SellerPageStoreRating = ({ store, isFetchingStore, handleFetchStore, setSe
             ) : (
                 <div className={styles.storeInfo}>
                     <div className={styles.storelhs}>
-                        <span className="bg-[#2C7865] h-fit p-3 rounded-full">
-                            {store?.storeDetails?.image ? (
+                        {store?.storeDetails?.image ?
+                            <div className="relative h-[60px] w-[60px] md:h-[100px] md:w-[100px]">
                                 <Image
                                     src={store.storeDetails.image}
                                     alt="Logo"
-                                    width={50}
-                                    height={50}
+                                    fill
+                                    className="object-cover rounded-full"
                                 />
-                            ) : (
+                            </div> :
+                            <span className="bg-[#2C7865] h-fit p-3 rounded-full">
                                 <UserIcon />
-                            )}
-                        </span>
+                            </span>
+                        }
+
+
                         <div className={styles.info}>
                             <h3 className="text-lg md:text-xl lg:text-2xl text-[#828282] mb-1 font-semibold underline">
                                 {store?.storeDetails.name}

@@ -20,42 +20,41 @@ type Props = {
 
 const EditProfileModal = ({ visibility, setVisibility, handleFetchStore, selectedStore }: Props) => {
     const updateProfile = useUpdateProfile();
-    const [formValues, setFormValues] = useState<ProfileRequest>();
-    const [updatedFormValues, setUpdatedFormValues] = useState<ProfileRequest>();
+
+    const [formValues, setFormValues] = useState<ProfileRequest>({
+        name: '',
+        description: '',
+        image: '',
+    });
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [isUpdatingProfile, setIsUpdatingProfile] = useState(false);
-    const [userPhoto, setUserPhoto] = useState<string>();
-    const [selectedImageFile, setSelectedImageFile] = useState<File | null>(null);
+    const [userPhoto, setUserPhoto] = useState<string>('');
     console.log(formValues)
-console.log({updatedFormValues})
 
-    function onFormValueChange(e: ChangeEvent<HTMLSelectElement | HTMLTextAreaElement | HTMLInputElement>) {
-
+    const handleInputChange = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>) => {
         const { name, value } = e.target;
-
-        setFormValues({ ...formValues as ProfileRequest, [name]: value });
-        setUpdatedFormValues({ ...updatedFormValues as ProfileRequest, [name]: value });
+        setFormValues({ ...formValues, [name]: value });
     };
 
-    const handleFileUpload = (e: any) => {
-        const selectedFile: File = e.target.files[0];
-        console.log({ selectedFile })
-        if (selectedFile && (selectedFile.type === "image/jpg" || selectedFile.type === "image/png" || selectedFile.type === 'image/jpeg' || selectedFile.type === 'image/webp')) {
-            setSelectedImageFile(selectedFile);
-            const imgURL = URL.createObjectURL(selectedFile);
-            setUserPhoto(imgURL);
+    const handleFileUpload = (e: ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file && (file.type === 'image/jpg' || file.type === 'image/png' || file.type === 'image/jpeg' || file.type === 'image/webp')) {
+            setSelectedFile(file);
+            setUserPhoto(URL.createObjectURL(file));
         }
     };
 
-    async function handleUpdateProfile(e: FormEvent<HTMLFormElement>) {
-
+    const handleUpdateProfile = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-
-        // Log request 
-
-        // Show loader 
         setIsUpdatingProfile(true);
 
-        await updateProfile(updatedFormValues as ProfileRequest)
+        const formData = new FormData();
+        formData.append('name', formValues.name);
+        formData.append('description', formValues.description);
+        if (selectedFile) {
+            formData.append('image', selectedFile);
+        }
+        await updateProfile(formData)
             .then((response) => {
                 // Log response 
                 // console.log(response);
@@ -84,25 +83,22 @@ console.log({updatedFormValues})
     useEffect(() => {
         if (selectedStore?.storeDetails) {
             setUserPhoto(selectedStore.storeDetails.image);
+            setFormValues(selectedStore?.storeDetails);
         }
     }, [selectedStore?.storeDetails])
 
-    useEffect(() => {
-        setFormValues(selectedStore?.storeDetails);
-        setUpdatedFormValues(selectedStore?.storeDetails);
-    }, [selectedStore?.storeDetails]);
     return (
         <ModalWrapper
             visibility={visibility}
             setVisibility={setVisibility}
-            styles={{ backgroundColor: "transparent" }}
+            styles={{ backgroundColor: 'transparent' }}
         >
-            <form className="flex flex-col gap-8 min-w-[400px] bg-[#fff] overflow-y-auto max-h-[90vh] p-10 w-full rounded-[37px]" onSubmit={(e) => handleUpdateProfile(e)}>
+            <form onSubmit={handleUpdateProfile} className="flex flex-col gap-8 min-w-[400px] bg-[#fff] overflow-y-auto max-h-[90vh] p-10 w-full rounded-[37px]">
                 <h2 className='text-2xl text-[#1E1E1E] mb-3 text-center font-medium'>Edit your profile</h2>
                 <div className='flex flex-col items-center mb-4 relative w-fit h-fit mx-auto justify-center'>
                     <div className='w-[120px] h-[120px] rounded-full bg-gray-300 grid place-items-center overflow-hidden mb-3 relative '>
                         <span className='inline-flex'><ImageIcon /></span>
-                        {userPhoto && <Image src={userPhoto} alt="User photo" fill />}
+                        {userPhoto && <Image src={userPhoto} alt="User photo" className='object-cover' fill />}
                     </div>
                     <button type='button' className='text-white text-sm font-medium cursor-pointer bg-primary w-10 h-10 grid place-items-center rounded-full absolute bottom-0 right-0 '>
                         <input type="file" className='absolute w-full h-full top-0 left-0 cursor-pointer opacity-0' onChange={(e) => handleFileUpload(e)} />
@@ -110,21 +106,21 @@ console.log({updatedFormValues})
                     </button>
                 </div>
                 <div className="flex flex-col gap-1 w-full">
-                    <Label text={<label>Store name </label>} />
+                    <Label text={<>Store name </>} />
                     <Input
-                        type="text" name="name"
-                        className=' w-full py-[10px] px-4 placeholder:text-sm text-base !rounded-[10px]'
-                        onChange={(e) => onFormValueChange(e)}
-                        value={formValues?.name}
+                        name="name"
+                        value={formValues.name}
+                        onChange={handleInputChange}
+                        className='w-full py-[10px] px-4 placeholder:text-sm text-base !rounded-[10px]'
                     />
                 </div>
                 <div className="flex flex-col gap-1 w-full">
-                    <Label text={<label>Brief</label>} />
+                    <Label text={<>Brief</>} />
                     <TextArea
                         name="description"
-                        className=' w-full py-[10px] px-4 placeholder:text-sm text-base !rounded-[10px]'
-                        onChange={(e) => onFormValueChange(e)}
-                        value={formValues?.description}
+                        value={formValues.description}
+                        onChange={handleInputChange}
+                        className='w-full py-[10px] px-4 placeholder:text-sm text-base !rounded-[10px]'
                     />
                 </div>
                 <div className="flex items-center ml-auto text-sm gap-5">
