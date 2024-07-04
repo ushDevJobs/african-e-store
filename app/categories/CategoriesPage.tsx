@@ -111,8 +111,8 @@ const CategoriesPage = () => {
 
     return (
         <motion.div
-            initial = "closed"
-            animate = { isFilterOpen ? "opened": "closed" }>
+            initial="closed"
+            animate={isFilterOpen ? "opened" : "closed"}>
             {isFilterOpen && <MobileSettingsBar setIsFilterOpen={setIsFilterOpen} categories={categories} activeCategory={activeCategory} onCategoryClick={handleCategoryClick} />}
             {categories.length == 0 && isFetchingCategories ? <CategoriesSkeletonLoader /> :
                 <div className={styles.main}>
@@ -142,6 +142,7 @@ const CategoriesPage = () => {
                                                         <Image fill src={product.coverImage} alt='product image' />
                                                     </div>
                                                     <p>{product.name} </p>
+                                                    <span className='text-gray-400 text-sm '>{product.details}</span>
                                                     <h4>&pound;{product.amount.toLocaleString()}</h4>
                                                 </Link>
                                             ))}
