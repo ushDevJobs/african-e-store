@@ -35,7 +35,7 @@ const AddProductToCart = ({ product, isFetchingProduct }: Props) => {
     const isMobile = windowRes.width && windowRes.width < 768;
     const onMobile = typeof isMobile === 'boolean' && isMobile;
     const onDesktop = typeof isMobile === 'boolean' && !isMobile;
-// console.log({product})
+    // console.log({product})
     let imagesUrls: string[] = [];
 
     if (product && product.images) {
@@ -49,8 +49,6 @@ const AddProductToCart = ({ product, isFetchingProduct }: Props) => {
 
         imagesUrls = imageUrlsArray.map(image => image);
     }
-
-    // console.log("imagesUrls", imagesUrls);
 
     const [mainImage, setMainImage] = useState(imagesUrls[0]);
     // console.log({ mainImage })
@@ -94,7 +92,8 @@ const AddProductToCart = ({ product, isFetchingProduct }: Props) => {
                                 </div>
                             )}
                             <h1 className={styles.productName}>{product?.name}</h1>
-                            {onDesktop && <p className={styles.shipping}>{product?.shippingDetails}</p>}
+                            <p className='text-[#828282] text-base mb-8 md:mt-1 md:mb-2'> {product?.details}</p>
+                            {/* {onDesktop && <p className={styles.shipping}>{product?.shippingDetails}</p>} */}
                             {onDesktop && <h2 className={styles.price}>&pound;{product?.amount.toLocaleString()}</h2>}
                             <p className='text-[#828282] text-base mb-8 md:mb-5'>Condition: {product?.itemCondition}</p>
                             {onMobile && (
@@ -116,7 +115,7 @@ const AddProductToCart = ({ product, isFetchingProduct }: Props) => {
                             )}
                             {onDesktop && (
                                 <div className={styles.bid}>
-                                    {product.endBiddingDate && <p>{product.name} <span className='text-[#FD6A02] text-base'>7 Bids at US $168 </span>(Bidding ends on {moment(product.endBiddingDate).format('DD-MM-YYYY')}) <button onClick={() => setIsPlaceABidVisible(true)}>Place Bid </button></p>}                                  
+                                    {product.endBiddingDate && <p>{product.name} <span className='text-[#FD6A02] text-base'>7 Bids at US $168 </span>(Bidding ends on {moment(product.endBiddingDate).format('DD-MM-YYYY')}) <button onClick={() => setIsPlaceABidVisible(true)}>Place Bid </button></p>}
                                     <Link href={'/contact-seller'}><button className='mt-1'>Contact seller</button></Link>
                                 </div>
                             )}
