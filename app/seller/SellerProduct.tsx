@@ -16,6 +16,7 @@ const SellerProduct = ({
     isFetchingProducts,
     setIsAddProductModalVisible,
 }: Props) => {
+    console.log({ products })
     return (
         <main className="overflow-y-auto max-h-[500px] w-full">
             <div className="flex flex-col gap-10">
