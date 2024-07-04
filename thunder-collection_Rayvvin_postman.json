@@ -1,6 +1,6 @@
 {
     "info": {
-        "_postman_id": "385ab088-4f93-4b0b-a218-df996888a19c",
+        "_postman_id": "0f0ec5f8-4c0f-4fd1-bc40-987a2b9ef32f",
         "name": "Rayvvin",
         "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
         "description": ""
@@ -245,6 +245,11 @@
                                     "key": "condition",
                                     "value": "2",
                                     "disabled": true
+                                },
+                                {
+                                    "key": "products",
+                                    "value": "false",
+                                    "disabled": true
                                 }
                             ],
                             "variable": [],
@@ -457,7 +462,7 @@
                                 },
                                 {
                                     "key": "image",
-                                    "src": "c:\\Users\\USER\\Downloads\\ulcer img2.jpg",
+                                    "src": "c:\\Users\\USER\\Downloads\\store pd.jfif",
                                     "type": "file"
                                 }
                             ]
@@ -774,12 +779,12 @@
                     "request": {
                         "method": "GET",
                         "url": {
-                            "raw": "http://localhost:3000/api/products/product/clxzcnizw0001ekoc53wh1950",
+                            "raw": "http://localhost:3000/api/products/product/cly0d5ywn0005kfryhsuycuxt",
                             "path": [
                                 "api",
                                 "products",
                                 "product",
-                                "clxzcnizw0001ekoc53wh1950"
+                                "cly0d5ywn0005kfryhsuycuxt"
                             ],
                             "protocol": "http",
                             "host": [
@@ -811,17 +816,17 @@
                             "formdata": [
                                 {
                                     "key": "price",
-                                    "value": "250",
+                                    "value": "10",
                                     "type": "default"
                                 },
                                 {
                                     "key": "name",
-                                    "value": "Samsung 43 Mp 50 64GB ram 1TB ROM",
+                                    "value": "Sunglasses",
                                     "type": "default"
                                 },
                                 {
                                     "key": "quantity",
-                                    "value": "14",
+                                    "value": "5000",
                                     "type": "default"
                                 },
                                 {
@@ -830,13 +835,8 @@
                                     "type": "default"
                                 },
                                 {
-                                    "key": "salesType",
-                                    "value": "BIDDING",
-                                    "type": "default"
-                                },
-                                {
                                     "key": "category",
-                                    "value": "793e6b2c-3599-11ef-b974-bc",
+                                    "value": "793ded12-3599-11ef-b974-bc",
                                     "type": "default"
                                 },
                                 {
@@ -847,7 +847,7 @@
                                 },
                                 {
                                     "key": "description",
-                                    "value": "Very good phone. bla bla bla",
+                                    "value": "affordable",
                                     "type": "default"
                                 },
                                 {
@@ -857,14 +857,29 @@
                                     "type": "default"
                                 },
                                 {
+                                    "key": "salesType",
+                                    "value": "ONCE",
+                                    "type": "default"
+                                },
+                                {
                                     "key": "images",
-                                    "src": "c:\\Users\\USER\\Downloads\\ulcer img2.jpg",
+                                    "src": "c:\\Users\\USER\\Downloads\\sunglasses 1.png",
                                     "type": "file"
                                 },
                                 {
                                     "key": "images",
-                                    "src": "c:\\Users\\USER\\Downloads\\ulcer illness.jpg",
+                                    "src": "c:\\Users\\USER\\Downloads\\sunglasses 2.jfif",
                                     "disabled": true,
+                                    "type": "file"
+                                },
+                                {
+                                    "key": "images",
+                                    "src": "c:\\Users\\USER\\Downloads\\sunglasses 3.jfif",
+                                    "type": "file"
+                                },
+                                {
+                                    "key": "images",
+                                    "src": "c:\\Users\\USER\\Downloads\\sunglasses 4.jfif",
                                     "type": "file"
                                 }
                             ]
@@ -929,6 +944,26 @@
                                 "api",
                                 "products",
                                 "favourite"
+                            ],
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3000"
+                        }
+                    }
+                },
+                {
+                    "name": "Delete Product By id ",
+                    "request": {
+                        "method": "DELETE",
+                        "url": {
+                            "raw": "http://localhost:3000/api/products/product/cly6azblw000112gfg1ep08ti",
+                            "path": [
+                                "api",
+                                "products",
+                                "product",
+                                "cly6azblw000112gfg1ep08ti"
                             ],
                             "protocol": "http",
                             "host": [

@@ -18,6 +18,9 @@ export const createPrismaError = (error: Error) => {
       case "P2002":
         errorMessage = "Cannot create multiple product with same name";
         break;
+      case "P2025":
+        errorMessage = "Record not found";
+        break;
       default:
         errorMessage = "Unable to perform request";
     }
