@@ -6,21 +6,10 @@ export type Products = {
   name: string;
   itemCondition: string;
   salesType: string;
-  endBiddingDate: string;
   amount: number;
   quantity: number;
   details: string;
-  publish: boolean;
   coverImage: string;
-  images: 'image1.jpg,image2.jpg';
-  returnPolicy: string;
-  location: string;
-  storeId: string;
-  shippingDetails: string;
-  discount: boolean;
-  discountPercentage: number;
-  createdAt: string;
-  updatedAt: string;
 };
 
 export interface CategoriesResponse {

@@ -1,25 +1,26 @@
+import { Favorite } from './IStores';
+
 export interface ProductResponse {
   id: string;
   name: string;
   itemCondition: string;
   salesType: string;
-  endBiddingDate: string;
   amount: number;
   quantity: number;
   details: string;
-  publish: true;
   coverImage: string;
-  images: string[];
-  returnPolicy: string;
-  location: string;
-  storeId: string;
-  shippingDetails: string;
-  discount: true;
-  discountPercentage: number;
-  createdAt: string;
-  updatedAt: string;
   store: StoreResponse;
+  discount: boolean;
+  discountPercentage: number;
+  images: string[];
+  favourite: Favorite[];
+  endBiddingDate: null;
+  returnPolicy: null;
+  ratings: Rating[];
+  positiveFeeback: number;
 }
+
+export interface Rating {}
 
 export interface StoreResponse {
   id: string;
