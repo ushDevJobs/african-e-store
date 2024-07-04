@@ -23,9 +23,11 @@ import { CategoriesResponse } from "../components/models/AllCategories";
 type Props = {
   visibility: boolean;
   setVisibility: React.Dispatch<React.SetStateAction<boolean>>;
-    handleFetchProducts({ clearPreviousProducts }: {
-        clearPreviousProducts?: boolean | undefined;
-    }): Promise<void>
+  handleFetchProducts({
+    clearPreviousProducts,
+  }: {
+    clearPreviousProducts?: boolean | undefined;
+  }): Promise<void>;
 };
 
 const AddProductModal = ({
@@ -310,20 +312,21 @@ const AddProductModal = ({
 
     if (validateFields()) {
       const formData = new FormData();
-        console.log({ formData })
+      console.log({ formData });
       formData.append("price", "" + formValues?.price!);
       formData.append("name", formValues?.name as string);
       formData.append("category", formValues?.category as string);
       formData.append("quantity", "" + formValues?.quantity!);
       formData.append("condition", selectedConditions);
       formData.append("salesType", selectedSalesType);
-    //   formData.append("publish", false);
+      //   formData.append("publish", false);
       formData.append("date", formValues?.date as string);
       formData.append("description", formValues?.description as string);
       formData.append("images", formValues?.imageOne as string);
       formData.append("images", formValues?.imageTwo as string);
       formData.append("images", formValues?.imageThree as string);
       formData.append("images", formValues?.imageFour as string);
+      formData.append("publish", "true");
 
       // Send request to create product
       await addProduct(formData)
@@ -334,7 +337,7 @@ const AddProductModal = ({
           // Display success
           toast.success("Product has been created successfully.");
           setVisibility(false);
-            handleFetchProducts({ clearPreviousProducts: true });
+          handleFetchProducts({ clearPreviousProducts: true });
           resetForm();
         })
         .catch((error) => {
