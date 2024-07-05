@@ -7,7 +7,7 @@ import { ErrorCode } from "../exceptions/root";
 import { NotFound } from "../exceptions/not-found";
 import { RequestUser } from "../types";
 
-export const getAllCategories = async (req: Request, res: Response) => {
+export const getCategories = async (req: Request, res: Response) => {
   const { _limit, _page } = req.query;
   const user = req.user as RequestUser;
   const addFavourite = req.isAuthenticated()
@@ -140,6 +140,31 @@ export const getAllCategories = async (req: Request, res: Response) => {
       createdAt: true,
       ...fetchProduct,
       ...countProducts,
+    },
+  });
+
+  return returnJSONSuccess(res, {
+    data: categories,
+    totalPages: Math.ceil(count / (_limit ? +_limit : count)),
+    hasMore: validatedPag.data?._page! * (_limit ? +_limit : count) < count,
+  });
+};
+export const getAllCategories = async (req: Request, res: Response) => {
+  const { _limit, _page } = req.query;
+
+  const validatedPag = validatePagination.safeParse({
+    _page: +_page!,
+  });
+  const count = await prisma.category.count({});
+  const page = (+validatedPag.data?._page! - 1) * (_limit ? +_limit : count);
+
+  const categories = await prisma.category.findMany({
+    skip: page,
+    take: +_limit! || undefined,
+    select: {
+      id: true,
+      name: true,
+      createdAt: true,
     },
   });
 

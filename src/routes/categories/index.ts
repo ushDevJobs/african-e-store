@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {
   getAllCategories,
+  getCategories,
   getCategoryById,
   updateCategory,
 } from "../../controllers/categories";
@@ -9,7 +10,8 @@ import { checkAuth } from "../../middlewares/auth";
 
 const router = Router();
 
-router.get("/", rootErrorHandler(getAllCategories));
+router.get("/", rootErrorHandler(getCategories));
+router.get("/all", rootErrorHandler(getAllCategories));
 router.get("/category/:id", rootErrorHandler(getCategoryById));
 router.patch("/category/:id", checkAuth, rootErrorHandler(updateCategory));
 
