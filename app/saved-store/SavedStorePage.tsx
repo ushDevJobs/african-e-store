@@ -98,8 +98,8 @@ const SavedStorePage = (props: Props) => {
                     <ComponentLoader lightTheme svgStyle={{ width: '62px' }} />
                 </p>
             )}
-            {!savedStoreStores && !isFetchingSavedStores &&
-                <p className={styles.loaderText}>No stores found</p>
+            {savedStoreStores?.length == 0 &&
+                <p className={styles.loaderText}>No saved store found</p>
             }
         </div>
     )

@@ -118,9 +118,10 @@ const SingleCategoryPage = ({ params }: Props) => {
                                         {category?.products.map((product, index) => (
                                             <Link href={`/products/${product.id}`} className={styles.card} key={product.id} >
                                                 <div className={styles.image}>
-                                                    <Image fill src={images.cashew} alt='product image' />
+                                                    <Image fill src={product.coverImage} alt='product image' />
                                                 </div>
                                                 <p>{product.name} </p>
+                                                <p className='text-xs my-1'>{product.details} </p>
                                                 <h4>&pound;{product.amount.toLocaleString()}</h4>
                                             </Link>
                                         ))}

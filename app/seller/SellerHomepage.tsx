@@ -133,7 +133,7 @@ const SellerHomePage = (props: Props) => {
                             Customer Feedbacks
                         </span>
                     </div>
-                    {activeTab === TabIndex.Shop && <SellerProduct products={products}
+                    {activeTab === TabIndex.Shop && <SellerProduct products={products} handleFetchProducts={handleFetchProducts}
                         isFetchingProducts={isFetchingProducts} setIsAddProductModalVisible={setIsAddProductModalVisible} />}
                     {activeTab === TabIndex.About && <AboutSeller />}
                     {activeTab === TabIndex.Draft && <AboutSeller />}

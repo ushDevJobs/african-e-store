@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styles from '../products/[productId]/SingleCategory.module.scss';
 import QuantityButton from './QuantityButton';
-import { FavoriteIcon, RatingIcon, ShoppingIcon } from './SVGs/SVGicons';
+import { FavoriteIcon, FilledLoveIcon, RatingIcon, ShoppingIcon } from './SVGs/SVGicons';
 import images from '@/public/images';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -15,16 +15,15 @@ import ComponentLoader from './Loader/ComponentLoader';
 import { useAccountStatus } from '../context/AccountStatusContext';
 import { useRouter } from 'next/navigation';
 import moment from 'moment';
-import { useAddProductsToFavorite } from '../api/apiClients';
-import { toast } from 'sonner';
 
 type Props = {
     product: ProductResponse | undefined;
     isFetchingProduct: boolean;
+    handleAddProductToFavorite: (id: string) => Promise<void>
+     handleRemoveProductFromFavorite: (id: string) => Promise<void>
 };
 
-const AddProductToCart = ({ product, isFetchingProduct }: Props) => {
-    const addProductsToFavorite = useAddProductsToFavorite();
+const AddProductToCart = ({ product, isFetchingProduct, handleAddProductToFavorite, handleRemoveProductFromFavorite }: Props) => {
     const dispatch = useDispatch();
     const { accountStatus, fetchAccountStatus } = useAccountStatus();
     const quantityInCart = useSelector((state: RootState) => productQtyInCartSelector(state, product?.id as string));
@@ -56,6 +55,13 @@ const AddProductToCart = ({ product, isFetchingProduct }: Props) => {
         fetchAccountStatus();
     }, []);
 
+    // Calculate the maximum rating possible (e.g., 5 stars)
+    const maxRating = 5;
+
+    // Get the number of filled ratings from the product ratings array
+    const filledRatings = product?.ratings.map(rating => rating.rating) || [];
+
+ 
     return (
         <>
             <PlaceABidComponent visibility={isPlaceABidVisible} setVisibility={setIsPlaceABidVisible} />
@@ -86,30 +92,38 @@ const AddProductToCart = ({ product, isFetchingProduct }: Props) => {
                                     {!quantityInCart && (
                                         <span className='border border-[#828282] rounded-3xl py-2 px-16 cursor-pointer' onClick={() => dispatch(increment(product as ProductResponse))}><ShoppingIcon /> </span>
                                     )}
-                                    <Link className='border border-[#828282] ml-auto rounded-3xl py-2 px-16' href={'/'}>
-                                        <span><FavoriteIcon /></span>
-                                    </Link>
+                                    <span
+                                        className='border border-[#828282] cursor-pointer ml-auto rounded-3xl py-2 px-16'
+                                        onClick={(e) => {
+                                            e.preventDefault(); // Prevent navigation on click
+                                            if (product.favourite.length === 0) {
+                                                handleAddProductToFavorite(product.id);
+                                            } else {
+                                                handleRemoveProductFromFavorite(product.id);
+                                            }
+                                        }}>
+                                        {product.favourite.length === 0 ? <FavoriteIcon /> : <FilledLoveIcon />}
+                                    </span>
                                 </div>
                             )}
                             <h1 className={styles.productName}>{product?.name}</h1>
-                            <p className='text-[#828282] text-base mb-8 md:mt-1 md:mb-2'> {product?.details}</p>
+                            <p className='text-[#828282] text-base mt-1 mb-1 md:mt-1 md:mb-2'> {product?.details}</p>
                             {/* {onDesktop && <p className={styles.shipping}>{product?.shippingDetails}</p>} */}
                             {onDesktop && <h2 className={styles.price}>&pound;{product?.amount.toLocaleString()}</h2>}
                             <p className='text-[#828282] text-base mb-8 md:mb-5'>Condition: {product?.itemCondition}</p>
                             {onMobile && (
                                 <div className={`${styles.rating} -mt-7`}>
-                                    <span className='flex items-center'>
-                                        {[1, 2, 3, 4].map((_, index) => (
-                                            <span key={index} className={index != 5 ? 'mr-1' : ''}>
-                                                <RatingIcon colored={true} />
+                                    {/* <span className='flex items-center'>
+                                        {[...Array(maxRating)].map((_, index) => (
+                                            <span key={index} className={index !== maxRating - 1 ? 'mr-1' : ''}>
+                                                {index < filledRatings.length ? (
+                                                    <RatingIcon colored={true} /> // Render filled rating icon
+                                                ) : (
+                                                    <RatingIcon /> // Render empty rating icon
+                                                )}
                                             </span>
                                         ))}
-                                        {[1].map((_, index) => (
-                                            <span key={index}>
-                                                <RatingIcon />
-                                            </span>
-                                        ))}
-                                    </span>
+                                    </span> */}
                                     <p className=' text-[#2C7865] text-sm'>(121 review)</p>
                                 </div>
                             )}
@@ -121,6 +135,17 @@ const AddProductToCart = ({ product, isFetchingProduct }: Props) => {
                             )}
                             {onDesktop && (
                                 <div className={styles.rating}>
+                                    {/* <span className='flex items-center'>
+                                        {[...Array(maxRating)].map((_, index) => (                                
+                                            <span key={index} className={index !== maxRating - 1 ? 'mr-1' : ''}>
+                                                {index < filledRatings.length ? (
+                                                    <RatingIcon colored={true} /> // Render filled rating icon
+                                                ) : (
+                                                    <RatingIcon /> // Render empty rating icon
+                                                )}
+                                            </span>
+                                        ))}
+                                    </span> */}
                                     <span className='flex items-center'>
                                         {[1, 2, 3, 4].map((_, index) => (
                                             <span key={index} className={index != 5 ? 'mr-1' : ''}>
@@ -155,9 +180,18 @@ const AddProductToCart = ({ product, isFetchingProduct }: Props) => {
                                         {!quantityInCart && (
                                             <span className={`${styles.icon} cursor-pointer`} onClick={() => dispatch(increment(product as ProductResponse))}><ShoppingIcon /></span>
                                         )}
-                                        <Link className={styles.icon} href={'/'}>
-                                            <span><FavoriteIcon /></span>
-                                        </Link>
+                                        <span
+                                            className={`${styles.icon} bg-white p-3 cursor-pointer rounded-full`}
+                                            onClick={(e) => {
+                                                e.preventDefault(); // Prevent navigation on click
+                                                if (product.favourite.length === 0) {
+                                                    handleAddProductToFavorite(product.id);
+                                                }else {
+                                                    handleRemoveProductFromFavorite(product.id);
+                                                }
+                                            }}>
+                                            {product.favourite.length === 0 ? <FavoriteIcon /> : <FilledLoveIcon />}
+                                        </span>
                                     </>
                                 )}
                             </div>

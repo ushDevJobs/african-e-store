@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import styles from "./SellerStore.module.scss";
 import SellerStoreRating from "./SellerStoreRating";
 import SellerShop from "./SellerShop";
-import CategoriesSettingsBar from "../../components/CategoriesSettingsBar";
 import {
     FilterIcon,
     SearchIcon,
@@ -18,7 +17,6 @@ import {
 } from "@/app/components/models/IStores";
 import {
     useFetchAStore,
-    useFetchSingleCategory,
     useStoreCategories,
     useStoreProducts,
 } from "@/app/api/apiClients";
@@ -115,9 +113,18 @@ const SellerStorePage = ({ params }: Props) => {
             });
     }
 
-      const filteredStoreProducts = storeProducts?.filter(
-          (item) => item.name && item.name.toLowerCase().includes(searchQuery.toLowerCase())
-      );
+    //   const filteredStoreProducts = storeProducts?.filter(
+    //       (item) => item.name && item.name.toLowerCase().includes(searchQuery.toLowerCase())
+    //   );
+    const filteredCategories = storeProducts?.map(store => ({
+        ...store,
+        categories: store.categories.map(category => ({
+            ...category,
+            products: category.products.filter(product =>
+                product.name.toLowerCase().includes(searchQuery.toLowerCase())
+            )
+        })).filter(category => category.products.length > 0)
+    })).filter(store => store.categories.length > 0);
 
     useEffect(() => {
         handleFetchStore();
@@ -222,7 +229,8 @@ const SellerStorePage = ({ params }: Props) => {
                     )}
                     {activeTab === TabIndex.Shop && (
                         <SellerShop
-                            filteredStoreProducts={filteredStoreProducts}
+                            filteredCategories={filteredCategories}
+                            storeProducts={storeProducts}
                             isFetchingProducts={isFetchingProducts}
                             handleFetchStoreCategories={handleFetchStoreCategories}
                         />

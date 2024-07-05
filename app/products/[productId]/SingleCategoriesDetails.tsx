@@ -43,7 +43,7 @@ const SingleCategoriesDetails = ({ product }: Props) => {
                             </span>
 
                             <p className='text-base text-[#4B4B4B] font-normal leading-9 mt-6 mb-5'>
-                                Grade C - Condition 5/10 <br />
+                                {/* Grade C - Condition 5/10 <br />
                                 At first glance, the device appears to be very used. <br />
                                 The screen has heavily visible scratches under normal light. <br />
                                 The back cover has heavy use signs including scratches visible under normal light. <br />
@@ -53,7 +53,8 @@ const SingleCategoriesDetails = ({ product }: Props) => {
                                 Storage: 128GB <br />
                                 Color: Phantom Gray <br />
                                 Carrier: Factory Unlocked <br />
-                                Lock Status: Unlocked
+                                Lock Status: Unlocked */}
+                                {product?.details}
                             </p>
                             <div className={styles.return}>
                                 <div className={styles.returnLhs}>

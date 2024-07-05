@@ -134,7 +134,8 @@ const CategoriesPage = () => {
                                 {categories.map((category, index) => (
                                     <div className='flex flex-col'
                                         key={category.id}
-                                        ref={(el) => { categoryRefs.current[category.id.toString()] = el; }}>                                        <h3>{category.name}</h3>
+                                        ref={(el) => { categoryRefs.current[category.id.toString()] = el; }}>
+                                        <h3>{category.name}</h3>
                                         <div className={styles.cards}>
                                             {category.products.map((product, index) => (
                                                 <Link href={`/products/${product.id}`} className={styles.card} key={product.id} id={category.id.toString()}>

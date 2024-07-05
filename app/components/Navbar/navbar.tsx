@@ -225,7 +225,7 @@ const Navbar = (props: Props) => {
                                             <Link href={'/saved-store'} onClick={() => setIsLoginDropdownOpen(false)}>
                                                 Saved Store
                                             </Link>
-                                            <Link href={'/saved-items'}>
+                                            <Link href={'/saved-items'} onClick={() => setIsLoginDropdownOpen(false)}>
                                                 Saved Items
                                             </Link>
                                             <Link href={'/'}>

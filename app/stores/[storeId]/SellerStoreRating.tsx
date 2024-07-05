@@ -4,6 +4,7 @@ import { DotIcon, GreenStarIcon, UserIcon } from '../../components/SVGs/SVGicons
 import useResponsiveness from '../../components/hooks/responsiveness-hook'
 import { ASingleStoreResponse } from '@/app/components/models/IStores'
 import { StoreStoreRatingSkeletonLoader } from '../StoresSkeleton'
+import Image from 'next/image'
 
 type Props = {
     store?: ASingleStoreResponse | undefined;
@@ -27,9 +28,22 @@ const SellerStoreRating = ({store, isFetchingStore}: Props) => {
         {!store && isFetchingStore ? <StoreStoreRatingSkeletonLoader /> : 
                 <div className={styles.storeInfo}>
                     <div className={styles.storelhs}>
-                        <span className='bg-[#2C7865] h-fit p-3 rounded-full'><UserIcon /></span>
+                        {store?.storeDetails?.image ?
+                            <div className="relative h-[60px] w-[60px] md:h-[100px] md:w-[100px]">
+                                <Image
+                                    src={store.storeDetails.image}
+                                    alt="Logo"
+                                    fill
+                                    className="object-cover rounded-full"
+                                />
+                            </div> :
+                            <span className="bg-[#2C7865] h-fit p-3 rounded-full">
+                                <UserIcon />
+                            </span>
+                        }
                         <div className={styles.info}>
                             <h3 className='text-lg md:text-xl lg:text-2xl text-[#828282] mb-1 font-semibold underline'>{store?.storeDetails.name}</h3>
+                            <p className="text-sm text-[#333333] mb-1">{store?.storeDetails.description}</p>
                             <div className='flex gap-2 text-[#1E1E1E] text-sm'>
                                 <span className='flex text-sm md:text-base items-center gap-1'><DotIcon />{store?.feedback}&#37; Feedback</span>
                                 <span className='flex text-sm md:text-base items-center gap-1'><DotIcon />{store?.totalItemSold} {store?.totalItemSold === 1 ? 'Item Sold' : 'Items Sold'}</span>
@@ -39,7 +53,7 @@ const SellerStoreRating = ({store, isFetchingStore}: Props) => {
                     <div className={styles.ratings}>
                         <div className={styles.rating}>
                             <div className={styles.average}>
-                                <h4 className='flex items-center gap-2'>{store?.avgRating.rating ?? 0}/5 {onMobile && <span className='text-[#828282] font-normal'>Rating</span>}</h4>
+                                <h4 className='flex items-center gap-2'>{store?.avgRating.rating ? store?.avgRating.rating.toFixed(1) : 0}/5 {onMobile && <span className='text-[#828282] font-normal'>Rating</span>}</h4>
                                 {onDesktop && <p className='text-[#828282]'>Rating</p>}
                             </div>
 

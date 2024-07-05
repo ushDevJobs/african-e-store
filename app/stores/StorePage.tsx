@@ -122,7 +122,9 @@ const StorePage = (props: Props) => {
                     {filteredStores?.map((store, index) => (
                         <div className={styles.card} key={index}>
                             <div className={styles.image}>
-                                <Image fill src={images.cashew} alt='product image' />
+                                {/* <Image fill src={images.cashew} alt='product image' /> */}
+                                {store.image && <Image fill src={store.image} alt='product image' />}
+
                                 <span
                                     className='absolute right-2 top-2 bg-white p-3 cursor-pointer rounded-full'
                                     onClick={(e) => {
@@ -133,7 +135,8 @@ const StorePage = (props: Props) => {
                                             handleRemoveStoreFromFavorite(store.id);
                                         }
                                     }}>
-                                    {store.favourite.length === 0 ? <FavoriteIcon /> : <FilledLoveIcon />}                                </span>
+                                    {store.favourite.length === 0 ? <FavoriteIcon /> : <FilledLoveIcon />}
+                                </span>
                             </div>
                             <Link href={`/stores/${store.id}`} className="flex flex-col gap-2 w-fit">
                                 <h4 className='text-[#828282] text-base'>{store.name} </h4>

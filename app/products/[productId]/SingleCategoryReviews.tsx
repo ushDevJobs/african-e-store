@@ -5,6 +5,7 @@ import { FavoriteIcon, GreenStarIcon, RatingIcon, UserIcon } from '@/app/compone
 import useResponsiveness from '@/app/components/hooks/responsiveness-hook'
 import Link from 'next/link'
 import { ProductResponse } from '@/app/components/models/IProduct'
+import Image from 'next/image'
 
 type Props = {
     product: ProductResponse | undefined
@@ -16,38 +17,15 @@ const SingleCategoryReviews = ({ product }: Props) => {
     const onMobile = typeof isMobile == 'boolean' && isMobile;
     const onDesktop = typeof isMobile == 'boolean' && !isMobile;
 
-    const data = [
-        {
-            star: 5,
-            count: 98000
-        },
-        {
-            star: 4,
-            count: 80000
-        },
-        {
-            star: 3,
-            count: 60000
-        },
-        {
-            star: 2,
-            count: 40000
-        },
-        {
-            star: 1,
-            count: 20000
-        },
-    ]
-
     // Calculate total count and weighted sum for average
-    const totalCount = data.reduce((sum, item) => sum + item.count, 0);
-    const weightedSum = data.reduce((sum, item) => sum + (item.star * item.count), 0);
+    // const totalCount = data.reduce((sum, item) => sum + item.count, 0);
+    // const weightedSum = data.reduce((sum, item) => sum + (item.star * item.count), 0);
 
     // Calculate average rating
-    const averageRating = totalCount === 0 ? 0 : (weightedSum / totalCount).toFixed(1);
+    // const averageRating = totalCount === 0 ? 0 : (weightedSum / totalCount).toFixed(1);
 
-    // Find the maximum count among all ratings
-    const maxCount = Math.max(...data.map(item => item.count));
+    // // Find the maximum count among all ratings
+    // const maxCount = Math.max(...data.map(item => item.count));
 
     return (
         <div className={styles.reviews}>
@@ -57,14 +35,38 @@ const SingleCategoryReviews = ({ product }: Props) => {
                     <div className={styles.top}>
 
                         {onMobile && <div className={styles.top_lhs}>
-                            <span><UserIcon /></span>
+                             {product?.store.image ?
+                            <div className="relative h-[60px] w-[60px] md:h-[100px] md:w-[100px]">
+                                <Image
+                                    src={product?.store.image}
+                                    alt="Logo"
+                                    fill
+                                    className="object-cover rounded-full"
+                                />
+                            </div> :
+                            <span className="bg-[#2C7865] h-fit p-3 rounded-full">
+                                <UserIcon />
+                            </span>
+                        }
                             <div className={styles.product}>
                                 <Link href={'/stores'} className='text-[#828282] text-sm underline cursor-pointer'>{product?.store.name}</Link>
                                 <p className='text-[#828282] text-xs'>98% positive feedback</p>
                             </div>
                         </div>}
                         {onDesktop && <div className={styles.top_lhs}>
-                            <span><UserIcon /></span>
+                            {product?.store.image ?
+                            <div className="relative h-[60px] w-[60px] md:h-[100px] md:w-[100px]">
+                                <Image
+                                    src={product?.store.image}
+                                    alt="Logo"
+                                    fill
+                                    className="object-cover rounded-full"
+                                />
+                            </div> :
+                            <span className="bg-[#2C7865] h-fit p-3 rounded-full">
+                                <UserIcon />
+                            </span>
+                        }
                             <div className={styles.product}>
                                 <h3 className='text-[#828282] text-lg'>{product?.store.name}</h3>
                                 <p className='text-[#828282] text-base'>98% positive feedback <Link href={'/contact-seller'} className='cursor-pointer text-sm text-[#2C7865] font-bold'>Contact seller </Link></p>

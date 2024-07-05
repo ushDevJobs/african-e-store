@@ -20,7 +20,17 @@ export interface ProductResponse {
   positiveFeeback: number;
 }
 
-export interface Rating {}
+export interface Rating {
+  id: string;
+  rating: number;
+  review: string;
+  productId: string;
+  storeId: string;
+  userId: string;
+  orderId: string;
+  createdAt: string;
+  updatedAt: string;
+}
 
 export interface StoreResponse {
   id: string;

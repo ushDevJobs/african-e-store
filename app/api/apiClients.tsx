@@ -316,6 +316,38 @@ export function useRemoveStoreFromFavorite() {
     // Return function to add StoreToFavorite
     return RemoveFavoriteStore;
 }
+export function useRemoveProductFromFavorite() {
+    /**
+     * Send request to API server to removr Product from favorite
+     * @returns The response for the API request
+     */
+    async function RemoveFavoriteProduct(id: string) {
+        // Send request to add Product to favorite
+        let response = await API.delete(`${ApiRoutes.RemoveFavoriteProduct}/${id}`);
+
+        // Return response
+        return response;
+    }
+
+    // Return function to add ProductToFavorite
+    return RemoveFavoriteProduct;
+}
+export function useRemoveProduct() {
+    /**
+     * Send request to API server to removr Product
+     * @returns The response for the API request
+     */
+    async function RemoveProduct(id: string) {
+        // Send request to delete Product 
+        let response = await API.delete(`${ApiRoutes.RemoveProduct}/${id}`);
+
+        // Return response
+        return response;
+    }
+
+    // Return function to delete Product
+    return RemoveProduct;
+}
 
 // Api call to fetch favorite stores
 export function useFetchFavoriteStores() {
@@ -328,6 +360,17 @@ export function useFetchFavoriteStores() {
     }
 
     return fetchFavoriteStores;
+}
+export function useFetchFavoriteProducts() {
+    async function fetchFavoriteProducts() {
+        // Fire the request
+        const response = await API.get(ApiRoutes.FetchFavoriteProducts);
+
+        // Return the response
+        return response;
+    }
+
+    return fetchFavoriteProducts;
 }
 export function useUpdateProfile() {
     /**
