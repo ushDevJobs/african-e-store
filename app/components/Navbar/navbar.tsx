@@ -188,10 +188,10 @@ const Navbar = (props: Props) => {
                         {!isLoggedIn && !isSellerLoggedIn && (
                             <>
                                 <Link href='/login'>
-                                    <button className={styles.login}>  Login</button>
+                                    <button className={`${styles.login} hover:opacity-70`}>  Login</button>
                                 </Link>
                                 <Link href='/signup'>
-                                    <button className={styles.signup}>Sign up</button>
+                                    <button className={`${styles.signup} hover:opacity-70`}>Sign up</button>
                                 </Link>
                             </>
                         )}
@@ -231,7 +231,7 @@ const Navbar = (props: Props) => {
                                             <Link href={'/'}>
                                                 Track order
                                             </Link>
-                                            <button onClick={() => {
+                                            <button className={'hover:opacity-70'} onClick={() => {
                                                 setIsLoginDropdownOpen(false)
                                                 Logout()
                                             }}>
@@ -243,7 +243,7 @@ const Navbar = (props: Props) => {
                             </>
                         )}
 
-                        {isSellerLoggedIn && <button className={styles.signup} onClick={() => {
+                        {isSellerLoggedIn && <button className={`${styles.signup} hover:opacity-70`} onClick={() => {
                             setIsLoginDropdownOpen(false)
                             Logout()
                         }}>

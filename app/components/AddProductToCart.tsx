@@ -55,13 +55,6 @@ const AddProductToCart = ({ product, isFetchingProduct, handleAddProductToFavori
         fetchAccountStatus();
     }, []);
 
-    // Calculate the maximum rating possible (e.g., 5 stars)
-    const maxRating = 5;
-
-    // Get the number of filled ratings from the product ratings array
-    const filledRatings = product?.ratings.map(rating => rating.rating) || [];
-
- 
     return (
         <>
             <PlaceABidComponent visibility={isPlaceABidVisible} setVisibility={setIsPlaceABidVisible} />

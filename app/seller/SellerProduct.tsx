@@ -12,43 +12,20 @@ type Props = {
     products: SellerProductsResponse[] | undefined;
     isFetchingProducts: boolean;
     setIsAddProductModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
-    handleFetchProducts: ({ clearPreviousProducts }: {
-        clearPreviousProducts?: boolean | undefined;
-    }) => Promise<void>
+    isDeletingId: string | null
+    handleRemoveProduct: (id: string) => Promise<void>
 };
 
 const SellerProduct = ({
     products,
     isFetchingProducts,
     setIsAddProductModalVisible,
-    handleFetchProducts
+    isDeletingId,
+    handleRemoveProduct
 }: Props) => {
-    console.log({ products })
-    const removeProduct = useRemoveProduct()
-    const [isDeletingId, setIsDeletingId] = useState<string | null>(null);
-    async function handleRemoveProduct(id: string) {
-        setIsDeletingId(id);
-        await removeProduct(id)
-            .then((response) => {
-
-                handleFetchProducts({ clearPreviousProducts: true });
-                // Display success 
-                toast.success('Product Deleted.');
-
-            })
-            .catch((error) => {
-                // Display error
-                const errorMessage = createCustomErrorMessages(error.response?.data)
-                toast.error(errorMessage)
-            })
-            .finally(() => {
-
-                // Close laoder 
-                setIsDeletingId(null);
-            })
-    };
+    // console.log({ products })
     return (
-        <main className="overflow-y-auto max-h-[500px] w-full">
+        <main className="w-full">
             <div className="flex flex-col gap-10">
                 {products?.map((product) => (
                     <div className="flex gap-4" key={product.id}>
@@ -72,9 +49,6 @@ const SellerProduct = ({
                                 <button className="border flex items-center justify-center cursor-pointer gap-1 border-[#2C7865] text-[#2C7865] rounded-[37px] py-3 px-14">
                                     <EditIcon /> Edit
                                 </button>
-                                {/* <button type="button" onClick={() => handleRemoveProduct(product.id)} disabled={isDeleting} className="border flex items-center justify-center cursor-pointer gap-1 border-[#FD6A02] text-[#FD6A02] rounded-[37px] py-3 px-14 disabled:pointer-events-none disabled:opacity-60">
-                                    <DeleteIcon /> {isDeleting ? "Deleting..." : "Remove"}
-                                </button> */}
                                 <button
                                     key={product.id}
                                     type="button"
@@ -91,7 +65,7 @@ const SellerProduct = ({
             </div>
             {!products && isFetchingProducts && (
                 <p className="h-[30vh]">
-                    <ComponentLoader lightTheme svgStyle={{ width: "62px" }} />
+                    <ComponentLoader lightTheme svgStyle={{ width: "30px" }} />
                 </p>
             )}
             {products?.length == 0 && (

@@ -55,7 +55,13 @@ const SellerPageStoreRating = ({ store, isFetchingStore, handleFetchStore, setSe
                             <h3 className="text-lg md:text-xl lg:text-2xl text-[#828282] mb-1 font-semibold underline">
                                 {store?.storeDetails.name}
                             </h3>
-                            <p className="text-sm text-[#333333] mb-1">{store?.storeDetails.description}</p>
+                                {store?.storeDetails.description && 
+                                <p className="text-sm text-[#333333] mb-1">
+                                    { store?.storeDetails.description.length > 50
+                                        ? `${store.storeDetails.description.slice(0, 50)}...`
+                                        : store.storeDetails.description}
+                                </p>}
+                                
                             <div className="flex gap-2 text-[#1E1E1E] text-sm">
                                 <span className="flex text-sm md:text-base items-center gap-1">
                                     <DotIcon />
@@ -77,7 +83,7 @@ const SellerPageStoreRating = ({ store, isFetchingStore, handleFetchStore, setSe
                         <div className={styles.rating}>
                             <div className={styles.average}>
                                 <h4 className="flex items-center gap-2">
-                                    {store?.avgRating.rating ?? 0}/5{" "}
+                                        {store?.avgRating.rating ? store?.avgRating.rating.toFixed(1) : 0}/5{" "}
                                     {onMobile && (
                                         <span className="text-[#828282] font-normal">Rating</span>
                                     )}

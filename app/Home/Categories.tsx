@@ -29,7 +29,7 @@ const Categories = (props: Props) => {
     const scrollLeft = () => {
         setActiveTab(prevActiveTab => {
             if (retrievedCategories?.length) {
-                return (prevActiveTab === 0 ? retrievedCategories.slice(0,6).length - 1 : prevActiveTab - 1);
+                return (prevActiveTab === 0 ? retrievedCategories.slice(0, 6).length - 1 : prevActiveTab - 1);
             }
             return prevActiveTab; // or handle the undefined case appropriately
         });
@@ -39,7 +39,7 @@ const Categories = (props: Props) => {
     const scrollRight = () => {
         setActiveTab(prevActiveTab => {
             if (retrievedCategories?.length) {
-                return (prevActiveTab === retrievedCategories.slice(0,6).length - 1 ? 0 : prevActiveTab + 1);
+                return (prevActiveTab === retrievedCategories.slice(0, 6).length - 1 ? 0 : prevActiveTab + 1);
             }
             return prevActiveTab;
         });
@@ -87,12 +87,12 @@ const Categories = (props: Props) => {
                     <div className={styles.cards}>
                         {retrievedCategories && retrievedCategories.length > 0 && (
                             retrievedCategories[activeTab].products.length > 0 ? (
-                                retrievedCategories[activeTab].products.slice(0, 4).map((product, productIndex) => (
+                                retrievedCategories[activeTab].products.slice(0, 3).map((product, productIndex) => (
                                     <Link href={`/categories/${retrievedCategories[activeTab].id}?${retrievedCategories[activeTab].name}`} className={styles.card} key={productIndex}>
                                         <div className={styles.images}>
-                                            <Image src={images.cashew} alt='product image' fill />
+                                            <Image src={product.coverImage} alt='product image' fill />
                                         </div>
-                                        <span>{product.name}</span>
+                                        <span className='!whitespace-nowrap'>{product.name}</span>
                                         <h4>&pound;{product.amount.toLocaleString()}</h4>
                                     </Link>
                                 ))

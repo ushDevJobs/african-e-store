@@ -1,16 +1,19 @@
 import React from 'react'
-import styles from './SellerStore.module.scss';
+import { SellerStoreResponse } from '../components/models/ISellerStore'
+import { AboutStoreSkeletonLoader } from '../stores/StoresSkeleton'
 
-type Props = {}
+type Props = {
+    store: SellerStoreResponse | undefined
+    isFetchingStore: boolean
+}
 
-const AboutSeller = (props: Props) => {
+const AboutSeller = ({ store, isFetchingStore }: Props) => {
     return (
-        <div>
-            <h2 className='text-[#000000] text-2xl mb-4 font-medium'>About</h2>
-            <form action="">
-                <textarea name="" id="" placeholder='Enter  description about your store here'></textarea>
-                <button>Save</button>
-            </form>
+        <div className='h-[20vh] overflow-y-auto'>
+            <h2 className='text-black text-2xl mb-2 font-medium'>About</h2>
+            {!store && isFetchingStore ? <AboutStoreSkeletonLoader /> :
+                <p className='text-sm text-gray-500 leading-5'>{store?.storeDetails.description}</p>
+            }
         </div>
     )
 }

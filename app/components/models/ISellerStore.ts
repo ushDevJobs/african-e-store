@@ -49,3 +49,16 @@ export interface SellerProductsResponse {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface DraftResponse {
+  id: string;
+  name: string;
+  itemCondition: string;
+  salesType: string;
+  amount: 6;
+  quantity: 5;
+  details: string;
+  coverImage: string;
+  images: string[];
+  publish: false;
+}

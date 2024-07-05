@@ -65,22 +65,11 @@
       }
 
       .cards {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(30%, 1fr));
-        gap: 20px;
+        display: flex;
+        flex-direction: row;
+        gap: 30px;
+        overflow-x: auto;
         width: 100%;
-
-        // @include smallLaptop {
-        //   grid-template-columns: repeat(auto-fill, minmax(30%, 1fr));
-        // }
-        @include bigTablet {
-          display: flex;
-          width: 100%;
-        }
-        @include tablet {
-          display: flex;
-          width: 100%;
-        }
 
         .card {
           display: flex;
@@ -91,13 +80,8 @@
             border-radius: 22px;
             height: 206px;
             margin-bottom: 20px;
-            // width: 300px;
-            @include bigTablet {
-              width: 300px;
-            }
-            @include tablet {
-              width: 300px;
-            }
+            width: 100%;
+            
             img {
               object-fit: cover;
               border-radius: 22px !important;

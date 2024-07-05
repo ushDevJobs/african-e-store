@@ -246,6 +246,17 @@ export function useFetchSellerProducts() {
 
   return fetchSellerProducts;
 }
+export function useFetchDrafts() {
+  async function fetchDrafts() {
+    // Fire the request
+    const response = await API.get(ApiRoutes.FetchDrafts);
+
+    // Return the response
+    return response;
+  }
+
+  return fetchDrafts;
+}
 
 // Api call to add product
 export function useAddProduct() {

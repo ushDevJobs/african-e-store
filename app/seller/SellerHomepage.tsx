@@ -6,10 +6,11 @@ import SellerProduct from './SellerProduct';
 import AddProductModal from './AddProductModal';
 import AboutSeller from './AboutSeller';
 import SellerPageStoreRating from './SellerStoreRating';
-import { useFetchSellerProducts, useFetchSellerStore } from '../api/apiClients';
-import { SellerProductsResponse, SellerStoreResponse } from '../components/models/ISellerStore';
+import { useFetchDrafts, useFetchSellerProducts, useFetchSellerStore, useRemoveProduct } from '../api/apiClients';
+import { DraftResponse, SellerProductsResponse, SellerStoreResponse } from '../components/models/ISellerStore';
 import { toast } from 'sonner';
 import { createCustomErrorMessages } from '../components/constants/catchError';
+import DraftSection from './DraftSection';
 type Props = {};
 
 enum TabIndex {
@@ -34,6 +35,14 @@ const SellerHomePage = (props: Props) => {
     const [products, setProducts] = useState<SellerProductsResponse[]>()
     const [isFetchingStore, setIsFetchingStore] = useState<boolean>(true);
     const [isFetchingProducts, setIsFetchingProducts] = useState<boolean>(true);
+    console.log({ store })
+    const removeProduct = useRemoveProduct()
+    const [isDeletingId, setIsDeletingId] = useState<string | null>(null);
+
+    const fetchDrafts = useFetchDrafts()
+
+    const [drafts, setDrafts] = useState<DraftResponse[]>()
+    const [isFetchingDrafts, setIsFetchingDrafts] = useState<boolean>(true);
 
     async function handleFetchStore() {
 
@@ -76,14 +85,69 @@ const SellerHomePage = (props: Props) => {
                 setIsFetchingProducts(false);
             });
     }
+    async function handleFetchDrafts({ clearPreviousProducts = false }) {
+
+        // Start loader
+
+        if (clearPreviousProducts) {
+            // Clear previous configurations
+            setDrafts(undefined);
+            // Show loader
+            setIsFetchingDrafts(true);
+        }
+        await fetchDrafts()
+            .then((response) => {
+                console.log("Response: ", response.data.data);
+                setDrafts(response.data.data);
+            })
+            .catch((error) => {
+                const errorMessage = createCustomErrorMessages(error.response?.data)
+                toast.error(errorMessage);
+            })
+            .finally(() => {
+                setIsFetchingDrafts(false);
+            });
+    }
+
+    async function handleRemoveProduct(id: string) {
+        setIsDeletingId(id);
+        await removeProduct(id)
+            .then((response) => {
+
+                handleFetchProducts({ clearPreviousProducts: true });
+                handleFetchDrafts({ clearPreviousProducts: true });
+                // Display success 
+                toast.success('Product Deleted.');
+
+            })
+            .catch((error) => {
+                // Display error
+                const errorMessage = createCustomErrorMessages(error.response?.data)
+                toast.error(errorMessage)
+            })
+            .finally(() => {
+
+                // Close laoder 
+                setIsDeletingId(null);
+            })
+    };
 
     useEffect(() => {
         handleFetchStore();
         handleFetchProducts({ clearPreviousProducts: true });
     }, []);
+    useEffect(() => {
+        handleFetchDrafts({ clearPreviousProducts: true });
+    }, []);
     return (
         <div className={styles.main}>
-            <SellerPageStoreRating selectedStore={selectedStore} setSelectedStore={setSelectedStore} handleFetchStore={handleFetchStore} store={store} isFetchingStore={isFetchingStore} />
+            <SellerPageStoreRating
+                selectedStore={selectedStore}
+                setSelectedStore={setSelectedStore}
+                handleFetchStore={handleFetchStore}
+                store={store}
+                isFetchingStore={isFetchingStore}
+            />
             <AddProductModal
                 visibility={isAddProductModalVisible}
                 setVisibility={setIsAddProductModalVisible}
@@ -133,10 +197,25 @@ const SellerHomePage = (props: Props) => {
                             Customer Feedbacks
                         </span>
                     </div>
-                    {activeTab === TabIndex.Shop && <SellerProduct products={products} handleFetchProducts={handleFetchProducts}
-                        isFetchingProducts={isFetchingProducts} setIsAddProductModalVisible={setIsAddProductModalVisible} />}
-                    {activeTab === TabIndex.About && <AboutSeller />}
-                    {activeTab === TabIndex.Draft && <AboutSeller />}
+                    {activeTab === TabIndex.Shop &&
+                        <SellerProduct
+                            products={products}
+                            isFetchingProducts={isFetchingProducts}
+                            setIsAddProductModalVisible={setIsAddProductModalVisible}
+                            isDeletingId={isDeletingId}
+                            handleRemoveProduct={handleRemoveProduct}
+                        />}
+                    {activeTab === TabIndex.About &&
+                        <AboutSeller
+                            store={store}
+                            isFetchingStore={isFetchingStore}
+                        />}
+                    {activeTab === TabIndex.Draft && <DraftSection
+                        isDeletingId={isDeletingId}
+                        handleRemoveProduct={handleRemoveProduct}
+                        drafts={drafts}
+                        isFetchingDrafts={isFetchingDrafts}
+                    />}
                     {activeTab === TabIndex.Feedback && <h1>Feedback</h1>}
                 </div>
             </div>

@@ -40,6 +40,7 @@ const AddProductModal = ({
     const [formValues, setFormValues] = useState<AddProductRequest>();
     // console.log("formValues", formValues);
     const [isLoading, setIsLoading] = useState(false);
+    const [isLoadingDraft, setIsLoadingDraft] = useState(false);
     const [file, setFile] = useState<File>();
     const [image1, setImage1] = useState<File>();
     const [image2, setImage2] = useState<File>();
@@ -302,8 +303,7 @@ const AddProductModal = ({
         setCategoryErrorMsg(false);
         setDescErrorMsg(false);
     };
-
-    async function handleCreateProduct(e: FormEvent<HTMLFormElement>) {
+    async function handleCreateProduct(e: FormEvent<HTMLFormElement | HTMLButtonElement>) {
         // Prevent deafult actions
         e.preventDefault();
 
@@ -353,6 +353,56 @@ const AddProductModal = ({
             setIsLoading(false);
         }
     }
+    async function handleDraftProduct(e: FormEvent<HTMLFormElement | HTMLButtonElement>) {
+        // Prevent deafult actions
+        e.preventDefault();
+
+        // Show loader
+        setIsLoadingDraft(true);
+
+        if (validateFields()) {
+            const formData = new FormData();
+            // console.log({ formData });
+            formData.append("price", "" + formValues?.price!);
+            formData.append("name", formValues?.name as string);
+            formData.append("category", formValues?.category as string);
+            formData.append("quantity", "" + formValues?.quantity!);
+            formData.append("condition", selectedConditions);
+            formData.append("salesType", selectedSalesType);
+            //   formData.append("publish", false);
+            formData.append("date", formValues?.date as string);
+            formData.append("description", formValues?.description as string);
+            formData.append("images", formValues?.imageOne as string);
+            formData.append("images", formValues?.imageTwo as string);
+            formData.append("images", formValues?.imageThree as string);
+            formData.append("images", formValues?.imageFour as string);
+            formData.append("publish", "false");
+
+            // Send request to create product
+            await addProduct(formData)
+                .then((response) => {
+                    // Log response
+                    // console.log({ response });
+
+                    // Display success
+                    toast.success("Product added to draft.");
+                    setVisibility(false);
+                    // handleFetchProducts({ clearPreviousProducts: true });
+                    resetForm();
+                })
+                .catch((error) => {
+                    // Display error
+                    const errorMessage = createCustomErrorMessages(error.response?.data);
+                    toast.error(errorMessage);
+                })
+                .finally(() => {
+                    // Close laoder
+                    setIsLoadingDraft(false);
+                });
+        } else {
+            setIsLoadingDraft(false);
+        }
+    }
 
     const departureDateRef = useRef<HTMLDivElement>(null);
 
@@ -385,11 +435,10 @@ const AddProductModal = ({
             <form
                 action=""
                 className={styles.formFieldContainer}
-                onSubmit={(e) => handleCreateProduct(e)}
             >
                 <span
                     onClick={() => setVisibility(false)}
-                    className=" ml-auto cursor-pointer flex items-end justify-end mb-6 w-fit"
+                    className=" ml-auto cursor-pointer flex items-end justify-end mb-6 w-fit hover:bg-green-200"
                 >
                     <TimesIcon />
                 </span>
@@ -749,10 +798,20 @@ const AddProductModal = ({
                     )}
                 </div>
                 <div className={styles.btnContainer}>
-                    <button type="submit" disabled={isLoading}>
+                    <button 
+                    type="submit" 
+                    disabled={isLoading}
+                        onClick={(e) => handleCreateProduct(e)}
+                    >
                         {isLoading ? "Uploading..." : " Upload Product"}
                     </button>
-                    <button>Save as Draft</button>
+                    <button 
+                    type="submit" 
+                    disabled={isLoadingDraft} 
+                    onClick={(e) => handleDraftProduct(e)}
+                    >
+                        {isLoadingDraft ? "Saving..." : " Save as Draft"}
+                       </button>
                 </div>
             </form>
         </ModalWrapper>

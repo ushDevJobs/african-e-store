@@ -82,6 +82,7 @@ export default class ApiRoutes {
   static FetchFavoriteStores: string = "api/stores/favourite";
   static FetchFavoriteProducts: string = "api/products/favourite";
   static FetchSellerProducts: string = "api/stores/store/products";
+    static FetchDrafts: string = "api/stores/store/products/draft";
 
   static productImages: string = "images/product";
   static storeImages: string = "images/store";

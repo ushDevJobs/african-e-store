@@ -16,15 +16,15 @@ type Props = {
     }
 }
 
-const SingleProductPage = ({params}: Props) => {
+const SingleProductPage = ({ params }: Props) => {
     const fetchProduct = useFetchProduct()
     const productId = params.productId;
     const [product, setProduct] = useState<ProductResponse>();
     const [isFetchingProduct, setIsFetchingProduct] = useState<boolean>(true);
-
+    console.log({ product })
     const addProductToFavorite = useAddProductsToFavorite();
     const removeProductFromFavorite = useRemoveProductFromFavorite()
-   
+
     async function handleFetchProduct() {
 
         // Start loader
@@ -51,10 +51,10 @@ const SingleProductPage = ({params}: Props) => {
 
                 // Log response 
                 console.log(response);
-               
+
                 handleFetchProduct()
                 // Display success 
-                toast.success('Product added to favorites successfully.');
+                toast.success('Product added to favorite successfully.');
             })
             .catch((error) => {
                 // Display error
@@ -75,10 +75,10 @@ const SingleProductPage = ({params}: Props) => {
 
                 // Log response 
                 // console.log(response);
-              
+
                 handleFetchProduct()
                 // Display success 
-                toast.success('Product removed from favorites successfully.');
+                toast.success('Product removed from favorite successfully.');
             })
             .catch((error) => {
                 // Display error
@@ -98,10 +98,10 @@ const SingleProductPage = ({params}: Props) => {
     return (
         <div className={styles.main}>
             <AddProductToCart handleAddProductToFavorite={handleAddProductToFavorite}
-             product={product} 
+                product={product}
                 handleRemoveProductFromFavorite={handleRemoveProductFromFavorite}
-             isFetchingProduct={isFetchingProduct} 
-             />
+                isFetchingProduct={isFetchingProduct}
+            />
             <SingleCategoriesDetails product={product} />
             <SingleCategoryReviews product={product} />
             <Recommendations />
