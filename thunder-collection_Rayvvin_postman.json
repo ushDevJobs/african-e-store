@@ -1,6 +1,6 @@
 {
     "info": {
-        "_postman_id": "0f0ec5f8-4c0f-4fd1-bc40-987a2b9ef32f",
+        "_postman_id": "2bbfe74f-e864-42ae-9fa4-a67f54da5c87",
         "name": "Rayvvin",
         "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
         "description": ""
@@ -468,6 +468,47 @@
                             ]
                         }
                     }
+                },
+                {
+                    "name": "reviews of A Store ",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "http://localhost:3000/api/stores/store/reviews",
+                            "path": [
+                                "api",
+                                "stores",
+                                "store",
+                                "reviews"
+                            ],
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3000"
+                        }
+                    }
+                },
+                {
+                    "name": "Draft Products In A Store",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "http://localhost:3000/api/stores/store/products/draft",
+                            "path": [
+                                "api",
+                                "stores",
+                                "store",
+                                "products",
+                                "draft"
+                            ],
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3000"
+                        }
+                    }
                 }
             ]
         },
@@ -768,6 +809,28 @@
                             "port": "3000"
                         }
                     }
+                },
+                {
+                    "name": "Get reviews of a Store",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "http://localhost:3000/api/stores/store/id/clxzbyp0q0001n7p96lu2xg1w/reviews",
+                            "path": [
+                                "api",
+                                "stores",
+                                "store",
+                                "id",
+                                "clxzbyp0q0001n7p96lu2xg1w",
+                                "reviews"
+                            ],
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3000"
+                        }
+                    }
                 }
             ]
         },
@@ -779,12 +842,12 @@
                     "request": {
                         "method": "GET",
                         "url": {
-                            "raw": "http://localhost:3000/api/products/product/cly0d5ywn0005kfryhsuycuxt",
+                            "raw": "http://localhost:3000/api/products/product/cly6azblw000112gfg1ep08ti",
                             "path": [
                                 "api",
                                 "products",
                                 "product",
-                                "cly0d5ywn0005kfryhsuycuxt"
+                                "cly6azblw000112gfg1ep08ti"
                             ],
                             "protocol": "http",
                             "host": [
