@@ -102,3 +102,20 @@ export async function checkUserAccessibility(
     next(new BadRequest("Invalid Request Parameters", ErrorCode.BAD_REQUEST));
   }
 }
+export async function checkStoreId(
+  req: Request,
+  _: Response,
+  next: NextFunction
+) {
+  const { id } = req.params;
+  if (id) {
+    try {
+      await prisma.store.findFirstOrThrow({ where: { id: id } });
+      next();
+    } catch (error) {
+      next(new NotFound("Store not found", ErrorCode.NOT_FOUND));
+    }
+  } else {
+    next(new BadRequest("Invalid Request parameter", ErrorCode.BAD_REQUEST));
+  }
+}

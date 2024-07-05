@@ -220,59 +220,12 @@ export const getProductsOfStoreById = async (
   res: Response,
   next: NextFunction
 ) => {
-  try {
-    const { storeId } = req.params;
-    const user = req.user as RequestUser;
-    if (storeId && storeId !== "") {
-      const categories = await prisma.store.findFirst({
-        where: {
-          id: storeId,
-        },
-        select: {
-          products: {
-            where: {
-              publish: true,
-            },
-            select: {
-              categories: {
-                select: {
-                  id: true,
-                  name: true,
-                  products: {
-                    where: {
-                      AND: [{ storeId: storeId }, { publish: true }],
-                    },
-                    select: {
-                      id: true,
-                      name: true,
-                      itemCondition: true,
-                      salesType: true,
-                      amount: true,
-                      quantity: true,
-                      details: true,
-                      coverImage: true,
-                      favourite: {
-                        where: {
-                          id: user.id,
-                        },
-                        select: {
-                          id: true,
-                        },
-                      },
-                    },
-                  },
-                },
-              },
-            },
-          },
-        },
-      });
-      return returnJSONSuccess(res, { data: categories?.products });
-    } else {
-      next(new BadRequest("Invalid Request Parameters", ErrorCode.NOT_FOUND));
-    }
-  } catch (error) {
-    next(new NotFound("Store not found", ErrorCode.NOT_FOUND));
+  const { id } = req.params;
+  if (id && id !== "") {
+    const categories = await getCategory(id);
+    return returnJSONSuccess(res, { data: categories });
+  } else {
+    next(new BadRequest("Invalid request parameters", ErrorCode.BAD_REQUEST));
   }
 };
 export const createStore = async (req: Request, res: Response) => {
@@ -345,6 +298,43 @@ export const getStoreProducts = async (
       products: {
         where: {
           publish: true,
+        },
+        select: {
+          id: true,
+          name: true,
+          itemCondition: true,
+          salesType: true,
+          amount: true,
+          quantity: true,
+          details: true,
+          coverImage: true,
+          images: true,
+          publish: true,
+        },
+      },
+    },
+  });
+
+  return res.status(200).json({ status: true, data: categories.products });
+};
+export const getStoreDraftProducts = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const user = req.user as RequestUser;
+  const store = await prisma.store.findFirstOrThrow({
+    where: { userId: user.id },
+    select: { id: true },
+  });
+  const categories = await prisma.store.findFirstOrThrow({
+    where: {
+      id: store.id,
+    },
+    select: {
+      products: {
+        where: {
+          publish: false,
         },
         select: {
           id: true,
@@ -587,4 +577,51 @@ const getCategory = async (id: string, store = true) => {
     },
   });
   return categories;
+};
+export const getReviewsForLoggedInUser = async (
+  req: Request,
+  res: Response
+) => {
+  const user = req.user as RequestUser;
+  const store = await prisma.store.findFirstOrThrow({
+    where: { userId: user.id },
+    select: { id: true },
+  });
+  const reviews = await getReviewsForStore(store.id);
+  returnJSONSuccess(res, { data: reviews });
+};
+export const getReviewsForStoreById = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const reviews = await getReviewsForStore(id);
+  return returnJSONSuccess(res, { data: reviews });
+};
+const getReviewsForStore = async (id: string) => {
+  const reviews = await prisma.rating.findMany({
+    where: {
+      AND: [
+        { storeId: id },
+        { orderId: { not: undefined } },
+        { productId: { not: undefined } },
+      ],
+    },
+    select: {
+      rating: true,
+      review: true,
+      id: true,
+      user: {
+        select: {
+          fullname: true,
+          id: true,
+        },
+      },
+      product: {
+        select: {
+          name: true,
+          id: true,
+          coverImage: true,
+        },
+      },
+    },
+  });
+  return reviews;
 };

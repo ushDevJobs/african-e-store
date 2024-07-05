@@ -6,9 +6,12 @@ import {
   getCategoriesfromStoreById,
   getFavouriteStores,
   getProductsOfStoreById,
+  getReviewsForLoggedInUser,
+  getReviewsForStoreById,
   getStoreById,
   getStoreByUserLogged,
   getStoreCategories,
+  getStoreDraftProducts,
   getStoreProducts,
   removeStoreFromFavourite,
   searchForStore,
@@ -17,20 +20,31 @@ import {
   updateStoreProfile,
 } from "../../controllers/store";
 import { rootErrorHandler } from "../../root-error-handler";
-import { checkStore, sellerRoleCheck } from "../../middlewares/roles";
+import {
+  checkStore,
+  checkStoreId,
+  sellerRoleCheck,
+} from "../../middlewares/roles";
 import { uploadStoreImage, uploadUsertImage } from "../../config/configOptions";
 
 const router = Router();
 router.get("/all", rootErrorHandler(getAllStores));
-router.get("/store/id/:id", rootErrorHandler(getStoreById));
+router.get("/store/id/:id", checkStoreId, rootErrorHandler(getStoreById));
 
 router.get(
-  "/store/id/:storeId/products",
+  "/store/id/:id/products",
+  checkStoreId,
   rootErrorHandler(getProductsOfStoreById)
 );
 router.get(
   "/store/id/:id/categories",
+  checkStoreId,
   rootErrorHandler(getCategoriesfromStoreById)
+);
+router.get(
+  "/store/id/:id/reviews",
+  checkStoreId,
+  rootErrorHandler(getReviewsForStoreById)
 );
 router.get("/search", rootErrorHandler(searchForStore));
 
@@ -39,19 +53,29 @@ router.get(
   [sellerRoleCheck, checkStore],
   rootErrorHandler(getStoreCategories)
 );
+router.get(
+  "/store/reviews",
+  [sellerRoleCheck, checkStore],
+  rootErrorHandler(getReviewsForLoggedInUser)
+);
 router
   .route("/favourite")
   .get(rootErrorHandler(getFavouriteStores))
-  .post(rootErrorHandler(addStoreToFavourite))
-  router.delete("/favourite/:id", rootErrorHandler(removeStoreFromFavourite));
+  .post(rootErrorHandler(addStoreToFavourite));
+router.delete("/favourite/:id", rootErrorHandler(removeStoreFromFavourite));
 router
   .route("/store")
   .get(sellerRoleCheck, rootErrorHandler(getStoreByUserLogged))
   .post(sellerRoleCheck, rootErrorHandler(createStore));
 router.get(
-  "/store/products/",
+  "/store/products",
   [sellerRoleCheck, checkStore],
   rootErrorHandler(getStoreProducts)
+);
+router.get(
+  "/store/products/draft",
+  [sellerRoleCheck, checkStore],
+  rootErrorHandler(getStoreDraftProducts)
 );
 router.get(
   "/store/search",
