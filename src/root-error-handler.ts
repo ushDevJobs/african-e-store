@@ -35,7 +35,7 @@ export const rootErrorHandler = (method: Function) => {
         exception = new DatabaseException(
           message,
           400,
-          ErrorCode.NOT_FOUND,
+          ErrorCode.BAD_REQUEST,
           error
         );
       } else {
