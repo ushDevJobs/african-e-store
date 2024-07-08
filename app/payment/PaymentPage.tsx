@@ -8,6 +8,7 @@ import QuantityButton from '../components/QuantityButton'
 import { useDispatch, useSelector } from 'react-redux'
 import { totalPriceSelector } from '../redux/features/cart/cartSlice'
 import { RootState } from '../redux/store'
+import PaymentFormPage from './PaymentFormPage'
 
 type Props = {}
 
@@ -61,28 +62,7 @@ const PaymentPage = (props: Props) => {
                     </div>
                 </div>
                 <div className={styles.rhs}>
-                    <form action="" className={styles.formContainer}>
-                        <div className={styles.formField}>
-                            <label htmlFor=""><span>*</span>Card number </label>
-                            <input type="text" name="" id="" placeholder='XXX XXX XXX XXX' />
-                        </div>
-                        <div className={styles.formField}>
-                            <label htmlFor=""><span>*</span>CVV </label>
-                            <input type="text" name="" id="" placeholder='***' />
-                        </div>
-                        <div className={styles.formField}>
-                            <label htmlFor=""><span>*</span>MM/YY </label>
-                            <input type="text" name="" id="" placeholder='' />
-                        </div>
-                        <div className={styles.formField}>
-                            <label htmlFor=""><span>*</span>Card pin </label>
-                            <input type="text" name="" id="" placeholder='' />
-                        </div>
-
-                        <button>Continue to pay $195.99</button>
-                    </form>
-
-
+                 <PaymentFormPage/>
                 </div>
             </div>
         </div>
