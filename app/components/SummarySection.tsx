@@ -18,7 +18,8 @@ const SummarySection = (props: Props) => {
             </div>
             <div className={styles.summaryItem}>
                 <p>Shipping</p>
-                <h3>{cartItems.map((item) => item.product.shippingDetails)}</h3>
+                {/* <h3>{cartItems.map((item) => item.product.)}</h3> */}
+                <h3>Shipping here</h3>
             </div>
             <div className={styles.total}>
                 <p>Subtotal </p>

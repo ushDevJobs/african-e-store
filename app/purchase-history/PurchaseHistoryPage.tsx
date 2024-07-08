@@ -1,6 +1,6 @@
 'use client'
 import React, { useState } from 'react'
-import styles from '../saved-seller/SavedSeller.module.scss'
+import styles from '../saved-store/SavedStore.module.scss'
 import { CheckIcon, EmptyStarIcon, UserIcon } from '../components/SVGs/SVGicons'
 import Image from 'next/image'
 import images from '@/public/images'

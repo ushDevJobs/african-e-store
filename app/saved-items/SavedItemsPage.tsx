@@ -74,7 +74,7 @@ const SavedItemsPage = (props: Props) => {
             <div className='flex flex-col gap-8'>
                 {onDesktop && (
                     savedProducts?.map((product) => (
-                        <div className="flex flex-col bg-[#F7FAFA] rounded-lg py-5 px-7">
+                        <div className="flex flex-col bg-[#F7FAFA] rounded-lg py-5 px-7" key={product.id}>
                             <span
                                 onClick={(e) => {
                                     e.preventDefault(); // Prevent navigation on click
@@ -120,7 +120,7 @@ const SavedItemsPage = (props: Props) => {
                 )}
                 {onMobile && (
                     savedProducts?.map((product) => (
-                        <div className="flex gap-7">
+                        <div className="flex gap-7" key={product.id}>
                             <div className="relative w-[85px] h-[104px]">
                                 <Image src={product.coverImage} fill alt='product image' />
                                 <span onClick={(e) => {
