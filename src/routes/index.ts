@@ -6,6 +6,8 @@ import { storeRoutes } from "./store";
 import { categoryRoutes } from "./categories";
 import { cartRoutes } from "./cart";
 import { orderRoutes } from "./orders";
+import { rootErrorHandler } from "../root-error-handler";
+import { paymentRoutes } from "./payment";
 const router = Router();
 router.use("/auth", authRoute);
 router.use("/stores", checkAuth, storeRoutes);
@@ -13,5 +15,6 @@ router.use("/products", checkAuth, productRoutes);
 router.use("/categories", categoryRoutes);
 router.use("/cart", checkAuth, cartRoutes);
 router.use("/orders", checkAuth, orderRoutes);
+router.use("/payment", checkAuth, paymentRoutes);
 
 export default router;
