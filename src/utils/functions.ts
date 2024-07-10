@@ -31,6 +31,9 @@ export const createPrismaError = (error: Error) => {
   }
   return null;
 };
+export function convertToSubcurrency(amount: number, factor = 100) {
+  return Math.round(amount * factor);
+}
 export const generateRandomId = function (): string {
   let randomValues: string =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
