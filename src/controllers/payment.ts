@@ -1,7 +1,11 @@
 import { Request, Response } from "express";
 import Stripe from "stripe";
 import { prisma } from "../prisma";
-import { convertToSubcurrency, returnJSONSuccess } from "../utils/functions";
+import {
+  convertToSubcurrency,
+  returnJSONError,
+  returnJSONSuccess,
+} from "../utils/functions";
 import { RequestUser } from "../types";
 
 const stripe = new Stripe(process.env.STRIPE_S_KEY!, {
@@ -55,19 +59,28 @@ export const paymentIntent = async (req: Request, res: Response) => {
       id: true,
     },
   });
-  const intent = await stripe.paymentIntents.create({
-    amount: convertToSubcurrency(amount + 2),
-    currency: "EUR",
-    automatic_payment_methods: {
-      enabled: true,
-    },
-  });
-  return returnJSONSuccess(res, {
-    data: {
-      clientSecret: intent.client_secret,
-      orderId: order.id,
-    },
-  });
+  try {
+    const intent = await stripe.paymentIntents.create({
+      amount: convertToSubcurrency(amount + 2),
+      currency: "EUR",
+      automatic_payment_methods: {
+        enabled: true,
+      },
+    });
+    return returnJSONSuccess(res, {
+      data: {
+        clientSecret: intent.client_secret,
+        orderId: order.id,
+      },
+    });
+  } catch (error) {
+    await prisma.order.delete({
+      where: {
+        id: order.id,
+      },
+    });
+    returnJSONError(res, { message: "unable to initiate payment" });
+  }
 };
 export const getAmount = async (req: Request, res: Response) => {
   const cart: { id: string; quantity: number }[] = req.body.id;
