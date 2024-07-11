@@ -15,6 +15,7 @@ const PaymentCheckoutPage = ({ amount }: { amount: number }) => {
   const elements = useElements();
   const [errorMessage, setErrorMessage] = useState<string>();
   const [clientSecret, setClientSecret] = useState("");
+  const [orderId, setOrderId] = useState("");
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -32,7 +33,10 @@ const PaymentCheckoutPage = ({ amount }: { amount: number }) => {
       credentials: "include",
     })
       .then((res) => res.json())
-      .then((data) => setClientSecret(data.data.clientSecret));
+      .then((data) => {
+        setOrderId(data.data.orderId);
+        setClientSecret(data.data.clientSecret);
+      });
   }, [amount]);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -55,7 +59,7 @@ const PaymentCheckoutPage = ({ amount }: { amount: number }) => {
       elements,
       clientSecret,
       confirmParams: {
-        return_url: `http://www.localhost:2500/payment-success?amount=${amount}`,
+        return_url: `http://localhost:3000/api/payment/success?o_id=${orderId}`,
       },
     });
 
