@@ -11,12 +11,12 @@ type Props = {
     isFetchingStore?: boolean
 }
 
-const SellerStoreRating = ({store, isFetchingStore}: Props) => {
+const SellerStoreRating = ({ store, isFetchingStore }: Props) => {
     const windowRes = useResponsiveness();
     const isMobile = windowRes.width && windowRes.width < 768;
     const onMobile = typeof isMobile == 'boolean' && isMobile;
     const onDesktop = typeof isMobile == 'boolean' && !isMobile;
-    
+
     // const totalCount = store?.ratingWithPercent.reduce((sum, item) => sum + item.percentage, 0);
     // const weightedSum = store?.ratingWithPercent.reduce((sum, item) => sum + (item.rating * item.percentage), 0);
 
@@ -25,7 +25,7 @@ const SellerStoreRating = ({store, isFetchingStore}: Props) => {
 
     return (
         <>
-        {!store && isFetchingStore ? <StoreStoreRatingSkeletonLoader /> : 
+            {!store && isFetchingStore ? <StoreStoreRatingSkeletonLoader /> :
                 <div className={styles.storeInfo}>
                     <div className={styles.storelhs}>
                         {store?.storeDetails?.image ?
@@ -43,7 +43,13 @@ const SellerStoreRating = ({store, isFetchingStore}: Props) => {
                         }
                         <div className={styles.info}>
                             <h3 className='text-lg md:text-xl lg:text-2xl text-[#828282] mb-1 font-semibold underline'>{store?.storeDetails.name}</h3>
-                            <p className="text-sm text-[#333333] mb-1">{store?.storeDetails.description}</p>
+                            
+                            {store?.storeDetails.description &&
+                                <p className="text-sm text-[#333333] mb-1">
+                                    {store?.storeDetails.description.length > 50
+                                        ? `${store.storeDetails.description.slice(0, 50)}...`
+                                        : store.storeDetails.description}
+                                </p>}
                             <div className='flex gap-2 text-[#1E1E1E] text-sm'>
                                 <span className='flex text-sm md:text-base items-center gap-1'><DotIcon />{store?.feedback}&#37; Feedback</span>
                                 <span className='flex text-sm md:text-base items-center gap-1'><DotIcon />{store?.totalItemSold} {store?.totalItemSold === 1 ? 'Item Sold' : 'Items Sold'}</span>
@@ -53,7 +59,7 @@ const SellerStoreRating = ({store, isFetchingStore}: Props) => {
                     <div className={styles.ratings}>
                         <div className={styles.rating}>
                             <div className={styles.average}>
-                                <h4 className='flex items-center gap-2'>{store?.avgRating.rating ? store?.avgRating.rating.toFixed(1) : 0}/5 {onMobile && <span className='text-[#828282] font-normal'>Rating</span>}</h4>
+                                <h4 className='flex items-center gap-2'>{store?.avgRating.rating ? store?.avgRating.rating.toFixed(0) : 0}/5 {onMobile && <span className='text-[#828282] font-normal'>Rating</span>}</h4>
                                 {onDesktop && <p className='text-[#828282]'>Rating</p>}
                             </div>
 
@@ -85,9 +91,9 @@ const SellerStoreRating = ({store, isFetchingStore}: Props) => {
                         </div>
                     </div>
                 </div>
-        }
+            }
         </>
-       
+
     )
 }
 

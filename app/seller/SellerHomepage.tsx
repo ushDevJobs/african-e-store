@@ -11,6 +11,7 @@ import { DraftResponse, SellerProductsResponse, SellerStoreResponse } from '../c
 import { toast } from 'sonner';
 import { createCustomErrorMessages } from '../components/constants/catchError';
 import DraftSection from './DraftSection';
+import FeedBack from './FeedBack';
 type Props = {};
 
 enum TabIndex {
@@ -21,27 +22,26 @@ enum TabIndex {
 }
 
 const SellerHomePage = (props: Props) => {
+
     const fetchSellerStore = useFetchSellerStore()
     const fetchSellerProducts = useFetchSellerProducts()
+    const removeProduct = useRemoveProduct()
+    const fetchDrafts = useFetchDrafts()
+
     const [activeTab, setActiveTab] = useState<TabIndex>(TabIndex.Shop);
     const [isAddProductModalVisible, setIsAddProductModalVisible] = useState(false);
     const windowRes = useResponsiveness();
     const isMobile = windowRes.width && windowRes.width < 768;
     const onMobile = typeof isMobile == 'boolean' && isMobile;
-    const onDesktop = typeof isMobile == 'boolean' && !isMobile;
 
     const [store, setStore] = useState<SellerStoreResponse>()
     const [selectedStore, setSelectedStore] = useState<SellerStoreResponse>();
     const [products, setProducts] = useState<SellerProductsResponse[]>()
+    const [drafts, setDrafts] = useState<DraftResponse[]>()
+
     const [isFetchingStore, setIsFetchingStore] = useState<boolean>(true);
     const [isFetchingProducts, setIsFetchingProducts] = useState<boolean>(true);
-    console.log({ store })
-    const removeProduct = useRemoveProduct()
     const [isDeletingId, setIsDeletingId] = useState<string | null>(null);
-
-    const fetchDrafts = useFetchDrafts()
-
-    const [drafts, setDrafts] = useState<DraftResponse[]>()
     const [isFetchingDrafts, setIsFetchingDrafts] = useState<boolean>(true);
 
     async function handleFetchStore() {
@@ -135,10 +135,9 @@ const SellerHomePage = (props: Props) => {
     useEffect(() => {
         handleFetchStore();
         handleFetchProducts({ clearPreviousProducts: true });
-    }, []);
-    useEffect(() => {
         handleFetchDrafts({ clearPreviousProducts: true });
     }, []);
+
     return (
         <div className={styles.main}>
             <SellerPageStoreRating
@@ -153,6 +152,7 @@ const SellerHomePage = (props: Props) => {
                 setVisibility={setIsAddProductModalVisible}
                 handleFetchProducts={handleFetchProducts}
             />
+
             {onMobile &&
                 activeTab === TabIndex.Shop &&
                 <div
@@ -160,7 +160,9 @@ const SellerHomePage = (props: Props) => {
                     style={{ color: '#828282', fontSize: '16px', marginBottom: '1rem', width: 'fit-content', backgroundColor: '#ecf8f5', padding: '16px', borderRadius: '13px', height: 'fit-content' }}>
                     <p className='cursor-pointer w-fit'> Add Products to store</p>
                 </div>}
+
             <div className={styles.tab}>
+
                 {activeTab === TabIndex.Shop &&
                     <div
                         style={{ color: '#828282', fontSize: '16px', backgroundColor: '#ecf8f5', padding: '16px', borderRadius: '13px', height: 'fit-content' }}
@@ -169,6 +171,7 @@ const SellerHomePage = (props: Props) => {
                     >
                         <p className='cursor-pointer w-fit whitespace-nowrap'> Add Products to store</p>
                     </div>}
+
                 <div className={styles.rhs}>
                     {/* {activeTab === TabIndex.Shop && <div className={styles.search}><SearchIcon /> <input type="text" placeholder='Search items in shop' /></div>} */}
                     <div className={styles.tabSection}>
@@ -197,6 +200,7 @@ const SellerHomePage = (props: Props) => {
                             Customer Feedbacks
                         </span>
                     </div>
+
                     {activeTab === TabIndex.Shop &&
                         <SellerProduct
                             products={products}
@@ -210,13 +214,18 @@ const SellerHomePage = (props: Props) => {
                             store={store}
                             isFetchingStore={isFetchingStore}
                         />}
+
                     {activeTab === TabIndex.Draft && <DraftSection
                         isDeletingId={isDeletingId}
                         handleRemoveProduct={handleRemoveProduct}
                         drafts={drafts}
                         isFetchingDrafts={isFetchingDrafts}
                     />}
-                    {activeTab === TabIndex.Feedback && <h1>Feedback</h1>}
+
+                    {
+                        activeTab === TabIndex.Feedback &&
+                        <FeedBack />
+                    }
                 </div>
             </div>
         </div>

@@ -28,6 +28,7 @@ import {
     StoreInputSkeletonLoader,
     StoreTabsSkeletonLoader,
 } from "../StoresSkeleton";
+import FeedBack from "./FeedBack";
 
 type Props = {
     params: {
@@ -234,7 +235,7 @@ const SellerStorePage = ({ params }: Props) => {
                         />
                     )}
                     {activeTab === TabIndex.About && <AboutSeller store={store} isFetchingStore={isFetchingStore} />}
-                    {activeTab === TabIndex.Feedback && <h1>Feedback</h1>}
+                    {activeTab === TabIndex.Feedback && <FeedBack storeId={storeId} />}
                 </div>
             </div>
         </div>

@@ -122,13 +122,12 @@ const StorePage = (props: Props) => {
                     {filteredStores?.map((store, index) => (
                         <div className={styles.card} key={index}>
                             <div className={styles.image}>
-                                {/* <Image fill src={images.cashew} alt='product image' /> */}
                                 {store.image && <Image fill src={store.image} alt='product image' />}
 
                                 <span
                                     className='absolute right-2 top-2 bg-white p-3 cursor-pointer rounded-full'
                                     onClick={(e) => {
-                                        e.preventDefault(); // Prevent navigation on click
+                                        e.preventDefault();
                                         if (store.favourite.length === 0) {
                                             handleAddStoreToFavorite(store.id);
                                         } else {
@@ -140,7 +139,12 @@ const StorePage = (props: Props) => {
                             </div>
                             <Link href={`/stores/${store.id}`} className="flex flex-col gap-2 w-fit">
                                 <h4 className='text-[#828282] text-base'>{store.name} </h4>
-                                <p className='text-[#828282] text-sm'>{store.description ? store.description : 'lorem ipsum'}</p>
+                                {store.description &&
+                                    <p className="text-sm text-[#828282]] mb-1">
+                                        {store.description.length > 50
+                                            ? `${store.description.slice(0, 50)}...`
+                                            : store.description}
+                                    </p>}
                                 <span className='flex items-center gap-2'>{store.location == 'Nigeria' ? '' : <UkIcon />} {store.location}</span>
                             </Link>
                         </div>

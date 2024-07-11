@@ -35,20 +35,27 @@ const AddProductModal = ({
     setVisibility,
     handleFetchProducts,
 }: Props) => {
+
     const addProduct = useAddProduct();
     const fetchCategories = useFetchCategoriesWithoutProducts();
+
     const [formValues, setFormValues] = useState<AddProductRequest>();
-    // console.log("formValues", formValues);
     const [isLoading, setIsLoading] = useState(false);
     const [isLoadingDraft, setIsLoadingDraft] = useState(false);
+
     const [file, setFile] = useState<File>();
     const [image1, setImage1] = useState<File>();
     const [image2, setImage2] = useState<File>();
     const [image3, setImage3] = useState<File>();
     const [image4, setImage4] = useState<File>();
+
     const [selectedConditions, setSelectedConditions] = useState<string>("");
     const [selectedSalesType, setSelectedSalesType] = useState<string>("");
     const [selectedCategory, setSelectedCategory] = useState<string>("");
+
+    const [categories, setCategories] = useState<CategoriesResponse[]>([]);
+
+    const [showEndDateField, setShowEndDateField] = useState(false); // State to manage visibility of bidding end date
 
     const [priceErrorMsg, setPriceErrorMsg] = useState(false);
     const [imageErrorMsg, setImageErrorMsg] = useState<boolean | string>(false);
@@ -59,32 +66,6 @@ const AddProductModal = ({
     const [endDateErrorMsg, setEndDateErrorMsg] = useState(false);
     const [categoryErrorMsg, setCategoryErrorMsg] = useState(false);
     const [descErrorMsg, setDescErrorMsg] = useState(false);
-    const [categories, setCategories] = useState<CategoriesResponse[]>([]);
-    const [showEndDateField, setShowEndDateField] = useState(false); // State to manage visibility of bidding end date
-    /**
-     * Function to handle image file upload and update form values
-     * @param e is the event handler
-     * @returns void
-     */
-
-    async function handleFetchAllCategories() {
-        // Start loader
-
-        await fetchCategories()
-            .then((response) => {
-                // console.log("Response: ", response.data.data);
-                setCategories(response.data.data);
-            })
-            .catch((error) => {
-                const errorMessage = createCustomErrorMessages(error.response?.data);
-                toast.error(errorMessage);
-            })
-            .finally(() => { });
-    }
-
-    useEffect(() => {
-        handleFetchAllCategories();
-    }, []);
 
     const handleFileUpload = (e: any, name: string) => {
         // Get the selected file
@@ -158,6 +139,27 @@ const AddProductModal = ({
         }
 
         stateFunction && stateFunction(false);
+    }
+
+    /**
+     * Function to handle image file upload and update form values
+     * @param e is the event handler
+     * @returns void
+     */
+
+    async function handleFetchAllCategories() {
+        // Start loader
+
+        await fetchCategories()
+            .then((response) => {
+                // console.log("Response: ", response.data.data);
+                setCategories(response.data.data);
+            })
+            .catch((error) => {
+                const errorMessage = createCustomErrorMessages(error.response?.data);
+                toast.error(errorMessage);
+            })
+            .finally(() => { });
     }
 
     // Implement a function to handle changes in the conditions selection
@@ -303,6 +305,28 @@ const AddProductModal = ({
         setCategoryErrorMsg(false);
         setDescErrorMsg(false);
     };
+
+    const conditions = [
+        {
+            condition: "NEW",
+        },
+        {
+            condition: "USED",
+        },
+        {
+            condition: "REFURBISHED",
+        },
+    ];
+
+    const salesType = [
+        {
+            sale: "ONCE",
+        },
+        {
+            sale: "BIDDING",
+        },
+    ];
+
     async function handleCreateProduct(e: FormEvent<HTMLFormElement | HTMLButtonElement>) {
         // Prevent deafult actions
         e.preventDefault();
@@ -353,6 +377,7 @@ const AddProductModal = ({
             setIsLoading(false);
         }
     }
+
     async function handleDraftProduct(e: FormEvent<HTMLFormElement | HTMLButtonElement>) {
         // Prevent deafult actions
         e.preventDefault();
@@ -404,27 +429,11 @@ const AddProductModal = ({
         }
     }
 
-    const departureDateRef = useRef<HTMLDivElement>(null);
+    useEffect(() => {
+        handleFetchAllCategories();
+    }, []);
 
-    const conditions = [
-        {
-            condition: "NEW",
-        },
-        {
-            condition: "USED",
-        },
-        {
-            condition: "REFURBISHED",
-        },
-    ];
-    const salesType = [
-        {
-            sale: "ONCE",
-        },
-        {
-            sale: "BIDDING",
-        },
-    ];
+    const departureDateRef = useRef<HTMLDivElement>(null);
 
     return (
         <ModalWrapper
@@ -798,20 +807,20 @@ const AddProductModal = ({
                     )}
                 </div>
                 <div className={styles.btnContainer}>
-                    <button 
-                    type="submit" 
-                    disabled={isLoading}
+                    <button
+                        type="submit"
+                        disabled={isLoading}
                         onClick={(e) => handleCreateProduct(e)}
                     >
                         {isLoading ? "Uploading..." : " Upload Product"}
                     </button>
-                    <button 
-                    type="submit" 
-                    disabled={isLoadingDraft} 
-                    onClick={(e) => handleDraftProduct(e)}
+                    <button
+                        type="submit"
+                        disabled={isLoadingDraft}
+                        onClick={(e) => handleDraftProduct(e)}
                     >
                         {isLoadingDraft ? "Saving..." : " Save as Draft"}
-                       </button>
+                    </button>
                 </div>
             </form>
         </ModalWrapper>
