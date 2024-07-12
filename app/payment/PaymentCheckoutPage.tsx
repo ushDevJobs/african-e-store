@@ -8,6 +8,7 @@ import {
 } from "@stripe/react-stripe-js";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
+import ApiRoutes from "../api/apiRoutes";
 const PaymentCheckoutPage = ({ amount }: { amount: number }) => {
   const cartItems = useSelector((state: RootState) => state.cart.cartItems);
 
@@ -19,7 +20,7 @@ const PaymentCheckoutPage = ({ amount }: { amount: number }) => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    fetch("http://localhost:3000/api/payment/pay", {
+    fetch(`${ApiRoutes.BASE_URL_DEV}/api/payment/pay`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -59,7 +60,7 @@ const PaymentCheckoutPage = ({ amount }: { amount: number }) => {
       elements,
       clientSecret,
       confirmParams: {
-        return_url: `http://localhost:3000/api/payment/success?o_id=${orderId}`,
+        return_url: `${ApiRoutes.BASE_URL_DEV}/api/payment/success?o_id=${orderId}`,
       },
     });
 

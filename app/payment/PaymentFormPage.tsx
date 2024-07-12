@@ -6,6 +6,7 @@ import PaymentCheckoutPage from "./PaymentCheckoutPage";
 import convertToSubcurrency from "@/lib/convertToSubcurrency";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
+import ApiRoutes from "../api/apiRoutes";
 
 type Props = {};
 // if (process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY === undefined) {
@@ -18,7 +19,7 @@ const PaymentFormPage = (props: Props) => {
   const cartItems = useSelector((state: RootState) => state.cart.cartItems);
   const [amount, setAmount] = useState(0);
   useEffect(() => {
-    fetch("http://localhost:3000/api/payment/amount", {
+    fetch(`${ApiRoutes.BASE_URL_DEV}/api/payment/amount`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
