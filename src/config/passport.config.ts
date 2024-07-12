@@ -101,7 +101,7 @@ export const initializePassport = (passport: PassportStatic) => {
         clientSecret: process.env.CLIENT_SECRET as string,
         callbackURL:
           process.env.NODE_ENV === "production"
-            ? `https://gemstonesmontessori.com/api/auth/google/callback`
+            ? `https://rayvvin.onrender.com/api/auth/google/callback`
             : `http://localhost:3000/api/auth/google/callback`,
         passReqToCallback: true,
       },

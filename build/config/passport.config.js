@@ -104,7 +104,7 @@ const initializePassport = (passport) => {
         clientID: process.env.CLIENT_ID,
         clientSecret: process.env.CLIENT_SECRET,
         callbackURL: process.env.NODE_ENV === "production"
-            ? `https://gemstonesmontessori.com/api/auth/google/callback`
+            ? `https://rayvvin.onrender.com/api/auth/google/callback`
             : `http://localhost:3000/api/auth/google/callback`,
         passReqToCallback: true,
     }, (req, accessToken, refreshToken, profile, done) => __awaiter(void 0, void 0, void 0, function* () {
