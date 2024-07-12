@@ -5,6 +5,7 @@ const nextConfig = {
   images: {
     domains: [
       'localhost',
+      'gemstonesmontessori.com'
       //   'res.cloudinary.com',
       //   'res.cloudinary.co',
       //   'blog.voyagequest.travel',
