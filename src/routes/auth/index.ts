@@ -38,8 +38,13 @@ router.get(
   passport.authenticate("google", {
     failureRedirect: "google/error",
     failureFlash: true,
-  }), (req, res) => {
-    res.redirect(`http://localhost:2500${(req.user as RequestUser).accountType === "SELLER" ? "/seller" : "/"}`)
+  }),
+  (req, res) => {
+    res.redirect(
+      `${process.env.CLIENT_URL}${
+        (req.user as RequestUser).accountType === "SELLER" ? "/seller" : "/"
+      }`
+    );
   }
 );
 router.get("/login/error", rootErrorHandler(loginAuthError));

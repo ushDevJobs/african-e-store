@@ -7,15 +7,17 @@ import {
   returnJSONSuccess,
 } from "../utils/functions";
 import { RequestUser } from "../types";
+import logger from "../utils/logger";
 
 const stripe = new Stripe(process.env.STRIPE_S_KEY!, {
   typescript: true,
 });
+
 export const checkout = async (req: Request, res: Response) => {
   const session = await stripe.checkout.sessions.create({
     mode: "payment",
-    success_url: "http://localhost:2500/payment/success",
-    cancel_url: "http://localhost:2500/payment/cancel",
+    success_url: `${process.env.CLIENT_URL}/payment/success`,
+    cancel_url: `${process.env.CLIENT_URL}/payment/cancel`,
     line_items: [
       {
         price_data: {
@@ -67,6 +69,16 @@ export const paymentIntent = async (req: Request, res: Response) => {
         enabled: true,
       },
     });
+    if (intent.id) {
+      await prisma.order.update({
+        where: {
+          id: order.id,
+        },
+        data: {
+          transaction_id: intent.id,
+        },
+      });
+    }
     return returnJSONSuccess(res, {
       data: {
         clientSecret: intent.client_secret,
@@ -107,7 +119,7 @@ export const handlePaymentSuccess = async (req: Request, res: Response) => {
         },
       });
       res.redirect(
-        `http://localhost:2500/payment-success?amount=${order.amount}`
+        `${process.env.CLIENT_URL}/payment-success?amount=${order.amount}`
       );
     } else {
       const order = await prisma.order.update({
@@ -121,7 +133,7 @@ export const handlePaymentSuccess = async (req: Request, res: Response) => {
         },
       });
       res.redirect(
-        `http://localhost:2500/payment-failed?amount=${order.amount}`
+        `${process.env.CLIENT_URL}/payment-failure?amount=${order.amount}`
       );
     }
   }

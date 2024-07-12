@@ -23,8 +23,7 @@ node_modules/
 .parcel-cache
 
 dist
-build
-images/
+# build
 # Gatsby files
 
 .pnp.*

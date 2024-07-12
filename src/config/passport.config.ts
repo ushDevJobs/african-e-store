@@ -99,7 +99,10 @@ export const initializePassport = (passport: PassportStatic) => {
       {
         clientID: process.env.CLIENT_ID as string,
         clientSecret: process.env.CLIENT_SECRET as string,
-        callbackURL: "http://localhost:3000/api/auth/google/callback",
+        callbackURL:
+          process.env.NODE_ENV === "production"
+            ? `https://gemstonesmontessori.com/api/auth/google/callback`
+            : `http://localhost:3000/api/auth/google/callback`,
         passReqToCallback: true,
       },
       async (req, accessToken, refreshToken, profile, done) => {
