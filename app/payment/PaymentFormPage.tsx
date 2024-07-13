@@ -35,6 +35,8 @@ const PaymentFormPage = (props: Props) => {
       .then((res) => res.json())
       .then((data) => setAmount(data.data.amount));
   }, []);
+  console.log(!!amount, amount);
+
   return (
     //   <form action="" className={styles.formContainer}>
     //       <div className={styles.formField}>

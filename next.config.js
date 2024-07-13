@@ -5,7 +5,8 @@ const nextConfig = {
   images: {
     domains: [
       'localhost',
-      'gemstonesmontessori.com'
+      'gemstonesmontessori.com',
+      'rayvvin.onrender.com'
       //   'res.cloudinary.com',
       //   'res.cloudinary.co',
       //   'blog.voyagequest.travel',
