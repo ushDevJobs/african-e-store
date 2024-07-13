@@ -17,9 +17,10 @@ const Footer = (props: Props) => {
         <div className={styles.footerContainer}>
             {onMobile &&
                 <div className={styles.logoArea}>
-                    <div className={styles.lhs}>
+                    <div className={styles.lhs} style={{marginBottom: '20px'}}>
                         <Link href={'/'}>
-                            <Image src={images.logo} alt='logo' /></Link>
+                            <Image src={images.logo} alt='logo' />
+                            </Link>
                         {/* <h2>Your catch phrase here </h2> */}
                     </div>
                     <div className={styles.rhs}>
