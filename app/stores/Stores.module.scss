@@ -1,0 +1,105 @@
+@import '../styles/reusables';
+
+.main {
+  @include sectionPadding;
+  //   padding-top: 93px;
+  padding-bottom: 150px;
+
+  @include tablet {
+    padding-bottom: 150px;
+  }
+
+  .contents {
+    .fieldContainer {
+      margin-bottom: 40px;
+      width: fit-content;
+      min-width: 400px;
+      background-color: #fff;
+      border-radius: 42px;
+      border: 1px solid #828282;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 10px;
+
+      @include tablet {
+        width: 100%;
+        min-width: 0;
+      }
+
+      svg {
+        width: 13px;
+        height: 13px;
+      }
+
+      input {
+        width: 100%;
+        outline: none;
+        color: #000;
+        border: none;
+        background-color: transparent;
+
+        &::placeholder {
+          color: #828282;
+        }
+      }
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(20%, 1fr));
+      gap: 32px;
+
+      @include bigTablet {
+        grid-template-columns: repeat(auto-fill, minmax(30%, 1fr));
+      }
+
+      @include tablet {
+        display: flex;
+        flex-direction: column;
+        gap: 32px;
+      }
+
+      .card {
+        .image {
+          position: relative;
+          height: 206px;
+          margin-bottom: 20px;
+
+          @include tablet {
+            width: 100%;
+          }
+
+          img {
+            object-fit: cover;
+            border-radius: 22px !important;
+          }
+        }
+      }
+    }
+  }
+  .tableLoader {
+    width: 100%;
+    height: 300px;
+    // height: 50vh;
+    // position: relative;
+    column-span: 2;
+    border: 1px solid red;
+  }
+
+  .loaderText {
+    margin: 0 auto;
+    opacity: 0.8;
+    width: 100%;
+    white-space: nowrap;
+    // transform: translateX(50%);
+    font-size: 14px;
+    text-align: center;
+    // margin-left: 20px;
+
+    @include tablet {
+      transform: translateX(0%);
+      margin-left: 0px;
+    }
+  }
+}

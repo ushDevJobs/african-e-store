@@ -1,0 +1,68 @@
+@import '../styles/reusables';
+.settingsBar {
+  background-color: #ecf8f5;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  border-radius: 13px;
+  position: sticky;
+  position: -webkit-sticky; /* Safari */
+  top: 83px;
+  left: 0;
+
+  @include tablet {
+    display: none;
+  }
+
+  h3 {
+    color: #1e1e1e;
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 20px;
+  }
+
+  .field {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+
+    input {
+      cursor: pointer;
+    }
+
+    label {
+      font-size: 16px;
+      color: #828282;
+    }
+  }
+
+  .catgoriesFilter {
+    ul {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      //   max-height: 250px;
+      //   overflow-y: auto;
+a{
+    width: fit-content;
+}
+      li {
+        font-size: 16px;
+        color: #828282;
+        cursor: pointer;
+        width: fit-content;
+         &:hover{
+            color: #2c7865;
+        font-weight: bold;
+      }
+      }
+
+      .active {
+        color: #2c7865;
+        font-weight: bold;
+      }
+    }
+  }
+}

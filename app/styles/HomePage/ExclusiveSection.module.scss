@@ -1,0 +1,68 @@
+@import '../reusables';
+
+.main {
+  @include sectionPadding;
+  padding-top: 80px;
+  padding-bottom: 80px;
+
+  h2 {
+    text-align: center;
+    font-size: 32px;
+    color: #6f6f6f;
+    margin-bottom: 20px;
+  }
+  p {
+    max-width: 473px;
+    margin: 0 auto;
+    font-size: 16px;
+    color: #1e1e1e;
+    margin-bottom: 50px;
+    text-align: center;
+  }
+
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(20%, 1fr));
+    gap: 30px;
+
+    @include smallLaptop {
+      grid-template-columns: repeat(auto-fill, minmax(30%, 1fr));
+    }
+    @include tablet {
+      display: flex;
+      overflow-x: auto;
+       width: 100%;
+    }
+
+    .card {
+      display: flex;
+      flex-direction: column;
+
+      .images {
+        position: relative;
+        border-radius: 22px;
+        height: 206px;
+        margin-bottom: 20px;
+
+         @include tablet {
+              width: 300px;
+            }
+        img {
+          object-fit: cover;
+          border-radius: 22px !important;
+        }
+      }
+      span {
+        color: #828282;
+        font-size: 16px;
+        margin-bottom: 7px;
+      }
+
+      h4 {
+        font-weight: 500;
+        font-size: 16px;
+        color: #1e1e1e;
+      }
+    }
+  }
+}

@@ -1,0 +1,53 @@
+@import '../styles/reusables';
+
+.main {
+  //   padding-top: 83px;
+  padding-bottom: 100px;
+
+  .faqContents {
+    padding-top: 100px;
+    @include sectionPadding;
+    display: flex;
+    gap: 70px;
+
+    .lhs {
+      flex: 1;
+      background-color: #ecf8f5;
+      border-radius: 13px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+
+      .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        h3 {
+          font-size: 400;
+          color: #1e1e1e;
+          font-size: 16px;
+        }
+
+        span {
+          svg {
+            cursor: pointer;
+          }
+        }
+      }
+
+      .item {
+        color: #828282;
+        font-size: 16px;
+        margin-top: 20px;
+        cursor: pointer;
+        width: fit-content;
+      }
+    }
+
+    .rhs {
+      flex: 3;
+    }
+  }
+}

@@ -1,0 +1,262 @@
+@import '../styles/reusables';
+
+.formFieldContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  background-color: #fff;
+  width: 100%;
+  height: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 20px;
+  border-radius: 15px;
+
+  @include tablet {
+    // width: 120%;
+    max-width: 100%;
+    min-width: 100%;
+  }
+
+  .additionalImage {
+    display: flex;
+    flex-direction: column;
+
+    > p {
+      color: gray;
+      font-size: 14px;
+      margin-bottom: 1.3rem;
+
+      span {
+        color: gray;
+        font-size: 0.7rem;
+      }
+    }
+
+    .cardContainer {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(22%, 1fr));
+      width: 100%;
+      padding: 10px;
+      gap: 1rem;
+
+      @include tablet {
+        grid-template-columns: repeat(auto-fill, minmax(30%, 1fr));
+      }
+
+      .card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        gap: 1rem;
+
+        .image {
+          width: 120px;
+          height: 120px;
+          background-color: #e4e4e4;
+          border-radius: 100%;
+          display: grid;
+          place-items: center;
+          overflow: hidden;
+          position: relative;
+
+          > img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+          }
+        }
+
+        .addFlight {
+          display: flex;
+          flex-direction: column;
+          margin-top: auto;
+
+          & button {
+            width: fit-content;
+            max-width: 172px;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            padding: 6px;
+            background-color: #2c7865;
+            color: white;
+            border: 1px solid #2c7865;
+            letter-spacing: 0.1px;
+            cursor: pointer;
+            margin-bottom: 0.7rem;
+            position: relative;
+            z-index: 3;
+            white-space: nowrap;
+
+            input {
+              position: absolute;
+              width: 100%;
+              height: 100%;
+              top: 0;
+              left: 0;
+              opacity: 0;
+              cursor: pointer;
+            }
+
+            &:hover {
+              transform: translateY(-4px);
+            }
+          }
+
+          .changeButton {
+            background-color: white;
+            color: #2c7865;
+            font-weight: 600;
+            text-align: center;
+          }
+
+          p {
+            color: gray;
+            font-size: 14px;
+            font-weight: 400;
+            white-space: nowrap;
+          }
+        }
+      }
+    }
+  }
+
+  .rowForm {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+
+    @include tablet {
+      flex-direction: column;
+    }
+  }
+
+  .formField {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    width: 100%;
+    label {
+      font-size: 16px;
+
+      span {
+        color: #fd6a02;
+        font-size: 14px;
+      }
+    }
+    input,
+    textarea {
+      width: 100%;
+      border: 1px solid #acacac;
+      padding: 14px 21px;
+      outline: none;
+      background-color: #f7fafa;
+      border-radius: 7px;
+      font-size: 16px;
+
+      &::placeholder {
+        color: #828282;
+      }
+
+      @include tablet {
+        padding: 14px 8px;
+      }
+    }
+
+    textarea {
+      resize: none;
+      height: 150px;
+    }
+
+    select {
+      width: 100%;
+      border: 1px solid #acacac;
+      height: 50px;
+      outline: none;
+      background-color: #f7fafa;
+      border-radius: 7px;
+      padding: 14px 21px;
+      color: #424242;
+
+      &::placeholder {
+        color: #828282;
+      }
+    }
+
+    .dial {
+      display: flex;
+      border: 1px solid #acacac;
+      border-radius: 7px;
+
+      input {
+        border: none;
+        font-size: 16px;
+      }
+
+      select {
+        border-right: 1px solid #acacac;
+        border-top: none;
+        border-bottom: none;
+        border-left: none;
+        border-radius: 7px;
+        width: 98px;
+        font-size: 16px;
+      }
+    }
+
+    .datePickerContainer {
+      background-color: white;
+      border-radius: 5px;
+      border: 1.5px solid #acacac;
+      font-size: 0.75rem;
+      overflow: hidden;
+      height: fit-content;
+      // max-height: 40px;
+      font-weight: 500;
+      padding: 5px;
+      // padding: 0;
+      width: 100%;
+      outline: none;
+    }
+  }
+
+  .btnContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    padding-bottom: 20px;
+    @include tablet {
+      flex-direction: column;
+    }
+    button {
+      border-radius: 8px;
+      padding: 15px 0;
+      text-align: center;
+      border: 1px solid #2c7865;
+      color: #fff;
+      width: 100%;
+      cursor: pointer;
+      background-color: #2c7865;
+
+      &:nth-child(2) {
+        color: #424242;
+        background-color: transparent;
+      }
+
+      &:hover {
+        opacity: 0.8;
+      }
+
+      &:disabled {
+        opacity: 0.5;
+        pointer-events: none;
+      }
+
+      @include tablet {
+        width: 100%;
+      }
+    }
+  }
+}
