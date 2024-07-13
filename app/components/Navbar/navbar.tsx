@@ -5,8 +5,7 @@ import useResponsiveness from '../hooks/responsiveness-hook';
 import Image from 'next/image';
 import images from '@/public/images';
 import Link from 'next/link';
-import { CartIcon, DownArrowIcon, DropDownIcon, DropDownIcon2, HamburgerIcon, TimesIcon, UserIcon } from '../SVGs/SVGicons';
-import useOuterClick from '../hooks/useOuterClick';
+import { CartIcon, DownArrowIcon, UserIcon } from '../SVGs/SVGicons';
 import { usePathname, useRouter } from 'next/navigation';
 import { useAccountStatus } from '@/app/context/AccountStatusContext';
 import { useLogout } from '@/app/api/apiClients';
@@ -16,7 +15,7 @@ import { toast } from 'sonner';
 import { CategoriesResponse } from '../models/AllCategories';
 import { StorageKeys } from '../constants/StorageKeys';
 import { RootState } from '@/app/redux/store';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import MobileNavBar from './MobileNavBar';
 
 type Props = {}
@@ -24,14 +23,11 @@ type Props = {}
 const Navbar = (props: Props) => {
     const router = useRouter()
     const cartItems = useSelector((state: RootState) => state.cart.cartItems);
-
     const [navIsOpen, setNavIsOpen] = useState(false);
     const logout = useLogout()
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const pathname = usePathname();
     const { accountStatus, fetchAccountStatus } = useAccountStatus();
     const [retrievedCategories, setRetrievedCategories] = useState<CategoriesResponse[]>();
-    // console.log({ retrievedCategories })
     const windowRes = useResponsiveness();
     const isMobile = windowRes.width && windowRes.width < 768;
     const onMobile = typeof isMobile == 'boolean' && isMobile;
@@ -57,7 +53,6 @@ const Navbar = (props: Props) => {
             .then((response) => {
                 // console.log("Response: ", response);
                 setLogoutResponse(response.data);
-                // fetchAccountStatus();
                 if (response.data.status) {
                     router.push('/')
                     setIsLoggedIn(false);

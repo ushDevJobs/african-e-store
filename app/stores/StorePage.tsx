@@ -2,15 +2,14 @@
 import React, { FormEvent, useEffect, useState } from 'react'
 import styles from './Stores.module.scss'
 import Image from 'next/image'
-import images from '@/public/images'
 import { FavoriteIcon, FilledLoveIcon, SearchIcon, UkIcon } from '../components/SVGs/SVGicons'
 import { CategoriesHeader } from '../components/CategoriesHeader'
 import { useAddStoreToFavorite, useFetchAllStores, useRemoveStoreFromFavorite } from '../api/apiClients'
 import { AllStoresResponse } from '../components/models/IStores'
 import { createCustomErrorMessages } from '../components/constants/catchError'
 import { toast } from 'sonner'
-import ComponentLoader from '../components/Loader/ComponentLoader'
 import Link from 'next/link'
+import { FullPageLoader } from '../Loader/ComponentLoader'
 
 type Props = {}
 
@@ -152,7 +151,7 @@ const StorePage = (props: Props) => {
                 </div>
             </div>
             {!stores && !filteredStores && isFetchingStores && (
-                <ComponentLoader lightTheme svgStyle={{ width: '62px' }} />
+               <FullPageLoader />
             )}
             {!stores && !isFetchingStores &&
                 <p className={styles.loaderText}>No stores found</p>

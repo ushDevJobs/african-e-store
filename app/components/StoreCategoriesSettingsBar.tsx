@@ -10,7 +10,6 @@ type Props = {
 }
 
 const StoreCategoriesSettingsBar = ({ storeCategories, isFetchingStoreCategories, activeCategory }: Props) => {
-
     return (
         <>
             {!storeCategories && isFetchingStoreCategories ? <StoreSettingsBarSkeletonLoader /> : (
@@ -25,8 +24,8 @@ const StoreCategoriesSettingsBar = ({ storeCategories, isFetchingStoreCategories
                                     {category.name}
                                 </li>
                             ))}
-                            {!storeCategories &&
-                                <li className='text-center flex flex-col items-center justify-center mt-4 text-gray-400 text-base'>
+                            {storeCategories?.length == 0  &&
+                                <li className='text-center flex flex-col items-center justify-center mt-4 text-gray-400 text-sm'>
                                     No category available</li>
                             }
                         </ul>

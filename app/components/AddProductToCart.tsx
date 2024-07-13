@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import styles from '../products/[productId]/SingleCategory.module.scss';
 import QuantityButton from './QuantityButton';
 import { FavoriteIcon, FilledLoveIcon, RatingIcon, ShoppingIcon } from './SVGs/SVGicons';
-import images from '@/public/images';
 import Image from 'next/image';
 import Link from 'next/link';
 import useResponsiveness from './hooks/responsiveness-hook';
@@ -11,16 +10,16 @@ import { ProductResponse } from './models/IProduct';
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from '../redux/store';
 import { decrement, increment, productQtyInCartSelector } from '../redux/features/cart/cartSlice';
-import ComponentLoader from './Loader/ComponentLoader';
 import { useAccountStatus } from '../context/AccountStatusContext';
 import { useRouter } from 'next/navigation';
 import moment from 'moment';
+import { FullPageLoader } from '../Loader/ComponentLoader';
 
 type Props = {
     product: ProductResponse | undefined;
     isFetchingProduct: boolean;
     handleAddProductToFavorite: (id: string) => Promise<void>
-     handleRemoveProductFromFavorite: (id: string) => Promise<void>
+    handleRemoveProductFromFavorite: (id: string) => Promise<void>
 };
 
 const AddProductToCart = ({ product, isFetchingProduct, handleAddProductToFavorite, handleRemoveProductFromFavorite }: Props) => {
@@ -163,11 +162,7 @@ const AddProductToCart = ({ product, isFetchingProduct, handleAddProductToFavori
                                 />
                             )}
                             <div className={styles.buyNow}>
-                                <button onClick={() => {
-                                    accountStatus && accountStatus.accountType === 'BUYER' ?
-                                        router.push('/checkout') :
-                                        router.push('/login');
-                                }}>Buy Now</button>
+                                <Link href={'/checkout'}> Buy Now</Link>
                                 {onDesktop && (
                                     <>
                                         {!quantityInCart && (
@@ -179,7 +174,7 @@ const AddProductToCart = ({ product, isFetchingProduct, handleAddProductToFavori
                                                 e.preventDefault(); // Prevent navigation on click
                                                 if (product.favourite.length === 0) {
                                                     handleAddProductToFavorite(product.id);
-                                                }else {
+                                                } else {
                                                     handleRemoveProductFromFavorite(product.id);
                                                 }
                                             }}>
@@ -199,9 +194,7 @@ const AddProductToCart = ({ product, isFetchingProduct, handleAddProductToFavori
                     </>
                 )}
                 {!product && isFetchingProduct && (
-                    <div className="min-h-[60vh]">
-                        <ComponentLoader lightTheme svgStyle={{ width: '62px' }} />
-                    </div>
+                    <FullPageLoader />
                 )}
                 {!product && !isFetchingProduct && (
                     <p className='text-base text-gray-500 flex flex-col items-center justify-center text-center mx-auto min-h-[50vh]'>No product found</p>

@@ -1,13 +1,12 @@
 'use client'
 import React, { useEffect, useState } from 'react'
 import styles from './SavedStore.module.scss'
-import { DotIcon, FavoriteIcon, FilledLoveIcon, UserIcon } from '../components/SVGs/SVGicons'
+import { DotIcon, FilledLoveIcon, UserIcon } from '../components/SVGs/SVGicons'
 import { SavedStoreResponse } from '../components/models/ISavedStore'
-import { useAddStoreToFavorite, useFetchAllStores, useFetchFavoriteStores, useRemoveStoreFromFavorite } from '../api/apiClients'
+import { useFetchFavoriteStores, useRemoveStoreFromFavorite } from '../api/apiClients'
 import { createCustomErrorMessages } from '../components/constants/catchError'
 import { toast } from 'sonner'
-import ComponentLoader from '../components/Loader/ComponentLoader'
-import { AllStoresResponse } from '../components/models/IStores'
+import { FullPageLoader } from '../Loader/ComponentLoader'
 type Props = {}
 
 const SavedStorePage = (props: Props) => {
@@ -94,9 +93,7 @@ const SavedStorePage = (props: Props) => {
                 ))}
             </div>
             {isFetchingSavedStores && (
-                <p className='h-[50vh]'>
-                    <ComponentLoader lightTheme svgStyle={{ width: '62px' }} />
-                </p>
+                <FullPageLoader />
             )}
             {savedStoreStores?.length == 0 &&
                 <p className={styles.loaderText}>No saved store found</p>

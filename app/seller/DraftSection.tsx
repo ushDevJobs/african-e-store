@@ -1,10 +1,8 @@
 import React, { useState } from 'react'
-import { useFetchDrafts } from '../api/apiClients'
 import { DraftResponse } from '../components/models/ISellerStore'
 import { DeleteIcon, EditIcon } from '../components/SVGs/SVGicons'
 import Image from 'next/image'
-import ComponentLoader from '../components/Loader/ComponentLoader'
-import images from '@/public/images'
+import { FullPageLoader } from '../Loader/ComponentLoader'
 
 type Props = {
     isDeletingId: string | null
@@ -60,9 +58,7 @@ const DraftSection = ({
                 ))}
             </div>
             {!drafts && isFetchingDrafts && (
-                <p className="h-[30vh]">
-                    <ComponentLoader lightTheme svgStyle={{ width: "30px" }} />
-                </p>
+                <FullPageLoader />
             )}
             {!drafts || drafts.length === 0 && (
                 <p className='h-[30vh] text-center text-base text-gray-600'>No item in your draft </p>

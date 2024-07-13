@@ -5,7 +5,6 @@ import useResponsiveness from "../components/hooks/responsiveness-hook";
 import { SellerStoreResponse } from "../components/models/ISellerStore";
 import { StoreStoreRatingSkeletonLoader } from "../stores/StoresSkeleton";
 import Image from "next/image";
-import ApiRoutes from "../api/apiRoutes";
 import EditProfileModal from "../components/Modal/EditProfileModal";
 
 type Props = {
@@ -49,7 +48,6 @@ const SellerPageStoreRating = ({ store, isFetchingStore, handleFetchStore, setSe
                                 <UserIcon />
                             </span>
                         }
-
 
                         <div className={styles.info}>
                             <h3 className="text-lg md:text-xl lg:text-2xl text-[#828282] mb-1 font-semibold underline">

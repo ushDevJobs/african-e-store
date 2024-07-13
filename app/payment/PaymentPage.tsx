@@ -2,9 +2,6 @@
 import React from 'react'
 import styles from '../checkout/Checkout.module.scss'
 import Image from 'next/image'
-import images from '@/public/images'
-import { RectangleIcon } from '../components/SVGs/SVGicons'
-import QuantityButton from '../components/QuantityButton'
 import { useDispatch, useSelector } from 'react-redux'
 import { totalPriceSelector } from '../redux/features/cart/cartSlice'
 import { RootState } from '../redux/store'
@@ -34,18 +31,16 @@ const PaymentPage = (props: Props) => {
                                     </div>
                                     <div className={styles.item}>
                                         <p className={styles.name}>{item.product.name}</p>
-                                        <p className={styles.price}>&pound;{item.product.amount.toLocaleString()}</p>
+                                        <p className={styles.price}>&pound;{item.product.amount.toLocaleString()} ({item.qty})</p>
+
                                         {/* <QuantityButton
                                             onIncrease={() => dispatch(increment(item.product))}
                                             onDecrease={() => dispatch(decrement(item.product))}
                                             qty={item.qty}
                                         /> */}
                                         <div className={`${styles.delivery} -mt-2`}>
-                                            <h3 className='mb-1'>Delivery</h3>
-                                            <p className='mb-4 max-w-[300px]'>Delivery
-                                                Estimated delivery: Jun 19 - Jul 18Est. delivery: Jun 19 - Jul 18
-                                                Rayvvin International Shipping
-                                                US $31.00</p>
+                                            {/* <h3 className='mb-1'>Delivery</h3> */}
+                                            {/* <p className='mb-4 max-w-[300px]'>Shipping &pound;2.99</p> */}
 
                                             <span className={styles.fees}>Authorities may apply duties, fees, and taxes upon delivery</span>
                                         </div>
@@ -62,7 +57,7 @@ const PaymentPage = (props: Props) => {
                     </div>
                 </div>
                 <div className={styles.rhs}>
-                 <PaymentFormPage/>
+                    <PaymentFormPage />
                 </div>
             </div>
         </div>

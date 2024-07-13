@@ -3,10 +3,7 @@ import Image from "next/image";
 import React, { useState } from "react";
 import { DeleteIcon, EditIcon } from "../components/SVGs/SVGicons";
 import { SellerProductsResponse } from "../components/models/ISellerStore";
-import ComponentLoader from "../components/Loader/ComponentLoader";
-import { useRemoveProduct } from "../api/apiClients";
-import { toast } from "sonner";
-import { createCustomErrorMessages } from "../components/constants/catchError";
+import { FullPageLoader } from "../Loader/ComponentLoader";
 
 type Props = {
     products: SellerProductsResponse[] | undefined;
@@ -64,9 +61,9 @@ const SellerProduct = ({
                 ))}
             </div>
             {!products && isFetchingProducts && (
-                <p className="h-[30vh]">
-                    <ComponentLoader lightTheme svgStyle={{ width: "30px" }} />
-                </p>
+                <div className="lg:-translate-x-48">
+                    <FullPageLoader />
+                </div>
             )}
             {products?.length == 0 && (
                 <div className="flex flex-col lg:-translate-x-48 gap-5 items-center justify-center text-center">

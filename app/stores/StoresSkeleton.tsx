@@ -18,7 +18,7 @@ export const AboutStoreSkeletonLoader: React.FC = () => {
 export const StoreInputSkeletonLoader: React.FC = () => {
     return (
         <div className='-mt-10 animate-pulse'>
-            <div className="skeleton h-1 w-1/2 mb-3 rounded-xl" style={{ marginTop: "40px" }}></div>
+            <div className="skeleton h-10 w-1/2 mb-3 rounded-xl" style={{ marginTop: "40px" }}></div>
         </div>
     );
 };

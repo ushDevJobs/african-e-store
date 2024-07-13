@@ -1,5 +1,5 @@
+import { FullPageLoader } from '@/app/Loader/ComponentLoader';
 import { useFetchStoreReview } from '@/app/api/apiClients';
-import ComponentLoader from '@/app/components/Loader/ComponentLoader';
 import { createCustomErrorMessages } from '@/app/components/constants/catchError';
 import { ReviewResponse } from '@/app/components/models/IReview';
 import React, { useEffect, useState } from 'react'
@@ -61,9 +61,7 @@ const FeedBack = ({ storeId }: Props) => {
                     )
                 }
                 {!reviews && isFetchingReviews && (
-                    <p className="h-[30vh]">
-                        <ComponentLoader lightTheme svgStyle={{ width: "30px" }} />
-                    </p>
+                  <FullPageLoader/>
                 )}
 
                 {reviews?.length == 0 && !isFetchingReviews && (

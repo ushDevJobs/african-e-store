@@ -9,6 +9,8 @@ import { useAddProductsToFavorite, useFetchProduct, useRemoveProductFromFavorite
 import { createCustomErrorMessages } from '@/app/components/constants/catchError'
 import { toast } from 'sonner'
 import { ProductResponse } from '@/app/components/models/IProduct'
+import { useAccountStatus } from '@/app/context/AccountStatusContext'
+import { useRouter } from 'next/navigation'
 
 type Props = {
     params: {
@@ -18,6 +20,8 @@ type Props = {
 
 const SingleProductPage = ({ params }: Props) => {
     const fetchProduct = useFetchProduct()
+    const { accountStatus, fetchAccountStatus } = useAccountStatus();
+    const router = useRouter()
     const productId = params.productId;
     const [product, setProduct] = useState<ProductResponse>();
     const [isFetchingProduct, setIsFetchingProduct] = useState<boolean>(true);
@@ -95,6 +99,15 @@ const SingleProductPage = ({ params }: Props) => {
     useEffect(() => {
         handleFetchProduct();
     }, []);
+
+    // useEffect(() => {
+    //     // Check if accountStatus changes and is falsy (not logged in)
+    //     if (router && !accountStatus?.accountType) {
+    //         // Redirect to login page immediately if not logged in
+    //         router.push(`/login?id=${productId}`);
+    //     }
+    // }, [accountStatus, router.refresh()]);
+
     return (
         <div className={styles.main}>
             <AddProductToCart handleAddProductToFavorite={handleAddProductToFavorite}

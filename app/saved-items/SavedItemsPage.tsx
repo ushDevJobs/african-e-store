@@ -9,8 +9,8 @@ import { useFetchFavoriteProducts, useRemoveProductFromFavorite } from '../api/a
 import { SavedProductsResponse } from '../components/models/ISavedStore'
 import { createCustomErrorMessages } from '../components/constants/catchError'
 import { toast } from 'sonner'
-import ComponentLoader from '../components/Loader/ComponentLoader'
 import Link from 'next/link'
+import { FullPageLoader } from '../Loader/ComponentLoader'
 type Props = {}
 
 const SavedItemsPage = (props: Props) => {
@@ -143,9 +143,7 @@ const SavedItemsPage = (props: Props) => {
                 )}
             </div>
             {isFetchingSavedProducts && (
-                <p className='h-[50vh]'>
-                    <ComponentLoader lightTheme svgStyle={{ width: '62px' }} />
-                </p>
+               <FullPageLoader />
             )}
             {savedProducts?.length == 0 &&
                 <p className={styles.loaderText}>No saved product found</p>

@@ -3,7 +3,7 @@ import { useFetchReviews } from '../api/apiClients';
 import { ReviewResponse } from '../components/models/IReview';
 import { createCustomErrorMessages } from '../components/constants/catchError';
 import { toast } from 'sonner';
-import ComponentLoader from '../components/Loader/ComponentLoader';
+import { FullPageLoader } from '../Loader/ComponentLoader';
 
 type Props = {}
 
@@ -61,11 +61,8 @@ const FeedBack = (props: Props) => {
                     )
                 }
                 {!reviews && isFetchingReviews && (
-                    <p className="h-[30vh]">
-                        <ComponentLoader lightTheme svgStyle={{ width: "30px" }} />
-                    </p>
+                    <FullPageLoader />
                 )}
-
                 {reviews?.length == 0 && !isFetchingReviews && (
                     <p className="text-base text-center">
                         No review available
@@ -73,7 +70,6 @@ const FeedBack = (props: Props) => {
                 )}
             </section>
         </>
-
     )
 }
 

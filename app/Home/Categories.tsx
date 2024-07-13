@@ -18,6 +18,8 @@ const Categories = (props: Props) => {
     const onMobile = typeof isMobile == 'boolean' && isMobile;
     const onDesktop = typeof isMobile == 'boolean' && !isMobile;
 
+    const [isRetrievingCategories, setIsRetrievingCategories] = useState<boolean>(true);
+
     const router = useRouter()
     const [retrievedCategories, setRetrievedCategories] = useState<CategoriesResponse[]>();
     const [activeTab, setActiveTab] = useState(0);
@@ -47,6 +49,8 @@ const Categories = (props: Props) => {
 
     useEffect(() => {
         if (router) {
+            setIsRetrievingCategories(true);
+
             // Get the retrieved categories placed
             const _retrievedCategories = sessionStorage.getItem(
                 StorageKeys.AllCategories
@@ -54,8 +58,16 @@ const Categories = (props: Props) => {
 
             // If we have a retrieved categoriess...
             if (_retrievedCategories) {
+                setIsRetrievingCategories(false);
                 // Update the state
                 setRetrievedCategories(JSON.parse(_retrievedCategories) as CategoriesResponse[]);
+            } else {
+                // Simulate an API call to fetch categories
+                setTimeout(() => {
+                    setIsRetrievingCategories(false);
+                    // Example: Set empty array if no categories are available
+                    setRetrievedCategories([]);
+                }, 2000);
             }
         }
 
@@ -88,7 +100,7 @@ const Categories = (props: Props) => {
                         {retrievedCategories && retrievedCategories.length > 0 && (
                             retrievedCategories[activeTab].products.length > 0 ? (
                                 retrievedCategories[activeTab].products.slice(0, 3).map((product, productIndex) => (
-                                    <Link href={`/categories/${retrievedCategories[activeTab].id}?${retrievedCategories[activeTab].name}`} className={styles.card} key={productIndex}>
+                                    <Link href={`/products/${product.id}?${product.name}`} className={styles.card} key={productIndex}>
                                         <div className={styles.images}>
                                             <Image src={product.coverImage} alt='product image' fill />
                                         </div>

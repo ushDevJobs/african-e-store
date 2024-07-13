@@ -19,15 +19,15 @@ const SummarySection = (props: Props) => {
             <div className={styles.summaryItem}>
                 <p>Shipping</p>
                 {/* <h3>{cartItems.map((item) => item.product.)}</h3> */}
-                <h3>Shipping here</h3>
+                <h3>&pound;2.99</h3>
             </div>
             <div className={styles.total}>
                 <p>Subtotal </p>
-                <h3>&pound;{totalPrice.toLocaleString()}+ shipping fee</h3>
+                <h3>&pound;{(totalPrice + 2.99).toLocaleString()}</h3>
                 {/* add shipping fee  */}
             </div>
             <Link href={'/checkout'}>
-                <button>Pay &pound;{totalPrice.toLocaleString()} + shipping fee</button>
+                <button>Pay &pound;{(totalPrice + 2.99).toLocaleString()}</button>
                 {/* add shipping fee  */}
             </Link>
         </div>

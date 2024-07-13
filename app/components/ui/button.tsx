@@ -1,5 +1,4 @@
 import * as React from "react"
-import ComponentLoader from "../Loader/ComponentLoader";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     btnIcon?: React.ReactElement;
