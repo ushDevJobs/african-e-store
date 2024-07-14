@@ -61,9 +61,13 @@ export const paymentIntent = async (req: Request, res: Response) => {
       id: true,
     },
   });
+  const SHiPPING_FEE =
+    Array.from(new Set(products.map((product) => product.storeId))).length *
+    2.99;
+  const newAmount = amount + SHiPPING_FEE;
   try {
     const intent = await stripe.paymentIntents.create({
-      amount: convertToSubcurrency(amount + 2),
+      amount: convertToSubcurrency(newAmount),
       currency: "EUR",
       automatic_payment_methods: {
         enabled: true,
@@ -97,8 +101,12 @@ export const paymentIntent = async (req: Request, res: Response) => {
 export const getAmount = async (req: Request, res: Response) => {
   const cart: { id: string; quantity: number }[] = req.body.id;
 
-  const { amount } = await getTotal(cart);
-  return returnJSONSuccess(res, { data: { amount } });
+  const { amount, products } = await getTotal(cart);
+  const SHiPPING_FEE =
+    Array.from(new Set(products.map((product) => product.storeId))).length *
+    2.99;
+  const newAmount = amount + SHiPPING_FEE;
+  return returnJSONSuccess(res, { data: { amount: newAmount } });
 };
 export const handlePaymentSuccess = async (req: Request, res: Response) => {
   const { o_id, payment_intent, redirect_status } = req.query;
@@ -149,6 +157,7 @@ const getTotal = async (cart: { id: string; quantity: number }[]) => {
       name: true,
       id: true,
       amount: true,
+      storeId: true,
     },
   });
   const productAmount = products
