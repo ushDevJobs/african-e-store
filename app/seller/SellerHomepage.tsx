@@ -12,13 +12,15 @@ import { toast } from 'sonner';
 import { createCustomErrorMessages } from '../components/constants/catchError';
 import DraftSection from './DraftSection';
 import FeedBack from './FeedBack';
+import Orders from './Orders';
 type Props = {};
 
 enum TabIndex {
     Shop = '1',
-    About = '2',
-    Draft = '3',
-    Feedback = '4',
+    Orders = '2',
+    About = '3',
+    Draft = '4',
+    Feedback = '5',
 }
 
 const SellerHomePage = (props: Props) => {
@@ -162,15 +164,16 @@ const SellerHomePage = (props: Props) => {
                 </div>}
 
             <div className={styles.tab}>
-
-                {activeTab === TabIndex.Shop &&
+                {
+                    activeTab === TabIndex.Shop &&
                     <div
                         style={{ color: '#828282', fontSize: '16px', backgroundColor: '#ecf8f5', padding: '16px', borderRadius: '13px', height: 'fit-content' }}
                         className={styles.lhs}
                         onClick={() => setIsAddProductModalVisible(true)}
                     >
                         <p className='cursor-pointer w-fit whitespace-nowrap'> Add Products to store</p>
-                    </div>}
+                    </div>
+                }
 
                 <div className={styles.rhs}>
                     {/* {activeTab === TabIndex.Shop && <div className={styles.search}><SearchIcon /> <input type="text" placeholder='Search items in shop' /></div>} */}
@@ -180,6 +183,12 @@ const SellerHomePage = (props: Props) => {
                             className={activeTab === TabIndex.Shop ? styles.active : ''}
                         >
                             My products
+                        </span>
+                        <span
+                            onClick={() => setActiveTab(TabIndex.Orders)}
+                            className={activeTab === TabIndex.Orders ? styles.active : ''}
+                        >
+                            Orders <span className='!bg-[#2C7865] !text-white font-medium !text-sm !px-[5px] !py-[1px] rounded-full'>6</span>
                         </span>
                         <span
                             onClick={() => setActiveTab(TabIndex.About)}
@@ -201,26 +210,38 @@ const SellerHomePage = (props: Props) => {
                         </span>
                     </div>
 
-                    {activeTab === TabIndex.Shop &&
+                    {
+                        activeTab === TabIndex.Shop &&
                         <SellerProduct
                             products={products}
                             isFetchingProducts={isFetchingProducts}
                             setIsAddProductModalVisible={setIsAddProductModalVisible}
                             isDeletingId={isDeletingId}
                             handleRemoveProduct={handleRemoveProduct}
-                        />}
-                    {activeTab === TabIndex.About &&
+                        />
+                    }
+
+                    {
+                        activeTab === TabIndex.Orders &&
+                        <Orders />
+                    }
+
+                    {
+                        activeTab === TabIndex.About &&
                         <AboutSeller
                             store={store}
                             isFetchingStore={isFetchingStore}
-                        />}
+                        />
+                    }
 
-                    {activeTab === TabIndex.Draft && <DraftSection
-                        isDeletingId={isDeletingId}
-                        handleRemoveProduct={handleRemoveProduct}
-                        drafts={drafts}
-                        isFetchingDrafts={isFetchingDrafts}
-                    />}
+                    {
+                        activeTab === TabIndex.Draft && <DraftSection
+                            isDeletingId={isDeletingId}
+                            handleRemoveProduct={handleRemoveProduct}
+                            drafts={drafts}
+                            isFetchingDrafts={isFetchingDrafts}
+                        />
+                    }
 
                     {
                         activeTab === TabIndex.Feedback &&
