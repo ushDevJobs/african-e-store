@@ -2,9 +2,13 @@ generator client {
   provider = "prisma-client-js"
 }
 
+generator json {
+  provider = "prisma-json-types-generator"
+}
+
 datasource db {
   provider = "mysql"
-  url      = "mysql://ushengin_rayvvin:rayvvin@@ushengineering.com:3306/ushengin_rayvvin"
+  url      = env("DATABASE_URL")
 }
 
 model User {
@@ -18,9 +22,8 @@ model User {
   password          String?
   telephone         String?
   country           String?
+  address           String?
   accountType       AccountType @default(BUYER)
-  createdAt         DateTime    @default(now())
-  updatedAt         DateTime    @updatedAt
   cartItems         Cart[]
   orders            Order[]
   myRatings         Rating[]
@@ -28,24 +31,28 @@ model User {
   favouriteStores   Store[]     @relation(name: "myFavouriteStores")
   favouriteProducts Product[]
   verifyUser        verifyUser?
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
 
   @@map("users")
 }
 
 model Store {
-  id          String    @id @default(cuid())
-  name        String    @unique
-  description String    @db.VarChar(255)
-  image       String?
-  location    String
-  userId      String    @unique
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  orders      Order[]
-  products    Product[]
-  ratings     Rating[]
-  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade, name: "myPersonalStore")
-  favourite   User[]    @relation(name: "myFavouriteStores")
+  id            String    @id @default(cuid())
+  name          String    @unique
+  description   String    @db.VarChar(255)
+  image         String?
+  location      String
+  userId        String    @unique
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  accountNumber String?
+  bank          String?
+  orders        Order[]
+  products      Product[]
+  ratings       Rating[]
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade, name: "myPersonalStore")
+  favourite     User[]    @relation(name: "myFavouriteStores")
 
   @@map("store")
 }
@@ -61,11 +68,11 @@ model Product {
   details            String         @db.VarChar(255)
   publish            Boolean        @default(true)
   coverImage         String
-  images             String         @default("[]") @db.LongText
+  /// [productImages]
+  images             Json?
   returnPolicy       String?
   location           String?
   storeId            String
-  shippingDetails    String?        @default("{}") @db.LongText
   discount           Boolean        @default(false)
   discountPercentage Int            @default(0)
   createdAt          DateTime       @default(now())
@@ -106,24 +113,24 @@ model Cart {
 }
 
 model Order {
-  id              String        @id @default(cuid())
-  amount          Float
-  quantity        String        @db.LongText
-  status          OrderStatus   @default(PENDING)
-  shippingDetails String        @db.LongText
-  userId          String?
-  storeId         String
-  trackingId      String?       @unique
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
-  products        Product[]
-  store           Store         @relation(fields: [storeId], references: [id])
-  tracker         Tracker?      @relation(fields: [trackingId], references: [id])
-  user            User?         @relation(fields: [userId], references: [id])
-  Rating          Rating[]
-  transaction_id  String?
-  payment_status  PaymentStatus @default(PENDING)
-  date_paid       DateTime?
+  id             String        @id @default(cuid())
+  amount         Float
+  /// [orderQuantity]
+  quantity       Json
+  /// [orderStatus]
+  status         Json
+  userId         String?
+  trackingId     String?       @unique
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  products       Product[]
+  stores         Store[]
+  tracker        Tracker?      @relation(fields: [trackingId], references: [id])
+  user           User?         @relation(fields: [userId], references: [id])
+  Rating         Rating[]
+  transaction_id String?
+  payment_status PaymentStatus @default(PENDING)
+  date_paid      DateTime?
 
   @@map("orders")
 }
@@ -183,9 +190,9 @@ enum UserStatus {
 }
 
 enum OrderStatus {
-  DELIVERED
   PENDING
-  FAILED
+  DISPATCHED
+  DELIVERED
 }
 
 enum AccountType {

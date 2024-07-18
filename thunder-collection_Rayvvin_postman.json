@@ -1,6 +1,6 @@
 {
     "info": {
-        "_postman_id": "2bbfe74f-e864-42ae-9fa4-a67f54da5c87",
+        "_postman_id": "24d15acd-3adc-4fdc-8307-e40526fd5b04",
         "name": "Rayvvin",
         "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
         "description": ""
@@ -225,7 +225,7 @@
             "name": "Categories",
             "item": [
                 {
-                    "name": "All Categories",
+                    "name": "Get All Categories That have products",
                     "request": {
                         "method": "GET",
                         "url": {
@@ -276,6 +276,48 @@
                                 "categories",
                                 "category",
                                 "clwtj53v100025qqjeg8ics62"
+                            ],
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3000"
+                        }
+                    }
+                },
+                {
+                    "name": "Get All Categories",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "http://localhost:3000/api/categories/all",
+                            "query": [
+                                {
+                                    "key": "_page",
+                                    "value": "4",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "_limit",
+                                    "value": "1",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "condition",
+                                    "value": "2",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "products",
+                                    "value": "false",
+                                    "disabled": true
+                                }
+                            ],
+                            "variable": [],
+                            "path": [
+                                "api",
+                                "categories",
+                                "all"
                             ],
                             "protocol": "http",
                             "host": [
@@ -507,6 +549,64 @@
                                 "localhost"
                             ],
                             "port": "3000"
+                        }
+                    }
+                },
+                {
+                    "name": "Get  orders for store",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "http://localhost:3000/api/stores/store/orders?f=DELIVERED",
+                            "query": [
+                                {
+                                    "key": "f",
+                                    "value": "DELIVERED"
+                                }
+                            ],
+                            "variable": [],
+                            "path": [
+                                "api",
+                                "stores",
+                                "store",
+                                "orders"
+                            ],
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3000"
+                        }
+                    }
+                },
+                {
+                    "name": "Update Order Status",
+                    "request": {
+                        "method": "PATCH",
+                        "url": {
+                            "raw": "http://localhost:3000/api/stores/store/orders/order/clyrhba6a0007foyobsg0sqa5",
+                            "path": [
+                                "api",
+                                "stores",
+                                "store",
+                                "orders",
+                                "order",
+                                "clyrhba6a0007foyobsg0sqa5"
+                            ],
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3000"
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            },
+                            "raw": "{\n  \"status\":3\n}"
                         }
                     }
                 }
@@ -1033,6 +1133,59 @@
                                 "localhost"
                             ],
                             "port": "3000"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Payment",
+            "item": [
+                {
+                    "name": "Checkout",
+                    "request": {
+                        "method": "POST",
+                        "url": {
+                            "raw": "http://localhost:3000/api/payment/checkout",
+                            "path": [
+                                "api",
+                                "payment",
+                                "checkout"
+                            ],
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3000"
+                        }
+                    }
+                },
+                {
+                    "name": "Get Amount",
+                    "request": {
+                        "method": "POST",
+                        "url": {
+                            "raw": "https://rayvvin.onrender.com/api/payment/pay",
+                            "path": [
+                                "api",
+                                "payment",
+                                "pay"
+                            ],
+                            "protocol": "https",
+                            "host": [
+                                "rayvvin",
+                                "onrender",
+                                "com"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            },
+                            "raw": "{\n  \"id\":[\n    {\n        \"id\": \"cly78gy5b0005psvzyzqvwlld\",\n        \"quantity\": 1\n    },\n    {\n        \"id\": \"cly95arbb000710izjze7itc9\",\n        \"quantity\": 1\n    }\n]\n}"
                         }
                     }
                 }

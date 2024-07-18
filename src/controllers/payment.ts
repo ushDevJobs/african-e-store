@@ -6,8 +6,7 @@ import {
   returnJSONError,
   returnJSONSuccess,
 } from "../utils/functions";
-import { RequestUser } from "../types";
-import logger from "../utils/logger";
+import { OrderQuantity, OrderStatus, RequestUser } from "../types";
 
 const stripe = new Stripe(process.env.STRIPE_S_KEY!, {
   typescript: true,
@@ -44,30 +43,33 @@ export const checkout = async (req: Request, res: Response) => {
 };
 export const paymentIntent = async (req: Request, res: Response) => {
   const user = req.user as RequestUser;
-  const cart: { id: string; quantity: number }[] = req.body.id;
+  const cart: OrderQuantity = req.body.id;
   const { amount, products } = await getTotal(cart);
+  const status = Array.from(
+    new Set(products.map((product) => product.storeId))
+  ).map((id) => ({ storeId: id, status: "PENDING" })) as OrderStatus;
+
   const order = await prisma.order.create({
     data: {
       amount,
-      quantity: JSON.stringify(cart),
-      shippingDetails: "{}",
+      quantity: cart,
       products: {
         connect: products.map((product) => ({ id: product.id })),
       },
       userId: user.id,
-      storeId: "clxzbyp0q0001n7p96lu2xg1w",
+      status: status,
+      stores: {
+        connect: products.map((product) => ({ id: product.storeId })),
+      },
     },
     select: {
       id: true,
+      quantity: true,
     },
   });
-  const SHiPPING_FEE =
-    Array.from(new Set(products.map((product) => product.storeId))).length *
-    2.99;
-  const newAmount = amount + SHiPPING_FEE;
   try {
     const intent = await stripe.paymentIntents.create({
-      amount: convertToSubcurrency(newAmount),
+      amount: convertToSubcurrency(amount),
       currency: "EUR",
       automatic_payment_methods: {
         enabled: true,
@@ -101,12 +103,9 @@ export const paymentIntent = async (req: Request, res: Response) => {
 export const getAmount = async (req: Request, res: Response) => {
   const cart: { id: string; quantity: number }[] = req.body.id;
 
-  const { amount, products } = await getTotal(cart);
-  const SHiPPING_FEE =
-    Array.from(new Set(products.map((product) => product.storeId))).length *
-    2.99;
-  const newAmount = amount + SHiPPING_FEE;
-  return returnJSONSuccess(res, { data: { amount: newAmount } });
+  const { amount } = await getTotal(cart);
+
+  return returnJSONSuccess(res, { data: { amount } });
 };
 export const handlePaymentSuccess = async (req: Request, res: Response) => {
   const { o_id, payment_intent, redirect_status } = req.query;
@@ -169,5 +168,9 @@ const getTotal = async (cart: { id: string; quantity: number }[]) => {
     .reduce((x, y, i, e) => {
       return x + y;
     }, 0);
-  return { amount: productAmount, products };
+  const SHiPPING_FEE =
+    Array.from(new Set(products.map((product) => product.storeId))).length *
+    2.99;
+  const amount = productAmount + SHiPPING_FEE;
+  return { amount, products };
 };

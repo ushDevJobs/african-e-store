@@ -1,7 +1,8 @@
 import { NextFunction, Request, Response } from "express";
-import { RequestUser } from "../types";
+import { OrderStatus, RequestUser } from "../types";
 import { prisma } from "../prisma";
 import {
+  checkIfEmpty,
   extractFullUrlStore,
   returnJSONError,
   returnJSONSuccess,
@@ -122,7 +123,20 @@ const getStoreFullDetails = async (id: string, isStoreId = false) => {
   });
   const totalItemSold = await prisma.order.count({
     where: {
-      AND: [{ status: "DELIVERED" }, { storeId: store.id }],
+      AND: [
+        {
+          status: {
+            array_contains: { storeId: store.id, status: "DELIVERED" },
+          },
+        },
+        {
+          stores: {
+            some: {
+              id: store.id,
+            },
+          },
+        },
+      ],
     },
   });
   const totalRatingByUsers = await prisma.rating.groupBy({
@@ -624,4 +638,143 @@ const getReviewsForStore = async (id: string) => {
     },
   });
   return reviews;
+};
+export const getStoreOrders = async (req: Request, res: Response) => {
+  const { id } = req.user as RequestUser;
+  const store = await prisma.store.findFirstOrThrow({
+    where: {
+      userId: id,
+    },
+  });
+  const filter = req.query.f || "all";
+  const filterQ = filter
+    ? filter !== "all"
+      ? {
+          status: {
+            array_contains: { status: (filter as string).toUpperCase() },
+          },
+        }
+      : {}
+    : {};
+  const orders = await prisma.order.findMany({
+    where: {
+      AND: [
+        {
+          stores: {
+            some: {
+              id: store.id,
+            },
+          },
+        },
+        { payment_status: "SUCCEEDED" },
+        { ...filterQ },
+      ],
+    },
+    select: {
+      id: true,
+      amount: true,
+      createdAt: true,
+      trackingId: true,
+      status: true,
+      user: {
+        select: {
+          fullname: true,
+          id: true,
+          address: true,
+        },
+      },
+      products: {
+        where: {
+          storeId: store.id,
+        },
+        select: {
+          name: true,
+          amount: true,
+        },
+      },
+    },
+  });
+
+  returnJSONSuccess(res, { data: orders });
+};
+export const updateDeliveryStatusOfOrder = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { status } = req.body;
+
+  const { id } = req.params;
+  const store = await prisma.store.findFirstOrThrow({
+    where: {
+      userId: (req.user as RequestUser).id,
+    },
+  });
+  const orderStatus = await prisma.order.findUnique({
+    where: {
+      id,
+    },
+    select: {
+      status: true,
+    },
+  });
+  const stat =
+    status === 3 ? "DELIVERED" : status === 2 ? "DISPATCHED" : "PENDING";
+
+  const newStatus = orderStatus?.status.filter(
+    (stats) => stats.storeId !== store.id
+  );
+  newStatus?.push({ storeId: store.id, status: stat });
+  if (id && id !== "") {
+    const order = await prisma.order.update({
+      where: {
+        id: id as string,
+      },
+      data: {
+        status: newStatus,
+      },
+    });
+    returnJSONSuccess(res, { data: order });
+  } else {
+    next(
+      new BadRequest("Invalid request prarameter", ErrorCode.BAD_REQUEST, 400)
+    );
+  }
+};
+export const addBankDetails = async (req: Request, res: Response) => {
+  const { id } = req.user as RequestUser;
+  const { bank, account } = req.body;
+  const bankQ =
+    bank && bank !== ""
+      ? {
+          bank,
+        }
+      : {};
+  const numQ =
+    account && account !== ""
+      ? {
+          accountNumber: account,
+        }
+      : {};
+
+  const store = await prisma.store.update({
+    where: {
+      userId: id,
+    },
+    data: {
+      ...bank,
+      ...numQ,
+    },
+  });
+
+  returnJSONSuccess(res, { data: store });
+};
+export const getAboutStore = async (req: Request, res: Response) => {
+  // const monthlyIncome = await prisma.order.aggregate({
+  //   where: {
+  //     createdAt: {
+  //       getMonth:
+  //     }
+  //   }
+  // })
 };

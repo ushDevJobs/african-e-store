@@ -12,10 +12,12 @@ import {
   getStoreByUserLogged,
   getStoreCategories,
   getStoreDraftProducts,
+  getStoreOrders,
   getStoreProducts,
   removeStoreFromFavourite,
   searchForStore,
   searchStoreProducts,
+  updateDeliveryStatusOfOrder,
   updateStoreDescription,
   updateStoreProfile,
 } from "../../controllers/store";
@@ -26,6 +28,7 @@ import {
   sellerRoleCheck,
 } from "../../middlewares/roles";
 import { uploadStoreImage, uploadUsertImage } from "../../config/configOptions";
+import { checkAuth } from "../../middlewares/auth";
 
 const router = Router();
 router.get("/all", rootErrorHandler(getAllStores));
@@ -91,5 +94,16 @@ router.patch(
   "/store/profile",
   [sellerRoleCheck, checkStore, uploadStoreImage.single("image")],
   rootErrorHandler(updateStoreProfile)
+);
+
+router.get(
+  "/store/orders",
+  [sellerRoleCheck, checkStore],
+  rootErrorHandler(getStoreOrders)
+);
+router.patch(
+  "/store/orders/order/:id",
+  [sellerRoleCheck, checkStore],
+  rootErrorHandler(updateDeliveryStatusOfOrder)
 );
 export { router as storeRoutes };

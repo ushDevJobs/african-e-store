@@ -15,6 +15,7 @@ import { NotFound } from "../exceptions/not-found";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import { DatabaseException } from "../exceptions/datebase-exception";
 import { getPositiveReview } from "./store";
+import { Prisma } from "@prisma/client";
 
 export const updateProduct = async () => {};
 
@@ -38,7 +39,6 @@ export const addProduct = async (
   });
 
   try {
-    console.log(req.body.date);
     await prisma.product.create({
       data: {
         coverImage: images.length > 0 ? images[0] : "",
@@ -49,7 +49,7 @@ export const addProduct = async (
           req.body.data && req.body.date !== ""
             ? new Date(req.body.date) || null
             : null,
-        images: JSON.stringify(images),
+        images: images as Prisma.JsonArray,
         details: validatedProduct.description,
         quantity: validatedProduct.quantity,
         publish: validatedProduct.publish === "false" ? false : true,
@@ -148,10 +148,12 @@ export const getProductById = async (req: Request, res: Response) => {
     : (rating._avg.rating || 0).toFixed(0);
   return returnJSONSuccess(res, {
     data: product,
-    avgRating: parseFloat(avgRating),
-    totalRating: rating._count.rating || 0,
-    storePositiveFeeback: await getPositiveReview(product?.store.id!),
-    productRatings,
+    ratings: {
+      avgRating: parseFloat(avgRating),
+      totalRating: rating._count.rating || 0,
+      storePositiveFeeback: await getPositiveReview(product?.store.id!),
+      productRatings,
+    },
   });
 };
 export const deleteProductById = async (req: Request, res: Response) => {
