@@ -16,8 +16,8 @@ export type OrderQuantity = {
 }[];
 declare global {
   namespace PrismaJson {
-    type productImage = string[];
-    type orderQuantity = OrderQuantity;
-    type orderStatus = OrderStatus;
+    type productImage = string[] | [];
+    type orderQuantity = OrderQuantity | [];
+    type orderStatus = OrderStatus | [];
   }
 }
