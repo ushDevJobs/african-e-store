@@ -69,7 +69,7 @@ model Product {
   publish            Boolean        @default(true)
   coverImage         String
   /// [productImages]
-  images             Json?
+  images             Json?          @default("[]")
   returnPolicy       String?
   location           String?
   storeId            String
@@ -116,9 +116,9 @@ model Order {
   id             String        @id @default(cuid())
   amount         Float
   /// [orderQuantity]
-  quantity       Json
+  quantity       Json          @default("[]")
   /// [orderStatus]
-  status         Json
+  status         Json          @default("[]")
   userId         String?
   trackingId     String?       @unique
   createdAt      DateTime      @default(now())
