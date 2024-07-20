@@ -756,13 +756,12 @@ export const addBankDetails = async (req: Request, res: Response) => {
           accountNumber: account,
         }
       : {};
-
   const store = await prisma.store.update({
     where: {
       userId: id,
     },
     data: {
-      ...bank,
+      ...bankQ,
       ...numQ,
     },
   });
@@ -770,11 +769,65 @@ export const addBankDetails = async (req: Request, res: Response) => {
   returnJSONSuccess(res, { data: store });
 };
 export const getAboutStore = async (req: Request, res: Response) => {
-  // const monthlyIncome = await prisma.order.aggregate({
-  //   where: {
-  //     createdAt: {
-  //       getMonth:
-  //     }
-  //   }
-  // })
+  const { id } = req.user as RequestUser;
+  const store = await prisma.store.findFirstOrThrow({
+    where: { userId: id },
+    select: { id: true },
+  });
+  const products = await prisma.product.findMany({
+    where: {
+      storeId: store.id,
+    },
+    select: {
+      quantity: true,
+      amount: true,
+    },
+  });
+  const stock = products
+    .map(({ amount, quantity }) => amount * quantity)
+    .reduce((x, y) => x + y, 0);
+  const fufilledOrders = await prisma.order.aggregate({
+    where: {
+      status: {
+        array_contains: { storeId: store.id, status: "DELIVERED" },
+      },
+    },
+    _count: {
+      _all: true,
+    },
+  });
+  const income = await prisma.order.findMany({
+    where: {
+      status: {
+        array_contains: { storeId: store.id, status: "DELIVERED" },
+      },
+    },
+    select: {
+      products: {
+        where: {
+          storeId: store.id,
+        },
+        select: {
+          amount: true,
+          quantity: true,
+        },
+      },
+    },
+  });
+  const filteredIncome = income
+    .map((product) =>
+      product.products
+        .map((pro) => pro.amount * pro.quantity)
+        .map((am) => am + 2.99)
+    )
+    .flat()
+    .reduce((x, y) => x + y, 0);
+  return returnJSONSuccess(res, {
+    data: {
+      income: filteredIncome,
+      stock,
+      fufilledOrders: fufilledOrders._count._all || 0,
+      messages: 0,
+    },
+  });
 };

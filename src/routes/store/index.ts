@@ -1,7 +1,9 @@
 import { Router } from "express";
 import {
+  addBankDetails,
   addStoreToFavourite,
   createStore,
+  getAboutStore,
   getAllStores,
   getCategoriesfromStoreById,
   getFavouriteStores,
@@ -95,11 +97,21 @@ router.patch(
   [sellerRoleCheck, checkStore, uploadStoreImage.single("image")],
   rootErrorHandler(updateStoreProfile)
 );
+router.patch(
+  "/store/profile/bank",
+  [sellerRoleCheck, checkStore],
+  rootErrorHandler(addBankDetails)
+);
 
 router.get(
   "/store/orders",
   [sellerRoleCheck, checkStore],
   rootErrorHandler(getStoreOrders)
+);
+router.get(
+  "/store/about",
+  [sellerRoleCheck, checkStore],
+  rootErrorHandler(getAboutStore)
 );
 router.patch(
   "/store/orders/order/:id",
