@@ -1,6 +1,9 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import ModalWrapper from '../components/Modal/ModalWrapper'
 import { BoxIcon, DeliveryLineIcon, TimesIcon } from '../components/SVGs/SVGicons';
+import { StoreOrderResponse } from '../components/models/ISellerStore';
+import { useRouter } from 'next/navigation';
+import { StorageKeys } from '../components/constants/StorageKeys';
 
 type Props = {
     visibility: boolean;
@@ -8,11 +11,32 @@ type Props = {
 }
 
 const SellerDeliveryStatus = ({ visibility, setVisibility }: Props) => {
+    const router = useRouter()
+
+    const [retrievedOrderId, setRetrievedOrderId] = useState<StoreOrderResponse[]>();
+    const id = retrievedOrderId?.map(order => order.id)
+    console.log({ id });
+    useEffect(() => {
+        if (router) {
+            // Get the retrieved order id
+            const _retrievedOrderId = sessionStorage.getItem(
+                StorageKeys.OrderId
+            );
+
+            // If we have a retrieved OrderIds...
+            if (_retrievedOrderId) {
+                // Update the state
+                setRetrievedOrderId(JSON.parse(_retrievedOrderId) as StoreOrderResponse[]);
+            }
+        }
+
+        // Run this effect only when the router is ready, which means: when the page is loaded
+    }, [router]);
     return (
         <ModalWrapper
             visibility={visibility}
             setVisibility={setVisibility}
-            styles={{ backgroundColor: "transparent", overflowX:'auto' }}
+            styles={{ backgroundColor: "transparent", overflowX: 'auto' }}
         >
             <div className="bg-white w-[90%] mx-auto md:w-full rounded-[34px] p-7">
                 <div className="flex flex-col gap-3 mb-10">

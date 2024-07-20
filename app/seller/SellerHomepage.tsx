@@ -6,13 +6,14 @@ import SellerProduct from './SellerProduct';
 import AddProductModal from './AddProductModal';
 import AboutSeller from './AboutSeller';
 import SellerPageStoreRating from './SellerStoreRating';
-import { useFetchDrafts, useFetchSellerProducts, useFetchSellerStore, useRemoveProduct } from '../api/apiClients';
-import { DraftResponse, SellerProductsResponse, SellerStoreResponse } from '../components/models/ISellerStore';
+import { useFetchDrafts, useFetchSellerProducts, useFetchSellerStore, useFetchStoreOrders, useRemoveProduct } from '../api/apiClients';
+import { DraftResponse, SellerProductsResponse, SellerStoreResponse, StoreOrderResponse } from '../components/models/ISellerStore';
 import { toast } from 'sonner';
 import { createCustomErrorMessages } from '../components/constants/catchError';
 import DraftSection from './DraftSection';
 import FeedBack from './FeedBack';
 import Orders from './Orders';
+import { StorageKeys } from '../components/constants/StorageKeys';
 type Props = {};
 
 enum TabIndex {
@@ -29,6 +30,7 @@ const SellerHomePage = (props: Props) => {
     const fetchSellerProducts = useFetchSellerProducts()
     const removeProduct = useRemoveProduct()
     const fetchDrafts = useFetchDrafts()
+    const fetchOrders = useFetchStoreOrders()
 
     const [activeTab, setActiveTab] = useState<TabIndex>(TabIndex.Shop);
     const [isAddProductModalVisible, setIsAddProductModalVisible] = useState(false);
@@ -40,11 +42,13 @@ const SellerHomePage = (props: Props) => {
     const [selectedStore, setSelectedStore] = useState<SellerStoreResponse>();
     const [products, setProducts] = useState<SellerProductsResponse[]>()
     const [drafts, setDrafts] = useState<DraftResponse[]>()
+    const [orders, setOrders] = useState<StoreOrderResponse[]>()
 
     const [isFetchingStore, setIsFetchingStore] = useState<boolean>(true);
     const [isFetchingProducts, setIsFetchingProducts] = useState<boolean>(true);
     const [isDeletingId, setIsDeletingId] = useState<string | null>(null);
     const [isFetchingDrafts, setIsFetchingDrafts] = useState<boolean>(true);
+    const [isFetchingOrders, setIsFetchingOrders] = useState<boolean>(true);
 
     async function handleFetchStore() {
 
@@ -110,6 +114,25 @@ const SellerHomePage = (props: Props) => {
                 setIsFetchingDrafts(false);
             });
     }
+    async function handleFetchOrders() {
+
+        // Show loader
+        setIsFetchingOrders(true);
+        await fetchOrders()
+            .then((response) => {
+                console.log("Response: ", response.data.data);
+                setOrders(response.data.data);
+                // console.log("Order Id: ", response.data.data);
+                sessionStorage.setItem(StorageKeys.OrderId, JSON.stringify(response.data.data));
+            })
+            .catch((error) => {
+                const errorMessage = createCustomErrorMessages(error.response?.data)
+                toast.error(errorMessage);
+            })
+            .finally(() => {
+                setIsFetchingOrders(false);
+            });
+    }
 
     async function handleRemoveProduct(id: string) {
         setIsDeletingId(id);
@@ -138,6 +161,7 @@ const SellerHomePage = (props: Props) => {
         handleFetchStore();
         handleFetchProducts({ clearPreviousProducts: true });
         handleFetchDrafts({ clearPreviousProducts: true });
+        handleFetchOrders()
     }, []);
 
     return (
@@ -188,7 +212,7 @@ const SellerHomePage = (props: Props) => {
                             onClick={() => setActiveTab(TabIndex.Orders)}
                             className={activeTab === TabIndex.Orders ? styles.active : ''}
                         >
-                            Orders <span className='!bg-[#2C7865] !text-white font-medium !text-sm !px-[5px] !py-[1px] rounded-full'>6</span>
+                            Orders {orders && <span className='!bg-[#2C7865] !text-white font-medium !text-sm !px-[5px] !py-[1px] rounded-full'>{orders?.length}</span>}
                         </span>
                         <span
                             onClick={() => setActiveTab(TabIndex.About)}
@@ -223,7 +247,10 @@ const SellerHomePage = (props: Props) => {
 
                     {
                         activeTab === TabIndex.Orders &&
-                        <Orders />
+                        <Orders
+                            orders={orders}
+                            isFetchingOrders={isFetchingOrders}
+                        />
                     }
 
                     {

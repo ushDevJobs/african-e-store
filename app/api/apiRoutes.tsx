@@ -118,6 +118,10 @@ export default class ApiRoutes {
 
     static FetchReviews: string = "api/stores/store/reviews";
 
+    static FetchStoreOrders: string = "api/stores/store/orders";
+
+    static UpdateDeliveryStatus: string = "api/stores/store/orders/order";
+
     static FetchStoreReview: (storeId: string) => string = (storeId: string) =>
         `api/stores/store/id/${storeId}/reviews`;
 }

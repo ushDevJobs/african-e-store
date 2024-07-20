@@ -11,4 +11,5 @@ export class StorageKeys {
    */
   static AllCategories = 'AllCategories';
   static SavedStore = 'SavedStore';
+  static OrderId = 'OrderId';
 }

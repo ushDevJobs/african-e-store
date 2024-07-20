@@ -5,6 +5,7 @@ import {
     RegisterBuyerRequest,
 } from "../components/models/IRegisterBuyer";
 import { RegisterSellerRequest } from "../components/models/IRegisterSeller";
+import { DeliveryStatus } from "../components/models/IOrderDeliveryStatus";
 
 export const API = axios.create({
     baseURL: ApiRoutes.BASE_URL_DEV,
@@ -442,4 +443,27 @@ export function useFetchStoreReview() {
     }
 
     return fetchReview;
+}
+
+export function useFetchStoreOrders() {
+    async function fetchOrders() {
+        // Fire the request
+        const response = await API.get(ApiRoutes.FetchStoreOrders);
+
+        // Return the response
+        return response;
+    }
+
+    return fetchOrders;
+}
+export function useUpdateDeliveryStatus() {
+    async function updateStatus(id: string, data: DeliveryStatus) {
+        // Fire the request
+        const response = await API.patch(`${ApiRoutes.UpdateDeliveryStatus}/${id}`,data);
+
+        // Return the response
+        return response;
+    }
+
+    return updateStatus;
 }

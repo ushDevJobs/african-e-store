@@ -62,3 +62,27 @@ export interface DraftResponse {
   images: string[];
   publish: false;
 }
+
+export interface StoreOrderResponse {
+  id: string;
+  amount: number;
+  createdAt: string;
+  trackingId: string | null;
+  status: Status[];
+  user: User;
+  products: Products[];
+}
+
+export interface Products {
+  name: string;
+  amount: number;
+}
+export interface Status {
+      storeId: string;
+      status: string;
+    }
+export interface User {
+  fullname: string;
+  id: string;
+  address: string | null;
+}
