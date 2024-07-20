@@ -676,6 +676,7 @@ export const getStoreOrders = async (req: Request, res: Response) => {
       createdAt: true,
       trackingId: true,
       status: true,
+      quantity: true,
       user: {
         select: {
           fullname: true,
@@ -690,6 +691,7 @@ export const getStoreOrders = async (req: Request, res: Response) => {
         select: {
           name: true,
           amount: true,
+          coverImage: true,
         },
       },
     },
