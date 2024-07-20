@@ -23,6 +23,7 @@ import { StorageKeys } from './constants/StorageKeys';
 import { createCustomErrorMessages } from './constants/catchError';
 import { store } from '../redux/store';
 import { Provider } from "react-redux";
+import { initializeIcons, loadTheme } from '@fluentui/react';
 
 interface LayoutProps {
     children?: ReactNode;
@@ -39,6 +40,40 @@ const Layout: FunctionComponent<LayoutProps> = ({ children }): ReactElement => {
     const limit = 6; // // Number of categories per page
 
     const iswindow = typeof window !== 'undefined' ? true : false;
+
+    // Load fluent UI icons
+    loadTheme({
+        palette: {
+            themePrimary: "#f26528",
+            themeLighterAlt: "#fef9f6",
+            themeLighter: "#fde5db",
+            themeLight: "#fbcfbd",
+            themeTertiary: "#f7a17c",
+            themeSecondary: "#f47742",
+            themeDarkAlt: "#da5b25",
+            themeDark: "#b84d1f",
+            themeDarker: "#883917",
+            neutralLighterAlt: "#faf9f8",
+            neutralLighter: "#f3f2f1",
+            neutralLight: "#edebe9",
+            neutralQuaternaryAlt: "#e1dfdd",
+            neutralQuaternary: "#d0d0d0",
+            neutralTertiaryAlt: "#c8c6c4",
+            neutralTertiary: "#a19f9d",
+            neutralSecondary: "#605e5c",
+            neutralSecondaryAlt: "#8a8886",
+            neutralPrimaryAlt: "#3b3a39",
+            neutralPrimary: "#323130",
+            neutralDark: "#201f1e",
+            black: "#000000",
+            white: "#ffffff",
+        },
+        defaultFontStyle: { fontFamily: "Josefin Sans" },
+    });
+
+    // Initialize icons
+    initializeIcons();
+
     async function handleFetchAllCategories() {
 
         // Start loader
