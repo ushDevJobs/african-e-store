@@ -113,24 +113,27 @@ model Cart {
 }
 
 model Order {
-  id             String        @id @default(cuid())
+  id             String    @id @default(cuid())
+  orderId        Int       @unique
   amount         Float
   /// [orderQuantity]
-  quantity       Json          @default("[]")
+  quantity       Json      @default("[]")
   /// [orderStatus]
-  status         Json          @default("[]")
+  status         Json      @default("[]")
   userId         String?
-  trackingId     String?       @unique
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt
+  trackingId     String?   @unique
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
   products       Product[]
   stores         Store[]
-  tracker        Tracker?      @relation(fields: [trackingId], references: [id])
-  user           User?         @relation(fields: [userId], references: [id])
+  tracker        Tracker?  @relation(fields: [trackingId], references: [id])
+  user           User?     @relation(fields: [userId], references: [id])
   Rating         Rating[]
   transaction_id String?
-  payment_status PaymentStatus @default(PENDING)
+  payment_status Boolean   @default(false)
   date_paid      DateTime?
+  /// [sellerPaid]
+  sellerPaid     Json      @default("[]")
 
   @@map("orders")
 }
@@ -174,6 +177,14 @@ model Sessions {
   @@map("sessions")
 }
 
+model sellerMessage {
+  id        String       @id @unique @default(cuid())
+  from      MessagesFrom @default(USER)
+  message   String
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+}
+
 model verifyUser {
   id        String   @id @default(cuid())
   userId    String   @unique(map: "VerifyUser_userId_key")
@@ -195,20 +206,15 @@ enum OrderStatus {
   DELIVERED
 }
 
+enum MessagesFrom {
+  USER
+  ADMIN
+}
+
 enum AccountType {
   BUYER
   SELLER
   ADMIN
-}
-
-enum PaymentStatus {
-  SUCCEEDED
-  FAILED
-  BLOCKED
-  CANCELED
-  INCOMPLETE
-  PENDING
-  REFUNDED
 }
 
 enum TrackerStatus {

@@ -74,17 +74,10 @@ export const paymentIntent = async (req: Request, res: Response) => {
       automatic_payment_methods: {
         enabled: true,
       },
+      description: "You're about to pay",
+      metadata: { orderId: order.id },
     });
-    if (intent.id) {
-      await prisma.order.update({
-        where: {
-          id: order.id,
-        },
-        data: {
-          transaction_id: intent.id,
-        },
-      });
-    }
+
     return returnJSONSuccess(res, {
       data: {
         clientSecret: intent.client_secret,
@@ -117,7 +110,7 @@ export const handlePaymentSuccess = async (req: Request, res: Response) => {
           id: o_id as string,
         },
         data: {
-          payment_status: "SUCCEEDED",
+          payment_status: true,
           transaction_id: payment_intent as string,
           date_paid: new Date(),
         },
@@ -129,19 +122,7 @@ export const handlePaymentSuccess = async (req: Request, res: Response) => {
         `${process.env.CLIENT_URL}/payment-success?amount=${order.amount}`
       );
     } else {
-      const order = await prisma.order.update({
-        where: {
-          id: o_id as string,
-        },
-        data: {
-          payment_status: "FAILED",
-          transaction_id: payment_intent as string,
-          date_paid: new Date(),
-        },
-      });
-      res.redirect(
-        `${process.env.CLIENT_URL}/payment-failure?amount=${order.amount}`
-      );
+      res.redirect(`${process.env.CLIENT_URL}/payment-failure`);
     }
   }
 };

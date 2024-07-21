@@ -7,6 +7,7 @@ import {
   getAllStores,
   getCategoriesfromStoreById,
   getFavouriteStores,
+  getIncomeAndTransactionsFromStore,
   getProductsOfStoreById,
   getReviewsForLoggedInUser,
   getReviewsForStoreById,
@@ -112,6 +113,11 @@ router.get(
   "/store/about",
   [sellerRoleCheck, checkStore],
   rootErrorHandler(getAboutStore)
+);
+router.get(
+  "/store/transactions",
+  [sellerRoleCheck, checkStore],
+  rootErrorHandler(getIncomeAndTransactionsFromStore)
 );
 router.patch(
   "/store/orders/order/:id",
