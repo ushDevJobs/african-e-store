@@ -1,6 +1,6 @@
 {
     "info": {
-        "_postman_id": "24d15acd-3adc-4fdc-8307-e40526fd5b04",
+        "_postman_id": "bc71f3a8-ea48-4098-bd77-8c04f97733ba",
         "name": "Rayvvin",
         "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
         "description": ""
@@ -472,14 +472,15 @@
                 {
                     "name": "Update Store Profile",
                     "request": {
-                        "method": "PATCH",
+                        "method": "GET",
                         "url": {
-                            "raw": "http://localhost:3000/api/stores/store/profile",
+                            "raw": "http://localhost:3000/api/stores/store/profile/bank",
                             "path": [
                                 "api",
                                 "stores",
                                 "store",
-                                "profile"
+                                "profile",
+                                "bank"
                             ],
                             "protocol": "http",
                             "host": [
@@ -488,26 +489,13 @@
                             "port": "3000"
                         },
                         "body": {
-                            "mode": "formdata",
-                            "formdata": [
-                                {
-                                    "key": "name",
-                                    "value": "Joe Gamings",
-                                    "disabled": true,
-                                    "type": "default"
-                                },
-                                {
-                                    "key": "description",
-                                    "value": "everything games",
-                                    "disabled": true,
-                                    "type": "default"
-                                },
-                                {
-                                    "key": "image",
-                                    "src": "c:\\Users\\USER\\Downloads\\store pd.jfif",
-                                    "type": "file"
+                            "mode": "raw",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
                                 }
-                            ]
+                            },
+                            "raw": "{\n  \"bank\":\"Califonia Bank\",\n  \"account\":\"45536788\"\n}"
                         }
                     }
                 },
@@ -607,6 +595,46 @@
                                 }
                             },
                             "raw": "{\n  \"status\":3\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Get  Store Summary",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "http://localhost:3000/api/stores/store/about",
+                            "path": [
+                                "api",
+                                "stores",
+                                "store",
+                                "about"
+                            ],
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3000"
+                        }
+                    }
+                },
+                {
+                    "name": "Get Store Transactions",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "http://localhost:3000/api/stores/store/transactions",
+                            "path": [
+                                "api",
+                                "stores",
+                                "store",
+                                "transactions"
+                            ],
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3000"
                         }
                     }
                 }
