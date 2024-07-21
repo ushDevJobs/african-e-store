@@ -171,7 +171,7 @@ const SignupPage = (props: Props) => {
 
     return (
         <form className={styles.formFieldContainer} onSubmit={(e) => handleFormSubmission(e)}>
-            <h2>Join Rayvinn today and become a seller  </h2>
+            <h2>Join Rayvvin today and become a seller  </h2>
 
             <div className={styles.fieldContainer}>
                 <div className={styles.rowForm}>

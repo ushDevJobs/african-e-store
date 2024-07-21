@@ -36,7 +36,7 @@ const ExploreSection = (props: Props) => {
     ]
     return (
         <div className={styles.main}>
-            <h2>Rayvinn makes the culture thrive </h2>
+            <h2>Rayvvin makes the culture thrive </h2>
             <p>Select from variety of good placed by thousands of african vendors in the world </p>
 
             <div className={styles.cards}>
@@ -52,12 +52,12 @@ const ExploreSection = (props: Props) => {
                         ))
                     }
                 </div>
-               {
-                onDesktop && 
+                {
+                    onDesktop &&
                     <div className={styles.rhs}>
                         <Image src={images.explore} alt='image' />
                     </div>
-               }
+                }
             </div>
         </div>
     )

@@ -38,7 +38,7 @@ const SingleCategoriesDetails = ({ product }: Props) => {
                             <h3 className='text-xl text-[#4B4B4B] mb-3 font-bold'>Item Details</h3>
                             <span className='text-xs text-[#828282] leading-5 font-normal'>
                                 Seller assumes all responsibility for this listing. <br />
-                                Rayvinn item number:195952185806 <br />
+                                Rayvvin item number:195952185806 <br />
                                 Last updated on Apr 23, 2024 15:32:35 WAT
                             </span>
 
@@ -122,7 +122,7 @@ const SingleCategoriesDetails = ({ product }: Props) => {
                                 <h3 className='text-xl text-gray-800 mb-3 font-bold'>Item Details</h3>
                                 <span className='text-xs text-gray-500 leading-5 font-normal'>
                                     Seller assumes all responsibility for this listing. <br />
-                                    Rayvinn item number:195952185806 <br />
+                                    Rayvvin item number:195952185806 <br />
                                     Last updated on Apr 23, 2024 15:32:35 WAT
                                 </span>
                                 <p className='text-xs text-gray-800 font-normal leading-8 mt-3 mb-5'>

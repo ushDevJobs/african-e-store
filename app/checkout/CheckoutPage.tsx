@@ -109,7 +109,7 @@ const CheckoutPage = (props: Props) => {
                         </div>
                         <div className={styles.terms}>
                             <p>
-                                By confirming your order, you agree to the Rayvinn International
+                                By confirming your order, you agree to the Rayvvin International
                                 Shipping terms and conditions.{" "}
                             </p>
 

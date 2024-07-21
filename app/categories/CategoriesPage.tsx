@@ -116,7 +116,7 @@ const CategoriesPage = () => {
             {isFilterOpen && <MobileSettingsBar setIsFilterOpen={setIsFilterOpen} categories={categories} activeCategory={activeCategory} onCategoryClick={handleCategoryClick} />}
             {categories.length == 0 && isFetchingCategories ? <CategoriesSkeletonLoader /> :
                 <div className={styles.main}>
-                    <CategoriesHeader mainText='Explore different categories' subText='Search for any product in different categories on Rayvinn' />
+                    <CategoriesHeader mainText='Explore different categories' subText='Search for any product in different categories on Rayvvin' />
                     {onMobile &&
                         <div className="w-full flex items-center gap-4 justify-end mb-2 ml-auto">
                             <span className='flex items-center gap-2 cursor-pointer'><SortIcon /> Sort</span>

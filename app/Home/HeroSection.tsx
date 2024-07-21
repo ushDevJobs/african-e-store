@@ -36,7 +36,7 @@ const HeroSection = (props: Props) => {
                 <Image src={images.hero_bg} alt="hero background image" />
                 <div className={styles.contents}>
                     <h1>An African Goods marketplace</h1>
-                    <p>Buy and sell to Africans all over the globe with Rayvinn, create a buyer or seller account on our platform to get started.</p>
+                    <p>Buy and sell to Africans all over the globe with Rayvvin, create a buyer or seller account on our platform to get started.</p>
                     {retrievedCategories && (
                         <div className={styles.categories}>
                             <h3 className='!mx-auto !text-center'>Suggested categories</h3>
