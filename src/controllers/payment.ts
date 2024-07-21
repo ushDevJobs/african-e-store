@@ -3,6 +3,7 @@ import Stripe from "stripe";
 import { prisma } from "../prisma";
 import {
   convertToSubcurrency,
+  generateRandomNumbers,
   returnJSONError,
   returnJSONSuccess,
 } from "../utils/functions";
@@ -56,6 +57,7 @@ export const paymentIntent = async (req: Request, res: Response) => {
       products: {
         connect: products.map((product) => ({ id: product.id })),
       },
+      orderId: generateRandomNumbers(7),
       userId: user.id,
       status: status,
       stores: {
