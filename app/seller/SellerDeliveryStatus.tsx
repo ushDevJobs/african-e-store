@@ -1,37 +1,54 @@
-import React, { useEffect, useState } from 'react'
+import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react'
 import ModalWrapper from '../components/Modal/ModalWrapper'
 import { BoxIcon, DeliveryLineIcon, TimesIcon } from '../components/SVGs/SVGicons';
 import { StoreOrderResponse } from '../components/models/ISellerStore';
 import { useRouter } from 'next/navigation';
 import { StorageKeys } from '../components/constants/StorageKeys';
+import { useUpdateDeliveryStatus } from '../api/apiClients';
+import { DeliveryStatus, Status } from '../components/models/IOrderDeliveryStatus';
 
 type Props = {
     visibility: boolean;
     setVisibility: React.Dispatch<React.SetStateAction<boolean>>;
+    selectedOrder: StoreOrderResponse | undefined
 }
 
-const SellerDeliveryStatus = ({ visibility, setVisibility }: Props) => {
-    const router = useRouter()
+const SellerDeliveryStatus = ({ visibility, setVisibility, selectedOrder }: Props) => {
+    const updateStatus = useUpdateDeliveryStatus()
 
-    const [retrievedOrderId, setRetrievedOrderId] = useState<StoreOrderResponse[]>();
-    const id = retrievedOrderId?.map(order => order.id)
-    console.log({ id });
-    useEffect(() => {
-        if (router) {
-            // Get the retrieved order id
-            const _retrievedOrderId = sessionStorage.getItem(
-                StorageKeys.OrderId
-            );
+    const [isUpdating, setIsUpdating] = useState<boolean>(false)
+    const [formValues, setFormValues] = useState<DeliveryStatus>()
+    console.log({ selectedOrder });
+    function onFormValueChange(
+        e: ChangeEvent<HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement>,
+        stateFunction?: (value: React.SetStateAction<boolean>) => void
+    ) {
+        const { name, value } = e.target;
 
-            // If we have a retrieved OrderIds...
-            if (_retrievedOrderId) {
-                // Update the state
-                setRetrievedOrderId(JSON.parse(_retrievedOrderId) as StoreOrderResponse[]);
-            }
+        setFormValues({ ...(formValues as DeliveryStatus), [name]: value });
+
+    }
+
+    async function handleUpdateStatus(e: FormEvent<HTMLFormElement | HTMLButtonElement>) {
+        e.preventDefault()
+        setIsUpdating(true)
+
+        const data: DeliveryStatus = {
+            status: formValues?.status as Status
         }
+        await updateStatus(selectedOrder?.id as string, data)
+            .then((response) => {
+                console.log(response.data);
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+            .finally(() => {
+                setIsUpdating(false)
+            })
 
-        // Run this effect only when the router is ready, which means: when the page is loaded
-    }, [router]);
+    }
+
     return (
         <ModalWrapper
             visibility={visibility}

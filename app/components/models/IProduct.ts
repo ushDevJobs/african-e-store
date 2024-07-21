@@ -84,3 +84,10 @@ export interface AddProductRequest {
   imageFour: string;
   publish: boolean;
 }
+
+export interface StoreSummary {
+  income: number;
+  stock: number;
+  fufilledOrders: number;
+  messages: number;
+}

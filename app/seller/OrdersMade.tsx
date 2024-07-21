@@ -30,18 +30,22 @@ const OrdersMade = ({ visibility, setVisibility, orders, isFetchingOrders }: Pro
                 </div>
                 <div className="flex flex-col gap-8 mb-5">
                     {orders?.map((order, index) => (
-                        order.products.map((product, index) => (
-                            <div className="flex gap-6" key={index}>
-                                <div className="relative min-w-[101px] h-[132px]">
-                                    <Image src={images.cart_prooduct_image} alt='product image' fill className='object-contain' />
+                        <>
+                            {order.products.map((product, index) => (
+                                <div className="flex gap-6" key={index}>
+                                    <div className="relative min-w-[101px] h-[132px]">
+                                        <Image src={product.coverImage} alt='product image' fill className='object-contain' />
+                                    </div>
+                                    <div className="text-[#1E1E1E] flex flex-col gap-3">
+                                        <p className='max-w-[400px]'>{product.name}</p>
+                                        <h4 className='font-medium text-xl'>&pound;{product.amount.toLocaleString()}</h4>
+                                    </div>
                                 </div>
-                                <div className="text-[#1E1E1E] flex flex-col gap-3">
-                                    <p className='max-w-[400px]'>{product.name}</p>
-                                    <h4 className='font-medium text-xl'>&pound;{product.amount.toLocaleString()}</h4>
-                                    <p className='text-[#828282] text-xs'>Quantity: <span className='text-[#1E1E1E] text-base'>1</span></p>
-                                </div>
-                            </div>
-                        ))
+                            ))}
+                            < p className='text-[#828282] text-xs' > Quantity: <span className='text-[#1E1E1E] text-base'>{order.quantity.length}</span></p>
+
+                        </>
+
                     ))}
                 </div>
                 {!orders && isFetchingOrders && (

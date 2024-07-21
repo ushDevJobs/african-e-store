@@ -64,7 +64,7 @@ const FeedBack = (props: Props) => {
                     <FullPageLoader />
                 )}
                 {reviews?.length == 0 && !isFetchingReviews && (
-                    <p className="text-base text-center">
+                    <p className="h-52 w-full grid place-items-center text-[#333333]">
                         No review available
                     </p>
                 )}

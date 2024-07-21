@@ -456,10 +456,21 @@ export function useFetchStoreOrders() {
 
     return fetchOrders;
 }
+export function useFetchStoreSummary() {
+    async function fetchSummary() {
+        // Fire the request
+        const response = await API.get(ApiRoutes.FetchStoreSummary);
+
+        // Return the response
+        return response;
+    }
+
+    return fetchSummary;
+}
 export function useUpdateDeliveryStatus() {
     async function updateStatus(id: string, data: DeliveryStatus) {
         // Fire the request
-        const response = await API.patch(`${ApiRoutes.UpdateDeliveryStatus}/${id}`,data);
+        const response = await API.patch(`${ApiRoutes.UpdateDeliveryStatus}/${id}`, data);
 
         // Return the response
         return response;

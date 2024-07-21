@@ -61,7 +61,7 @@ const DraftSection = ({
                 <FullPageLoader />
             )}
             {!drafts || drafts.length === 0 && (
-                <p className='h-[30vh] text-center text-base text-gray-600'>No item in your draft </p>
+                <p className='h-52 w-full grid place-items-center text-[#333333]'>No item in your draft </p>
             )}
         </main>
     )

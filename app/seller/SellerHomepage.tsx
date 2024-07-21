@@ -122,7 +122,6 @@ const SellerHomePage = (props: Props) => {
             .then((response) => {
                 console.log("Response: ", response.data.data);
                 setOrders(response.data.data);
-                // console.log("Order Id: ", response.data.data);
                 sessionStorage.setItem(StorageKeys.OrderId, JSON.stringify(response.data.data));
             })
             .catch((error) => {

@@ -1,3 +1,5 @@
+import { StatusEnum } from "./IOrderDeliveryStatus";
+
 export interface StoreDetails {
   name: string;
   id: string;
@@ -63,24 +65,33 @@ export interface DraftResponse {
   publish: false;
 }
 
+
 export interface StoreOrderResponse {
   id: string;
   amount: number;
   createdAt: string;
   trackingId: string | null;
+  quantity:Quantity[]
   status: Status[];
   user: User;
   products: Products[];
 }
 
+export interface Quantity {
+  id: string;
+  quantity: number;
+}
+
 export interface Products {
   name: string;
   amount: number;
+  coverImage: string;
 }
 export interface Status {
-      storeId: string;
-      status: string;
-    }
+  storeId: string;
+  status: StatusEnum;
+}
+
 export interface User {
   fullname: string;
   id: string;

@@ -14,11 +14,13 @@ type Props = {
 const Orders = ({ orders, isFetchingOrders }: Props) => {
     const [isDeliveryModalVisible, setIsDeliveryModalVisible] = useState<boolean>(false)
     const [isOrderModalVisible, setIsOrderModalVisible] = useState<boolean>(false)
+    const [selectedOrder, setSelectedOrder] = useState<StoreOrderResponse>()
     return (
         <>
             <SellerDeliveryStatus
                 visibility={isDeliveryModalVisible}
                 setVisibility={setIsDeliveryModalVisible}
+                selectedOrder={selectedOrder}
             />
 
             <OrdersMade
@@ -53,11 +55,11 @@ const Orders = ({ orders, isFetchingOrders }: Props) => {
                                 <div className="flex items-center gap-5 text-[#6F6F6F] text-sm mb-6 whitespace-nowrap">
                                     <p className='flex items-center gap-1'>
                                         <span className='bg-[#2C4A78] rounded-full text-[10px] text-white px-[9px] py-[1px]'>T</span>
-                                       {order.user.fullname}
+                                        {order.user.fullname}
                                     </p>
                                     <p className='flex items-center gap-1'>
                                         <span><LocationIcon /></span>
-                                       {order.user.address ?? 'Location here'}
+                                        {order.user.address ?? 'Location here'}
                                     </p>
                                     <p className='flex items-center gap-1'>
                                         <span><CalenderIcon /></span>
@@ -65,11 +67,14 @@ const Orders = ({ orders, isFetchingOrders }: Props) => {
                                     </p>
                                     <p className='flex items-center gap-1'>
                                         <span><TimeIcon /></span>
-                                       {moment(order.createdAt).format('hh:mm A')}
+                                        {moment(order.createdAt).format('hh:mm A')}
                                     </p>
                                 </div>
                                 <div className="flex items-center gap-6">
-                                    <button onClick={() => setIsDeliveryModalVisible(true)} className='border border-[#2C7865] bg-[#2C7865] text-white rounded-[13px] min-w-[204px] py-4 cursor-pointer'>Update delivery status</button>
+                                    <button onClick={() => {
+                                        setSelectedOrder(order)
+                                        setIsDeliveryModalVisible(true)
+                                    }} className='border border-[#2C7865] bg-[#2C7865] text-white rounded-[13px] min-w-[204px] py-4 cursor-pointer'>Update delivery status</button>
                                     <button onClick={() => setIsOrderModalVisible(true)} className='border border-[#2C7865] rounded-[13px] bg-transparent text-[#2C7865]  min-w-[204px] py-4 cursor-pointer'>See products</button>
                                 </div>
                             </div>
@@ -80,8 +85,8 @@ const Orders = ({ orders, isFetchingOrders }: Props) => {
                 {!orders && isFetchingOrders && (
                     <FullPageLoader />
                 )}
-                {!orders && !isFetchingOrders && (
-                    <p className='text-center text-[#333333]'>No order available</p>
+                {orders?.length == 0 && !isFetchingOrders && (
+                    <p className='h-52 w-full grid place-items-center text-[#333333]'>No order available</p>
                 )}
             </section>
         </>
