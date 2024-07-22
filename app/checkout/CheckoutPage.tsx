@@ -20,6 +20,14 @@ const CheckoutPage = (props: Props) => {
     const dispatch = useDispatch();
     const cartItems = useSelector((state: RootState) => state.cart.cartItems);
     const totalPrice = useSelector(totalPriceSelector);
+    // Step 1: Extract the store IDs
+    const storeIds = cartItems.map(item => item.product.store.id);
+
+    // Step 2: Make the store IDs unique
+    const uniqueStoreIds = Array.from(new Set(storeIds));
+
+    // Step 3: Calculate the shipping fee
+    const shippingFee = uniqueStoreIds.length * 2.99;
     return (
         <div className={styles.main}>
             <h1>Checkout</h1>
@@ -105,7 +113,7 @@ const CheckoutPage = (props: Props) => {
                         </div>
                         <div className={styles.shipping}>
                             <p>Shipping </p>
-                            <p> &pound;2.99</p>
+                            <p> &pound;{shippingFee}</p>
                         </div>
                         <div className={styles.terms}>
                             <p>
@@ -116,7 +124,7 @@ const CheckoutPage = (props: Props) => {
                             {/* <p>By placing your order, you agree to eBay&apos;s User Agreement and Privacy Notice</p> */}
                             <Link href={"/payment"}>
                                 <button>
-                                    Pay &pound;{(totalPrice + 2.99).toLocaleString()}
+                                    Pay &pound;{(totalPrice + shippingFee).toLocaleString()}
                                 </button>
                             </Link>
                         </div>

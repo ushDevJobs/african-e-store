@@ -10,6 +10,14 @@ const SummarySection = (props: Props) => {
     const totalPrice = useSelector(totalPriceSelector);
 
     const cartItems = useSelector((state: RootState) => state.cart.cartItems);
+    // Step 1: Extract the store IDs
+    const storeIds = cartItems.map(item => item.product.store.id);
+
+    // Step 2: Make the store IDs unique
+    const uniqueStoreIds = Array.from(new Set(storeIds));
+
+    // Step 3: Calculate the shipping fee
+    const shippingFee = uniqueStoreIds.length * 2.99;
     return (
         <div className={styles.rhs}>
             <div className={styles.summaryItem}>
@@ -18,16 +26,15 @@ const SummarySection = (props: Props) => {
             </div>
             <div className={styles.summaryItem}>
                 <p>Shipping</p>
-                {/* <h3>{cartItems.map((item) => item.product.)}</h3> */}
-                <h3>&pound;2.99</h3>
+                <h3>&pound;{shippingFee}</h3>
             </div>
             <div className={styles.total}>
                 <p>Subtotal </p>
-                <h3>&pound;{(totalPrice + 2.99).toLocaleString()}</h3>
+                <h3>&pound;{(totalPrice + shippingFee).toLocaleString()}</h3>
                 {/* add shipping fee  */}
             </div>
             <Link href={'/checkout'}>
-                <button>Pay &pound;{(totalPrice + 2.99).toLocaleString()}</button>
+                <button>Pay &pound;{(totalPrice + shippingFee).toLocaleString()}</button>
                 {/* add shipping fee  */}
             </Link>
         </div>

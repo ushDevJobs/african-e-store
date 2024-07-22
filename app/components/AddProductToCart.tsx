@@ -116,7 +116,7 @@ const AddProductToCart = ({ product, isFetchingProduct, handleAddProductToFavori
                                             </span>
                                         ))}
                                     </span> */}
-                                    <p className=' text-[#2C7865] text-sm'>(121 review)</p>
+                                    {/* <p className=' text-[#2C7865] text-sm'>(121 review)</p> */}
                                 </div>
                             )}
                             {onDesktop && (
@@ -150,7 +150,7 @@ const AddProductToCart = ({ product, isFetchingProduct, handleAddProductToFavori
                                             </span>
                                         ))}
                                     </span>
-                                    <p className='text-base text-[#2C7865]'>(121 review)</p>
+                                    {/* <p className='text-base text-[#2C7865]'>(121 review)</p> */}
                                 </div>
                             )}
                             {onMobile && <h2 className='text-[#1E1E1E] font-semibold mb-3 text-xl'>&pound;{product?.amount.toLocaleString()}</h2>}
