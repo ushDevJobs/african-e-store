@@ -6,13 +6,8 @@ const nextConfig = {
     domains: [
       'localhost',
       'gemstonesmontessori.com',
-      'rayvvin.onrender.com'
-      //   'res.cloudinary.com',
-      //   'res.cloudinary.co',
-      //   'blog.voyagequest.travel',
-      //   'blog.tgmtravels.org',
-      //   'secure.gravatar.com',
-      //   'article.com'
+      'rayvvin.onrender.com',
+      "newrayvinn.rapidsuite.ng"
     ],
   },
 };

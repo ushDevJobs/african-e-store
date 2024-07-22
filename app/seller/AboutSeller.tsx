@@ -6,6 +6,7 @@ import { StoreSummary } from '../components/models/IProduct'
 import { createCustomErrorMessages } from '../components/constants/catchError'
 import { toast } from 'sonner'
 import { IncomeIcon, OrderIcon, SmallLineIcon, StockIcon, UserMessageIcon } from '../components/SVGs/SVGicons'
+import Link from 'next/link'
 
 type Props = {
     store: SellerStoreResponse | undefined
@@ -47,7 +48,7 @@ const AboutSeller = ({ store, isFetchingStore }: Props) => {
                         <div className="bg-white shadow-xl overflow-hidden min-w-[194px] p-4 flex flex-col gap-2 text-[#828282] rounded-[14px]">
                             <p className='flex items-center gap-2 mb-2'><IncomeIcon /> Income</p>
                             <h2 className='text-2xl mb-2 font-medium'>&pound;{summary?.income.toLocaleString()}</h2>
-                            <p className='flex items-center justify-between whitespace-nowrap gap-3'>This month <span><SmallLineIcon /></span></p>
+                            <p className='flex items-center justify-between whitespace-nowrap gap-3'>This month <Link href={`/income`}><SmallLineIcon /></Link></p>
                         </div>
                         <div className="bg-white shadow-xl overflow-hidden min-w-[194px] p-4 flex flex-col gap-2 text-[#828282] rounded-[14px]">
                             <p className='flex items-center gap-2  mb-2'><StockIcon /> Stock</p>
