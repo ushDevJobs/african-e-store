@@ -23,7 +23,7 @@ const PaymentPage = (props: Props) => {
                         {cartItems && cartItems.length > 0 && cartItems.map((item, index) => (
                             <div className={styles.card} key={index}>
                                 <p className={styles.seller}>
-                                    Seller: Chavo global
+                                    Seller: {item.product.store.name}
                                 </p>
                                 <div className={styles.info}>
                                     <div className={styles.image}>
@@ -32,12 +32,6 @@ const PaymentPage = (props: Props) => {
                                     <div className={styles.item}>
                                         <p className={styles.name}>{item.product.name}</p>
                                         <p className={styles.price}>&pound;{item.product.amount.toLocaleString()} ({item.qty})</p>
-
-                                        {/* <QuantityButton
-                                            onIncrease={() => dispatch(increment(item.product))}
-                                            onDecrease={() => dispatch(decrement(item.product))}
-                                            qty={item.qty}
-                                        /> */}
                                         <div className={`${styles.delivery} -mt-2`}>
                                             {/* <h3 className='mb-1'>Delivery</h3> */}
                                             {/* <p className='mb-4 max-w-[300px]'>Shipping &pound;2.99</p> */}
