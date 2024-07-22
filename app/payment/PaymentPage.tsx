@@ -41,8 +41,8 @@ const PaymentPage = (props: Props) => {
                                         <div className={styles.delivery}>
                                             <h3>Ship to </h3>
                                             <p>User address from google </p>
-                                            <p>Country</p>
-                                            <p>Number</p>
+                                            {/* <p>Country</p>
+                                            <p>Number</p> */}
                                         </div>
                                     </div>
                                 </div>
