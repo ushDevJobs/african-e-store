@@ -22,7 +22,7 @@ export const createPrismaError = (error: Error) => {
         errorMessage = "Record not found";
         break;
       default:
-        errorMessage = "Unable to perform request";
+        errorMessage = error.message;
     }
     return errorMessage;
   }

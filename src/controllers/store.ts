@@ -672,6 +672,7 @@ export const getStoreOrders = async (req: Request, res: Response) => {
     },
     select: {
       id: true,
+      orderId: true,
       amount: true,
       createdAt: true,
       trackingId: true,
@@ -826,16 +827,21 @@ export const getAboutStore = async (req: Request, res: Response) => {
           storeId: store.id,
         },
         select: {
+          id: true,
           amount: true,
-          quantity: true,
         },
       },
+      quantity: true,
     },
   });
   const filteredIncome = income
     .map((product) =>
       product.products
-        .map((pro) => pro.amount * pro.quantity)
+        .map(
+          (pro) =>
+            pro.amount *
+            (product.quantity.find((q) => q.id === pro.id)?.quantity || 0)
+        )
         .map((am) => am + 2.99)
     )
     .flat()
@@ -889,9 +895,10 @@ export const getIncomeAndTransactionsFromStore = async (
         },
         select: {
           amount: true,
-          quantity: true,
+          createdAt: true,
         },
       },
+      quantity: true,
     },
   });
   const transactions = await prisma.order.findMany({
@@ -931,18 +938,15 @@ export const getIncomeAndTransactionsFromStore = async (
       },
     },
   });
-  const filteredIncome = income
-    .map((product) =>
-      product.products
-        .map((pro) => pro.amount * pro.quantity)
-        .map((am) => am + 2.99)
-    )
-    .flat()
-    .reduce((x, y) => x + y, 0);
-
   return returnJSONSuccess(res, {
     data: {
-      income: filteredIncome,
+      income: income
+        .map((product) =>
+          product.products
+            .flat()
+            .map((pro) => ({ ...pro, quantity: product.quantity }))
+        )
+        .flat(),
       transactions,
     },
   });
