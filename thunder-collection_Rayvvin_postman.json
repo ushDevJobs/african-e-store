@@ -1,6 +1,6 @@
 {
     "info": {
-        "_postman_id": "bc71f3a8-ea48-4098-bd77-8c04f97733ba",
+        "_postman_id": "66c5daf7-895f-434a-9778-c13f2fb4a1e5",
         "name": "Rayvvin",
         "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
         "description": ""
@@ -545,11 +545,12 @@
                     "request": {
                         "method": "GET",
                         "url": {
-                            "raw": "http://localhost:3000/api/stores/store/orders?f=DELIVERED",
+                            "raw": "http://localhost:3000/api/stores/store/orders",
                             "query": [
                                 {
                                     "key": "f",
-                                    "value": "DELIVERED"
+                                    "value": "DELIVERED",
+                                    "disabled": true
                                 }
                             ],
                             "variable": [],
@@ -572,14 +573,14 @@
                     "request": {
                         "method": "PATCH",
                         "url": {
-                            "raw": "http://localhost:3000/api/stores/store/orders/order/clyrhba6a0007foyobsg0sqa5",
+                            "raw": "http://localhost:3000/api/stores/store/orders/order/clyvjclqz0003zy1sdhltgfdu",
                             "path": [
                                 "api",
                                 "stores",
                                 "store",
                                 "orders",
                                 "order",
-                                "clyrhba6a0007foyobsg0sqa5"
+                                "clyvjclqz0003zy1sdhltgfdu"
                             ],
                             "protocol": "http",
                             "host": [
@@ -1218,6 +1219,35 @@
                     }
                 }
             ]
+        },
+        {
+            "name": "Accept Payment",
+            "request": {
+                "method": "POST",
+                "url": {
+                    "raw": "http://localhost:3000/api/admin/accept-payment/clxzbyp0q0001n7p96lu2xg1w",
+                    "path": [
+                        "api",
+                        "admin",
+                        "accept-payment",
+                        "clxzbyp0q0001n7p96lu2xg1w"
+                    ],
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "3000"
+                },
+                "body": {
+                    "mode": "raw",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    },
+                    "raw": "{\n\"orderId\":\"clyy02e3m000138q9b3avevxm\"\n}"
+                }
+            }
         }
     ]
 }

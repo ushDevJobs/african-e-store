@@ -8,6 +8,8 @@ import { cartRoutes } from "./cart";
 import { orderRoutes } from "./orders";
 import { rootErrorHandler } from "../root-error-handler";
 import { paymentRoutes } from "./payment";
+import { sellerRoleCheck } from "../middlewares/roles";
+import { adminRoute } from "./admin";
 const router = Router();
 router.use("/auth", authRoute);
 router.use("/stores", checkAuth, storeRoutes);
@@ -16,5 +18,6 @@ router.use("/categories", categoryRoutes);
 router.use("/cart", checkAuth, cartRoutes);
 router.use("/orders", checkAuth, orderRoutes);
 router.use("/payment", checkAuth, paymentRoutes);
+router.use("/admin", checkAuth, sellerRoleCheck, adminRoute);
 
 export default router;

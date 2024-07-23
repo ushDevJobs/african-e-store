@@ -919,6 +919,7 @@ export const getIncomeAndTransactionsFromStore = async (
       trackingId: true,
       status: true,
       quantity: true,
+      sellerPaid: true,
       user: {
         select: {
           fullname: true,

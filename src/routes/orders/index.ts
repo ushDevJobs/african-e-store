@@ -1,7 +1,5 @@
 import { Router } from "express";
-import { deleteItemFromCart } from "../../controllers/cart";
 import { rootErrorHandler } from "../../root-error-handler";
-import { checkUserAccessibility } from "../../middlewares/roles";
 import { getOrders } from "../../controllers/orders";
 
 const router = Router();
