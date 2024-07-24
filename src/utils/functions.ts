@@ -16,7 +16,8 @@ export const createPrismaError = (error: Error) => {
     let errorMessage;
     switch (error.code) {
       case "P2002":
-        errorMessage = "Cannot create multiple product with same name";
+        errorMessage = "Duplicate data";
+        console.log(error.message);
         break;
       case "P2025":
         errorMessage = "Record not found";

@@ -108,13 +108,21 @@ export async function checkStoreId(
   next: NextFunction
 ) {
   const { id } = req.params;
-  if (id) {
+  if (id && id !== "") {
     try {
       await prisma.store.findFirstOrThrow({ where: { id: id } });
       next();
     } catch (error) {
       next(new NotFound("Store not found", ErrorCode.NOT_FOUND));
     }
+  } else {
+    next(new BadRequest("Invalid Request parameter", ErrorCode.BAD_REQUEST));
+  }
+}
+export async function checkId(req: Request, _: Response, next: NextFunction) {
+  const { id } = req.params;
+  if (id && id !== "") {
+    next();
   } else {
     next(new BadRequest("Invalid Request parameter", ErrorCode.BAD_REQUEST));
   }

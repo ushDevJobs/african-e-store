@@ -13,43 +13,10 @@ const stripe = new Stripe(process.env.STRIPE_S_KEY!, {
   typescript: true,
 });
 
-export const checkout = async (req: Request, res: Response) => {
-  const session = await stripe.checkout.sessions.create({
-    mode: "payment",
-    success_url: `${process.env.CLIENT_URL}/payment/success`,
-    cancel_url: `${process.env.CLIENT_URL}/payment/cancel`,
-    line_items: [
-      {
-        price_data: {
-          currency: "eur",
-          product_data: {
-            name: "Iphone 13 Pro Max",
-            description: "yeh yeh",
-            metadata: {
-              id: "kdkdkdkdkd",
-              order_id: "fff",
-            },
-          },
-          unit_amount: 500 * 100,
-        },
-        quantity: 2,
-        tax_rates: ["40"],
-      },
-    ],
-  });
-  res.json({
-    id: session.id,
-    url: session.url,
-  });
-};
 export const paymentIntent = async (req: Request, res: Response) => {
   const user = req.user as RequestUser;
   const cart: OrderQuantity = req.body.id;
   const { amount, products } = await getTotal(cart);
-  const status = Array.from(
-    new Set(products.map((product) => product.storeId))
-  ).map((id) => ({ storeId: id, status: "PENDING" })) as OrderStatus;
-
   const order = await prisma.order.create({
     data: {
       amount,
@@ -59,7 +26,11 @@ export const paymentIntent = async (req: Request, res: Response) => {
       },
       orderId: generateRandomNumbers(7),
       userId: user.id,
-      status: status,
+      status: {
+        create: Array.from(
+          new Set(products.map((product) => ({ storeId: product.storeId })))
+        ),
+      },
       stores: {
         connect: products.map((product) => ({ id: product.storeId })),
       },

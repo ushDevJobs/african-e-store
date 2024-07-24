@@ -126,7 +126,9 @@ const getStoreFullDetails = async (id: string, isStoreId = false) => {
       AND: [
         {
           status: {
-            array_contains: { storeId: store.id, status: "DELIVERED" },
+            some: {
+              status: "DELIVERED",
+            },
           },
         },
         {
@@ -646,16 +648,6 @@ export const getStoreOrders = async (req: Request, res: Response) => {
       userId: id,
     },
   });
-  const filter = req.query.f || "all";
-  const filterQ = filter
-    ? filter !== "all"
-      ? {
-          status: {
-            array_contains: { status: (filter as string).toUpperCase() },
-          },
-        }
-      : {}
-    : {};
   const orders = await prisma.order.findMany({
     where: {
       AND: [
@@ -667,7 +659,6 @@ export const getStoreOrders = async (req: Request, res: Response) => {
           },
         },
         { payment_status: true },
-        { ...filterQ },
       ],
     },
     select: {
@@ -675,8 +666,11 @@ export const getStoreOrders = async (req: Request, res: Response) => {
       orderId: true,
       amount: true,
       createdAt: true,
-      trackingId: true,
-      status: true,
+      status: {
+        where: {
+          storeId: store.id,
+        },
+      },
       quantity: true,
       user: {
         select: {
@@ -690,6 +684,7 @@ export const getStoreOrders = async (req: Request, res: Response) => {
           storeId: store.id,
         },
         select: {
+          id: true,
           name: true,
           amount: true,
           coverImage: true,
@@ -706,43 +701,18 @@ export const updateDeliveryStatusOfOrder = async (
   next: NextFunction
 ) => {
   const { status } = req.body;
-
   const { id } = req.params;
-  const store = await prisma.store.findFirstOrThrow({
-    where: {
-      userId: (req.user as RequestUser).id,
-    },
-  });
-  const orderStatus = await prisma.order.findUnique({
-    where: {
-      id,
-    },
-    select: {
-      status: true,
-    },
-  });
   const stat =
     status === 3 ? "DELIVERED" : status === 2 ? "DISPATCHED" : "PENDING";
-
-  const newStatus = orderStatus?.status.filter(
-    (stats) => stats.storeId !== store.id
-  );
-  newStatus?.push({ storeId: store.id, status: stat });
-  if (id && id !== "") {
-    const order = await prisma.order.update({
-      where: {
-        id: id as string,
-      },
-      data: {
-        status: newStatus,
-      },
-    });
-    returnJSONSuccess(res, { data: order });
-  } else {
-    next(
-      new BadRequest("Invalid request prarameter", ErrorCode.BAD_REQUEST, 400)
-    );
-  }
+  const order = await prisma.orderDeliveryStatus.update({
+    where: {
+      id: id,
+    },
+    data: {
+      status: stat,
+    },
+  });
+  returnJSONSuccess(res, { data: order });
 };
 export const addBankDetails = async (req: Request, res: Response) => {
   const { id } = req.user as RequestUser;
@@ -789,66 +759,39 @@ export const getAboutStore = async (req: Request, res: Response) => {
   const stock = products
     .map(({ amount, quantity }) => amount * quantity)
     .reduce((x, y) => x + y, 0);
+
   const fufilledOrders = await prisma.order.aggregate({
     where: {
       status: {
-        array_contains: { storeId: store.id, status: "DELIVERED" },
+        some: {
+          status: "DELIVERED",
+        },
       },
     },
     _count: {
       _all: true,
     },
   });
-  const income = await prisma.order.findMany({
+  const income = await prisma.sellerPaymentHistory.aggregate({
     where: {
       AND: [
+        { storeId: store.id },
         {
-          status: {
-            array_contains: { storeId: store.id, status: "DELIVERED" },
-          },
-        },
-        {
-          date_paid: {
+          createdAt: {
             gte: new Date(new Date().setMonth(new Date().getMonth() - 1)),
             lte: new Date(),
           },
         },
-        { payment_status: true },
-        {
-          sellerPaid: {
-            array_contains: { storeId: store.id, status: true },
-          },
-        },
       ],
     },
-    select: {
-      products: {
-        where: {
-          storeId: store.id,
-        },
-        select: {
-          id: true,
-          amount: true,
-        },
-      },
-      quantity: true,
+    _sum: {
+      amount: true,
     },
   });
-  const filteredIncome = income
-    .map((product) =>
-      product.products
-        .map(
-          (pro) =>
-            pro.amount *
-            (product.quantity.find((q) => q.id === pro.id)?.quantity || 0)
-        )
-        .map((am) => am + 2.99)
-    )
-    .flat()
-    .reduce((x, y) => x + y, 0);
+
   return returnJSONSuccess(res, {
     data: {
-      income: filteredIncome,
+      income: income._sum.amount || 0,
       stock,
       fufilledOrders: fufilledOrders._count._all || 0,
       messages: 0,
@@ -866,39 +809,21 @@ export const getIncomeAndTransactionsFromStore = async (
   });
   const fromDate = new Date(new Date().setMonth(new Date().getMonth() - 1));
   const toDate = new Date();
-  const income = await prisma.order.findMany({
+  const income = await prisma.sellerPaymentHistory.findMany({
     where: {
       AND: [
+        { storeId: store.id },
         {
-          status: {
-            array_contains: { storeId: store.id, status: "DELIVERED" },
-          },
-        },
-        {
-          date_paid: {
+          createdAt: {
             gte: fromDate,
             lte: toDate,
-          },
-        },
-        { payment_status: true },
-        {
-          sellerPaid: {
-            array_contains: { storeId: store.id, status: true },
           },
         },
       ],
     },
     select: {
-      products: {
-        where: {
-          storeId: store.id,
-        },
-        select: {
-          amount: true,
-          createdAt: true,
-        },
-      },
-      quantity: true,
+      amount: true,
+      createdAt: true,
     },
   });
   const transactions = await prisma.order.findMany({
@@ -906,7 +831,9 @@ export const getIncomeAndTransactionsFromStore = async (
       AND: [
         {
           status: {
-            array_contains: { storeId: store.id, status: "DELIVERED" },
+            some: {
+              status: "DELIVERED",
+            },
           },
         },
         { payment_status: true },
@@ -916,10 +843,17 @@ export const getIncomeAndTransactionsFromStore = async (
       id: true,
       amount: true,
       createdAt: true,
-      trackingId: true,
       status: true,
       quantity: true,
-      sellerPaid: true,
+      sellerPaymentHistory: {
+        where: {
+          storeId: store.id,
+        },
+        select: {
+          amount: true,
+          createdAt: true,
+        },
+      },
       user: {
         select: {
           fullname: true,
@@ -941,13 +875,7 @@ export const getIncomeAndTransactionsFromStore = async (
   });
   return returnJSONSuccess(res, {
     data: {
-      income: income
-        .map((product) =>
-          product.products
-            .flat()
-            .map((pro) => ({ ...pro, quantity: product.quantity }))
-        )
-        .flat(),
+      income: income,
       transactions,
     },
   });

@@ -26,7 +26,6 @@ export const getOrders = async (req: Request, res: Response) => {
       quantity: true,
       amount: true,
       status: true,
-      trackingId: true,
       products: {
         select: {
           name: true,
@@ -68,7 +67,6 @@ export const getOrderById = async (
           quantity: true,
           amount: true,
           status: true,
-          trackingId: true,
           products: {
             select: {
               name: true,
