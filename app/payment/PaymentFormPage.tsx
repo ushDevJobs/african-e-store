@@ -70,7 +70,7 @@ const PaymentFormPage = (props: Props) => {
           options={{
             mode: "payment",
             amount: convertToSubcurrency(amount),
-            currency: "eur",
+            currency: "gbp",
           }}
         >
           <PaymentCheckoutPage amount={amount} />
