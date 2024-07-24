@@ -82,7 +82,7 @@ const Orders = ({ orders, isFetchingOrders }: Props) => {
                 <div className="flex items-center gap-5 text-[#6F6F6F] text-sm mb-6 whitespace-nowrap">
                   <p className="flex items-center gap-1">
                     <span className="bg-[#2C4A78] rounded-full text-[10px] text-white px-[9px] py-[1px]">
-                      T
+                      {order.user.fullname.charAt(0)}
                     </span>
                     {order.user.fullname}
                   </p>

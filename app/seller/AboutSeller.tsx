@@ -45,22 +45,22 @@ const AboutSeller = ({ store, isFetchingStore }: Props) => {
             {!store && summary && isFetchingSummary && isFetchingStore ? <AboutStoreSkeletonLoader /> : (
                 <div className='flex flex-col gap-20'>
                     <div className="flex gap-10 w-full h-full hideScrollBar overflow-x-auto">
-                        <div className="bg-white shadow-xl overflow-hidden min-w-[194px] p-4 flex flex-col gap-2 text-[#828282] rounded-[14px]">
+                        <Link href={`/income`} className="bg-transparent shadow overflow-hidden min-w-[194px] p-4 flex flex-col gap-2 text-[#828282] rounded-[14px]">
                             <p className='flex items-center gap-2 mb-2'><IncomeIcon /> Income</p>
                             <h2 className='text-2xl mb-2 font-medium'>&pound;{summary?.income.toLocaleString()}</h2>
-                            <p className='flex items-center justify-between whitespace-nowrap gap-3'>This month <Link href={`/income`}><SmallLineIcon /></Link></p>
-                        </div>
-                        <div className="bg-white shadow-xl overflow-hidden min-w-[194px] p-4 flex flex-col gap-2 text-[#828282] rounded-[14px]">
+                            <p className='flex items-center justify-between whitespace-nowrap gap-3'>This month <SmallLineIcon /></p>
+                        </Link>
+                        <div className="bg-transparent shadow overflow-hidden min-w-[194px] p-4 flex flex-col gap-2 text-[#828282] rounded-[14px]">
                             <p className='flex items-center gap-2  mb-2'><StockIcon /> Stock</p>
                             <h2 className='text-2xl mb-2 font-medium'>{summary?.stock}</h2>
                             <p className='flex items-center justify-between whitespace-nowrap gap-3'>Items</p>
                         </div>
-                        <div className="bg-white shadow-xl overflow-hidden min-w-[194px] p-4 flex flex-col gap-2 text-[#828282] rounded-[14px]">
+                        <div className="bg-transparent shadow overflow-hidden min-w-[194px] p-4 flex flex-col gap-2 text-[#828282] rounded-[14px]">
                             <p className='flex items-center gap-2  mb-2'><UserMessageIcon /> User messages </p>
                             <h2 className='text-2xl mb-2 font-medium text-[#2C7865]'>{summary?.messages}</h2>
                             <p className='flex items-end justify-end whitespace-nowrap gap-3'><SmallLineIcon /></p>
                         </div>
-                        <div className="bg-white shadow-xl overflow-hidden min-w-[194px] p-4 flex flex-col gap-2 text-[#828282] rounded-[14px]">
+                        <div className="bg-transparent shadow overflow-hidden min-w-[194px] p-4 flex flex-col gap-2 text-[#828282] rounded-[14px]">
                             <p className='flex items-center gap-2  mb-2'><OrderIcon /> Fulfilled orders</p>
                             <h2 className='text-2xl mb-2 font-medium'>&pound;{summary?.fufilledOrders}</h2>
                             <p className='flex items-center justify-between whitespace-nowrap gap-3'>All time <span><SmallLineIcon /></span></p>

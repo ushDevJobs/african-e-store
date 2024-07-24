@@ -124,6 +124,8 @@ export default class ApiRoutes {
 
     static FetchStoreSummary: string = "api/stores/store/about";
 
+    static FetchStoreStoreIncome: string = "api/stores/store/transactions";
+
     static FetchStoreReview: (storeId: string) => string = (storeId: string) =>
         `api/stores/store/id/${storeId}/reviews`;
 }

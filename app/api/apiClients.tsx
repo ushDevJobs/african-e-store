@@ -467,6 +467,17 @@ export function useFetchStoreSummary() {
 
     return fetchSummary;
 }
+export function useFetchStoreIncome() {
+    async function fetchStoreIncome() {
+        // Fire the request
+        const response = await API.get(ApiRoutes.FetchStoreStoreIncome);
+
+        // Return the response
+        return response;
+    }
+
+    return fetchStoreIncome;
+}
 export function useUpdateDeliveryStatus() {
     async function updateStatus(id: string, data: DeliveryStatus) {
         // Fire the request
