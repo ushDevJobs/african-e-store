@@ -42,27 +42,6 @@ const PaymentFormPage = (props: Props) => {
   console.log(!!amount, amount);
 
   return (
-    //   <form action="" className={styles.formContainer}>
-    //       <div className={styles.formField}>
-    //           <label htmlFor=""><span>*</span>Card number </label>
-    //           <input type="text" name="" id="" placeholder='XXX XXX XXX XXX' />
-    //       </div>
-    //       <div className={styles.formField}>
-    //           <label htmlFor=""><span>*</span>CVV </label>
-    //           <input type="text" name="" id="" placeholder='***' />
-    //       </div>
-    //       <div className={styles.formField}>
-    //           <label htmlFor=""><span>*</span>MM/YY </label>
-    //           <input type="text" name="" id="" placeholder='' />
-    //       </div>
-    //       <div className={styles.formField}>
-    //           <label htmlFor=""><span>*</span>Card pin </label>
-    //           <input type="text" name="" id="" placeholder='' />
-    //       </div>
-
-    //       <button>Continue to pay $195.99</button>
-    //   </form>
-
     <main className="p-5 text-white text-center rounded-md bg-[#f7fafa]">
       {!!amount ? (
         <Elements
