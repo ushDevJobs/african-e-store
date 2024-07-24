@@ -8,11 +8,9 @@ import {
 } from "../utils/functions";
 import { validatecreateProduct } from "../schema/products";
 import { RequestUser } from "../types";
-import { InternalException } from "../exceptions/internal-exception";
 import { ErrorCode } from "../exceptions/root";
 import { BadRequest } from "../exceptions/bad-request";
 import { NotFound } from "../exceptions/not-found";
-import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import { DatabaseException } from "../exceptions/datebase-exception";
 import { getPositiveReview } from "./store";
 import { Prisma } from "@prisma/client";
@@ -118,7 +116,27 @@ export const getProductById = async (req: Request, res: Response) => {
   });
   const rating = await prisma.rating.aggregate({
     where: {
-      AND: [{ NOT: { orderId: undefined } }, { productId: id }],
+      AND: [
+        {
+          orderDelivered: {
+            some: {
+              AND: [
+                { status: "DELIVERED" },
+                { storeId: product?.store.id },
+                {
+                  order: {
+                    products: {
+                      some: {
+                        id: product?.id || "",
+                      },
+                    },
+                  },
+                },
+              ],
+            },
+          },
+        },
+      ],
     },
     _avg: {
       rating: true,
@@ -129,7 +147,27 @@ export const getProductById = async (req: Request, res: Response) => {
   });
   const productRatings = await prisma.rating.findMany({
     where: {
-      AND: [{ NOT: { orderId: undefined } }, { productId: id }],
+      AND: [
+        {
+          orderDelivered: {
+            some: {
+              AND: [
+                { status: "DELIVERED" },
+                { storeId: product?.store.id },
+                {
+                  order: {
+                    products: {
+                      some: {
+                        id: product?.id || "",
+                      },
+                    },
+                  },
+                },
+              ],
+            },
+          },
+        },
+      ],
     },
     select: {
       user: {

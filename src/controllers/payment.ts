@@ -7,7 +7,7 @@ import {
   returnJSONError,
   returnJSONSuccess,
 } from "../utils/functions";
-import { OrderQuantity, OrderStatus, RequestUser } from "../types";
+import { OrderQuantity, RequestUser } from "../types";
 
 const stripe = new Stripe(process.env.STRIPE_S_KEY!, {
   typescript: true,
@@ -43,12 +43,12 @@ export const paymentIntent = async (req: Request, res: Response) => {
   try {
     const intent = await stripe.paymentIntents.create({
       amount: convertToSubcurrency(amount),
-      currency: "EUR",
+      currency: "GBP",
       automatic_payment_methods: {
         enabled: true,
       },
-      description: "You're about to pay",
-      metadata: { orderId: order.id },
+      description: `${products.map((p) => p.name).join(", ")}`,
+      metadata: { order_id: order.id },
     });
 
     return returnJSONSuccess(res, {

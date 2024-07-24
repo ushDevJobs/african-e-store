@@ -50,7 +50,6 @@ model Store {
   bank                    String?
   orders                  Order[]
   products                Product[]
-  ratings                 Rating[]
   user                    User                      @relation(fields: [userId], references: [id], onDelete: Cascade, name: "myPersonalStore")
   favourite               User[]                    @relation(name: "myFavouriteStores")
   SellerDashboard         SellerDashboard[]
@@ -85,7 +84,6 @@ model Product {
   carts              Cart[]
   orders             Order[]
   store              Store          @relation(fields: [storeId], references: [id], onDelete: Cascade)
-  ratings            Rating[]
   categories         Category[]
   favourite          User[]
 
@@ -130,11 +128,11 @@ model Order {
   products             Product[]
   stores               Store[]
   user                 User?                  @relation(fields: [userId], references: [id])
-  Rating               Rating[]
   transaction_id       String?
   payment_status       Boolean                @default(false)
   date_paid            DateTime?
   sellerPaymentHistory SellerPaymentHistory[]
+  Rating               Rating[]
 
   @@map("orders")
 }
@@ -153,19 +151,16 @@ model Tracker {
 }
 
 model Rating {
-  id        String   @id @default(uuid())
-  rating    Int
-  review    String?
-  productId String
-  storeId   String
-  userId    String
-  orderId   String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  order     Order    @relation(fields: [orderId], references: [id])
-  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
-  store     Store    @relation(fields: [storeId], references: [id], onDelete: Cascade)
-  user      User     @relation(fields: [userId], references: [id], onDelete: NoAction)
+  id             String                @id @default(uuid())
+  rating         Int
+  review         String
+  userId         String
+  order          Order                 @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderId        String
+  createdAt      DateTime              @default(now())
+  updatedAt      DateTime              @updatedAt
+  user           User                  @relation(fields: [userId], references: [id], onDelete: NoAction)
+  orderDelivered orderDeliveryStatus[]
 
   @@map("ratings")
 }
@@ -219,6 +214,7 @@ model orderDeliveryStatus {
   status    OrderStatus @default(PENDING)
   tracker   Tracker?    @relation(fields: [trackerId], references: [id])
   trackerId String?     @unique
+  reviews   Rating[]
   updatedAt DateTime    @updatedAt
   createdAt DateTime    @default(now())
 }

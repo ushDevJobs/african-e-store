@@ -1,8 +1,7 @@
 import { NextFunction, Request, Response } from "express";
-import { OrderStatus, RequestUser } from "../types";
+import { RequestUser } from "../types";
 import { prisma } from "../prisma";
 import {
-  checkIfEmpty,
   extractFullUrlStore,
   returnJSONError,
   returnJSONSuccess,
@@ -96,22 +95,23 @@ const getStoreFullDetails = async (id: string, isStoreId = false) => {
   });
   const ratings = await prisma.rating.groupBy({
     where: {
-      AND: [
-        { storeId: store.id },
-        { NOT: { orderId: undefined } },
-        { NOT: { productId: undefined } },
-      ],
+      orderDelivered: {
+        some: {
+          AND: [{ status: "DELIVERED" }, { storeId: store.id }],
+        },
+      },
     },
     by: ["rating"],
     _count: true,
   });
+
   let avg = await prisma.rating.aggregate({
     where: {
-      AND: [
-        { storeId: store.id },
-        { NOT: { orderId: undefined } },
-        { NOT: { productId: undefined } },
-      ],
+      orderDelivered: {
+        some: {
+          AND: [{ status: "DELIVERED" }, { storeId: store.id }],
+        },
+      },
     },
     _avg: {
       rating: true,
@@ -121,6 +121,7 @@ const getStoreFullDetails = async (id: string, isStoreId = false) => {
       rating: true,
     },
   });
+
   const totalItemSold = await prisma.order.count({
     where: {
       AND: [
@@ -143,12 +144,15 @@ const getStoreFullDetails = async (id: string, isStoreId = false) => {
   });
   const totalRatingByUsers = await prisma.rating.groupBy({
     where: {
-      AND: [{ storeId: store.id }, { NOT: { orderId: undefined } }],
+      orderDelivered: {
+        some: {
+          AND: [{ status: "DELIVERED" }, { storeId: store.id }],
+        },
+      },
     },
-    by: ["userId", "orderId"],
+    by: ["userId"],
   });
-  const feedback =
-    (((avg._sum.rating || 0) / totalRatingByUsers.length || 0) * 100) / 5;
+  const feedback = (((avg._sum.rating || 0) / avg._count || 0) * 100) / 5;
   const findRating = (number: number) => {
     const rate = ratings.find((rating) => rating.rating === number);
     return {
@@ -177,9 +181,13 @@ export const getPositiveReview = async (id: string) => {
   let positiveReview = await prisma.rating.aggregate({
     where: {
       AND: [
-        { storeId: id },
-        { NOT: { orderId: undefined } },
-        { NOT: { productId: undefined } },
+        {
+          orderDelivered: {
+            some: {
+              AND: [{ status: "DELIVERED" }, { storeId: id }],
+            },
+          },
+        },
         {
           rating: {
             gte: 4,
@@ -615,9 +623,13 @@ const getReviewsForStore = async (id: string) => {
   const reviews = await prisma.rating.findMany({
     where: {
       AND: [
-        { storeId: id },
-        { orderId: { not: undefined } },
-        { productId: { not: undefined } },
+        {
+          orderDelivered: {
+            some: {
+              AND: [{ status: "DELIVERED" }, { storeId: id }],
+            },
+          },
+        },
       ],
     },
     select: {
@@ -630,11 +642,22 @@ const getReviewsForStore = async (id: string) => {
           id: true,
         },
       },
-      product: {
+      orderDelivered: {
         select: {
-          name: true,
-          id: true,
-          coverImage: true,
+          order: {
+            select: {
+              products: {
+                where: {
+                  storeId: id,
+                },
+                select: {
+                  name: true,
+                  id: true,
+                  coverImage: true,
+                },
+              },
+            },
+          },
         },
       },
     },
