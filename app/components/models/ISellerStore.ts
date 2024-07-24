@@ -45,7 +45,7 @@ export interface SellerProductsResponse {
   returnPolicy: null;
   location: null;
   storeId: string;
-  shippingDetails: '{}';
+  shippingDetails: "{}";
   discount: false;
   discountPercentage: number;
   createdAt: string;
@@ -65,16 +65,16 @@ export interface DraftResponse {
   publish: false;
 }
 
-
 export interface StoreOrderResponse {
   id: string;
   amount: number;
   createdAt: string;
   trackingId: string | null;
-  quantity:Quantity[]
+  quantity: Quantity[];
   status: Status[];
   user: User;
   products: Products[];
+  orderId: number;
 }
 
 export interface Quantity {
@@ -83,12 +83,16 @@ export interface Quantity {
 }
 
 export interface Products {
+  id: string;
   name: string;
   amount: number;
   coverImage: string;
 }
 export interface Status {
+  id: string;
+  orderId: string;
   storeId: string;
+  createdAt: Date;
   status: StatusEnum;
 }
 

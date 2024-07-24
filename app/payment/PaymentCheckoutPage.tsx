@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   useStripe,
   useElements,
@@ -18,26 +18,29 @@ const PaymentCheckoutPage = ({ amount }: { amount: number }) => {
   const [clientSecret, setClientSecret] = useState("");
   const [orderId, setOrderId] = useState("");
   const [loading, setLoading] = useState(false);
-
+  const runOnce = useRef(0);
   useEffect(() => {
-    fetch(`${ApiRoutes.BASE_URL_DEV}/api/payment/pay`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        id: cartItems.map((cart) => ({
-          id: cart.product.id,
-          quantity: cart.qty,
-        })),
-      }),
-      credentials: "include",
-    })
-      .then((res) => res.json())
-      .then((data) => {
-          setOrderId(data.data &&data.data.orderId);
-        setClientSecret(data.data.clientSecret);
-      });
+    if (runOnce.current === 0) {
+      fetch(`${ApiRoutes.BASE_URL_DEV}/api/payment/pay`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id: cartItems.map((cart) => ({
+            id: cart.product.id,
+            quantity: cart.qty,
+          })),
+        }),
+        credentials: "include",
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setOrderId(data.data && data.data.orderId);
+          setClientSecret(data.data.clientSecret);
+        });
+      runOnce.current++;
+    }
   }, [amount]);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {

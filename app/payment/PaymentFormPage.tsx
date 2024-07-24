@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styles from "../checkout/Checkout.module.scss";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
@@ -18,22 +18,26 @@ const stripePromise = loadStripe(
 const PaymentFormPage = (props: Props) => {
   const cartItems = useSelector((state: RootState) => state.cart.cartItems);
   const [amount, setAmount] = useState(0);
+  const runOnce = useRef(0);
   useEffect(() => {
-    fetch(`${ApiRoutes.BASE_URL_DEV}/api/payment/amount`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        id: cartItems.map((cart) => ({
-          id: cart.product.id,
-          quantity: cart.qty,
-        })),
-      }),
-      credentials: "include",
-    })
-      .then((res) => res.json())
-      .then((data) => setAmount(data.data.amount));
+    if (runOnce.current === 0) {
+      fetch(`${ApiRoutes.BASE_URL_DEV}/api/payment/amount`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id: cartItems.map((cart) => ({
+            id: cart.product.id,
+            quantity: cart.qty,
+          })),
+        }),
+        credentials: "include",
+      })
+        .then((res) => res.json())
+        .then((data) => setAmount(data.data.amount));
+      runOnce.current++;
+    }
   }, []);
   console.log(!!amount, amount);
 
