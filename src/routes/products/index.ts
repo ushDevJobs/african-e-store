@@ -1,5 +1,9 @@
 import { Router } from "express";
-import { sellerRoleCheck } from "../../middlewares/roles";
+import {
+  checkId,
+  mutateProductCheck,
+  sellerRoleCheck,
+} from "../../middlewares/roles";
 import { rootErrorHandler } from "../../root-error-handler";
 import {
   getProductById,
@@ -17,8 +21,11 @@ const router = Router();
 router
   .route("/product/:id")
   .get(rootErrorHandler(getProductById))
-  .patch([sellerRoleCheck], rootErrorHandler(updateProduct))
-  .delete([sellerRoleCheck], rootErrorHandler(deleteProductById))
+  .patch(
+    [checkId, mutateProductCheck, uploadProductImage.array("images")],
+    rootErrorHandler(updateProduct)
+  )
+  .delete([sellerRoleCheck], rootErrorHandler(deleteProductById));
 
 router.post(
   "/product",
@@ -28,6 +35,6 @@ router.post(
 router
   .route("/favourite")
   .get(rootErrorHandler(getFavouriteProducts))
-  .post(rootErrorHandler(addProductToFavourite))
-  router.delete("/favourite/:id", rootErrorHandler(removeProductFromFavourite));
+  .post(rootErrorHandler(addProductToFavourite));
+router.delete("/favourite/:id", rootErrorHandler(removeProductFromFavourite));
 export { router as productRoutes };

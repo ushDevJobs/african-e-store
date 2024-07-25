@@ -36,7 +36,6 @@ export const approvePaymentByAdmin = async (req: Request, res: Response) => {
           quantity: true,
         },
       });
-      console.log(order);
       const amount =
         order?.products
           .map(
@@ -49,6 +48,15 @@ export const approvePaymentByAdmin = async (req: Request, res: Response) => {
         await prisma.sellerDashboard.upsert({
           where: {
             storeId: id,
+            AND: [
+              {
+                payment: {
+                  none: {
+                    orderId,
+                  },
+                },
+              },
+            ],
           },
           update: {
             amount: {

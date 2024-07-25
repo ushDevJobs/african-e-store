@@ -18,24 +18,26 @@ export async function mutateProductCheck(
     const validated = validateProductMutation.safeParse({ id });
     if (validated.success) {
       try {
-        await prisma.store.findFirstOrThrow({
+        const product = await prisma.product.findFirstOrThrow({
           where: {
-            userId: user.id,
-            products: {
-              some: {
-                id: id,
-              },
-            },
+            id,
+          },
+          select: {
+            store: true,
           },
         });
-        next();
+        if (product.store.userId === user.id) {
+          next();
+        } else {
+          next(
+            new UnauthorizedException(
+              "Cant access this product",
+              ErrorCode.UNAUTHORIZED
+            )
+          );
+        }
       } catch (error) {
-        next(
-          new UnauthorizedException(
-            "Cant access this product",
-            ErrorCode.UNAUTHORIZED
-          )
-        );
+        next(new NotFound("Product not found", ErrorCode.NOT_FOUND));
       }
     } else {
       next(new BadRequest("Invalid request parameters", ErrorCode.BAD_REQUEST));

@@ -12,27 +12,28 @@ datasource db {
 }
 
 model User {
-  id                String      @id @default(cuid())
-  email             String      @unique
-  googleId          String?     @unique
-  facebookId        String?     @unique
-  status            UserStatus  @default(PENDING)
+  id                String          @id @default(cuid())
+  email             String          @unique
+  googleId          String?         @unique
+  facebookId        String?         @unique
+  status            UserStatus      @default(PENDING)
   profilePicture    String?
   fullname          String
   password          String?
   telephone         String?
   country           String?
   address           String?
-  accountType       AccountType @default(BUYER)
+  accountType       AccountType     @default(BUYER)
   cartItems         Cart[]
   orders            Order[]
   myRatings         Rating[]
-  store             Store?      @relation(name: "myPersonalStore")
-  favouriteStores   Store[]     @relation(name: "myFavouriteStores")
+  store             Store?          @relation(name: "myPersonalStore")
+  favouriteStores   Store[]         @relation(name: "myFavouriteStores")
   favouriteProducts Product[]
   verifyUser        verifyUser?
-  createdAt         DateTime    @default(now())
-  updatedAt         DateTime    @updatedAt
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+  sellerMessage     sellerMessage[]
 
   @@map("users")
 }
@@ -57,6 +58,7 @@ model Store {
   SellerWithdrawalHistory SellerWithdrawalHistory[]
   orderDeliveryStatus     orderDeliveryStatus[]
   shippingFee             Float                     @default(2.99)
+  sellerMessage           sellerMessage[]
 
   @@map("store")
 }
@@ -147,7 +149,7 @@ model Tracker {
   updatedAt           DateTime             @updatedAt
   orderDeliveryStatus orderDeliveryStatus?
 
-  @@map("DeliveryTracker")
+  @@map("deliveryTracker")
 }
 
 model Rating {
@@ -230,6 +232,10 @@ model Sessions {
 model sellerMessage {
   id        String       @id @unique @default(cuid())
   from      MessagesFrom @default(USER)
+  store     Store        @relation(fields: [storeId], references: [id])
+  storeId   String
+  user      User?        @relation(fields: [userId], references: [id])
+  userId    String?
   message   String
   createdAt DateTime     @default(now())
   updatedAt DateTime     @updatedAt

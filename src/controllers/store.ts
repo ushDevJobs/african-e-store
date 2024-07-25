@@ -773,7 +773,7 @@ export const getAboutStore = async (req: Request, res: Response) => {
   const { id } = req.user as RequestUser;
   const store = await prisma.store.findFirstOrThrow({
     where: { userId: id },
-    select: { id: true },
+    select: { id: true, sellerMessage: true },
   });
   const products = await prisma.product.findMany({
     where: {
@@ -816,13 +816,13 @@ export const getAboutStore = async (req: Request, res: Response) => {
       amount: true,
     },
   });
-
+  const messagesLength = store.sellerMessage.length;
   return returnJSONSuccess(res, {
     data: {
       income: income._sum.amount || 0,
       stock,
       fufilledOrders: fufilledOrders._count._all || 0,
-      messages: 0,
+      messages: messagesLength,
     },
   });
 };
