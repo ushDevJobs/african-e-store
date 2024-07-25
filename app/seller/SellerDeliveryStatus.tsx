@@ -35,19 +35,13 @@ const SellerDeliveryStatus = ({
 
     useEffect(() => {
         if (selectedOrder) {
-            const storedStatuses = localStorage.getItem(
-                `selectedStatuses-${selectedOrder.id}`
+            const statusForStore = selectedOrder.status.find(
+                (s) => s.storeId === selectedOrder.id
             );
-            if (storedStatuses) {
-                setSelectedStatuses(JSON.parse(storedStatuses));
+            if (statusForStore) {
+                setSelectedStatuses([StatusEnum.Pending, statusForStore.status]);
             } else {
-                // Default to existing status from selectedOrder if no localStorage data
-                const statusForStore = selectedOrder.status.find(
-                    (s) => s.storeId === selectedOrder.id
-                );
-                if (statusForStore) {
-                    setSelectedStatuses([statusForStore.status]);
-                }
+                setSelectedStatuses([StatusEnum.Pending]);
             }
         }
     }, [selectedOrder]);
