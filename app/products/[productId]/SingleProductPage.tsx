@@ -20,7 +20,6 @@ type Props = {
 
 const SingleProductPage = ({ params }: Props) => {
     const fetchProduct = useFetchProduct()
-    const { accountStatus, fetchAccountStatus } = useAccountStatus();
     const router = useRouter()
     const productId = params.productId;
     const [product, setProduct] = useState<ProductResponse>();

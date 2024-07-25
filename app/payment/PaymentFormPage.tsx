@@ -4,7 +4,7 @@ import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import PaymentCheckoutPage from "./PaymentCheckoutPage";
 import convertToSubcurrency from "@/lib/convertToSubcurrency";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import ApiRoutes from "../api/apiRoutes";
 
@@ -19,6 +19,7 @@ const PaymentFormPage = (props: Props) => {
   const cartItems = useSelector((state: RootState) => state.cart.cartItems);
   const [amount, setAmount] = useState(0);
   const runOnce = useRef(0);
+
   useEffect(() => {
     if (runOnce.current === 0) {
       fetch(`${ApiRoutes.BASE_URL_DEV}/api/payment/amount`, {
@@ -36,6 +37,7 @@ const PaymentFormPage = (props: Props) => {
       })
         .then((res) => res.json())
         .then((data) => setAmount(data.data.amount));
+      
       runOnce.current++;
     }
   }, []);
