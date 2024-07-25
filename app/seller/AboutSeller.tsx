@@ -63,7 +63,7 @@ const AboutSeller = ({ store, isFetchingStore }: Props) => {
                         <div className="bg-transparent shadow overflow-hidden min-w-[194px] p-4 flex flex-col gap-2 text-[#828282] rounded-[14px]">
                             <p className='flex items-center gap-2  mb-2'><OrderIcon /> Fulfilled orders</p>
                             <h2 className='text-2xl mb-2 font-medium'>&pound;{summary?.fufilledOrders}</h2>
-                            <p className='flex items-center justify-between whitespace-nowrap gap-3'>All time <span><SmallLineIcon /></span></p>
+                            <p className='flex items-center justify-between whitespace-nowrap gap-3'>All time</p>
                         </div>
                     </div>
 

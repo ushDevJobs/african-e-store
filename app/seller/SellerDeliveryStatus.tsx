@@ -9,7 +9,7 @@ import {
     WhiteBoxIcon,
     WhiteDeliveredIcon,
     WhiteDispatchIcon,
-} from "../components/SVGs/SVGicons"; // Added CheckedIcon
+} from "../components/SVGs/SVGicons";
 import { StoreOrderResponse } from "../components/models/ISellerStore";
 import { useUpdateDeliveryStatus } from "../api/apiClients";
 import {
@@ -33,19 +33,6 @@ const SellerDeliveryStatus = ({
     const [isUpdating, setIsUpdating] = useState<boolean>(false);
     const [selectedStatuses, setSelectedStatuses] = useState<StatusEnum[]>([]);
 
-    useEffect(() => {
-        if (selectedOrder) {
-            const statusForStore = selectedOrder.status.find(
-                (s) => s.storeId === selectedOrder.id
-            );
-            if (statusForStore) {
-                setSelectedStatuses([StatusEnum.Pending, statusForStore.status]);
-            } else {
-                setSelectedStatuses([StatusEnum.Pending]);
-            }
-        }
-    }, [selectedOrder]);
-
     async function handleUpdateStatus(
         e: FormEvent<HTMLButtonElement>,
         status: StatusEnum
@@ -62,7 +49,6 @@ const SellerDeliveryStatus = ({
                 selectedOrder?.status[0].id as string,
                 data
             );
-            // console.log(response.data.data);
             setSelectedStatuses((prevStatuses) => {
                 const newStatuses = [...prevStatuses, status];
                 localStorage.setItem(
@@ -80,6 +66,24 @@ const SellerDeliveryStatus = ({
 
     const isStatusSelected = (status: StatusEnum) =>
         selectedStatuses.includes(status);
+
+    useEffect(() => {
+        if (selectedOrder) {
+            const savedStatuses = localStorage.getItem(`selectedStatuses-${selectedOrder.id}`);
+            if (savedStatuses) {
+                setSelectedStatuses(JSON.parse(savedStatuses));
+            } else {
+                const statusForStore = selectedOrder.status.find(
+                    (s) => s.storeId === selectedOrder.id
+                );
+                if (statusForStore) {
+                    setSelectedStatuses([StatusEnum.Pending, statusForStore.status]);
+                } else {
+                    setSelectedStatuses([StatusEnum.Pending]);
+                }
+            }
+        }
+    }, [selectedOrder]);
 
     return (
         <ModalWrapper
