@@ -866,7 +866,15 @@ export const getIncomeAndTransactionsFromStore = async (
       id: true,
       amount: true,
       createdAt: true,
-      status: true,
+      orderId: true,
+      status: {
+        where: {
+          storeId: store.id,
+        },
+        select: {
+          status: true,
+        },
+      },
       quantity: true,
       sellerPaymentHistory: {
         where: {

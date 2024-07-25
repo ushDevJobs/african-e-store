@@ -23,6 +23,7 @@ export const getOrders = async (req: Request, res: Response) => {
     },
     select: {
       id: true,
+      orderId: true,
       quantity: true,
       amount: true,
       status: true,
@@ -64,6 +65,7 @@ export const getOrderById = async (
         },
         select: {
           id: true,
+          orderId: true,
           quantity: true,
           amount: true,
           status: true,
@@ -92,13 +94,4 @@ export const getOrderById = async (
   } else {
     next(new BadRequest("Invalid request parameters", ErrorCode.BAD_REQUEST));
   }
-};
-export const deleteItemFromCart = async (req: Request, res: Response) => {
-  const { id } = req.query;
-  await prisma.cart.delete({
-    where: {
-      id: id as string,
-    },
-  });
-  returnJSONSuccess(res);
 };
