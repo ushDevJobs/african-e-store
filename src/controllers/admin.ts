@@ -36,6 +36,7 @@ export const approvePaymentByAdmin = async (req: Request, res: Response) => {
           quantity: true,
         },
       });
+      console.log(order);
       const amount =
         order?.products
           .map(

@@ -835,25 +835,10 @@ export const getIncomeAndTransactionsFromStore = async (
     where: { userId: id },
     select: { id: true },
   });
-  const fromDate = new Date(new Date().setMonth(new Date().getMonth() - 1));
-  const toDate = new Date();
-  const income = await prisma.sellerPaymentHistory.findMany({
-    where: {
-      AND: [
-        { storeId: store.id },
-        {
-          createdAt: {
-            gte: fromDate,
-            lte: toDate,
-          },
-        },
-      ],
-    },
-    select: {
-      amount: true,
-      createdAt: true,
-    },
-  });
+
+  const income =
+    await prisma.$queryRaw`SELECT DATE(createdAt) AS createdAt, amount FROM sellerspaymenthistory WHERE storeId = ${store.id} GROUP BY MONTH(createdAt)`;
+
   const transactions = await prisma.order.findMany({
     where: {
       AND: [
