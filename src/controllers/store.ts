@@ -693,6 +693,11 @@ export const getStoreOrders = async (req: Request, res: Response) => {
         where: {
           storeId: store.id,
         },
+        select: {
+          id: true,
+          status: true,
+          storeId: true,
+        },
       },
       quantity: true,
       user: {

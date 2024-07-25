@@ -28,8 +28,8 @@ export const paymentIntent = async (req: Request, res: Response) => {
       userId: user.id,
       status: {
         create: Array.from(
-          new Set(products.map((product) => ({ storeId: product.storeId })))
-        ),
+          new Set(products.map((product) => product.storeId))
+        ).map((id) => ({ storeId: id })),
       },
       stores: {
         connect: products.map((product) => ({ id: product.storeId })),
