@@ -85,6 +85,11 @@ export default class ApiRoutes {
     static AddProduct: string = "api/products/product";
 
     /**
+     * Api routes to edit product
+     */
+    static UpdateProduct: string = "api/products/product";
+
+    /**
      * Api routes to add store to favorite
      */
     static AddStoreToFavorite: string = "api/stores/favourite";

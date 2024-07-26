@@ -161,8 +161,14 @@ const AddProductToCart = ({ product, isFetchingProduct, handleAddProductToFavori
                                     qty={quantityInCart ?? 0}
                                 />
                             )}
-                            <div className={styles.buyNow}>
-                                <Link href={'/checkout'}> Buy Now</Link>
+                            <div className={`${styles.buyNow}`} >
+                                <button
+                                    onClick={() => router.push('/checkout')}
+                                    className={`${!quantityInCart ? 'pointer-events-none opacity-60' : ''
+                                        }`}
+                                    disabled={!quantityInCart}>
+                                    Buy Now
+                                </button>
                                 {onDesktop && (
                                     <>
                                         {!quantityInCart && (

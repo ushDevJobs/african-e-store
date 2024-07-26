@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { DeleteIcon, EditIcon } from "../components/SVGs/SVGicons";
 import { SellerProductsResponse } from "../components/models/ISellerStore";
 import { FullPageLoader } from "../Loader/ComponentLoader";
+import EditProductModal from "./EditProductModal";
 
 type Props = {
     products: SellerProductsResponse[] | undefined;
@@ -11,6 +12,13 @@ type Props = {
     setIsAddProductModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
     isDeletingId: string | null
     handleRemoveProduct: (id: string) => Promise<void>
+    handleFetchProducts({
+        clearPreviousProducts,
+    }: {
+        clearPreviousProducts?: boolean | undefined;
+    }): Promise<void>;
+    selectedProduct: SellerProductsResponse | undefined
+    setSelectedProduct: React.Dispatch<React.SetStateAction<SellerProductsResponse | undefined>>
 };
 
 const SellerProduct = ({
@@ -18,11 +26,22 @@ const SellerProduct = ({
     isFetchingProducts,
     setIsAddProductModalVisible,
     isDeletingId,
-    handleRemoveProduct
+    handleRemoveProduct,
+    handleFetchProducts,
+    selectedProduct,
+    setSelectedProduct
 }: Props) => {
-    // console.log({ products })
+    const [editProductModalVisible, seEditProductModalVisible] = useState(false);
     return (
         <main className="w-full">
+            <EditProductModal
+                visibility={editProductModalVisible}
+                setVisibility={seEditProductModalVisible}
+                handleFetchProducts={handleFetchProducts}
+                selectedProduct={selectedProduct}
+                setSelectedProduct={setSelectedProduct}
+            />
+
             <div className="flex flex-col gap-10">
                 {products?.map((product) => (
                     <div className="flex gap-4" key={product.id}>
@@ -39,11 +58,15 @@ const SellerProduct = ({
                         <div className="flex flex-col">
                             <h2 className="text-[#828282] text-lg">{product.name}</h2>
                             <p className="text-[#1E1E1E] text-sm mb-1">{product.details}</p>
-                            <h3 className="font-medium text-base text-[#1E1E1E] mb-14">
+                            <span className="text-[#828282] text-sm">Quantity: {product.quantity}</span>
+                            <h3 className="font-medium text-lg text-[#1E1E1E] mb-8">
                                 &pound;{product.amount.toLocaleString()}
                             </h3>
                             <div className="flex items-center gap-4">
-                                <button className="border flex items-center justify-center cursor-pointer gap-1 border-[#2C7865] text-[#2C7865] rounded-[37px] py-3 px-14">
+                                <button onClick={() => {
+                                    setSelectedProduct(product);
+                                    seEditProductModalVisible(true)}} 
+                                    className="border flex items-center justify-center cursor-pointer gap-1 border-[#2C7865] text-[#2C7865] rounded-[37px] py-3 px-14">
                                     <EditIcon /> Edit
                                 </button>
                                 <button

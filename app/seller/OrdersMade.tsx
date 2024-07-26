@@ -23,29 +23,31 @@ const OrdersMade = ({ visibility, setVisibility, selectedOrder, isFetchingOrders
                 <div className="flex flex-col gap-3 mb-5">
                     <span onClick={() => setVisibility(false)} className='cursor-pointer flex items-end justify-end ml-auto w-fit'><TimesIcon /></span>
                     <div className="flex flex-col gap-1 text-start text-[#2C7865]">
-                            <div>
+                        <div>
                             <h2 className='text-2xl font-medium'>{selectedOrder?.products.length} {selectedOrder && selectedOrder.products.length > 1 ? 'items' : 'item'} </h2>
                             <p className='text-lg'>Order {selectedOrder?.orderId}</p>
-                            </div>
+                        </div>
                     </div>
                 </div>
                 <div className="flex flex-col ">
-                        <div className="flex flex-col gap-6">
+                    <div className="flex flex-col gap-6">
                         {selectedOrder?.products.map((product, index) => (
-                                <div className="flex gap-6" key={index}>
-                                    <div key={index} className="relative min-w-[101px] rounded-lg h-[132px]">
-                                        <Image src={product.coverImage} alt='product image' fill className='object-cover rounded-lg ' />
-                                    </div>
-                                    <div className="text-[#1E1E1E] flex flex-col" key={index}>
-                                        <p className='max-w-[400px]'>{product.name}</p>
-                                        <h4 className='font-medium text-xl'>&pound;{product.amount.toLocaleString()}</h4>
+                            <div className="flex gap-6" key={index}>
+                                <div key={index} className="relative min-w-[101px] rounded-lg h-[132px]">
+                                    <Image src={product.coverImage} alt='product image' fill className='object-cover rounded-lg ' />
+                                </div>
+                                <div className="text-[#1E1E1E] flex flex-col" key={index}>
+                                    <p className='max-w-[400px]'>{product.name}</p>
+                                    <h4 className='font-medium text-xl'>&pound;{(product.amount *
+                                        (selectedOrder.quantity.find((q) => q.id === product.id)
+                                            ?.quantity || 0)).toLocaleString()}</h4>
 
                                     < p className='text-[#828282] text-xs' > Quantity: <span className='text-[#1E1E1E] text-base'>{selectedOrder.quantity.find((q) => q.id === product.id)
-                                            ?.quantity || 0}</span></p>
-                                    </div>
+                                        ?.quantity || 0}</span></p>
                                 </div>
-                            ))}
-                        </div>
+                            </div>
+                        ))}
+                    </div>
                 </div>
                 {!selectedOrder && isFetchingOrders && (
                     <FullPageLoader />

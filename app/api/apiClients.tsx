@@ -288,6 +288,25 @@ export function useAddProduct() {
     return addProduct;
 }
 
+// Api call to edit product
+export function useUpdateProduct() {
+    /**
+     * Send request to API server to update a Product
+     * @returns The response for the API request
+     */
+    async function updateProduct(id: string, data: FormData) {
+        // Send request to update a Product
+        let response = await API.patch(`${ApiRoutes.UpdateProduct}/${id}`, data);
+
+        // Return response
+        return response;
+    }
+
+    // Return function to update a Product
+    return updateProduct;
+}
+
+
 // Api call to add store to favorite
 export function useAddStoreToFavorite() {
     /**

@@ -123,7 +123,7 @@
         //   align-items: center;
         //   justify-content: center;
 
-        a {
+        button {
           min-width: 367px;
           color: #fff;
           cursor: pointer;
@@ -132,6 +132,10 @@
           font-weight: 700;
           background-color: #2c7865;
           text-align: center;
+
+          &:hover {
+            background-color: rgba(44, 120, 101, 0.7);
+          }
 
           @include bigTablet {
             min-width: 250px;

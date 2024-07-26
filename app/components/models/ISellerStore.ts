@@ -1,4 +1,5 @@
 import { StatusEnum } from "./IOrderDeliveryStatus";
+import { AddProductRequest } from "./IProduct";
 
 export interface StoreDetails {
   name: string;
@@ -30,7 +31,7 @@ export interface SellerStoreResponse extends ProfileRequest {
   totalItemSold: number;
 }
 
-export interface SellerProductsResponse {
+export interface SellerProductsResponse{
   id: string;
   name: string;
   itemCondition: string;
@@ -45,7 +46,7 @@ export interface SellerProductsResponse {
   returnPolicy: null;
   location: null;
   storeId: string;
-  shippingDetails: "{}";
+  shippingDetails: '{}';
   discount: false;
   discountPercentage: number;
   createdAt: string;

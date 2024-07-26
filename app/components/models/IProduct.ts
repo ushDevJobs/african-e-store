@@ -1,3 +1,4 @@
+import { SellerProductsResponse } from './ISellerStore';
 import { Favorite } from './IStores';
 
 export interface ProductResponse {
@@ -69,7 +70,7 @@ export interface CartResponse {
   product: Product;
 }
 
-export interface AddProductRequest {
+export interface AddProductRequest extends SellerProductsResponse {
   price: number;
   name: string;
   quantity: number;

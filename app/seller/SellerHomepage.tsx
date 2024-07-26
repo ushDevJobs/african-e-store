@@ -41,6 +41,7 @@ const SellerHomePage = (props: Props) => {
     const [store, setStore] = useState<SellerStoreResponse>()
     const [selectedStore, setSelectedStore] = useState<SellerStoreResponse>();
     const [products, setProducts] = useState<SellerProductsResponse[]>()
+    const [selectedProduct, setSelectedProduct] = useState<SellerProductsResponse>()
     const [drafts, setDrafts] = useState<DraftResponse[]>()
     const [orders, setOrders] = useState<StoreOrderResponse[]>()
 
@@ -241,6 +242,9 @@ const SellerHomePage = (props: Props) => {
                             setIsAddProductModalVisible={setIsAddProductModalVisible}
                             isDeletingId={isDeletingId}
                             handleRemoveProduct={handleRemoveProduct}
+                            handleFetchProducts={handleFetchProducts}
+                            selectedProduct={selectedProduct}
+                            setSelectedProduct={setSelectedProduct}
                         />
                     }
 
