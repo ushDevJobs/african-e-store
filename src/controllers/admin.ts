@@ -31,19 +31,25 @@ export const approvePaymentByAdmin = async (req: Request, res: Response) => {
             select: {
               id: true,
               amount: true,
+              store: {
+                select: {
+                  shippingFee: true,
+                },
+              },
             },
           },
           quantity: true,
         },
       });
       const amount =
-        order?.products
+        (order?.products
           .map(
             (product) =>
               product.amount *
               (order.quantity.find((q) => q.id === product.id)?.quantity || 0)
           )
-          .reduce((x, y) => x + y, 0) || 0;
+          .reduce((x, y) => x + y, 0) || 0) +
+        (order?.products[0].store.shippingFee || 0);
       try {
         await prisma.sellerDashboard.upsert({
           where: {
@@ -60,24 +66,24 @@ export const approvePaymentByAdmin = async (req: Request, res: Response) => {
           },
           update: {
             amount: {
-              increment: 1,
+              increment: amount,
             },
             payment: {
               create: {
                 orderId: orderId,
                 storeId: id,
-                amount: amount + 2.99,
+                amount: amount,
               },
             },
           },
           create: {
-            amount: amount + 2.99,
+            amount: amount,
             storeId: id,
             payment: {
               create: {
                 orderId: orderId,
                 storeId: id,
-                amount: amount + 2.99,
+                amount: amount,
               },
             },
           },
@@ -87,7 +93,7 @@ export const approvePaymentByAdmin = async (req: Request, res: Response) => {
         console.log(error);
       }
     } else {
-      return returnJSONError(res, { message: "Already paid" });
+      return returnJSONError(res, { message: "Order already paid out" });
     }
   } else {
     return returnJSONError(res, { message: "Order not delivered" });

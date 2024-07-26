@@ -1,7 +1,7 @@
 {
     "info": {
-        "_postman_id": "3e0883be-eba9-43e6-8918-609c2046c4db",
-        "name": "Rayvvin",
+        "_postman_id": "001d7835-3f92-462d-a818-a058a9b5f787",
+        "name": "Rayvvin with env",
         "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
         "description": ""
     },
@@ -20,11 +20,8 @@
                                 "auth",
                                 "login"
                             ],
-                            "protocol": "https",
                             "host": [
-                                "newrayvinn",
-                                "rapidsuite",
-                                "ng"
+                                "{{host}}"
                             ]
                         },
                         "body": {
@@ -49,11 +46,9 @@
                                 "auth",
                                 "register"
                             ],
-                            "protocol": "http",
                             "host": [
-                                "localhost"
-                            ],
-                            "port": "3000"
+                                "{{host}}"
+                            ]
                         },
                         "body": {
                             "mode": "raw",
@@ -62,7 +57,7 @@
                                     "language": "json"
                                 }
                             },
-                            "raw": "{\n  \"email\":\"testnet041@gmail.com\",\n  \"password\":\"123456\",\n  \"fullname\":\"Teejay\",\n  \"confirmPassword\":\"123456\",\n  \"telephone\":\"09078785538\",\n  \"country\":\"canada\"\n}"
+                            "raw": "{\n  \"email\":\"testnet041@gmail.com\",\n  \"password\":\"password\",\n  \"fullname\":\"Teejay\",\n  \"confirmPassword\":\"password\",\n  \"telephone\":\"07044651989\",\n  \"country\":\"canada\",\n  \"address\":\"Lagos, Nigeria\"\n}"
                         }
                     }
                 },
@@ -90,11 +85,9 @@
                                 "auth",
                                 "verify"
                             ],
-                            "protocol": "http",
                             "host": [
-                                "localhost"
-                            ],
-                            "port": "3000"
+                                "{{host}}"
+                            ]
                         },
                         "body": {
                             "mode": "raw",
@@ -125,11 +118,9 @@
                                 "auth",
                                 "resend"
                             ],
-                            "protocol": "http",
                             "host": [
-                                "localhost"
-                            ],
-                            "port": "3000"
+                                "{{host}}"
+                            ]
                         }
                     }
                 },
@@ -145,11 +136,8 @@
                                 "account",
                                 "status"
                             ],
-                            "protocol": "https",
                             "host": [
-                                "newrayvinn",
-                                "rapidsuite",
-                                "ng"
+                                "{{host}}"
                             ]
                         }
                     }
@@ -165,11 +153,9 @@
                                 "auth",
                                 "logout"
                             ],
-                            "protocol": "http",
                             "host": [
-                                "localhost"
-                            ],
-                            "port": "3000"
+                                "{{host}}"
+                            ]
                         }
                     }
                 },
@@ -185,11 +171,9 @@
                                 "register",
                                 "seller"
                             ],
-                            "protocol": "http",
                             "host": [
-                                "localhost"
-                            ],
-                            "port": "3000"
+                                "{{host}}"
+                            ]
                         },
                         "body": {
                             "mode": "raw",
@@ -213,11 +197,9 @@
                                 "auth",
                                 "google"
                             ],
-                            "protocol": "http",
                             "host": [
-                                "localhost"
-                            ],
-                            "port": "3000"
+                                "{{host}}"
+                            ]
                         }
                     }
                 }
@@ -259,11 +241,9 @@
                                 "api",
                                 "categories"
                             ],
-                            "protocol": "http",
                             "host": [
-                                "localhost"
-                            ],
-                            "port": "3000"
+                                "{{host}}"
+                            ]
                         }
                     }
                 },
@@ -279,11 +259,9 @@
                                 "category",
                                 "clwtj53v100025qqjeg8ics62"
                             ],
-                            "protocol": "http",
                             "host": [
-                                "localhost"
-                            ],
-                            "port": "3000"
+                                "{{host}}"
+                            ]
                         }
                     }
                 },
@@ -321,11 +299,9 @@
                                 "categories",
                                 "all"
                             ],
-                            "protocol": "http",
                             "host": [
-                                "localhost"
-                            ],
-                            "port": "3000"
+                                "{{host}}"
+                            ]
                         }
                     }
                 }
@@ -363,11 +339,8 @@
                                 "store",
                                 "products"
                             ],
-                            "protocol": "https",
                             "host": [
-                                "newrayvinn",
-                                "rapidsuite",
-                                "ng"
+                                "{{host}}"
                             ]
                         }
                     }
@@ -383,11 +356,9 @@
                                 "stores",
                                 "store"
                             ],
-                            "protocol": "http",
                             "host": [
-                                "localhost"
-                            ],
-                            "port": "3000"
+                                "{{host}}"
+                            ]
                         },
                         "body": {
                             "mode": "raw",
@@ -413,11 +384,9 @@
                                 "search",
                                 "dell"
                             ],
-                            "protocol": "http",
                             "host": [
-                                "localhost"
-                            ],
-                            "port": "3000"
+                                "{{host}}"
+                            ]
                         }
                     }
                 },
@@ -433,11 +402,9 @@
                                 "store",
                                 "categories"
                             ],
-                            "protocol": "http",
                             "host": [
-                                "localhost"
-                            ],
-                            "port": "3000"
+                                "{{host}}"
+                            ]
                         }
                     }
                 },
@@ -453,11 +420,9 @@
                                 "store",
                                 "description"
                             ],
-                            "protocol": "http",
                             "host": [
-                                "localhost"
-                            ],
-                            "port": "3000"
+                                "{{host}}"
+                            ]
                         },
                         "body": {
                             "mode": "raw",
@@ -483,11 +448,9 @@
                                 "profile",
                                 "bank"
                             ],
-                            "protocol": "http",
                             "host": [
-                                "localhost"
-                            ],
-                            "port": "3000"
+                                "{{host}}"
+                            ]
                         },
                         "body": {
                             "mode": "raw",
@@ -512,11 +475,9 @@
                                 "store",
                                 "reviews"
                             ],
-                            "protocol": "http",
                             "host": [
-                                "localhost"
-                            ],
-                            "port": "3000"
+                                "{{host}}"
+                            ]
                         }
                     }
                 },
@@ -533,11 +494,9 @@
                                 "products",
                                 "draft"
                             ],
-                            "protocol": "http",
                             "host": [
-                                "localhost"
-                            ],
-                            "port": "3000"
+                                "{{host}}"
+                            ]
                         }
                     }
                 },
@@ -561,11 +520,9 @@
                                 "store",
                                 "orders"
                             ],
-                            "protocol": "http",
                             "host": [
-                                "localhost"
-                            ],
-                            "port": "3000"
+                                "{{host}}"
+                            ]
                         }
                     }
                 },
@@ -583,11 +540,9 @@
                                 "order",
                                 "clyvjclqz0003zy1sdhltgfdu"
                             ],
-                            "protocol": "http",
                             "host": [
-                                "localhost"
-                            ],
-                            "port": "3000"
+                                "{{host}}"
+                            ]
                         },
                         "body": {
                             "mode": "raw",
@@ -612,11 +567,9 @@
                                 "store",
                                 "about"
                             ],
-                            "protocol": "http",
                             "host": [
-                                "localhost"
-                            ],
-                            "port": "3000"
+                                "{{host}}"
+                            ]
                         }
                     }
                 },
@@ -632,11 +585,36 @@
                                 "store",
                                 "transactions"
                             ],
-                            "protocol": "http",
                             "host": [
-                                "localhost"
+                                "{{host}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Update Shipping Fee",
+                    "request": {
+                        "method": "PATCH",
+                        "url": {
+                            "raw": "{{host}}/api/stores/store/shipping-fee",
+                            "path": [
+                                "api",
+                                "stores",
+                                "store",
+                                "shipping-fee"
                             ],
-                            "port": "3000"
+                            "host": [
+                                "{{host}}"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            },
+                            "raw": "{\n  \"fee\":50\n}"
                         }
                     }
                 }
@@ -655,11 +633,9 @@
                                 "api",
                                 "cart"
                             ],
-                            "protocol": "http",
                             "host": [
-                                "localhost"
-                            ],
-                            "port": "3000"
+                                "{{host}}"
+                            ]
                         }
                     }
                 },
@@ -680,11 +656,9 @@
                                 "api",
                                 "cart"
                             ],
-                            "protocol": "http",
                             "host": [
-                                "localhost"
-                            ],
-                            "port": "3000"
+                                "{{host}}"
+                            ]
                         }
                     }
                 },
@@ -698,11 +672,9 @@
                                 "api",
                                 "cart"
                             ],
-                            "protocol": "http",
                             "host": [
-                                "localhost"
-                            ],
-                            "port": "3000"
+                                "{{host}}"
+                            ]
                         },
                         "body": {
                             "mode": "raw",
@@ -730,11 +702,9 @@
                                 "api",
                                 "orders"
                             ],
-                            "protocol": "http",
                             "host": [
-                                "localhost"
-                            ],
-                            "port": "3000"
+                                "{{host}}"
+                            ]
                         }
                     }
                 },
@@ -750,11 +720,9 @@
                                 "order",
                                 "cxkosoawepaoeiw"
                             ],
-                            "protocol": "http",
                             "host": [
-                                "localhost"
-                            ],
-                            "port": "3000"
+                                "{{host}}"
+                            ]
                         }
                     }
                 }
@@ -774,11 +742,9 @@
                                 "stores",
                                 "favourite"
                             ],
-                            "protocol": "http",
                             "host": [
-                                "localhost"
-                            ],
-                            "port": "3000"
+                                "{{host}}"
+                            ]
                         }
                     }
                 },
@@ -793,11 +759,8 @@
                                 "stores",
                                 "all"
                             ],
-                            "protocol": "https",
                             "host": [
-                                "newrayvinn",
-                                "rapidsuite",
-                                "ng"
+                                "{{host}}"
                             ]
                         }
                     }
@@ -815,11 +778,9 @@
                                 "id",
                                 "clxg6pce40000goqspbxwannr"
                             ],
-                            "protocol": "http",
                             "host": [
-                                "localhost"
-                            ],
-                            "port": "3000"
+                                "{{host}}"
+                            ]
                         }
                     }
                 },
@@ -841,11 +802,9 @@
                                 "stores",
                                 "search"
                             ],
-                            "protocol": "http",
                             "host": [
-                                "localhost"
-                            ],
-                            "port": "3000"
+                                "{{host}}"
+                            ]
                         }
                     }
                 },
@@ -860,11 +819,9 @@
                                 "stores",
                                 "favourite"
                             ],
-                            "protocol": "http",
                             "host": [
-                                "localhost"
-                            ],
-                            "port": "3000"
+                                "{{host}}"
+                            ]
                         },
                         "body": {
                             "mode": "raw",
@@ -891,11 +848,9 @@
                                 "clxzbyp0q0001n7p96lu2xg1w",
                                 "categories"
                             ],
-                            "protocol": "http",
                             "host": [
-                                "localhost"
-                            ],
-                            "port": "3000"
+                                "{{host}}"
+                            ]
                         }
                     }
                 },
@@ -913,11 +868,9 @@
                                 "clxz0e5sy0004519exvf5593z",
                                 "products"
                             ],
-                            "protocol": "http",
                             "host": [
-                                "localhost"
-                            ],
-                            "port": "3000"
+                                "{{host}}"
+                            ]
                         }
                     }
                 },
@@ -933,11 +886,9 @@
                                 "favourite",
                                 "clxzo8tld0004bh1anjkhru02"
                             ],
-                            "protocol": "http",
                             "host": [
-                                "localhost"
-                            ],
-                            "port": "3000"
+                                "{{host}}"
+                            ]
                         }
                     }
                 },
@@ -955,11 +906,9 @@
                                 "clxzbyp0q0001n7p96lu2xg1w",
                                 "reviews"
                             ],
-                            "protocol": "http",
                             "host": [
-                                "localhost"
-                            ],
-                            "port": "3000"
+                                "{{host}}"
+                            ]
                         }
                     }
                 }
@@ -980,11 +929,9 @@
                                 "product",
                                 "cly4gnna80001ttwjn55cf93a"
                             ],
-                            "protocol": "http",
                             "host": [
-                                "localhost"
-                            ],
-                            "port": "3000"
+                                "{{host}}"
+                            ]
                         }
                     }
                 },
@@ -999,11 +946,9 @@
                                 "products",
                                 "product"
                             ],
-                            "protocol": "http",
                             "host": [
-                                "localhost"
-                            ],
-                            "port": "3000"
+                                "{{host}}"
+                            ]
                         },
                         "body": {
                             "mode": "formdata",
@@ -1070,11 +1015,9 @@
                                 "products",
                                 "favourite"
                             ],
-                            "protocol": "http",
                             "host": [
-                                "localhost"
-                            ],
-                            "port": "3000"
+                                "{{host}}"
+                            ]
                         },
                         "body": {
                             "mode": "raw",
@@ -1099,11 +1042,9 @@
                                 "favourite",
                                 "cly04oeuj0001ecf0xwdv4813"
                             ],
-                            "protocol": "http",
                             "host": [
-                                "localhost"
-                            ],
-                            "port": "3000"
+                                "{{host}}"
+                            ]
                         }
                     }
                 },
@@ -1118,11 +1059,9 @@
                                 "products",
                                 "favourite"
                             ],
-                            "protocol": "http",
                             "host": [
-                                "localhost"
-                            ],
-                            "port": "3000"
+                                "{{host}}"
+                            ]
                         }
                     }
                 },
@@ -1138,11 +1077,9 @@
                                 "product",
                                 "cly4gnna80001ttwjn55cf93a"
                             ],
-                            "protocol": "http",
                             "host": [
-                                "localhost"
-                            ],
-                            "port": "3000"
+                                "{{host}}"
+                            ]
                         }
                     }
                 },
@@ -1158,11 +1095,9 @@
                                 "product",
                                 "cly4gnna80001ttwjn55cf93a"
                             ],
-                            "protocol": "http",
                             "host": [
-                                "localhost"
-                            ],
-                            "port": "3000"
+                                "{{host}}"
+                            ]
                         },
                         "body": {
                             "mode": "formdata",
@@ -1234,11 +1169,9 @@
                                 "payment",
                                 "checkout"
                             ],
-                            "protocol": "http",
                             "host": [
-                                "localhost"
-                            ],
-                            "port": "3000"
+                                "{{host}}"
+                            ]
                         }
                     }
                 },
@@ -1288,11 +1221,9 @@
                                 "approve-payment",
                                 "clxzbyp0q0001n7p96lu2xg1w"
                             ],
-                            "protocol": "http",
                             "host": [
-                                "localhost"
-                            ],
-                            "port": "3000"
+                                "{{host}}"
+                            ]
                         },
                         "body": {
                             "mode": "raw",

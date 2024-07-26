@@ -901,3 +901,16 @@ export const getIncomeAndTransactionsFromStore = async (
     },
   });
 };
+export const updateDeliveryFee = async (req: Request, res: Response) => {
+  const { fee } = req.body;
+
+  await prisma.store.update({
+    where: {
+      userId: (req.user as RequestUser).id,
+    },
+    data: {
+      shippingFee: fee,
+    },
+  });
+  return returnJSONSuccess(res);
+};

@@ -1,4 +1,4 @@
-import e, { NextFunction, Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { ErrorCode, HttpException } from "./exceptions/root";
 import { InternalException } from "./exceptions/internal-exception";
 import { ZodError } from "zod";
@@ -15,6 +15,7 @@ export const rootErrorHandler = (method: Function) => {
       let exception: HttpException;
       if (error instanceof HttpException) {
         exception = error;
+        return next(exception);
       }
       if (error instanceof ZodError) {
         exception = new UnprocessableEntity(
@@ -22,6 +23,7 @@ export const rootErrorHandler = (method: Function) => {
           ErrorCode.UNPROCESSABLE_ENTITY,
           error.issues.map((err) => ({ field: err.path, message: err.message }))
         );
+        return next(exception);
       }
       if (error instanceof PrismaClientInitializationError) {
         exception = new InternalException(
@@ -29,6 +31,7 @@ export const rootErrorHandler = (method: Function) => {
           ErrorCode.INTERNAL_EXCEPTION,
           error
         );
+        return next(exception);
       }
       const message = createPrismaError(error);
       if (message) {
@@ -38,14 +41,15 @@ export const rootErrorHandler = (method: Function) => {
           ErrorCode.BAD_REQUEST,
           error
         );
+        return next(exception);
       } else {
         exception = new InternalException(
           error?.message ? error.message : "Something went wrong",
           error?.errorCode ? error.errorCode : ErrorCode.INTERNAL_EXCEPTION,
           error
         );
+        return next(exception);
       }
-      next(exception);
     }
   };
 };

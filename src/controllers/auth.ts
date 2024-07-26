@@ -34,6 +34,7 @@ export const register = async (
         telephone: req.body.telephone,
         country: req.body.country,
         password: hashSync(req.body.password, 10),
+        address: req.body.address,
       },
       select: {
         id: true,
@@ -206,9 +207,6 @@ export const registerSeller = async (
     next(new BadRequest("User already exist", ErrorCode.USER_ALREADY_EXIST));
   }
 };
-prisma.user.findMany({
-  select: {},
-});
 export const loginAuthError = (req: Request, res: Response) => {
   let message = req.flash("error");
   res.status(message[1] ? +message[1] : 401).json({

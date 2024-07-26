@@ -88,9 +88,30 @@ export const handlePaymentSuccess = async (req: Request, res: Response) => {
           date_paid: new Date(),
         },
         select: {
+          id: true,
           amount: true,
+          quantity: true,
         },
       });
+      try {
+        await prisma.$transaction(
+          order.quantity.map((q) =>
+            prisma.product.update({
+              where: {
+                id: q.id,
+              },
+              data: {
+                quantity: {
+                  decrement: q.quantity,
+                },
+              },
+            })
+          )
+        );
+      } catch (error) {
+        console.log(error);
+      }
+
       res.redirect(
         `${process.env.CLIENT_URL}/payment-success?amount=${order.amount}`
       );
@@ -111,6 +132,11 @@ const getTotal = async (cart: { id: string; quantity: number }[]) => {
       id: true,
       amount: true,
       storeId: true,
+      store: {
+        select: {
+          shippingFee: true,
+        },
+      },
     },
   });
   const productAmount = products
@@ -122,9 +148,18 @@ const getTotal = async (cart: { id: string; quantity: number }[]) => {
     .reduce((x, y, i, e) => {
       return x + y;
     }, 0);
-  const SHiPPING_FEE =
-    Array.from(new Set(products.map((product) => product.storeId))).length *
-    2.99;
+  const uniqueStores = Array.from(
+    new Set(products.map((product) => product.storeId))
+  );
+  const filteredProducts: any[] = [];
+  products.filter(
+    (product) =>
+      !filteredProducts.find((fp) => fp.storeId === product.storeId) &&
+      filteredProducts.push(product)
+  );
+  const SHiPPING_FEE = filteredProducts
+    .map((product) => product.store.shippingFee)
+    .reduce((x, y) => x + y, 0);
   const amount = productAmount + SHiPPING_FEE;
   return { amount, products };
 };

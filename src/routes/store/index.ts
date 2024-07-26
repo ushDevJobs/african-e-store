@@ -20,6 +20,7 @@ import {
   removeStoreFromFavourite,
   searchForStore,
   searchStoreProducts,
+  updateDeliveryFee,
   updateDeliveryStatusOfOrder,
   updateStoreDescription,
   updateStoreProfile,
@@ -102,6 +103,11 @@ router.patch(
   "/store/profile/bank",
   [sellerRoleCheck, checkStore],
   rootErrorHandler(addBankDetails)
+);
+router.patch(
+  "/store/shipping-fee",
+  [sellerRoleCheck, checkStore],
+  rootErrorHandler(updateDeliveryFee)
 );
 
 router.get(
