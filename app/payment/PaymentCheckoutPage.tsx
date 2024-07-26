@@ -42,9 +42,6 @@ const PaymentCheckoutPage = ({ amount }: { amount: number }) => {
                 .then((data) => {
                     setOrderId(data.data && data.data.orderId);
                     setClientSecret(data.data.clientSecret);
-
-                    // Dispatch the removeProducts action after placing the order successfully
-                    dispatch(removeProducts());
                 });
             runOnce.current++;
         }
@@ -53,6 +50,8 @@ const PaymentCheckoutPage = ({ amount }: { amount: number }) => {
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         setLoading(true);
+        // Dispatch the removeProducts action after placing the order successfully
+        dispatch(removeProducts());
 
         if (!stripe || !elements) {
             return;
@@ -81,6 +80,7 @@ const PaymentCheckoutPage = ({ amount }: { amount: number }) => {
         } else {
             // The payment UI automatically closes with a success animation.
             // Your customer is redirected to your `return_url`.
+          
         }
 
         setLoading(false);
