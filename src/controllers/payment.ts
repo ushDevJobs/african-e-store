@@ -160,6 +160,6 @@ const getTotal = async (cart: { id: string; quantity: number }[]) => {
   const SHiPPING_FEE = filteredProducts
     .map((product) => product.store.shippingFee)
     .reduce((x, y) => x + y, 0);
-  const amount = productAmount + SHiPPING_FEE;
-  return { amount, products };
+  const amount = (productAmount + parseFloat(SHiPPING_FEE)).toFixed(2);
+  return { amount: parseFloat(amount), products };
 };

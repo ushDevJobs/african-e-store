@@ -792,7 +792,14 @@ export const getAboutStore = async (req: Request, res: Response) => {
     where: {
       status: {
         some: {
-          status: "DELIVERED",
+          AND: [
+            {
+              status: "DELIVERED",
+            },
+            {
+              storeId: store.id,
+            },
+          ],
         },
       },
     },
