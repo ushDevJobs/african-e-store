@@ -142,16 +142,16 @@ const getStoreFullDetails = async (id: string, isStoreId = false) => {
       ],
     },
   });
-  const totalRatingByUsers = await prisma.rating.groupBy({
-    where: {
-      orderDelivered: {
-        some: {
-          AND: [{ status: "DELIVERED" }, { storeId: store.id }],
-        },
-      },
-    },
-    by: ["userId"],
-  });
+  // const totalRatingByUsers = await prisma.rating.groupBy({
+  //   where: {
+  //     orderDelivered: {
+  //       some: {
+  //         AND: [{ status: "DELIVERED" }, { storeId: store.id }],
+  //       },
+  //     },
+  //   },
+  //   by: ["userId"],
+  // });
   const feedback = (((avg._sum.rating || 0) / avg._count || 0) * 100) / 5;
   const findRating = (number: number) => {
     const rate = ratings.find((rating) => rating.rating === number);
