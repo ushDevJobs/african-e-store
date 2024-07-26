@@ -11,7 +11,7 @@
     "db": "npx prisma studio --schema=./src/prisma/schema.prisma",
     "prodSync": "npx prisma db push --schema=./src/prisma/schema.prisma",
     "prodGen": "npx prisma generate --schema=./prisma/schema.prisma",
-    "build":"tsc ./"
+    "build":"tsc"
   },
   "keywords": [],
   "author": "",
