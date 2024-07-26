@@ -9,7 +9,7 @@ import {
     WhiteBoxIcon,
     WhiteDeliveredIcon,
     WhiteDispatchIcon,
-} from "../components/SVGs/SVGicons";
+} from "../components/SVGs/SVGicons"; // Added CheckedIcon
 import { StoreOrderResponse } from "../components/models/ISellerStore";
 import { useUpdateDeliveryStatus } from "../api/apiClients";
 import {
@@ -33,6 +33,20 @@ const SellerDeliveryStatus = ({
     const [isUpdating, setIsUpdating] = useState<boolean>(false);
     const [selectedStatuses, setSelectedStatuses] = useState<StatusEnum[]>([]);
 
+    useEffect(() => {
+        if (selectedOrder) {
+            const storedStatuses = localStorage.getItem(
+                `selectedStatuses-${selectedOrder.id}`
+            );
+            if (storedStatuses) {
+                setSelectedStatuses(JSON.parse(storedStatuses));
+            } else {
+                // Default to "Purchased" status
+                setSelectedStatuses([StatusEnum.Pending]);
+            }
+        }
+    }, [selectedOrder]);
+
     async function handleUpdateStatus(
         e: FormEvent<HTMLButtonElement>,
         status: StatusEnum
@@ -50,7 +64,9 @@ const SellerDeliveryStatus = ({
                 data
             );
             setSelectedStatuses((prevStatuses) => {
-                const newStatuses = [...prevStatuses, status];
+                const newStatuses = prevStatuses.includes(status)
+                    ? prevStatuses.filter((s) => s !== status)
+                    : [...prevStatuses, status];
                 localStorage.setItem(
                     `selectedStatuses-${selectedOrder?.id}`,
                     JSON.stringify(newStatuses)
@@ -66,24 +82,6 @@ const SellerDeliveryStatus = ({
 
     const isStatusSelected = (status: StatusEnum) =>
         selectedStatuses.includes(status);
-
-    useEffect(() => {
-        if (selectedOrder) {
-            const savedStatuses = localStorage.getItem(`selectedStatuses-${selectedOrder.id}`);
-            if (savedStatuses) {
-                setSelectedStatuses(JSON.parse(savedStatuses));
-            } else {
-                const statusForStore = selectedOrder.status.find(
-                    (s) => s.storeId === selectedOrder.id
-                );
-                if (statusForStore) {
-                    setSelectedStatuses([StatusEnum.Pending, statusForStore.status]);
-                } else {
-                    setSelectedStatuses([StatusEnum.Pending]);
-                }
-            }
-        }
-    }, [selectedOrder]);
 
     return (
         <ModalWrapper
@@ -113,7 +111,7 @@ const SellerDeliveryStatus = ({
                         <div className="flex items-center gap-5">
                             <button
                                 onClick={(e) => handleUpdateStatus(e, StatusEnum.Pending)}
-                                className={`w-[90px] h-[90px] rounded-full flex items-center justify-center cursor-pointer bg-[#E7E7E7]
+                                className={`w-[90px] h-[90px] rounded-full flex items-center justify-center cursor-pointer bg-[#E7E7E7] disabled:pointer-events-none disabled:opacity-60
                                 ${isStatusSelected(StatusEnum.Pending) && "!bg-[#2C7865]"} hover:bg-[#D9EDBF]`} disabled={isUpdating}
                             >
                                 {isStatusSelected(StatusEnum.Pending) ? (
@@ -136,7 +134,7 @@ const SellerDeliveryStatus = ({
                         <div className="flex items-center gap-5">
                             <button
                                 onClick={(e) => handleUpdateStatus(e, StatusEnum.Dispatched)}
-                                className={`w-[90px] h-[90px] rounded-full flex items-center justify-center cursor-pointer bg-[#E7E7E7]
+                                className={`w-[90px] h-[90px] rounded-full flex items-center justify-center cursor-pointer bg-[#E7E7E7] disabled:pointer-events-none disabled:opacity-60
                                 ${isStatusSelected(StatusEnum.Dispatched) && "!bg-[#2C7865]"}  hover:bg-[#D9EDBF]`}
                                 disabled={isUpdating}
                             >
@@ -159,7 +157,7 @@ const SellerDeliveryStatus = ({
                     <div className="text-start flex flex-col gap-3">
                         <button
                             onClick={(e) => handleUpdateStatus(e, StatusEnum.Delivered)}
-                            className={`w-[90px] h-[90px] rounded-full flex items-center justify-center cursor-pointer bg-[#E7E7E7]
+                            className={`w-[90px] h-[90px] rounded-full flex items-center justify-center cursor-pointer bg-[#E7E7E7] disabled:pointer-events-none disabled:opacity-60
                             ${isStatusSelected(StatusEnum.Delivered) && "!bg-[#2C7865]"} hover:bg-[#D9EDBF]`}
                             disabled={isUpdating}
                         >
