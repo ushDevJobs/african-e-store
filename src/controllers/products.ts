@@ -19,33 +19,23 @@ export const updateProduct = async (req: Request, res: Response) => {
   const { id } = req.params;
   const user = req.user as RequestUser;
   const imagesArray = (req.files as any[]) || [];
-  const store = await prisma.store.findFirstOrThrow({
-    where: { userId: user.id },
-    select: {
-      id: true,
-      products: {
-        where: {
-          id,
-        },
-        select: {
-          images: true,
-        },
-      },
-    },
-  });
-  const images = [
-    ...imagesArray?.map(
-      (image) => extractFullUrlProducts(req) + image.filename
-    ),
-    ...store.products[0].images,
-  ];
+
+  const images = req.files
+    ? {
+        images: [
+          ...imagesArray?.map(
+            (image) => extractFullUrlProducts(req) + image.filename
+          ),
+        ],
+      }
+    : {};
   const validatedProduct = validatecreateProduct.parse(req.body);
   await prisma.product.update({
     where: {
       id,
     },
     data: {
-      coverImage: images.length > 0 ? images[0] : "",
+      coverImage: images.images ? images.images[0] : "",
       itemCondition: validatedProduct.condition,
       name: validatedProduct.name,
       amount: validatedProduct.price,
@@ -53,11 +43,10 @@ export const updateProduct = async (req: Request, res: Response) => {
         req.body.data && req.body.date !== ""
           ? new Date(req.body.date) || null
           : null,
-      images: images,
+      ...images,
       details: validatedProduct.description,
       quantity: validatedProduct.quantity,
       publish: validatedProduct.publish === "false" ? false : true,
-      storeId: store.id,
       categories: {
         connect: [{ id: req.body.category }],
       },
