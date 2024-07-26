@@ -126,7 +126,7 @@ const SellerDeliveryStatus = ({
                         </div>
                         <div className="flex flex-col items-start">
                             <p>Order purchased</p>
-                            <span>23-4-2024</span>
+                            {/* <span>23-4-2024</span> */}
                         </div>
                     </div>
 
@@ -150,7 +150,7 @@ const SellerDeliveryStatus = ({
                         </div>
                         <div className="flex flex-col items-start">
                             <p>Order dispatched</p>
-                            <span>23-4-2024</span>
+                            {/* <span>23-4-2024</span> */}
                         </div>
                     </div>
 
@@ -168,7 +168,7 @@ const SellerDeliveryStatus = ({
                             )}
                         </button>
                         <p>Order delivered</p>
-                        <span>23-4-2024</span>
+                        {/* <span>23-4-2024</span> */}
                     </div>
                 </div>
             </div>
