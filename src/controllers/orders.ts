@@ -61,7 +61,7 @@ export const getOrderById = async (
     try {
       const order = await prisma.order.findFirstOrThrow({
         where: {
-          id: id,
+          AND: [{ id: id }, { payment_status: true }],
         },
         select: {
           id: true,
