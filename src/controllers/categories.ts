@@ -10,6 +10,11 @@ import { RequestUser } from "../types";
 export const getCategories = async (req: Request, res: Response) => {
   const { _limit, _page } = req.query;
   const user = req.user as RequestUser;
+  const settings = await prisma.settings.findFirstOrThrow({
+    select: {
+      profitPercent: true,
+    },
+  });
   const addFavourite = req.isAuthenticated()
     ? {
         favourite: {
@@ -90,7 +95,7 @@ export const getCategories = async (req: Request, res: Response) => {
             select: {
               id: true,
               name: true,
-              modifiedAmount: true,
+              amount: true,
               itemCondition: true,
               salesType: true,
               quantity: true,
@@ -111,37 +116,53 @@ export const getCategories = async (req: Request, res: Response) => {
           },
         }
       : {};
-  const categories = await prisma.category.findMany({
-    skip: page,
-    take: +_limit! || undefined,
-    where: {
-      AND: [
-        {
-          products: {
-            some: {
-              id: {
-                not: undefined,
+  const categories = await prisma
+    .$extends({
+      result: {
+        product: {
+          amount: {
+            needs: { amount: true },
+            compute(product) {
+              const profit = settings.profitPercent;
+              return parseFloat(
+                (product.amount + (product.amount * profit) / 100).toFixed(2)
+              );
+            },
+          },
+        },
+      },
+    })
+    .category.findMany({
+      skip: page,
+      take: +_limit! || undefined,
+      where: {
+        AND: [
+          {
+            products: {
+              some: {
+                id: {
+                  not: undefined,
+                },
               },
             },
           },
-        },
-        {
-          products: {
-            some: {
-              publish: true,
+          {
+            products: {
+              some: {
+                publish: true,
+              },
             },
           },
-        },
-      ],
-    },
-    select: {
-      id: true,
-      name: true,
-      createdAt: true,
-      ...fetchProduct,
-      ...countProducts,
-    },
-  });
+        ],
+      },
+      select: {
+        id: true,
+        name: true,
+        createdAt: true,
+        ...fetchProduct,
+        ...countProducts,
+      },
+    });
 
   return returnJSONSuccess(res, {
     data: categories,
@@ -182,6 +203,11 @@ export const getCategoryById = async (
   const { id } = req.params;
   const { _limit, _page } = req.query;
   const user = req.user as RequestUser;
+  const settings = await prisma.settings.findFirstOrThrow({
+    select: {
+      profitPercent: true,
+    },
+  });
   const addFavourite = req.isAuthenticated()
     ? {
         favourite: {
@@ -199,34 +225,50 @@ export const getCategoryById = async (
   });
 
   if (id) {
-    const categoryWithProducts = await prisma.category.findFirst({
-      where: {
-        id,
-      },
-      skip: validatedPag.data?._page! - 1,
-      take: +_limit! || undefined,
-      select: {
-        id: true,
-        name: true,
-        createdAt: true,
-        products: {
-          where: {
-            publish: true,
-          },
-          select: {
-            id: true,
-            name: true,
-            itemCondition: true,
-            salesType: true,
-            modifiedAmount: true,
-            quantity: true,
-            details: true,
-            coverImage: true,
-            ...addFavourite,
+    const categoryWithProducts = await prisma
+      .$extends({
+        result: {
+          product: {
+            amount: {
+              needs: { amount: true },
+              compute(product) {
+                const profit = settings.profitPercent;
+                return parseFloat(
+                  (product.amount + (product.amount * profit) / 100).toFixed(2)
+                );
+              },
+            },
           },
         },
-      },
-    });
+      })
+      .category.findFirst({
+        where: {
+          id,
+        },
+        skip: validatedPag.data?._page! - 1,
+        take: +_limit! || undefined,
+        select: {
+          id: true,
+          name: true,
+          createdAt: true,
+          products: {
+            where: {
+              publish: true,
+            },
+            select: {
+              id: true,
+              name: true,
+              itemCondition: true,
+              salesType: true,
+              amount: true,
+              quantity: true,
+              details: true,
+              coverImage: true,
+              ...addFavourite,
+            },
+          },
+        },
+      });
     if (!categoryWithProducts) {
       return next(new NotFound("Category not found", ErrorCode.NOT_FOUND));
     }

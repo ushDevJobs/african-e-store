@@ -121,43 +121,64 @@ export const handlePaymentSuccess = async (req: Request, res: Response) => {
   }
 };
 const getTotal = async (cart: { id: string; quantity: number }[]) => {
-  const products = await prisma.product.findMany({
-    where: {
-      id: {
-        in: cart.map((cart: any) => cart.id) as [],
-      },
-    },
+  const settings = await prisma.settings.findFirstOrThrow({
     select: {
-      name: true,
-      id: true,
-      modifiedAmount: true,
-      storeId: true,
-      store: {
-        select: {
-          shippingFee: true,
-        },
-      },
+      profitPercent: true,
     },
   });
-  // const productAmount = products
-  //   .map(
-  //     (product) =>
-  //       product.modifiedAmount *
-  //       (cart.find((cart) => cart.id === product.id)?.quantity || 1)
-  //   )
-  //   .reduce((x, y, i, e) => {
-  //     return x + y;
-  //   }, 0);
+  const products = await prisma
+    .$extends({
+      result: {
+        product: {
+          amount: {
+            needs: { amount: true },
+            compute(product) {
+              const profit = settings.profitPercent;
+              return parseFloat(
+                (product.amount + (product.amount * profit) / 100).toFixed(2)
+              );
+            },
+          },
+        },
+      },
+    })
+    .product.findMany({
+      where: {
+        id: {
+          in: cart.map((cart: any) => cart.id) as [],
+        },
+      },
+      select: {
+        name: true,
+        id: true,
+        amount: true,
+        storeId: true,
+        store: {
+          select: {
+            shippingFee: true,
+          },
+        },
+      },
+    });
+  const productAmount = products
+    .map(
+      (product) =>
+        product.amount *
+        (cart.find((cart) => cart.id === product.id)?.quantity || 1)
+    )
+    .reduce((x, y, i, e) => {
+      return x + y;
+    }, 0);
 
-  // const filteredProducts: any[] = [];
-  // products.filter(
-  //   (product) =>
-  //     !filteredProducts.find((fp) => fp.storeId === product.storeId) &&
-  //     filteredProducts.push(product)
-  // );
-  // const SHiPPING_FEE = filteredProducts
-  //   .map((product) => product.store.shippingFee)
-  //   .reduce((x, y) => x + y, 0);
-  // const amount = (productAmount + parseFloat(SHiPPING_FEE)).toFixed(2);
-  return { amount: parseFloat("0"), products };
+  const filteredProducts: any[] = [];
+  products.filter(
+    (product) =>
+      !filteredProducts.find((fp) => fp.storeId === product.storeId) &&
+      filteredProducts.push(product)
+  );
+  const SHiPPING_FEE = filteredProducts
+    .map((product) => product.store.shippingFee)
+    .reduce((x, y) => x + y, 0);
+  const amount = (productAmount + parseFloat(SHiPPING_FEE)).toFixed(2);
+  return { amount: parseFloat(amount), products };
 };

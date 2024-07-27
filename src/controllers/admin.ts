@@ -6,6 +6,11 @@ import { returnJSONError, returnJSONSuccess } from "../utils/functions";
 export const approvePaymentByAdmin = async (req: Request, res: Response) => {
   const { id } = req.params;
   const { orderId } = req.body;
+  const settings = await prisma.settings.findFirstOrThrow({
+    select: {
+      profitPercent: true,
+    },
+  });
   validateAcceptPayment.parse({ id, orderId });
   const deliveryUpdate = await prisma.orderDeliveryStatus.findFirst({
     where: {
@@ -19,37 +24,55 @@ export const approvePaymentByAdmin = async (req: Request, res: Response) => {
       },
     });
     if (!alreadyPaid) {
-      const order = await prisma.order.findFirst({
-        where: {
-          id: orderId,
-        },
-        select: {
-          products: {
-            where: {
-              storeId: id,
-            },
-            select: {
-              id: true,
-              modifiedAmount: true,
-              store: {
-                select: {
-                  shippingFee: true,
+      const order = await prisma
+        .$extends({
+          result: {
+            product: {
+              amount: {
+                needs: { amount: true },
+                compute(product) {
+                  const profit = settings.profitPercent;
+                  return parseFloat(
+                    (product.amount + (product.amount * profit) / 100).toFixed(
+                      2
+                    )
+                  );
                 },
               },
             },
           },
-          quantity: true,
-        },
-      });
-      const amount = 0;
-      // (order?.products
-      //   .map(
-      //     (product) =>
-      //       product.modifiedAmount *
-      //       (order.quantity.find((q) => q.id === product.id)?.quantity || 0)
-      //   )
-      //   .reduce((x, y) => x + y, 0) || 0) +
-      // (order?.products[0].store.shippingFee || 0);
+        })
+        .order.findFirst({
+          where: {
+            id: orderId,
+          },
+          select: {
+            products: {
+              where: {
+                storeId: id,
+              },
+              select: {
+                id: true,
+                amount: true,
+                store: {
+                  select: {
+                    shippingFee: true,
+                  },
+                },
+              },
+            },
+            quantity: true,
+          },
+        });
+      const amount =
+        (order?.products
+          .map(
+            (product) =>
+              product.amount *
+              (order.quantity.find((q) => q.id === product.id)?.quantity || 0)
+          )
+          .reduce((x, y) => x + y, 0) || 0) +
+        (order?.products[0].store.shippingFee || 0);
       try {
         await prisma.sellerDashboard.upsert({
           where: {

@@ -150,37 +150,58 @@ export const addProduct = async (
 };
 
 export const getProductById = async (req: Request, res: Response) => {
-  const user = req.user as RequestUser;
-  const { id } = req.params;
-  let product = await prisma.product.findFirst({
-    where: {
-      AND: [{ id }, { publish: true }],
-    },
+  const settings = await prisma.settings.findFirstOrThrow({
     select: {
-      id: true,
-      name: true,
-      modifiedAmount: true,
-      itemCondition: true,
-      salesType: true,
-      quantity: true,
-      details: true,
-      coverImage: true,
-      store: true,
-      discount: true,
-      discountPercentage: true,
-      images: true,
-      favourite: {
-        where: {
-          id: user.id,
-        },
-        select: {
-          id: true,
-        },
-      },
-      endBiddingDate: true,
-      returnPolicy: true,
+      profitPercent: true,
     },
   });
+  const user = req.user as RequestUser;
+  const { id } = req.params;
+  let product = await prisma
+    .$extends({
+      result: {
+        product: {
+          amount: {
+            needs: { amount: true },
+            compute(product) {
+              const profit = settings.profitPercent;
+              return parseFloat(
+                (product.amount + (product.amount * profit) / 100).toFixed(2)
+              );
+            },
+          },
+        },
+      },
+    })
+    .product.findFirst({
+      where: {
+        AND: [{ id }, { publish: true }],
+      },
+      select: {
+        id: true,
+        name: true,
+        amount: true,
+        itemCondition: true,
+        salesType: true,
+        quantity: true,
+        details: true,
+        coverImage: true,
+        store: true,
+        discount: true,
+        discountPercentage: true,
+        images: true,
+        favourite: {
+          where: {
+            id: user.id,
+          },
+          select: {
+            id: true,
+          },
+        },
+        endBiddingDate: true,
+        returnPolicy: true,
+      },
+    });
   const rating = await prisma.rating.aggregate({
     where: {
       AND: [
