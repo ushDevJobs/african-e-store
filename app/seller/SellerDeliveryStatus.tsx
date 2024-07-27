@@ -21,12 +21,16 @@ type Props = {
     visibility: boolean;
     setVisibility: React.Dispatch<React.SetStateAction<boolean>>;
     selectedOrder: StoreOrderResponse | undefined;
+    handleFetchOrders({ clearPreviousOrders }: {
+        clearPreviousOrders?: boolean | undefined;
+    }): Promise<void>
 };
 
 const SellerDeliveryStatus = ({
     visibility,
     setVisibility,
     selectedOrder,
+    handleFetchOrders
 }: Props) => {
     const updateStatus = useUpdateDeliveryStatus();
 
@@ -73,6 +77,8 @@ const SellerDeliveryStatus = ({
                 );
                 return newStatuses;
             });
+            setVisibility(false);
+            handleFetchOrders({ clearPreviousOrders: true })
         } catch (err) {
             console.log(err);
         } finally {

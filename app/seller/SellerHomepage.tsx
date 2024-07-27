@@ -115,13 +115,19 @@ const SellerHomePage = (props: Props) => {
                 setIsFetchingDrafts(false);
             });
     }
-    async function handleFetchOrders() {
+    async function handleFetchOrders({ clearPreviousOrders = false }) {
 
         // Show loader
-        setIsFetchingOrders(true);
+
+        if (clearPreviousOrders) {
+            // Clear previous configurations
+            setDrafts(undefined);
+            // Show loader
+            setIsFetchingOrders(true);
+        }
         await fetchOrders()
             .then((response) => {
-                console.log("Response: ", response.data.data);
+                // console.log("Response: ", response.data.data);
                 setOrders(response.data.data);
                 sessionStorage.setItem(StorageKeys.OrderId, JSON.stringify(response.data.data));
             })
@@ -161,7 +167,7 @@ const SellerHomePage = (props: Props) => {
         handleFetchStore();
         handleFetchProducts({ clearPreviousProducts: true });
         handleFetchDrafts({ clearPreviousProducts: true });
-        handleFetchOrders()
+        handleFetchOrders({ clearPreviousOrders: true })
     }, []);
 
     return (
@@ -253,6 +259,7 @@ const SellerHomePage = (props: Props) => {
                         <Orders
                             orders={orders}
                             isFetchingOrders={isFetchingOrders}
+                            handleFetchOrders={handleFetchOrders}
                         />
                     }
 

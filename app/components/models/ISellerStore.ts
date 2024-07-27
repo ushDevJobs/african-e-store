@@ -1,6 +1,3 @@
-import { StatusEnum } from "./IOrderDeliveryStatus";
-import { AddProductRequest } from "./IProduct";
-
 export interface StoreDetails {
   name: string;
   id: string;
@@ -46,10 +43,17 @@ export interface SellerProductsResponse{
   returnPolicy: null;
   location: null;
   storeId: string;
-  category: string;
+  category: Category[];
   shippingDetails: '{}';
   discount: false;
   discountPercentage: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Category {
+  id: string;
+  name: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -95,7 +99,12 @@ export interface Status {
   orderId: string;
   storeId: string;
   createdAt: Date;
-  status: StatusEnum;
+  status: StatusEnums;
+}
+export enum StatusEnums {
+  Pending = 'PENDING',
+  Dispatched = 'DISPATCHED',
+  Delivered = 'DELIVERED',
 }
 
 export interface User {
