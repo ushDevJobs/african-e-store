@@ -241,6 +241,13 @@ model sellerMessage {
   updatedAt DateTime     @updatedAt
 }
 
+model Settings {
+  id            String   @id @unique @default(cuid())
+  profitPercent Float    @default(10)
+  updatedAt     DateTime @updatedAt
+  createdAt     DateTime @default(now())
+}
+
 model verifyUser {
   id        String   @id @default(cuid())
   userId    String   @unique(map: "VerifyUser_userId_key")

@@ -141,13 +141,13 @@ const getTotal = async (cart: { id: string; quantity: number }[]) => {
   });
   const productAmount = products
     .map(
-      (product) =>
-        product.modifiedAmount *
+      async (product) =>
+        (await product.modifiedAmount) *
         (cart.find((cart) => cart.id === product.id)?.quantity || 1)
     )
-    .reduce((x, y, i, e) => {
-      return x + y;
-    }, 0);
+    .reduce(async (x, y) => {
+      return (await x) + (await y);
+    });
 
   const filteredProducts: any[] = [];
   products.filter(
@@ -158,6 +158,6 @@ const getTotal = async (cart: { id: string; quantity: number }[]) => {
   const SHiPPING_FEE = filteredProducts
     .map((product) => product.store.shippingFee)
     .reduce((x, y) => x + y, 0);
-  const amount = (productAmount + parseFloat(SHiPPING_FEE)).toFixed(2);
+  const amount = ((await productAmount) + parseFloat(SHiPPING_FEE)).toFixed(2);
   return { amount: parseFloat(amount), products };
 };
