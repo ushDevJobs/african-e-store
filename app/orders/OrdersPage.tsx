@@ -142,7 +142,7 @@ const OrdersPage = (props: Props) => {
                                     )}
 
                                     {onMobile && (
-                                        <div className='flex flex-col gap-10 max-h-[700px] bg-[#F7FAFA] p-4 rounded-lg overflow-y-auto'>
+                                        <div className='flex flex-col gap-10 max-h-[700px] bg-[#F7FAFA] px-4 pt-5 pb-7 rounded-lg overflow-y-auto'>
                                             {orders.map(order => (
                                                 <div key={order.id} className='flex flex-col'>
                                                     <div className='flex flex-col gap-4'>
