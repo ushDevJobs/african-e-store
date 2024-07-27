@@ -4,17 +4,9 @@ export const prisma = new PrismaClient().$extends({
     product: {
       modifiedAmount: {
         needs: { amount: true },
-        async compute(product) {
-          const settings = await prisma.settings.findFirst({
-            select: {
-              profitPercent: true,
-            },
-          });
+        compute(product) {
           return parseFloat(
-            (
-              product.amount +
-              (product.amount * (settings?.profitPercent || 0)) / 100
-            ).toFixed(2)
+            (product.amount + (product.amount * 10) / 100).toFixed(2)
           );
         },
       },

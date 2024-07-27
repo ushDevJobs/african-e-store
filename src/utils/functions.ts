@@ -1,6 +1,4 @@
 import dotenv from "dotenv";
-import mysql from "mysql";
-dotenv.config({ path: "../.env" });
 
 import { Request, Response } from "express";
 import { MailOptions } from "nodemailer/lib/sendmail-transport";
@@ -115,7 +113,6 @@ export const returnJSONError = (
 };
 export const format_text = (text: string) => text?.trim()?.toLowerCase();
 export const isValidated = (result: any[]) => result.length > 0;
-export const escape = (value: any) => mysql.escape(value);
 export const generateRandomNumbers = (repeatNumber: number = 4) =>
   Math.floor(Math.random() * parseInt("9".repeat(repeatNumber)));
 

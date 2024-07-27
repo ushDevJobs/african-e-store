@@ -41,17 +41,15 @@ export const approvePaymentByAdmin = async (req: Request, res: Response) => {
           quantity: true,
         },
       });
-      let amount = order?.products
-        .map(
-          async (product) =>
-            (await product.modifiedAmount) *
-            (order.quantity.find((q) => q.id === product.id)?.quantity || 0)
-        )
-        .reduce(async (x, y) => {
-          return (await x) + (await y);
-        });
-      let newAmount = (await amount) || 0;
-      newAmount = newAmount + (order?.products[0].store.shippingFee || 0);
+      const amount = 0;
+      // (order?.products
+      //   .map(
+      //     (product) =>
+      //       product.modifiedAmount *
+      //       (order.quantity.find((q) => q.id === product.id)?.quantity || 0)
+      //   )
+      //   .reduce((x, y) => x + y, 0) || 0) +
+      // (order?.products[0].store.shippingFee || 0);
       try {
         await prisma.sellerDashboard.upsert({
           where: {
@@ -68,24 +66,24 @@ export const approvePaymentByAdmin = async (req: Request, res: Response) => {
           },
           update: {
             amount: {
-              increment: newAmount,
+              increment: amount,
             },
             payment: {
               create: {
                 orderId: orderId,
                 storeId: id,
-                amount: newAmount,
+                amount: amount,
               },
             },
           },
           create: {
-            amount: newAmount,
+            amount: amount,
             storeId: id,
             payment: {
               create: {
                 orderId: orderId,
                 storeId: id,
-                amount: newAmount,
+                amount: amount,
               },
             },
           },
