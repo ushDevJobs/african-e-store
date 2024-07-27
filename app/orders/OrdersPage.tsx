@@ -129,11 +129,11 @@ const OrdersPage = (props: Props) => {
                                                         {/* <p>Returns accepted</p> */}
                                                     </div>
                                                     <div className={styles.trackOrder}>
-                                                        <button 
-                                                        onClick={() => {
-                                                            setSelectedOrder(order)
-                                                            setIsDeliveryModalVisible(true)
-                                                        }}
+                                                        <button
+                                                            onClick={() => {
+                                                                setSelectedOrder(order)
+                                                                setIsDeliveryModalVisible(true)
+                                                            }}
                                                         >Track order</button>
                                                     </div>
                                                 </div>
@@ -142,7 +142,7 @@ const OrdersPage = (props: Props) => {
                                     )}
 
                                     {onMobile && (
-                                        <div className='flex flex-col gap-10 max-h-[700px] overflow-y-auto'>
+                                        <div className='flex flex-col gap-10 max-h-[700px] bg-[#F7FAFA] p-4 rounded-lg overflow-y-auto'>
                                             {orders.map(order => (
                                                 <div key={order.id} className='flex flex-col'>
                                                     <div className='flex flex-col gap-4'>
@@ -182,7 +182,7 @@ const OrdersPage = (props: Props) => {
                                                             setSelectedOrder(order)
                                                             setIsDeliveryModalVisible(true)
                                                         }}
-                                                    className='bg-[#2c7865] mt-6 text-white w-full cursor-pointer font-semibold py-3 hover:bg-opacity-60 rounded-full'>Track order</button>
+                                                        className='bg-[#2c7865] mt-6 text-white w-full cursor-pointer font-semibold py-3 hover:bg-opacity-60 rounded-full'>Track order</button>
                                                 </div>
                                             ))}
                                         </div>
