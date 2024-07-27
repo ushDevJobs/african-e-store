@@ -46,6 +46,7 @@ export interface SellerProductsResponse{
   returnPolicy: null;
   location: null;
   storeId: string;
+  category: string;
   shippingDetails: '{}';
   discount: false;
   discountPercentage: number;

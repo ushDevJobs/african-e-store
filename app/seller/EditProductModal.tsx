@@ -1,20 +1,10 @@
-import React, {
-    ChangeEvent,
-    FormEvent,
-    useEffect,
-    useRef,
-    useState,
-} from "react";
+import React, { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 import ModalWrapper from "../components/Modal/ModalWrapper";
 import styles from "../styles/AddProductModal.module.scss";
 import { MateriaSymbolIcon, TimesIcon } from "../components/SVGs/SVGicons";
 import { AddProductRequest } from "../components/models/IProduct";
 import Image from "next/image";
-import {
-    useAddProduct,
-    useFetchCategoriesWithoutProducts,
-    useUpdateProduct,
-} from "../api/apiClients";
+import { useAddProduct, useFetchCategoriesWithoutProducts, useUpdateProduct } from "../api/apiClients";
 import { toast } from "sonner";
 import { createCustomErrorMessages } from "../components/constants/catchError";
 import { DatePicker } from "@fluentui/react";
@@ -30,8 +20,8 @@ type Props = {
     }: {
         clearPreviousProducts?: boolean | undefined;
     }): Promise<void>;
-    selectedProduct: SellerProductsResponse | undefined
-    setSelectedProduct: React.Dispatch<React.SetStateAction<SellerProductsResponse | undefined>>
+    selectedProduct: SellerProductsResponse | undefined;
+    setSelectedProduct: React.Dispatch<React.SetStateAction<SellerProductsResponse | undefined>>;
 };
 
 const EditProductModal = ({
@@ -43,15 +33,9 @@ const EditProductModal = ({
 }: Props) => {
     const updateProduct = useUpdateProduct();
     const fetchCategories = useFetchCategoriesWithoutProducts();
-
     const [formValues, setFormValues] = useState<AddProductRequest>();
+    console.log({ formValues });
     const [isLoading, setIsLoading] = useState(false);
-
-    const [file, setFile] = useState<File>();
-    const [image1, setImage1] = useState<File>();
-    const [image2, setImage2] = useState<File>();
-    const [image3, setImage3] = useState<File>();
-    const [image4, setImage4] = useState<File>();
 
     const [selectedConditions, setSelectedConditions] = useState<string>("");
     const [selectedSalesType, setSelectedSalesType] = useState<string>("");
@@ -61,95 +45,60 @@ const EditProductModal = ({
 
     const [showEndDateField, setShowEndDateField] = useState(false); // State to manage visibility of bidding end date
 
+    const [file, setFile] = useState<File>();
+    const [image1, setImage1] = useState<File>();
+    const [image2, setImage2] = useState<File>();
+    const [image3, setImage3] = useState<File>();
+    const [image4, setImage4] = useState<File>();
+
     const handleFileUpload = (e: any, name: string) => {
+        // Get the selected file
         const selectedFile: File = e.target.files[0];
-        const reader = new FileReader();
 
-        reader.onloadend = () => {
-            const imgURL = reader.result as string;
+        // If a valid file was selected...
+        if (
+            selectedFile.type === "image/jpg" ||
+            selectedFile.type === "image/png" ||
+            selectedFile.type === "image/jpeg" ||
+            selectedFile.type === "image/webp"
+        ) {
 
-            if (name === "imageOne") {
-                setImage1(selectedFile);
-                setFormValues(prev => ({
-                    ...prev,
-                    imageOne: imgURL
-                } as AddProductRequest));
+            // console.log("working", name);
+            // Set the image URL
+            const imgURL = URL.createObjectURL(selectedFile);
+
+            // Update the image URL state
+            if (name === "image") {
+                setFile(selectedFile);
             }
-
+            if (name === "imageOne") {
+                // console.log("nice");
+                setImage1(selectedFile);
+            }
             if (name === "imageTwo") {
                 setImage2(selectedFile);
-                setFormValues(prev => ({
-                    ...prev,
-                    imageTwo: imgURL
-                } as AddProductRequest));
             }
             if (name === "imageThree") {
                 setImage3(selectedFile);
-                setFormValues(prev => ({
-                    ...prev,
-                    imageThree: imgURL
-                } as AddProductRequest));
             }
             if (name === "imageFour") {
                 setImage4(selectedFile);
-                setFormValues(prev => ({
-                    ...prev,
-                    imageFour: imgURL
-                } as AddProductRequest));
             }
-            // Repeat for other images...
-        };
 
-        if (selectedFile) {
-            reader.readAsDataURL(selectedFile);
+            // Optionally, update form values with the URL or the File object itself
+            // Here I'm setting the File object
+            setFormValues({
+                ...(formValues as AddProductRequest),
+                [name]: selectedFile,
+            });
+        }
+        // Otherwise...
+        else {
+
+            // Exit this method
+            return;
         }
     };
-
-    // const handleFileUpload = (e: any, name: string) => {
-    //     // Get the selected file
-    //     const selectedFile: File = e.target.files[0];
-
-    //     // If a valid file was selected...
-    //     if (
-    //         selectedFile.type === "image/jpg" ||
-    //         selectedFile.type === "image/png" ||
-    //         selectedFile.type === "image/jpeg" ||
-    //         selectedFile.type === "image/webp"
-    //     ) {
-    //         // Set the image URL
-    //         const imgURL = URL.createObjectURL(selectedFile);
-
-    //         // Update the image URL state
-    //         if (name === "imageOne") {
-    //             setImage1(selectedFile);
-    //             setFormValues(prev => ({
-    //                 ...prev,
-    //                 imageOne: imgURL
-    //             } as AddProductRequest));
-    //         }
-    //         if (name === "imageTwo") {
-    //             setImage2(selectedFile);
-    //             setFormValues(prev => ({
-    //                 ...prev,
-    //                 imageTwo: imgURL
-    //             } as AddProductRequest));
-    //         }
-    //         if (name === "imageThree") {
-    //             setImage3(selectedFile);
-    //             setFormValues(prev => ({
-    //                 ...prev,
-    //                 imageThree: imgURL
-    //             } as AddProductRequest));
-    //         }
-    //         if (name === "imageFour") {
-    //             setImage4(selectedFile);
-    //             setFormValues(prev => ({
-    //                 ...prev,
-    //                 imageFour: imgURL
-    //             } as AddProductRequest));
-    //         }
-    //     }
-    // }
 
     function onFormValueChange(
         e: ChangeEvent<HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement>,
@@ -157,7 +106,7 @@ const EditProductModal = ({
     ) {
         const { name, value } = e.target;
 
-        if (name == "price") {
+        if (name === "price") {
             setFormValues({
                 ...(formValues as AddProductRequest),
                 price: Number(value),
@@ -165,68 +114,47 @@ const EditProductModal = ({
             return;
         }
 
-        if (name !== "price") {
-            setFormValues({ ...(formValues as AddProductRequest), [name]: value });
-        }
+        setFormValues({ ...(formValues as AddProductRequest), [name]: value });
 
         stateFunction && stateFunction(false);
     }
 
-    /**
-     * Function to handle image file upload and update form values
-     * @param e is the event handler
-     * @returns void
-     */
-
     async function handleFetchAllCategories() {
-        // Start loader
-
         await fetchCategories()
             .then((response) => {
-                // console.log("Response: ", response.data.data);
                 setCategories(response.data.data);
             })
             .catch((error) => {
                 const errorMessage = createCustomErrorMessages(error.response?.data);
                 toast.error(errorMessage);
-            })
-            .finally(() => { });
+            });
     }
 
-    // Implement a function to handle changes in the conditions selection
     function handleProductCondition(e: ChangeEvent<HTMLSelectElement>) {
         const selectedValue = e.target.value;
         setSelectedConditions(selectedValue);
-        setFormValues(
-            (prevFormValues) =>
-            ({
-                ...prevFormValues,
-                conditions: selectedValue,
-            } as AddProductRequest)
-        );
+        setFormValues(prev => ({
+            ...prev,
+            condition: selectedValue,
+        } as AddProductRequest));
     }
-    // Implement a function to handle changes in the sales type selection
+
     function handleCategory(e: ChangeEvent<HTMLSelectElement>) {
         const selectedValue = e.target.value;
         setSelectedCategory(selectedValue);
-        setFormValues(
-            (prevFormValues) =>
-            ({
-                ...prevFormValues,
-                category: selectedValue,
-            } as AddProductRequest)
-        );
+        setFormValues(prev => ({
+            ...prev,
+            category: selectedValue,
+        } as AddProductRequest));
     }
+
     function handleSalesType(e: ChangeEvent<HTMLSelectElement>) {
         const selectedValue = e.target.value;
         setSelectedSalesType(selectedValue);
-        setFormValues(
-            (prevFormValues) =>
-            ({
-                ...prevFormValues,
-                salesType: selectedValue,
-            } as AddProductRequest)
-        );
+        setFormValues(prev => ({
+            ...prev,
+            salesType: selectedValue,
+        } as AddProductRequest));
         setShowEndDateField(selectedValue === "BIDDING");
     }
 
@@ -252,20 +180,16 @@ const EditProductModal = ({
     ];
 
     async function handleUpdateProduct(e: FormEvent<HTMLFormElement | HTMLButtonElement>) {
-        // Prevent deafult actions
         e.preventDefault();
-
-        // Show loader
         setIsLoading(true);
+
         const formData = new FormData();
-        // console.log({ formData });
         formData.append("price", "" + formValues?.price!);
         formData.append("name", formValues?.name as string);
         formData.append("category", formValues?.category as string);
         formData.append("quantity", "" + formValues?.quantity!);
         formData.append("condition", selectedConditions);
         formData.append("salesType", selectedSalesType);
-        //   formData.append("publish", false);
         formData.append("date", formValues?.date as string);
         formData.append("description", formValues?.description as string);
         formData.append("images", formValues?.imageOne as string);
@@ -274,29 +198,20 @@ const EditProductModal = ({
         formData.append("images", formValues?.imageFour as string);
         formData.append("publish", "true");
 
-        // Send request to create product
         await updateProduct(selectedProduct?.id as string, formData)
             .then((response) => {
-                // Log response
-                // console.log({ response });
-
-                // Display success
                 toast.success("Product has been updated successfully.");
                 setVisibility(false);
                 handleFetchProducts({ clearPreviousProducts: true });
             })
             .catch((error) => {
-                // Display error
                 const errorMessage = createCustomErrorMessages(error.response?.data);
                 toast.error(errorMessage);
             })
             .finally(() => {
-                // Close laoder
                 setIsLoading(false);
             });
-
     }
-
 
     useEffect(() => {
         handleFetchAllCategories();
@@ -310,7 +225,7 @@ const EditProductModal = ({
                 quantity: selectedProduct.quantity,
                 condition: selectedProduct.itemCondition,
                 salesType: selectedProduct.salesType,
-                // category: selectedProduct.,
+                category: selectedProduct.category, // Ensure the category field is set
                 date: selectedProduct.endBiddingDate,
                 description: selectedProduct.details,
                 imageOne: selectedProduct.images[0] || "",
@@ -319,17 +234,11 @@ const EditProductModal = ({
                 imageFour: selectedProduct.images[3] || "",
                 publish: selectedProduct.publish,
             } as AddProductRequest);
-            // setImage states if needed
+            setSelectedConditions(selectedProduct.itemCondition);
+            setSelectedSalesType(selectedProduct.salesType);
+            setSelectedCategory(selectedProduct.category); // Ensure the category state is set
         }
-    }, [selectedProduct])
-    useEffect(() => {
-        return () => {
-            URL.revokeObjectURL(formValues?.imageOne as string);
-            URL.revokeObjectURL(formValues?.imageTwo as string);
-            URL.revokeObjectURL(formValues?.imageThree as string);
-            URL.revokeObjectURL(formValues?.imageFour as string);
-        };
-    }, [formValues]);
+    }, [selectedProduct]);
 
     const departureDateRef = useRef<HTMLDivElement>(null);
 
@@ -384,10 +293,9 @@ const EditProductModal = ({
                         </label>
                         <select
                             name="conditions"
-                            value={formValues && formValues.condition}
+                            value={selectedConditions}
                             onChange={(e) => {
                                 handleProductCondition(e);
-                                onFormValueChange(e);
                             }}
                         >
                             <option value="">Select your product condition</option>
@@ -419,11 +327,8 @@ const EditProductModal = ({
                         </label>
                         <select
                             name="salesType"
-                            value={formValues && formValues.salesType}
-                            onChange={(e) => {
-                                handleSalesType(e);
-                                onFormValueChange(e);
-                            }}
+                            value={selectedSalesType}
+                            onChange={handleSalesType}
                         >
                             <option value="">Select your sales type</option>
                             {salesType.map((item, index) => (
@@ -440,11 +345,8 @@ const EditProductModal = ({
                         <select
                             name="category"
                             id=""
-                            value={formValues && formValues.category}
-                            onChange={(e) => {
-                                handleCategory(e);
-                                onFormValueChange(e);
-                            }}
+                            value={selectedCategory}
+                            onChange={handleCategory}
                         >
                             <option value="">Select category</option>
                             {categories.map((category) => (
@@ -473,15 +375,19 @@ const EditProductModal = ({
                                     target: departureDateRef,
                                 }}
                                 placeholder="Select bidding end date"
-                                value={formValues && formValues.date ? new Date(formValues.date) : undefined}
                                 ariaLabel="Select a date"
+                                // value={
+                                //     formValues?.date ? new Date(formValues?.date as string) : undefined
+                                // }
+
+                                value={formValues?.date ? new Date(formValues.date) : undefined}
                                 minDate={new Date()}
+                                formatDate={(date) => moment(date).format("YYYY-MM-DD")}
                                 onSelectDate={(date) => {
-                                    // Set the form value
-                                    setFormValues({
-                                        ...(formValues as AddProductRequest),
-                                        date: `${moment(date).format("YYYY-MM-DD")}`,
-                                    });
+                                    setFormValues((prev) => ({
+                                        ...prev,
+                                        date: date ? moment(date).format("YYYY-MM-DD") : undefined,
+                                    } as AddProductRequest));
                                 }}
                                 onKeyDown={(e) => {
                                     if (e.key === "Tab") {
@@ -498,6 +404,18 @@ const EditProductModal = ({
                         </div>
                     </div>
                 )}
+                <div className={styles.formField}>
+                    <label htmlFor="description">
+                        <span>*</span>Product description
+                    </label>
+                    <textarea
+                        name="description"
+                        id="description"
+                        placeholder="Enter detailed description here"
+                        value={formValues ? formValues.description : ""}
+                        onChange={(e) => onFormValueChange(e)}
+                    />
+                </div>
 
                 <div className={styles.additionalImage}>
                     <label className="mb-3" htmlFor="image">
@@ -506,9 +424,9 @@ const EditProductModal = ({
                     <div className={styles.cardContainer}>
                         <div className={styles.card}>
                             {formValues && formValues.imageOne && (
-                                <span className={`${styles.image} h-[300px]`}>
+                                <span className={`${styles.image}`}>
                                     <Image
-                                        src={formValues.imageOne}
+                                        src={image1 ? URL.createObjectURL(image1) : formValues.imageOne}
                                         alt="product image"
                                         fill
                                     />
@@ -529,9 +447,9 @@ const EditProductModal = ({
                         </div>
                         <div className={styles.card}>
                             {formValues && formValues.imageTwo && (
-                                <span className={`${styles.image} h-[300px]`}>
+                                <span className={`${styles.image}`}>
                                     <Image
-                                        src={formValues.imageTwo}
+                                        src={image2 ? URL.createObjectURL(image2) : formValues.imageTwo}
                                         alt="product image"
                                         fill
                                     />
@@ -552,9 +470,9 @@ const EditProductModal = ({
                         </div>
                         <div className={styles.card}>
                             {formValues && formValues.imageThree && (
-                                <span className={`${styles.image} h-[300px]`}>
+                                <span className={`${styles.image}`}>
                                     <Image
-                                        src={formValues.imageThree}
+                                        src={image3 ? URL.createObjectURL(image3) : formValues.imageThree}
                                         alt="product image"
                                         fill
                                     />
@@ -575,9 +493,9 @@ const EditProductModal = ({
                         </div>
                         <div className={styles.card}>
                             {formValues && formValues.imageFour && (
-                                <span className={`${styles.image} h-[300px]`}>
+                                <span className={`${styles.image}`}>
                                     <Image
-                                        src={formValues.imageFour}
+                                        src={image4 ? URL.createObjectURL(image4) : formValues.imageFour}
                                         alt="product image"
                                         fill
                                     />
@@ -598,18 +516,7 @@ const EditProductModal = ({
                         </div>
                     </div>
                 </div>
-                <div className={styles.formField}>
-                    <label htmlFor="description">
-                        <span>*</span>Product description
-                    </label>
-                    <textarea
-                        name="description"
-                        id="description"
-                        placeholder="Enter detailed description here"
-                        value={formValues ? formValues.description : ""}
-                        onChange={(e) => onFormValueChange(e)}
-                    />
-                </div>
+
                 <div className={styles.btnContainer}>
                     <button
                         type="submit"
@@ -619,12 +526,12 @@ const EditProductModal = ({
                         {isLoading ? "Uploading..." : " Upload Product"}
                     </button>
                     {/* <button
-                        type="submit"
-                        disabled={isLoadingDraft}
-                        onClick={(e) => handleDraftProduct(e)}
-                    >
-                        {isLoadingDraft ? "Saving..." : " Save as Draft"}
-                    </button> */}
+                                         type="submit"
+                                         disabled={isLoadingDraft}
+                                         onClick={(e) => handleDraftProduct(e)}
+                                     >
+                                         {isLoadingDraft ? "Saving..." : " Save as Draft"}
+                                     </button> */}
                 </div>
             </form>
         </ModalWrapper>
