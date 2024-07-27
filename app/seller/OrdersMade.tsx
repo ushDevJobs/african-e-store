@@ -42,7 +42,8 @@ const OrdersMade = ({ visibility, setVisibility, selectedOrder, isFetchingOrders
                                         (selectedOrder.quantity.find((q) => q.id === product.id)
                                             ?.quantity || 0)).toLocaleString()}</h4>
 
-                                    < p className='text-[#828282] text-xs' > Quantity: <span className='text-[#1E1E1E] text-base'>{selectedOrder.quantity.find((q) => q.id === product.id)
+                                    < p className='text-[#828282] text-xs' > Quantity: <span className='text-[#1E1E1E] text-base'>
+                                        {selectedOrder.quantity.find((q) => q.id === product.id)
                                         ?.quantity || 0}</span></p>
                                 </div>
                             </div>

@@ -43,7 +43,7 @@ export interface SellerProductsResponse{
   returnPolicy: null;
   location: null;
   storeId: string;
-  category: Category[];
+  category: string;
   shippingDetails: '{}';
   discount: false;
   discountPercentage: number;

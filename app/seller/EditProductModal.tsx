@@ -266,7 +266,7 @@ const EditProductModal = ({
                 quantity: selectedProduct.quantity,
                 condition: selectedProduct.itemCondition,
                 salesType: selectedProduct.salesType,
-                category: selectedProduct.category && selectedProduct.category[0].name,
+                category: selectedProduct.category && selectedProduct.category,
                 date: selectedProduct.endBiddingDate,
                 description: selectedProduct.details,
                 imageOne: selectedProduct.images[0] || "",
@@ -277,7 +277,7 @@ const EditProductModal = ({
             } as AddProductRequest);
             setSelectedConditions(selectedProduct.itemCondition);
             setSelectedSalesType(selectedProduct.salesType);
-            setSelectedCategory(selectedProduct.category && selectedProduct.category[0].name); // Ensure the category state is set
+            setSelectedCategory(selectedProduct.category && selectedProduct.category); // Ensure the category state is set
         }
     }, [selectedProduct]);
 

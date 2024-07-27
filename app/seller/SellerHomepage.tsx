@@ -121,7 +121,7 @@ const SellerHomePage = (props: Props) => {
 
         if (clearPreviousOrders) {
             // Clear previous configurations
-            setDrafts(undefined);
+            setOrders(undefined);
             // Show loader
             setIsFetchingOrders(true);
         }
@@ -129,7 +129,6 @@ const SellerHomePage = (props: Props) => {
             .then((response) => {
                 // console.log("Response: ", response.data.data);
                 setOrders(response.data.data);
-                sessionStorage.setItem(StorageKeys.OrderId, JSON.stringify(response.data.data));
             })
             .catch((error) => {
                 const errorMessage = createCustomErrorMessages(error.response?.data)

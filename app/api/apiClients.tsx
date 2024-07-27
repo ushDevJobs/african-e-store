@@ -409,6 +409,18 @@ export function useFetchFavoriteStores() {
     return fetchFavoriteStores;
 }
 
+export function useFetchUserOrders() {
+    async function fetchUserOrders() {
+        // Fire the request
+        const response = await API.get(ApiRoutes.FetchUserOrders);
+
+        // Return the response
+        return response;
+    }
+
+    return fetchUserOrders;
+}
+
 // Api call to fetch favorite products
 export function useFetchFavoriteProducts() {
     async function fetchFavoriteProducts() {
