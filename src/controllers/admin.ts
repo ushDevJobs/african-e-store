@@ -30,7 +30,7 @@ export const approvePaymentByAdmin = async (req: Request, res: Response) => {
             },
             select: {
               id: true,
-              amount: true,
+              modifiedAmount: true,
               store: {
                 select: {
                   shippingFee: true,
@@ -45,7 +45,7 @@ export const approvePaymentByAdmin = async (req: Request, res: Response) => {
         (order?.products
           .map(
             (product) =>
-              product.amount *
+              product.modifiedAmount *
               (order.quantity.find((q) => q.id === product.id)?.quantity || 0)
           )
           .reduce((x, y) => x + y, 0) || 0) +

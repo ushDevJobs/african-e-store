@@ -334,6 +334,7 @@ export const getStoreProducts = async (
           coverImage: true,
           images: true,
           publish: true,
+          categories: true,
         },
       },
     },

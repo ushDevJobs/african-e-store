@@ -130,7 +130,7 @@ const getTotal = async (cart: { id: string; quantity: number }[]) => {
     select: {
       name: true,
       id: true,
-      amount: true,
+      modifiedAmount: true,
       storeId: true,
       store: {
         select: {
@@ -142,15 +142,13 @@ const getTotal = async (cart: { id: string; quantity: number }[]) => {
   const productAmount = products
     .map(
       (product) =>
-        product.amount *
+        product.modifiedAmount *
         (cart.find((cart) => cart.id === product.id)?.quantity || 1)
     )
     .reduce((x, y, i, e) => {
       return x + y;
     }, 0);
-  const uniqueStores = Array.from(
-    new Set(products.map((product) => product.storeId))
-  );
+
   const filteredProducts: any[] = [];
   products.filter(
     (product) =>

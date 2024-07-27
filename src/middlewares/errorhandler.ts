@@ -5,8 +5,7 @@ import { HttpException } from "../exceptions/root";
 export const errorHandler = (
   err: HttpException,
   req: Request,
-  res: Response,
-  next: NextFunction
+  res: Response
 ) => {
   const status = typeof err.statusCode === "number" ? err.statusCode : 500;
   logger.error(err.message, { stack: err.stack });

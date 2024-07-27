@@ -17,25 +17,53 @@ import { Prisma } from "@prisma/client";
 
 export const updateProduct = async (req: Request, res: Response) => {
   const { id } = req.params;
-  const user = req.user as RequestUser;
   const imagesArray = (req.files as any[]) || [];
-
-  const images = req.files
-    ? {
-        images: [
-          ...imagesArray?.map(
-            (image) => extractFullUrlProducts(req) + image.filename
-          ),
-        ],
+  const images = [
+    ...imagesArray?.map(
+      (image) => extractFullUrlProducts(req) + image.filename
+    ),
+  ];
+  let newImageArray: string[] | [] = [];
+  const imagesIndex: { index: number; name: string }[] = JSON.parse(
+    req.body.imagesIndex
+  );
+  if (imagesIndex.length > 0) {
+    imagesIndex.map(
+      (index) =>
+        (newImageArray[index.index] =
+          images.find((i: string) => i.includes(index.name)) || "")
+    );
+    let availableIndex = newImageArray.map((img, i) => i);
+    const allNumbers = [0, 1, 2, 3];
+    availableIndex.map((i) => {
+      if (allNumbers.includes(i)) {
+        allNumbers.splice(allNumbers.indexOf(i), 1);
       }
-    : {};
+    });
+    allNumbers.map(
+      (index, i) =>
+        (newImageArray[index] = Array.isArray(req.body.images)
+          ? req.body.images[i]
+          : req.body.images)
+    );
+  } else {
+    newImageArray = req.body.images;
+  }
   const validatedProduct = validatecreateProduct.parse(req.body);
-  await prisma.product.update({
+  const categ = await prisma.product.findFirst({
     where: {
       id,
     },
+    select: {
+      categories: true,
+    },
+  });
+  await prisma.product.update({
+    where: {
+      id: id,
+    },
     data: {
-      coverImage: images.images ? images.images[0] : "",
+      coverImage: newImageArray[0],
       itemCondition: validatedProduct.condition,
       name: validatedProduct.name,
       amount: validatedProduct.price,
@@ -43,11 +71,12 @@ export const updateProduct = async (req: Request, res: Response) => {
         req.body.data && req.body.date !== ""
           ? new Date(req.body.date) || null
           : null,
-      ...images,
       details: validatedProduct.description,
+      salesType: req.body.salesType,
       quantity: validatedProduct.quantity,
       publish: validatedProduct.publish === "false" ? false : true,
       categories: {
+        disconnect: categ?.categories.map((cat) => ({ id: cat.id })),
         connect: [{ id: req.body.category }],
       },
     },
@@ -130,9 +159,9 @@ export const getProductById = async (req: Request, res: Response) => {
     select: {
       id: true,
       name: true,
+      modifiedAmount: true,
       itemCondition: true,
       salesType: true,
-      amount: true,
       quantity: true,
       details: true,
       coverImage: true,
