@@ -28,7 +28,7 @@ export interface SellerStoreResponse extends ProfileRequest {
   totalItemSold: number;
 }
 
-export interface SellerProductsResponse{
+export interface SellerProductsResponse {
   id: string;
   name: string;
   itemCondition: string;
@@ -43,12 +43,13 @@ export interface SellerProductsResponse{
   returnPolicy: null;
   location: null;
   storeId: string;
-  category: string;
-  shippingDetails: '{}';
+  category: any;
+  shippingDetails: "{}";
   discount: false;
   discountPercentage: number;
   createdAt: string;
   updatedAt: string;
+  categories: any;
 }
 
 export interface Category {
@@ -102,9 +103,9 @@ export interface Status {
   status: StatusEnums;
 }
 export enum StatusEnums {
-  Pending = 'PENDING',
-  Dispatched = 'DISPATCHED',
-  Delivered = 'DELIVERED',
+  Pending = "PENDING",
+  Dispatched = "DISPATCHED",
+  Delivered = "DELIVERED",
 }
 
 export interface User {
