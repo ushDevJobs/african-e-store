@@ -148,7 +148,7 @@ const LoginPage = (props: Props) => {
       className={styles.formFieldContainer}
       onSubmit={(e) => handleFormSubmission(e)}
     >
-      <h2>Sign in to buy </h2>
+      <h2>Sign in to Rayvvin </h2>
 
       <div className={styles.fieldContainer}>
         <div className={styles.formField}>
