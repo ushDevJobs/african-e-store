@@ -335,6 +335,7 @@ export const getStoreProducts = async (
           images: true,
           publish: true,
           categories: true,
+          endBiddingDate: true,
         },
       },
     },

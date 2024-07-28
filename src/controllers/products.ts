@@ -31,7 +31,7 @@ export const updateProduct = async (req: Request, res: Response) => {
     imagesIndex.map(
       (index) =>
         (newImageArray[index.index] =
-          images.find((i: string) => i.includes(index.name)) || "")
+          images.find((i) => i.endsWith(index.name.replace(/ /g, "_"))) || "")
     );
     let availableIndex = newImageArray.map((img, i) => i);
     const allNumbers = [0, 1, 2, 3];
@@ -72,6 +72,7 @@ export const updateProduct = async (req: Request, res: Response) => {
           ? new Date(req.body.date) || null
           : null,
       details: validatedProduct.description,
+      images: newImageArray,
       salesType: req.body.salesType,
       quantity: validatedProduct.quantity,
       publish: validatedProduct.publish === "false" ? false : true,
