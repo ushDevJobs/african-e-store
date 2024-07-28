@@ -5,6 +5,7 @@ export interface RegisterBuyerRequest {
   confirmPassword: string;
   telephone: string;
   country: string;
+  address: string;
 }
 export interface RegisterBuyerResponse {
   status: boolean;

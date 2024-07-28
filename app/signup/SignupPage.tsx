@@ -24,6 +24,7 @@ const SignupPage = (props: Props) => {
     const [fullNameErrorMsg, setFullNameErrorMsg] = useState<string | boolean>(false);
     const [emailAddressErrorMsg, setEmailAddressErrorMsg] = useState<string | boolean>(false);
     const [phoneErrorMsg, setPhoneErrorMsg] = useState<string | boolean>(false);
+    const [addressErrorMsg, setAddressErrorMsg] = useState<string | boolean>(false);
     const [passwordErrorMsg, setPasswordErrorMsg] = useState<string | boolean>(false);
     const [countryErrorMsg, setCountryErrorMsg] = useState<string | boolean>(false);
     const [cofirmPasswordErrorMsg, setCofirmPasswordErrorMsg] = useState<string | boolean>(false);
@@ -64,6 +65,7 @@ const SignupPage = (props: Props) => {
             formValues.password.length >= 8 &&
             formValues.confirmPassword &&
             formValues.telephone &&
+            formValues.address &&
             checkboxChecked
         ) {
             return true;
@@ -89,6 +91,11 @@ const SignupPage = (props: Props) => {
                 setPhoneErrorMsg(true);
             } else {
                 setPhoneErrorMsg(false);
+            }
+            if (!formValues?.address) {
+                setAddressErrorMsg(true);
+            } else {
+                setAddressErrorMsg(false);
             }
             if (!formValues?.password) {
                 setPasswordErrorMsg('Please enter password');
@@ -288,6 +295,23 @@ const SignupPage = (props: Props) => {
                             </span>
                         )}
                     </div>
+                </div>
+
+                <div className={styles.formField}>
+                    <label htmlFor="address"><span>*</span>Address</label>
+                    <input
+                        type="address"
+                        name="address"
+                        id="address"
+                        placeholder='Please fill in address'
+                        value={formValues?.address}
+                        onChange={(e) => onformValueChange(e, setAddressErrorMsg)}
+                    />
+                    {addressErrorMsg && (
+                        <span className={styles.errorMsg}>
+                            Please enter your address
+                        </span>
+                    )}
                 </div>
 
                 {/* <div className={styles.acknowledge}>
