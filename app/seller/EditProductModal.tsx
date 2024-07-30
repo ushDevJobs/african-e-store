@@ -424,10 +424,6 @@ const EditProductModal = ({
                                 }}
                                 placeholder="Select bidding end date"
                                 ariaLabel="Select a date"
-                                // value={
-                                //     formValues?.date ? new Date(formValues?.date as string) : undefined
-                                // }
-
                                 value={formValues?.date ? new Date(formValues.date) : undefined}
                                 minDate={new Date()}
                                 formatDate={(date) => moment(date).format("YYYY-MM-DD")}
