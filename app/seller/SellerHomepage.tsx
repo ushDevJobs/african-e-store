@@ -170,7 +170,7 @@ const SellerHomePage = (props: Props) => {
     }, []);
 
     return (
-        <div className={styles.main}>
+        <div className={`${styles.main} pt-24`}>
             <SellerPageStoreRating
                 selectedStore={selectedStore}
                 setSelectedStore={setSelectedStore}
