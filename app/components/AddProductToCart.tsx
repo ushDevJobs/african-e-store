@@ -50,9 +50,9 @@ const AddProductToCart = ({ product, isFetchingProduct, handleAddProductToFavori
 
     const [mainImage, setMainImage] = useState(imagesUrls[0]);
     // console.log({ mainImage })
-    useEffect(() => {
-        fetchAccountStatus();
-    }, []);
+    // useEffect(() => {
+    //     fetchAccountStatus();
+    // }, []);
 
     return (
         <>
@@ -191,8 +191,21 @@ const AddProductToCart = ({ product, isFetchingProduct, handleAddProductToFavori
                             </div>
                             {onMobile && (
                                 <div className={`${styles.bid} mt-4`}>
-                                    <p>Estimated between Tue, Jun 18 and Tue, Jul 16 to 502001 Please note the delivery estimate is greater than 38 business days. Seller ships within 1 day after receiving cleared payment. <br /><br />
-                                        <span className='text-[#FD6A02] text-base'>7 Bids at US $168 </span>(Bidding ends on 27th May 2024) <button onClick={() => setIsPlaceABidVisible(true)}>Place Bid</button></p>
+                                    <p>
+                                        Please note the delivery estimate is greater than 10 business days.
+                                        Seller ships within 1 day after receiving cleared payment. <br /><br />
+                                        {product.endBiddingDate && (
+                                            <span className='text-[#FD6A02] text-base'>
+                                                7 Bids at &pound;168
+                                            </span>
+                                        )}
+                                        {product.endBiddingDate && (
+                                            <>
+                                                (Bidding ends on {moment(product.endBiddingDate).format('DD-MM-YYYY')})
+                                                <button onClick={() => setIsPlaceABidVisible(true)}>Place Bid</button>
+                                            </>
+                                        )}
+                                    </p>
                                     <Link href={'/contact-seller'}><button className='mt-1'>Contact seller</button></Link>
                                 </div>
                             )}

@@ -27,6 +27,7 @@ const SingleProductPage = ({ params }: Props) => {
     console.log({ product })
     const addProductToFavorite = useAddProductsToFavorite();
     const removeProductFromFavorite = useRemoveProductFromFavorite()
+    const { accountStatus, fetchAccountStatus } = useAccountStatus();
 
     async function handleFetchProduct() {
 
@@ -40,7 +41,8 @@ const SingleProductPage = ({ params }: Props) => {
             })
             .catch((error) => {
                 const errorMessage = createCustomErrorMessages(error.response?.data)
-                toast.error(errorMessage);
+                // toast.error(errorMessage);
+                console.log(errorMessage);
             })
             .finally(() => {
                 setIsFetchingProduct(false);
@@ -99,13 +101,12 @@ const SingleProductPage = ({ params }: Props) => {
         handleFetchProduct();
     }, []);
 
-    // useEffect(() => {
-    //     // Check if accountStatus changes and is falsy (not logged in)
-    //     if (router && !accountStatus?.accountType) {
-    //         // Redirect to login page immediately if not logged in
-    //         router.push(`/login?id=${productId}`);
-    //     }
-    // }, [accountStatus, router.refresh()]);
+    useEffect(() => {
+        if (accountStatus === null) {
+            router.push(`/login?redirect=/products/${productId}`);
+        }
+    }, [accountStatus, productId]);
+
 
     return (
         <div className={styles.main}>
