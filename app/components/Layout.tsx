@@ -133,7 +133,7 @@ const Layout: FunctionComponent<LayoutProps> = ({ children }): ReactElement => {
                                     separator={<span>&gt;</span>}
                                     activeClasses='text-[#2c7865]'
                                     containerClasses='flex py-5 bg-white'
-                                    listClasses='hover:underline mx-2 font-bold'
+                                    listClasses='hover:underline mx-1 md:mx-2 font-bold'
                                     capitalizeLinks
                                 />}
                             {children}

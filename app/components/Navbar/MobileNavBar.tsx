@@ -142,11 +142,30 @@ const MobileNavBar = ({ navIsOpen, setNavIsOpen, isDropdownOpen,
                         )}
 
                         {isLoggedIn &&
-                            <Link href="/cart" onClick={() => setNavIsOpen(false)}>
-                                <li className={pathname == "/cart" ? styles.active : ""}>
-                                    My cart {cartItems.length > 0 && <>({cartItems.length})</>}
-                                </li>
-                            </Link>
+                            <>
+                                <Link href="/orders" onClick={() => setNavIsOpen(false)}>
+                                    <li className={pathname == "/orders" ? styles.active : ""}>
+                                        Orders
+                                    </li>
+                                </Link>
+
+                                <Link href="/saved-items" onClick={() => setNavIsOpen(false)}>
+                                    <li className={pathname == "/saved-items" ? styles.active : ""}>
+                                       Saved Items
+                                    </li>
+                                </Link>
+                                <Link href="/saved-store" onClick={() => setNavIsOpen(false)}>
+                                    <li className={pathname == "/saved-store" ? styles.active : ""}>
+                                       Saved Store
+                                    </li>
+                                </Link>
+
+                                <Link href="/cart" onClick={() => setNavIsOpen(false)}>
+                                    <li className={pathname == "/cart" ? styles.active : ""}>
+                                        My cart {cartItems.length > 0 && <>({cartItems.length})</>}
+                                    </li>
+                                </Link>
+                            </>
                         }
 
                         {isLoggedIn && (

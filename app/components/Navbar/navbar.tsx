@@ -17,6 +17,7 @@ import { StorageKeys } from '../constants/StorageKeys';
 import { RootState } from '@/app/redux/store';
 import { useSelector } from 'react-redux';
 import MobileNavBar from './MobileNavBar';
+import useOuterClick from '../hooks/useOuterClick';
 
 type Props = {}
 
@@ -121,13 +122,25 @@ const Navbar = (props: Props) => {
 
         // Run this effect only when the router is ready, which means: when the page is loaded
     }, [router]);
+
+    const userDropdownRef = useRef<HTMLDivElement>(null);
+    useOuterClick(userDropdownRef, setIsLoginDropdownOpen);
+    const catDropdownRef = useRef<HTMLUListElement>(null);
+    useOuterClick(catDropdownRef, setIsCategoryDropdownOpen);
     return (
         <div className={`${styles.navbarContainer} ${scrolled ? styles.scrolled : ''}`}>
             {onDesktop && (
                 <div className={styles.navContent}>
-                    <Link href='/' className={styles.logo}>
-                        <Image src={images.logo} alt='rayvvin logo' />
-                    </Link>
+                    {!isSellerLoggedIn &&
+                        <Link href='/' className={styles.logo}>
+                            <Image src={images.logo} alt='rayvvin logo' />
+                        </Link>
+                    }
+                    {!isLoggedIn &&
+                        <Link href='/seller' className={styles.logo}>
+                            <Image src={images.logo} alt='rayvvin logo' />
+                        </Link>
+                    }
                     <ul className={styles.links}>
                         {
                             !isSellerLoggedIn &&
@@ -150,7 +163,7 @@ const Navbar = (props: Props) => {
                                 <li ref={categoryDropdownRef}
                                     onClick={() => setIsCategoryDropdownOpen(!isCategoryDropdownOpen)}>Categories <DownArrowIcon /></li>
                                 {isCategoryDropdownOpen && (
-                                    <ul className={styles.dropdownContainer}>
+                                    <ul className={styles.dropdownContainer} ref={catDropdownRef}>
                                         <div className={styles.lhs}>
                                             {retrievedCategories?.slice(0, 6).map((category) => (
                                                 <div className={styles.category} key={category.id}>
@@ -207,7 +220,7 @@ const Navbar = (props: Props) => {
                                 </div>
                                 {
                                     isLoginDropdownOpen && (
-                                        <div className={`${styles.loginDropdownContainer} shadow-lg`}>
+                                        <div className={`${styles.loginDropdownContainer} shadow-lg`} ref={userDropdownRef}>
                                             <Link href={'/orders'} onClick={() => setIsLoginDropdownOpen(false)}>
                                                 My orders
                                             </Link>
