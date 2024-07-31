@@ -68,7 +68,7 @@ export const updateProduct = async (req: Request, res: Response) => {
       name: validatedProduct.name,
       amount: validatedProduct.price,
       endBiddingDate:
-        req.body.data && req.body.date !== ""
+        req.body.date && req.body.date !== ""
           ? new Date(req.body.date) || null
           : null,
       details: validatedProduct.description,
@@ -112,7 +112,7 @@ export const addProduct = async (
         name: validatedProduct.name,
         amount: validatedProduct.price,
         endBiddingDate:
-          req.body.data && req.body.date !== ""
+          req.body.date && req.body.date !== ""
             ? new Date(req.body.date) || null
             : null,
         images: images as Prisma.JsonArray,

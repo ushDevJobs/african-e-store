@@ -8,17 +8,19 @@ import {
   PrismaClientKnownRequestError,
   PrismaClientValidationError,
 } from "@prisma/client/runtime/library";
-// import { SendMail, cash, people, settings, tasks } from "../types";
 export const createPrismaError = (error: Error) => {
   if (error instanceof PrismaClientKnownRequestError) {
     let errorMessage;
     switch (error.code) {
       case "P2002":
-        errorMessage = "Duplicate data";
-        console.log(error.message);
+        errorMessage = `Duplicate data\n ${
+          process.env.NODE_ENV !== "production" && error.message
+        } `;
         break;
       case "P2025":
-        errorMessage = "Record not found";
+        errorMessage = `Record not found\n ${
+          process.env.NODE_ENV !== "production" && error.message
+        } `;
         break;
       default:
         errorMessage = error.message;
@@ -26,7 +28,9 @@ export const createPrismaError = (error: Error) => {
     return errorMessage;
   }
   if (error instanceof PrismaClientValidationError) {
-    return "Invalid Data Sent";
+    return `Invalid Data Sent\n ${
+      process.env.NODE_ENV !== "production" && error.message
+    } `;
   }
   return null;
 };
@@ -47,8 +51,8 @@ export const extractFullUrlProducts = (req: Request) => {
 export const extractFullUrlStore = (req: Request) => {
   return `${req.protocol}://${req["headers"].host}/images/store/`;
 };
-export const extractFullUrlUer = (req: Request) => {
-  return `${req.protocol}://${req["headers"].host}/images/store/`;
+export const extractFullUrlUser = (req: Request) => {
+  return `${req.protocol}://${req["headers"].host}/images/user/`;
 };
 const transporter: Transporter = nodemailer.createTransport({
   service: "gmail",

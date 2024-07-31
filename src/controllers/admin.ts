@@ -6,11 +6,6 @@ import { returnJSONError, returnJSONSuccess } from "../utils/functions";
 export const approvePaymentByAdmin = async (req: Request, res: Response) => {
   const { id } = req.params;
   const { orderId } = req.body;
-  const settings = await prisma.settings.findFirstOrThrow({
-    select: {
-      profitPercent: true,
-    },
-  });
   validateAcceptPayment.parse({ id, orderId });
   const deliveryUpdate = await prisma.orderDeliveryStatus.findFirst({
     where: {

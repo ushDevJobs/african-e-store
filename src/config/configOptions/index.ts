@@ -7,7 +7,7 @@ import multer from "multer";
 import { resolve } from "path";
 const MysqlStore = require("express-mysql-session")(session);
 export const corsConfig: CorsOptions = {
-  origin: [process.env.CLIENT_URL as string],
+  origin: [process.env.CLIENT_URL as string, "http://localhost:2500"],
   credentials: true,
 };
 

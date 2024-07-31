@@ -17,21 +17,21 @@ import logger from "./utils/logger";
 import passport from "passport";
 import { initializePassport } from "./config/passport.config";
 import flash from "express-flash";
+import next from "next";
 import path from "path";
 
 // express middleware
-process.on("uncaughtException", (error) => {
-  if (error.name === "PrismaClientInitializationError") {
-    logger.error("Failed to connect to database");
-  } else {
-    logger.error(error.message, { name: error.name, stack: error.stack });
-  }
-  process.exit(1);
-});
 app.set("trust proxy", 1);
 app.use(cors(corsConfig));
 app.use(express.json());
-app.use(helmet());
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", "'unsafe-inline'"], // modify as needed
+    },
+  })
+);
 app.use(compression());
 app.use(flash());
 app.use(sessionMiddleware);
@@ -42,5 +42,13 @@ app.use(passport.session());
 // images route
 app.use("/images", express.static(path.join(__dirname, "images")));
 app.use("/api", router);
+if (process.env.NODE_ENV === "development") {
+  const nextApp = next({ dev: false });
+  nextApp.prepare().then(() => {
+    app.all("*", (req, res) => {
+      return nextApp.getRequestHandler()(req, res);
+    });
+  });
+}
 app.use(errorHandler);
 server.listen(PORT, () => logger.info(`App Live`));
