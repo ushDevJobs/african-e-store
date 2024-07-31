@@ -14,14 +14,16 @@ import DraftSection from './DraftSection';
 import FeedBack from './FeedBack';
 import Orders from './Orders';
 import { StorageKeys } from '../components/constants/StorageKeys';
+import DeliveryFeeModal from '../components/Modal/DeliveryFeeModal';
 type Props = {};
 
 enum TabIndex {
     Shop = '1',
     Orders = '2',
     About = '3',
-    Draft = '4',
-    Feedback = '5',
+    Fees = '4',
+    Draft = '5',
+    Feedback = '6',
 }
 
 const SellerHomePage = (props: Props) => {
@@ -34,6 +36,7 @@ const SellerHomePage = (props: Props) => {
 
     const [activeTab, setActiveTab] = useState<TabIndex>(TabIndex.Shop);
     const [isAddProductModalVisible, setIsAddProductModalVisible] = useState(false);
+    const [isDeliveryFeeModalVisible, setIsDeliveryFeeModalVisible] = useState(false);
     const windowRes = useResponsiveness();
     const isMobile = windowRes.width && windowRes.width < 768;
     const onMobile = typeof isMobile == 'boolean' && isMobile;
@@ -184,6 +187,11 @@ const SellerHomePage = (props: Props) => {
                 handleFetchProducts={handleFetchProducts}
             />
 
+            <DeliveryFeeModal
+                visibility={isDeliveryFeeModalVisible}
+                setVisibility={setIsDeliveryFeeModalVisible}
+            />
+
             {onMobile &&
                 activeTab === TabIndex.Shop &&
                 <div
@@ -224,6 +232,15 @@ const SellerHomePage = (props: Props) => {
                             className={activeTab === TabIndex.About ? styles.active : ''}
                         >
                             About my store
+                        </span>
+                        <span
+                            onClick={() => {
+                                setActiveTab(TabIndex.Fees)
+                                setIsDeliveryFeeModalVisible(true)
+                            }}
+                            className={activeTab === TabIndex.Fees ? styles.active : ''}
+                        >
+                            Fees
                         </span>
                         <span
                             onClick={() => setActiveTab(TabIndex.Draft)}

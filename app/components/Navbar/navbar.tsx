@@ -131,16 +131,10 @@ const Navbar = (props: Props) => {
         <div className={`${styles.navbarContainer} ${scrolled ? styles.scrolled : ''}`}>
             {onDesktop && (
                 <div className={styles.navContent}>
-                    {!isSellerLoggedIn &&
-                        <Link href='/' className={styles.logo}>
-                            <Image src={images.logo} alt='rayvvin logo' />
-                        </Link>
-                    }
-                    {!isLoggedIn &&
-                        <Link href='/seller' className={styles.logo}>
-                            <Image src={images.logo} alt='rayvvin logo' />
-                        </Link>
-                    }
+                    <Link href='/' className={styles.logo}>
+                        <Image src={images.logo} alt='rayvvin logo' />
+                    </Link>
+                    
                     <ul className={styles.links}>
                         {
                             !isSellerLoggedIn &&
