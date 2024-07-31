@@ -6,6 +6,7 @@ import {
 } from "../components/models/IRegisterBuyer";
 import { RegisterSellerRequest } from "../components/models/IRegisterSeller";
 import { DeliveryStatus } from "../components/models/IOrderDeliveryStatus";
+import { ShippingFeeRequest } from "../components/models/IShippingFee";
 
 export const API = axios.create({
     baseURL: ApiRoutes.BASE_URL_DEV,
@@ -519,4 +520,21 @@ export function useUpdateDeliveryStatus() {
     }
 
     return updateStatus;
+}
+
+export function useUpdateShippingFee() {
+    /**
+     * Send request to API server to update a ShippingFee
+     * @returns The response for the API request
+     */
+    async function updateShippingFee(data: ShippingFeeRequest) {
+        // Send request to update a ShippingFee
+        let response = await API.patch(`${ApiRoutes.UpdateShippingFee}`, data);
+
+        // Return response
+        return response;
+    }
+
+    // Return function to update a ShippingFee
+    return updateShippingFee;
 }

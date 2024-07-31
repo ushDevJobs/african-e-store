@@ -120,6 +120,8 @@ export default class ApiRoutes {
 
     static storeImages: string = "images/store";
 
+    static UpdateShippingFee: string = "api/stores/store/shipping-fee";
+
     static userImages: string = "images/user";
 
     static FetchReviews: string = "api/stores/store/reviews";
