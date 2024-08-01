@@ -1,0 +1,1 @@
+export const accountStyle = `rounded-lg flex text-[#6F6F6F] items-center gap-3 bg-[#F7FAFA] py-3 px-7 w-full cursor-pointer md:max-w-[463px]`
