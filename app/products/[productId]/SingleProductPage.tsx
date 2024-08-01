@@ -101,12 +101,18 @@ const SingleProductPage = ({ params }: Props) => {
         handleFetchProduct();
     }, []);
 
-    useEffect(() => {
-        if (accountStatus === null) {
-            router.push(`/login?redirect=/products/${productId}`);
-        }
-    }, [accountStatus, productId]);
+    // useEffect(() => {
+    //     if (accountStatus === null) {
+    //         // router.push(`/login?redirect=/products/${productId}`);
+    //         // router.push(`/login`);
+    //     }
+    // }, [accountStatus !== null, productId]);
 
+    useEffect(() => {
+        if (router && !accountStatus?.accountType && !isFetchingProduct) {
+                router.push('/login');
+            }
+    }, [accountStatus, isFetchingProduct, router]);
 
     return (
         <div className={styles.main}>

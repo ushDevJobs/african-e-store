@@ -230,7 +230,7 @@ const Navbar = (props: Props) => {
                                             <Link href={'/saved-items'} onClick={() => setIsLoginDropdownOpen(false)}>
                                                 Saved Items
                                             </Link>
-                                            <Link href={'/'}>
+                                            <Link href={'/orders'}>
                                                 Track order
                                             </Link>
                                             <button className={'hover:opacity-70'} onClick={() => {

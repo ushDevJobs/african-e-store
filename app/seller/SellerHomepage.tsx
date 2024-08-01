@@ -214,7 +214,7 @@ const SellerHomePage = (props: Props) => {
 
                 <div className={styles.rhs}>
                     {/* {activeTab === TabIndex.Shop && <div className={styles.search}><SearchIcon /> <input type="text" placeholder='Search items in shop' /></div>} */}
-                    <div className={styles.tabSection}>
+                    <div className={`${styles.tabSection} hideScrollBar`}>
                         <span
                             onClick={() => setActiveTab(TabIndex.Shop)}
                             className={activeTab === TabIndex.Shop ? styles.active : ''}

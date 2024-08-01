@@ -105,17 +105,25 @@ const LoginPage = (props: Props) => {
                 .then((response) => {
                     // console.log(response)
 
+                    // if (response.data.status) {
+                    //     const redirectUrl = searchParams.get('redirect');
+
+                    //     if (redirectUrl) {
+                    //         router.push(redirectUrl);
+                    //     } 
+                    //     // else {
+                    //     //     response.data.data.accountType === "SELLER"
+                    //     //         ? router.push("/seller")
+                    //     //         : router.push("/");
+                    //     // }
+
+                    //     // Display success
+                    //     toast.success("You have successfully logged in.");
+                    // }
                     if (response.data.status) {
-                        const redirectUrl = searchParams.get('redirect');
-
-                        if (redirectUrl) {
-                            router.push(redirectUrl);
-                        } else {
-                            response.data.data.accountType === "SELLER"
-                                ? router.push("/seller")
-                                : router.push("/");
-                        }
-
+                        response.data.data.accountType === "SELLER"
+                            ? router.push("/seller")
+                            : router.push("/")
                         // Display success
                         toast.success("You have successfully logged in.");
                     }

@@ -20,7 +20,7 @@ const DraftSection = ({
 
     return (
         <main className="w-full">
-            <div className="flex flex-col gap-10">
+            <div className="flex flex-col gap-10 overflow-x-auto hideScrollBar">
                 {drafts?.map((draft) => (
                     <div className="flex gap-4" key={draft.id}>
                         <div className="relative h-[174px] min-w-[221px]">

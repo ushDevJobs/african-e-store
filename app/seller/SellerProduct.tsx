@@ -42,7 +42,7 @@ const SellerProduct = ({
                 setSelectedProduct={setSelectedProduct}
             />
 
-            <div className="flex flex-col gap-10">
+            <div className="flex flex-col gap-10 overflow-x-auto hideScrollBar">
                 {products?.map((product) => (
                     <div className="flex gap-4" key={product.id}>
                         <div className="relative h-[174px] min-w-[221px]">

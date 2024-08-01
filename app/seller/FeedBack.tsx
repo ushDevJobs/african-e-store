@@ -43,7 +43,7 @@ const FeedBack = (props: Props) => {
                     reviews && reviews?.length > 0 && (
                         <>
                             <h2 className='text-2xl font-medium mb-8 text-black'>All Feedbacks ({reviews?.length})</h2>
-                            <div className="flex flex-col gap-10 overflow-y-auto max-h-[800px]">
+                            <div className="flex flex-col gap-10 overflow-y-auto overflow-x-auto hideScrollBar max-h-[800px]">
                                 {reviews?.map((review, index) => (
                                     <div className="flex justify-between max-w-full md:max-w-[800px] text-[#828282]" key={index}>
                                         <div className="flex flex-col gap-3">

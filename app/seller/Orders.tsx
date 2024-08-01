@@ -76,7 +76,7 @@ const Orders = ({ orders, isFetchingOrders, handleFetchOrders }: Props) => {
                 isFetchingOrders={isFetchingOrders}
             />
 
-            <section className="flex flex-col gap-8">
+            <section className="flex flex-col gap-8 overflow-x-auto hideScrollBar">
                 <div className="flex flex-col gap-2">
                     <div className="relative" ref={statusRef}>
                         <h1

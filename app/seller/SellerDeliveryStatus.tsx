@@ -112,7 +112,7 @@ const SellerDeliveryStatus = ({
                         </p>
                     </div>
                 </div>
-                <div className="flex items-center gap-7 w-full mb-5 overflow-x-auto whitespace-nowrap">
+                <div className="flex items-center gap-7 w-full mb-5 overflow-x-auto hideScrollBar whitespace-nowrap">
                     <div className="text-center flex flex-col gap-3">
                         <div className="flex items-center gap-5">
                             <button

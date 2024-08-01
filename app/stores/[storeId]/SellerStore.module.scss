@@ -124,6 +124,7 @@
   .tab {
     display: flex;
     gap: 47px;
+    overflow-x: auto;
     .lhs {
       flex: 1;
 
@@ -185,6 +186,11 @@
         color: #6f6f6f;
         position: relative;
         margin-bottom: 10px;
+        overflow-x: auto;
+         &::-webkit-scrollbar {
+          display: none;
+        //   scrollbar-width: thin;
+        }
 
         span {
           cursor: pointer;
