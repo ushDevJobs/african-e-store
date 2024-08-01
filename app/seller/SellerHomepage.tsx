@@ -13,7 +13,6 @@ import { createCustomErrorMessages } from '../components/constants/catchError';
 import DraftSection from './DraftSection';
 import FeedBack from './FeedBack';
 import Orders from './Orders';
-import { StorageKeys } from '../components/constants/StorageKeys';
 import DeliveryFeeModal from '../components/Modal/DeliveryFeeModal';
 type Props = {};
 
