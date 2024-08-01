@@ -55,7 +55,7 @@ const DeliveryFeeModal = ({ visibility, setVisibility }: Props) => {
             setVisibility={setVisibility}
             styles={{ backgroundColor: "transparent" }}
         >
-            <div className="bg-white rounded-[34px] md:w-[600px] w-full text-center flex flex-col py-7 px-[32px]">
+            <div className="bg-white rounded-[34px] md:w-[600px] w-full text-center flex flex-col  md:py-7 py-4 px-4 md:px-[32px]">
                 <span onClick={() => setVisibility(false)} className='ml-auto cursor-pointer mb4 hover:bg-green-200 hover:rounded'><TimesIcon /></span>
                 <h2 className="text-[#828282] font-medium text-2xl mb-2">Update delivery fees </h2>
                 <p className="text-[#828282] font-normal text-base mb-8">Kindly update your delivery fee for all your products </p>
