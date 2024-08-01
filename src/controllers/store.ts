@@ -92,6 +92,7 @@ const getStoreFullDetails = async (id: string, isStoreId = false) => {
       description: true,
       image: true,
       bankDetails: true,
+      shippingFee: true,
     },
   });
   const ratings = await prisma.rating.groupBy({
@@ -544,11 +545,7 @@ export const getFavouriteStores = async (
     next(new NotFound("User not found", ErrorCode.NOT_FOUND));
   }
 };
-export const getStoreCategories = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const getStoreCategories = async (req: Request, res: Response) => {
   const user = req.user as RequestUser;
   const categories = await getCategory(user.id, false);
   return returnJSONSuccess(res, { data: categories });
@@ -728,8 +725,7 @@ export const getStoreOrders = async (req: Request, res: Response) => {
 };
 export const updateDeliveryStatusOfOrder = async (
   req: Request,
-  res: Response,
-  next: NextFunction
+  res: Response
 ) => {
   const { status } = req.body;
   const { id } = req.params;
