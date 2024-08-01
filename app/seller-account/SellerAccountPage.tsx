@@ -37,7 +37,7 @@ const SellerAccountPage = ({ isFetchingStore, store }: Props) => {
                     <h1 className='text-[#828282] text-2xl md:text-4xl font-medium'> My Account</h1>
                 </Link>
                 {isFetchingStore && !store ? (
-                    <div className="h-[30vh] flex flex-col items-center justify-center">
+                    <div className="h-[30vh]">
                         <FullPageLoader />
                     </div>
                 ) : store && !isFetchingStore ? (
