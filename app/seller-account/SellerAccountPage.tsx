@@ -70,7 +70,7 @@ const SellerAccountPage = ({ isFetchingStore, store }: Props) => {
                         </div>
                     </div>
                 ) : (
-                    <p className='text-[#828282] text-center'>No store found</p>
+                    <p className='text-[#828282] text-center h-[30vh]'>No store found</p>
                 )}
 
 
