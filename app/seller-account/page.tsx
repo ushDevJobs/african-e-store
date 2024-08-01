@@ -27,8 +27,8 @@ const SellerAccount = (props: Props) => {
                 setStore(response.data.data);
             })
             .catch((error) => {
-                const errorMessage = createCustomErrorMessages(error.response?.data)
-                toast.error(errorMessage);
+                // const errorMessage = createCustomErrorMessages(error.response?.data)
+                // toast.error(errorMessage);
             })
             .finally(() => {
                 setIsFetchingStore(false);
@@ -42,7 +42,7 @@ const SellerAccount = (props: Props) => {
         <SellerAccountPage
             store={store}
             isFetchingStore={isFetchingStore}
-            // Logout={Logout}
+        // Logout={Logout}
         />
     )
 }
