@@ -151,12 +151,12 @@ const MobileNavBar = ({ navIsOpen, setNavIsOpen, isDropdownOpen,
 
                                 <Link href="/saved-items" onClick={() => setNavIsOpen(false)}>
                                     <li className={pathname == "/saved-items" ? styles.active : ""}>
-                                       Saved Items
+                                        Saved Items
                                     </li>
                                 </Link>
                                 <Link href="/saved-store" onClick={() => setNavIsOpen(false)}>
                                     <li className={pathname == "/saved-store" ? styles.active : ""}>
-                                       Saved Store
+                                        Saved Store
                                     </li>
                                 </Link>
 
@@ -166,6 +166,11 @@ const MobileNavBar = ({ navIsOpen, setNavIsOpen, isDropdownOpen,
                                     </li>
                                 </Link>
                             </>
+                        }
+                        {isSellerLoggedIn &&
+                            <Link onClick={() => setNavIsOpen(false)} href='/seller-account' className='w-fit whitespace-nowrap'>
+                                <li className={pathname == "/seller-account" ? styles.active : ""}>My Account</li>
+                            </Link>
                         }
 
                         {isLoggedIn && (
