@@ -26,6 +26,7 @@ const Navbar = (props: Props) => {
     const cartItems = useSelector((state: RootState) => state.cart.cartItems);
     const [navIsOpen, setNavIsOpen] = useState(false);
     const logout = useLogout()
+    const pathname = usePathname();
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const { accountStatus, fetchAccountStatus } = useAccountStatus();
     const [retrievedCategories, setRetrievedCategories] = useState<CategoriesResponse[]>();
@@ -134,7 +135,7 @@ const Navbar = (props: Props) => {
                     <Link href='/' className={styles.logo}>
                         <Image src={images.logo} alt='rayvvin logo' />
                     </Link>
-                    
+
                     <ul className={styles.links}>
                         {
                             !isSellerLoggedIn &&
@@ -146,10 +147,16 @@ const Navbar = (props: Props) => {
                         {!isLoggedIn && !isSellerLoggedIn &&
                             <Link href='/seller/signup'>
                                 <li>Sell</li>
-                            </Link>}
+                            </Link>
+                        }
                         {!isSellerLoggedIn &&
                             <Link href='/faq'>
                                 <li>FAQ&apos;s</li>
+                            </Link>
+                        }
+                        {isSellerLoggedIn &&
+                            <Link href='/seller-account'>
+                                <li className={pathname == "/seller-account" ? 'text-[#2C7865]' : ""}>My Account</li>
                             </Link>
                         }
                         {!isSellerLoggedIn && (
@@ -245,12 +252,14 @@ const Navbar = (props: Props) => {
                             </>
                         )}
 
-                        {isSellerLoggedIn && <button className={`${styles.signup} hover:opacity-70`} onClick={() => {
-                            setIsLoginDropdownOpen(false)
-                            Logout()
-                        }}>
-                            Log out
-                        </button>}
+                        {isSellerLoggedIn &&
+                            <button className={`${styles.signup} hover:opacity-70`} onClick={() => {
+                                setIsLoginDropdownOpen(false)
+                                Logout()
+                            }}>
+                                Log out
+                            </button>
+                        }
                     </ul>
                 </div>
             )
