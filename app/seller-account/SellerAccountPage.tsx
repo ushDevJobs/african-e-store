@@ -37,7 +37,7 @@ const SellerAccountPage = ({ isFetchingStore, store }: Props) => {
                     <h1 className='text-[#828282] text-2xl md:text-4xl font-medium'> My Account</h1>
                 </Link>
                 {isFetchingStore && !store ? (
-                    <div className="h-[30vh]">
+                    <div className="h-[30vh] flex flex-col items-center justify-center">
                         <FullPageLoader />
                     </div>
                 ) : store && !isFetchingStore ? (
@@ -70,17 +70,17 @@ const SellerAccountPage = ({ isFetchingStore, store }: Props) => {
                         </div>
                     </div>
                 ) : (
-                    <p className='text-[#828282] text-center h-[30vh]'>No store found</p>
+                    <p className='text-[#828282] text-center h-[30vh] flex flex-col items-center justify-center'>No store found</p>
                 )}
 
 
-                {store && (
+                {/* {store && ( */}
                     <div className="flex flex-col gap-4">
                         <p onClick={() => setIsBankDetailModalVisible(true)} className={`${accountStyle}`}><span><HomeIcon /></span> Bank Details</p>
                         <p onClick={() => setIsDeliveryFeeModalVisible(true)} className={`${accountStyle}`}><span><DeliveryFeeIcon /></span> Delivery fee</p>
                         <p className={`${accountStyle}`}><span><MessageIcon /></span> Messages</p>
                     </div>
-                )}
+                {/* )} */}
             </div>
         </>
     )
