@@ -1,6 +1,6 @@
 {
     "info": {
-        "_postman_id": "001d7835-3f92-462d-a818-a058a9b5f787",
+        "_postman_id": "58c17b4d-35b3-4bbf-879b-7ab850f5f8bb",
         "name": "Rayvvin with env",
         "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
         "description": ""
@@ -252,12 +252,12 @@
                     "request": {
                         "method": "GET",
                         "url": {
-                            "raw": "{{host}}/api/categories/category/clwtj53v100025qqjeg8ics62",
+                            "raw": "{{host}}/api/categories/category/793e6b2c-3599-11ef-b974-bc",
                             "path": [
                                 "api",
                                 "categories",
                                 "category",
-                                "clwtj53v100025qqjeg8ics62"
+                                "793e6b2c-3599-11ef-b974-bc"
                             ],
                             "host": [
                                 "{{host}}"
@@ -270,7 +270,7 @@
                     "request": {
                         "method": "GET",
                         "url": {
-                            "raw": "{{host}}/api/categories/all",
+                            "raw": "{{host}}/api/categories/all?products=true",
                             "query": [
                                 {
                                     "key": "_page",
@@ -289,8 +289,7 @@
                                 },
                                 {
                                     "key": "products",
-                                    "value": "false",
-                                    "disabled": true
+                                    "value": "true"
                                 }
                             ],
                             "variable": [],
@@ -617,6 +616,36 @@
                             "raw": "{\n  \"fee\":50\n}"
                         }
                     }
+                },
+                {
+                    "name": "Update Bank Details",
+                    "request": {
+                        "method": "PATCH",
+                        "url": {
+                            "raw": "http://localhost:3000/api/stores/store/profile/bank",
+                            "path": [
+                                "api",
+                                "stores",
+                                "store",
+                                "profile",
+                                "bank"
+                            ],
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "3000"
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            },
+                            "raw": "{\n  \"bank\":\"zenith bank\",\n  \"accountNumber\":\"2388281490\"\n}"
+                        }
+                    }
                 }
             ]
         },
@@ -922,12 +951,12 @@
                     "request": {
                         "method": "GET",
                         "url": {
-                            "raw": "{{host}}/api/products/product/cly4gnna80001ttwjn55cf93a",
+                            "raw": "{{host}}/api/products/product/clyidg2xl000h32yntphb3see",
                             "path": [
                                 "api",
                                 "products",
                                 "product",
-                                "cly4gnna80001ttwjn55cf93a"
+                                "clyidg2xl000h32yntphb3see"
                             ],
                             "host": [
                                 "{{host}}"
@@ -1088,12 +1117,12 @@
                     "request": {
                         "method": "PATCH",
                         "url": {
-                            "raw": "{{host}}/api/products/product/cly4gnna80001ttwjn55cf93a",
+                            "raw": "{{host}}/api/products/product/clyidg2xl000h32yntphb3see",
                             "path": [
                                 "api",
                                 "products",
                                 "product",
-                                "cly4gnna80001ttwjn55cf93a"
+                                "clyidg2xl000h32yntphb3see"
                             ],
                             "host": [
                                 "{{host}}"
@@ -1105,26 +1134,29 @@
                                 {
                                     "key": "price",
                                     "value": "10",
+                                    "disabled": true,
                                     "type": "default"
                                 },
                                 {
                                     "key": "name",
                                     "value": "Sunglasses",
+                                    "disabled": true,
                                     "type": "default"
                                 },
                                 {
                                     "key": "quantity",
-                                    "value": "5000",
+                                    "value": "500",
                                     "type": "default"
                                 },
                                 {
                                     "key": "condition",
                                     "value": "NEW",
+                                    "disabled": true,
                                     "type": "default"
                                 },
                                 {
                                     "key": "category",
-                                    "value": "793ded12-3599-11ef-b974-bc",
+                                    "value": "793ded12-3599-11ef-b974-bc793c6285-3599-11ef-b974-bc",
                                     "type": "default"
                                 },
                                 {
@@ -1136,6 +1168,7 @@
                                 {
                                     "key": "description",
                                     "value": "affordable",
+                                    "disabled": true,
                                     "type": "default"
                                 },
                                 {
@@ -1147,6 +1180,7 @@
                                 {
                                     "key": "salesType",
                                     "value": "ONCE",
+                                    "disabled": true,
                                     "type": "default"
                                 }
                             ]
@@ -1232,7 +1266,7 @@
                                     "language": "json"
                                 }
                             },
-                            "raw": "{\n\"orderId\":\"clyzow2310003125mz6w314uy\"\n}"
+                            "raw": "{\n\"orderId\":\"clz35hvdi0001fnc1u2amcbkp\"\n}"
                         }
                     }
                 }

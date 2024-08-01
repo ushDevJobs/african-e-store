@@ -91,6 +91,7 @@ const getStoreFullDetails = async (id: string, isStoreId = false) => {
       id: true,
       description: true,
       image: true,
+      bankDetails: true,
     },
   });
   const ratings = await prisma.rating.groupBy({
@@ -746,26 +747,27 @@ export const updateDeliveryStatusOfOrder = async (
 };
 export const addBankDetails = async (req: Request, res: Response) => {
   const { id } = req.user as RequestUser;
-  const { bank, account } = req.body;
-  const bankQ =
-    bank && bank !== ""
-      ? {
-          bank,
-        }
-      : {};
-  const numQ =
-    account && account !== ""
-      ? {
-          accountNumber: account,
-        }
-      : {};
-  const store = await prisma.store.update({
+  const { bank, accountNumber } = req.body;
+  const store = await prisma.store.findFirstOrThrow({
     where: {
       userId: id,
     },
-    data: {
-      ...bankQ,
-      ...numQ,
+    select: {
+      id: true,
+    },
+  });
+  const bankDetails = await prisma.bankDetails.upsert({
+    where: {
+      storeId: store.id,
+    },
+    update: {
+      bank,
+      accountNumber,
+    },
+    create: {
+      storeId: store.id,
+      bank,
+      accountNumber,
     },
   });
 
@@ -809,26 +811,15 @@ export const getAboutStore = async (req: Request, res: Response) => {
       _all: true,
     },
   });
-  const income = await prisma.sellerPaymentHistory.aggregate({
-    where: {
-      AND: [
-        { storeId: store.id },
-        {
-          createdAt: {
-            gte: new Date(new Date().setMonth(new Date().getMonth() - 1)),
-            lte: new Date(),
-          },
-        },
-      ],
-    },
-    _sum: {
-      amount: true,
-    },
-  });
+
+  const income: any =
+    await prisma.$queryRaw`SELECT sum(amount) as amount FROM sellerspaymenthistory WHERE storeId = ${
+      store.id
+    } AND MONTH(createdAt) = MONTH(${new Date()})`;
   const messagesLength = store.sellerMessage.length;
   return returnJSONSuccess(res, {
     data: {
-      income: income._sum.amount || 0,
+      income: income[0].amount || 0,
       stock,
       fufilledOrders: fufilledOrders._count._all || 0,
       messages: messagesLength,
@@ -846,7 +837,7 @@ export const getIncomeAndTransactionsFromStore = async (
   });
 
   const income =
-    await prisma.$queryRaw`SELECT DATE(createdAt) AS createdAt, amount FROM sellerspaymenthistory WHERE storeId = ${store.id} GROUP BY MONTH(createdAt)`;
+    await prisma.$queryRaw`SELECT DATE(createdAt) AS createdAt, sum(amount) AS amount FROM sellerspaymenthistory WHERE storeId = ${store.id} GROUP BY MONTH(createdAt)`;
 
   const transactions = await prisma.order.findMany({
     where: {
@@ -905,7 +896,7 @@ export const getIncomeAndTransactionsFromStore = async (
   });
   return returnJSONSuccess(res, {
     data: {
-      income: income,
+      income: parseFloat((income as number).toFixed(2)),
       transactions,
     },
   });

@@ -22,7 +22,6 @@ model User {
   password          String?
   telephone         String?
   country           String?
-  address           String?
   accountType       AccountType     @default(BUYER)
   cartItems         Cart[]
   orders            Order[]
@@ -34,6 +33,7 @@ model User {
   createdAt         DateTime        @default(now())
   updatedAt         DateTime        @updatedAt
   sellerMessage     sellerMessage[]
+  address           Address?
 
   @@map("users")
 }
@@ -47,8 +47,6 @@ model Store {
   userId                  String                    @unique
   createdAt               DateTime                  @default(now())
   updatedAt               DateTime                  @updatedAt
-  accountNumber           String?
-  bank                    String?
   orders                  Order[]
   products                Product[]
   user                    User                      @relation(fields: [userId], references: [id], onDelete: Cascade, name: "myPersonalStore")
@@ -59,6 +57,7 @@ model Store {
   orderDeliveryStatus     orderDeliveryStatus[]
   shippingFee             Float                     @default(2.99)
   sellerMessage           sellerMessage[]
+  bankDetails             BankDetails?
 
   @@map("store")
 }
@@ -134,7 +133,7 @@ model Order {
   payment_status       Boolean                @default(false)
   date_paid            DateTime?
   sellerPaymentHistory SellerPaymentHistory[]
-  Rating               Rating[]
+  rating               Rating[]
 
   @@map("orders")
 }
@@ -201,7 +200,7 @@ model SellerWithdrawalHistory {
   createdAt         DateTime         @default(now())
   store             Store            @relation(fields: [storeId], references: [id], onDelete: Cascade)
   storeId           String
-  SellerDashboard   SellerDashboard? @relation(fields: [sellerDashboardId], references: [id])
+  sellerDashboard   SellerDashboard? @relation(fields: [sellerDashboardId], references: [id])
   sellerDashboardId String?
 
   @@map("sellersWithdrawalHistory")
@@ -246,6 +245,32 @@ model Settings {
   profitPercent Float    @default(10)
   updatedAt     DateTime @updatedAt
   createdAt     DateTime @default(now())
+}
+
+model BankDetails {
+  id            String   @unique @default(cuid())
+  store         Store    @relation(fields: [storeId], references: [id])
+  storeId       String   @unique
+  accountNumber String
+  bank          String
+  nameOnAccount String?
+  updatedAt     DateTime @updatedAt
+  createdAt     DateTime @default(now())
+
+  @@unique([storeId, accountNumber, nameOnAccount])
+}
+
+model Address {
+  id          String   @unique @default(cuid())
+  user        User     @relation(fields: [userId], references: [id])
+  userId      String   @unique
+  houseNumber String?
+  street      String?
+  postCode    Int?
+  city        String
+  country     String   @default("London")
+  updatedAt   DateTime @updatedAt
+  createdAt   DateTime @default(now())
 }
 
 model verifyUser {

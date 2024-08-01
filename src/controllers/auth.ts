@@ -34,7 +34,11 @@ export const register = async (
         telephone: req.body.telephone,
         country: req.body.country,
         password: hashSync(req.body.password, 10),
-        address: req.body.address,
+        address: {
+          create: {
+            city: req.body.address,
+          },
+        },
       },
       select: {
         id: true,
