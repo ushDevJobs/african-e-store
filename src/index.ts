@@ -22,16 +22,16 @@ import path from "path";
 app.set("trust proxy", 1);
 app.use(cors(corsConfig));
 app.use(express.json());
-app.use(
-  helmet.contentSecurityPolicy({
-    directives: {
-      defaultSrc: ["'self'"],
-      scriptSrc: ["'self'", "'unsafe-inline'", "https://js.stripe.com"], // modify as needed
-      frameSrc: ["https://js.stripe.com"],
-      imgSrc: ["'self'", "data:", "blob:"],
-    },
-  })
-);
+// app.use(
+//   helmet.contentSecurityPolicy({
+//     directives: {
+//       defaultSrc: ["'self'"],
+//       scriptSrc: ["'self'", "'unsafe-inline'", "https://js.stripe.com"], // modify as needed
+//       frameSrc: ["https://js.stripe.com"],
+//       imgSrc: ["'self'", "data:", "blob:"],
+//     },
+//   })
+// );
 app.use(compression());
 app.use(flash());
 app.use(sessionMiddleware);
