@@ -555,3 +555,25 @@ export function useUpdateBankDetail() {
     // Return function to update a BankDetail
     return updateBankDetail;
 }
+export function useFetchShippingFee() {
+    async function fetchShippingFee() {
+        // Fire the request
+        const response = await API.get(ApiRoutes.FetchShippingFee);
+
+        // Return the response
+        return response;
+    }
+
+    return fetchShippingFee;
+}
+export function useFetchBankDetail() {
+    async function fetchBankDetail() {
+        // Fire the request
+        const response = await API.get(ApiRoutes.FetchBankDetail);
+
+        // Return the response
+        return response;
+    }
+
+    return fetchBankDetail;
+}

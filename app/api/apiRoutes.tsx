@@ -122,7 +122,11 @@ export default class ApiRoutes {
 
     static UpdateShippingFee: string = "api/stores/store/shipping-fee";
 
+    static FetchShippingFee: string = "api/stores/store/shipping-fee";
+
     static UpdateBankDetail: string = "api/stores/store/profile/bank";
+
+    static FetchBankDetail: string = "api/stores/store/profile/bank";
 
     static userImages: string = "images/user";
 
