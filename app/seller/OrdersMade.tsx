@@ -19,7 +19,7 @@ const OrdersMade = ({ visibility, setVisibility, selectedOrder, isFetchingOrders
             setVisibility={setVisibility}
             styles={{ backgroundColor: "transparent", overflowX: 'auto' }}
         >
-            <div className='bg-white w-full md:min-w-[400px] max-h-[90vh] overflow-y-auto mx-auto md:w-full rounded-[34px] p-7'>
+            <div className='bg-white w-full md:min-w-[400px] max-h-[90vh] overflow-y-auto mx-auto md:w-full rounded-[34px] p-4 md:p-7'>
                 <div className="flex flex-col gap-3 mb-5">
                     <span onClick={() => setVisibility(false)} className='cursor-pointer flex items-end justify-end ml-auto w-fit'><TimesIcon /></span>
                     <div className="flex flex-col gap-1 text-start text-[#2C7865]">

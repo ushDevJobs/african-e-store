@@ -185,7 +185,7 @@ const Orders = ({ orders, isFetchingOrders, handleFetchOrders }: Props) => {
                                         <span>
                                             <LocationIcon />
                                         </span>
-                                        {order.user.address ?? "Location here"}
+                                        {order.user.address.city}, {order.user.address.country}
                                     </p>
                                     <p className="flex items-center gap-1">
                                         <span>
