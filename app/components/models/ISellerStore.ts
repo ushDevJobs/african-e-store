@@ -76,12 +76,11 @@ export interface StoreOrderResponse {
   id: string;
   amount: number;
   createdAt: string;
-  trackingId: string | null;
+  orderId: number;
   quantity: Quantity[];
   status: Status[];
   user: User;
   products: Products[];
-  orderId: number;
 }
 
 export interface Quantity {
@@ -97,9 +96,7 @@ export interface Products {
 }
 export interface Status {
   id: string;
-  orderId: string;
   storeId: string;
-  createdAt: Date;
   status: StatusEnums;
 }
 export enum StatusEnums {
@@ -111,5 +108,17 @@ export enum StatusEnums {
 export interface User {
   fullname: string;
   id: string;
-  address: string | null;
+  address: Address;
+}
+
+export interface Address {
+  id: string;
+  userId: string;
+  houseNumber: null;
+  street: null;
+  postCode: null;
+  city: string;
+  country: string;
+  updatedAt: string;
+  createdAt: string;
 }
