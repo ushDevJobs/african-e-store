@@ -117,8 +117,17 @@ export const returnJSONError = (
 };
 export const format_text = (text: string) => text?.trim()?.toLowerCase();
 export const isValidated = (result: any[]) => result.length > 0;
-export const generateRandomNumbers = (repeatNumber: number = 4) =>
-  Math.floor(Math.random() * parseInt("9".repeat(repeatNumber)));
+export const generateRandomNumbers = (repeatNumber: number = 4) => {
+  let otp = "";
+
+  for (let i = 0; i < length; i++) {
+    // Generate a random digit between 0 and 9
+    const randomDigit = Math.floor(Math.random() * 10);
+    otp += randomDigit.toString();
+  }
+
+  return parseInt(otp);
+};
 
 export const checkIfEmpty = (values: object[]): string[] => {
   let errors: string[] = [];
