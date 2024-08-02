@@ -7,7 +7,8 @@ const nextConfig = {
       'localhost',
       'gemstonesmontessori.com',
       'rayvvin.onrender.com',
-      "newrayvinn.rapidsuite.ng"
+      'newrayvinn.rapidsuite.ng',
+      'rayvvin.com',
     ],
   },
 };
