@@ -1,6 +1,6 @@
 {
     "info": {
-        "_postman_id": "1e898a92-4864-485f-872d-b0befa0a9d4a",
+        "_postman_id": "3cf2f440-9499-4e07-b841-a208b6164670",
         "name": "Rayvvin with env",
         "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
         "description": ""
@@ -1237,6 +1237,28 @@
                                 }
                             },
                             "raw": "{\n\"orderId\":\"clzb20abt0001ta41gbfl2who\"\n}"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "User",
+            "item": [
+                {
+                    "name": "Get user Address",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{host}}/api/user/address",
+                            "path": [
+                                "api",
+                                "user",
+                                "address"
+                            ],
+                            "host": [
+                                "{{host}}"
+                            ]
                         }
                     }
                 }

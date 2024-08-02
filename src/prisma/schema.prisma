@@ -275,7 +275,7 @@ model Address {
   street      String?
   postCode    Int?
   city        String
-  country     String   @default("London")
+  country     String   @default("United Kingdom")
   updatedAt   DateTime @updatedAt
   createdAt   DateTime @default(now())
 

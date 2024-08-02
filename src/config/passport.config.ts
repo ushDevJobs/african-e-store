@@ -51,6 +51,7 @@ export const initializePassport = (passport: PassportStatic) => {
             const user = await prisma.user.findUnique({
               where: {
                 email: email,
+                AND: { status: "VERIFIED" },
               },
               select: {
                 id: true,
