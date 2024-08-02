@@ -51,7 +51,7 @@ model Store {
   products                Product[]
   user                    User                      @relation(fields: [userId], references: [id], onDelete: Cascade, name: "myPersonalStore")
   favourite               User[]                    @relation(name: "myFavouriteStores")
-  SellerDashboard         SellerDashboard[]
+  SellerDashboard         SellerDashboard?
   SellerPaymentHistory    SellerPaymentHistory[]
   SellerWithdrawalHistory SellerWithdrawalHistory[]
   orderDeliveryStatus     orderDeliveryStatus[]
