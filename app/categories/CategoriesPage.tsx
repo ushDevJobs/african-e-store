@@ -142,7 +142,7 @@ const CategoriesPage = () => {
                                                     <div className={styles.image}>
                                                         <Image fill src={product.coverImage} alt='product image' />
                                                     </div>
-                                                    <p>{product.name} </p>
+                                                    <p className='text-lg font-medium'>{product.name} </p>
                                                     <span className='text-gray-400 text-sm '>{product.details}</span>
                                                     <h4>&pound;{product.amount.toLocaleString()}</h4>
                                                 </Link>

@@ -22,12 +22,13 @@ const CheckoutPage = (props: Props) => {
     const totalPrice = useSelector(totalPriceSelector);
     // Step 1: Extract the store IDs
     const storeIds = cartItems.map(item => item.product.store.id);
+    const storeShippingFee = cartItems[0].product.store.shippingFee;
 
     // Step 2: Make the store IDs unique
     const uniqueStoreIds = Array.from(new Set(storeIds));
 
     // Step 3: Calculate the shipping fee
-    const shippingFee = uniqueStoreIds.length * 2.99;
+    const shippingFee = uniqueStoreIds.length * storeShippingFee;
     return (
         <div className={styles.main}>
             <h1>Checkout</h1>

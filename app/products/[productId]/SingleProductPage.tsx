@@ -41,7 +41,7 @@ const SingleProductPage = ({ params }: Props) => {
             })
             .catch((error) => {
                 const errorMessage = createCustomErrorMessages(error.response?.data)
-                // toast.error(errorMessage);
+                toast.error(errorMessage);
                 console.log(errorMessage);
             })
             .finally(() => {

@@ -121,7 +121,7 @@ const AddProductToCart = ({ product, isFetchingProduct, handleAddProductToFavori
                             )}
                             {onDesktop && (
                                 <div className={styles.bid}>
-                                    {product.endBiddingDate && <p>{product.name} <span className='text-[#FD6A02] text-base'>7 Bids at US $168 </span>(Bidding ends on {moment(product.endBiddingDate).format('DD-MM-YYYY')}) <button onClick={() => setIsPlaceABidVisible(true)}>Place Bid </button></p>}
+                                    {product.endBiddingDate && <p>{product.name} <span className='text-[#FD6A02] text-base'>7 Bids at &pound;168 </span>(Bidding ends on {moment(product.endBiddingDate).format('DD-MM-YYYY')}) <button onClick={() => setIsPlaceABidVisible(true)}>Place Bid </button></p>}
                                     <Link href={'/contact-seller'}><button className='mt-1'>Contact seller</button></Link>
                                 </div>
                             )}

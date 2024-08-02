@@ -4,9 +4,9 @@ import { Favorite } from './IStores';
 export interface ProductResponse {
   id: string;
   name: string;
+  amount: number;
   itemCondition: string;
   salesType: string;
-  amount: number;
   quantity: number;
   details: string;
   coverImage: string;
@@ -17,21 +17,18 @@ export interface ProductResponse {
   favourite: Favorite[];
   endBiddingDate: null;
   returnPolicy: null;
-  ratings: Rating[];
+  ratings: Ratings;
   positiveFeeback: number;
 }
 
-export interface Rating {
-  id: string;
-  rating: number;
-  review: string;
-  productId: string;
-  storeId: string;
-  userId: string;
-  orderId: string;
-  createdAt: string;
-  updatedAt: string;
+export interface Ratings {
+  avgRating: number;
+  totalRating: number;
+  storePositiveFeeback: number;
+  productRatings: ProductRatings[];
 }
+
+export interface ProductRatings{}
 
 export interface StoreResponse {
   id: string;
@@ -42,6 +39,7 @@ export interface StoreResponse {
   userId: string;
   createdAt: string;
   updatedAt: string;
+  shippingFee: number;
 }
 
 export interface CartItem {
