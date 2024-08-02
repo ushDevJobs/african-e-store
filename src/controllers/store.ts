@@ -910,3 +910,31 @@ export const updateDeliveryFee = async (req: Request, res: Response) => {
   });
   return returnJSONSuccess(res);
 };
+export const getStoreShippingFee = async (req: Request, res: Response) => {
+  const { id } = req.user as RequestUser;
+  const fee = await prisma.store.findFirstOrThrow({
+    where: {
+      user: {
+        id,
+      },
+    },
+    select: {
+      shippingFee: true,
+    },
+  });
+  return returnJSONSuccess(res, { data: fee });
+};
+export const getStoreBankDetails = async (req: Request, res: Response) => {
+  const { id } = req.user as RequestUser;
+  const fee = await prisma.store.findFirstOrThrow({
+    where: {
+      user: {
+        id,
+      },
+    },
+    select: {
+      bankDetails: true,
+    },
+  });
+  return returnJSONSuccess(res, { data: fee });
+};

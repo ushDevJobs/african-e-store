@@ -11,12 +11,14 @@ import {
   getProductsOfStoreById,
   getReviewsForLoggedInUser,
   getReviewsForStoreById,
+  getStoreBankDetails,
   getStoreById,
   getStoreByUserLogged,
   getStoreCategories,
   getStoreDraftProducts,
   getStoreOrders,
   getStoreProducts,
+  getStoreShippingFee,
   removeStoreFromFavourite,
   searchForStore,
   searchStoreProducts,
@@ -99,16 +101,14 @@ router.patch(
   [sellerRoleCheck, checkStore, uploadStoreImage.single("image")],
   rootErrorHandler(updateStoreProfile)
 );
-router.patch(
-  "/store/profile/bank",
-  [sellerRoleCheck, checkStore],
-  rootErrorHandler(addBankDetails)
-);
-router.patch(
-  "/store/shipping-fee",
-  [sellerRoleCheck, checkStore],
-  rootErrorHandler(updateDeliveryFee)
-);
+router
+  .route("/store/profile/bank")
+  .get([sellerRoleCheck, checkStore], getStoreBankDetails)
+  .patch([sellerRoleCheck, checkStore], rootErrorHandler(addBankDetails));
+router
+  .route("/store/shipping-fee")
+  .get([sellerRoleCheck, checkStore], getStoreShippingFee)
+  .patch([sellerRoleCheck, checkStore], rootErrorHandler(updateDeliveryFee));
 
 router.get(
   "/store/orders",

@@ -148,7 +148,7 @@ model Tracker {
   updatedAt           DateTime             @updatedAt
   orderDeliveryStatus orderDeliveryStatus?
 
-  @@map("deliveryTracker")
+  @@map("deliverytracker")
 }
 
 model Rating {
@@ -176,7 +176,7 @@ model SellerDashboard {
   withdrawal SellerWithdrawalHistory[]
   payment    SellerPaymentHistory[]
 
-  @@map("sellersDashboard")
+  @@map("sellersdashboard")
 }
 
 model SellerPaymentHistory {
@@ -191,7 +191,7 @@ model SellerPaymentHistory {
   SellerDashboard   SellerDashboard? @relation(fields: [sellerDashboardId], references: [id])
   sellerDashboardId String?
 
-  @@map("sellersPaymentHistory")
+  @@map("sellerspaymenthistory")
 }
 
 model SellerWithdrawalHistory {
@@ -203,7 +203,7 @@ model SellerWithdrawalHistory {
   sellerDashboard   SellerDashboard? @relation(fields: [sellerDashboardId], references: [id])
   sellerDashboardId String?
 
-  @@map("sellersWithdrawalHistory")
+  @@map("sellerswithdrawalhistory")
 }
 
 model orderDeliveryStatus {
@@ -218,6 +218,8 @@ model orderDeliveryStatus {
   reviews   Rating[]
   updatedAt DateTime    @updatedAt
   createdAt DateTime    @default(now())
+
+  @@map("orderdeliverystatus")
 }
 
 model Sessions {
@@ -238,6 +240,8 @@ model sellerMessage {
   message   String
   createdAt DateTime     @default(now())
   updatedAt DateTime     @updatedAt
+
+  @@map("sellermessage")
 }
 
 model Settings {
@@ -245,6 +249,8 @@ model Settings {
   profitPercent Float    @default(10)
   updatedAt     DateTime @updatedAt
   createdAt     DateTime @default(now())
+
+  @@map("settings")
 }
 
 model BankDetails {
@@ -258,6 +264,7 @@ model BankDetails {
   createdAt     DateTime @default(now())
 
   @@unique([storeId, accountNumber, nameOnAccount])
+  @@map("bankdetails")
 }
 
 model Address {
@@ -271,6 +278,8 @@ model Address {
   country     String   @default("London")
   updatedAt   DateTime @updatedAt
   createdAt   DateTime @default(now())
+
+  @@map("addresses")
 }
 
 model verifyUser {

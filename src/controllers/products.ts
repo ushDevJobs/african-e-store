@@ -103,7 +103,7 @@ export const addProduct = async (
     where: { userId: user.id },
     select: { id: true },
   });
-
+  console.log(req.body.date, !!req.body.date);
   try {
     await prisma.product.create({
       data: {
@@ -112,10 +112,11 @@ export const addProduct = async (
         name: validatedProduct.name,
         amount: validatedProduct.price,
         endBiddingDate:
-          req.body.date && req.body.date !== ""
+          req.body.date !== "undefined"
             ? new Date(req.body.date) || null
             : null,
         images: images as Prisma.JsonArray,
+        salesType: validatedProduct.salesType,
         details: validatedProduct.description,
         quantity: validatedProduct.quantity,
         publish: validatedProduct.publish === "false" ? false : true,

@@ -1,6 +1,6 @@
 {
     "info": {
-        "_postman_id": "58c17b4d-35b3-4bbf-879b-7ab850f5f8bb",
+        "_postman_id": "1e898a92-4864-485f-872d-b0befa0a9d4a",
         "name": "Rayvvin with env",
         "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
         "description": ""
@@ -646,21 +646,18 @@
                             "raw": "{\n  \"bank\":\"zenith bank\",\n  \"accountNumber\":\"2388281490\"\n}"
                         }
                     }
-                }
-            ]
-        },
-        {
-            "name": "Cart",
-            "item": [
+                },
                 {
-                    "name": "Get Cart Items",
+                    "name": "Get Shipping Fee",
                     "request": {
                         "method": "GET",
                         "url": {
-                            "raw": "{{host}}/api/cart",
+                            "raw": "{{host}}/api/stores/store/shipping-fee",
                             "path": [
                                 "api",
-                                "cart"
+                                "stores",
+                                "store",
+                                "shipping-fee"
                             ],
                             "host": [
                                 "{{host}}"
@@ -669,50 +666,23 @@
                     }
                 },
                 {
-                    "name": "Delete Cart Item",
+                    "name": "Get Bank Details",
                     "request": {
-                        "method": "DELETE",
+                        "method": "GET",
                         "url": {
-                            "raw": "{{host}}/api/cart?id=abe0c22f-3aef-4373-965a-07bdbece0f68",
-                            "query": [
-                                {
-                                    "key": "id",
-                                    "value": "abe0c22f-3aef-4373-965a-07bdbece0f68"
-                                }
-                            ],
-                            "variable": [],
+                            "raw": "http://localhost:3000/api/stores/store/profile/bank",
                             "path": [
                                 "api",
-                                "cart"
+                                "stores",
+                                "store",
+                                "profile",
+                                "bank"
                             ],
+                            "protocol": "http",
                             "host": [
-                                "{{host}}"
-                            ]
-                        }
-                    }
-                },
-                {
-                    "name": "Add To Cart",
-                    "request": {
-                        "method": "POST",
-                        "url": {
-                            "raw": "{{host}}/api/cart",
-                            "path": [
-                                "api",
-                                "cart"
+                                "localhost"
                             ],
-                            "host": [
-                                "{{host}}"
-                            ]
-                        },
-                        "body": {
-                            "mode": "raw",
-                            "options": {
-                                "raw": {
-                                    "language": "json"
-                                }
-                            },
-                            "raw": "{\n  \"id\":\"clxk0nphn00008ulzlt4qiwgy\"\n}"
+                            "port": "3000"
                         }
                     }
                 }
@@ -1248,12 +1218,12 @@
                     "request": {
                         "method": "POST",
                         "url": {
-                            "raw": "{{host}}/api/admin/approve-payment/clxzbyp0q0001n7p96lu2xg1w",
+                            "raw": "{{host}}/api/admin/approve-payment/clz2dp2t3000112kuqllkyh3h",
                             "path": [
                                 "api",
                                 "admin",
                                 "approve-payment",
-                                "clxzbyp0q0001n7p96lu2xg1w"
+                                "clz2dp2t3000112kuqllkyh3h"
                             ],
                             "host": [
                                 "{{host}}"
@@ -1266,7 +1236,7 @@
                                     "language": "json"
                                 }
                             },
-                            "raw": "{\n\"orderId\":\"clz35hvdi0001fnc1u2amcbkp\"\n}"
+                            "raw": "{\n\"orderId\":\"clzb20abt0001ta41gbfl2who\"\n}"
                         }
                     }
                 }
