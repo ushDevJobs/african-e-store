@@ -34,6 +34,7 @@ export const getOrders = async (req: Request, res: Response) => {
           details: true,
           itemCondition: true,
           coverImage: true,
+          amount: true,
           store: {
             select: {
               name: true,
@@ -76,6 +77,7 @@ export const getOrderById = async (
               details: true,
               itemCondition: true,
               coverImage: true,
+              amount: true,
               store: {
                 select: {
                   id: true,

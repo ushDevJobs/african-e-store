@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import logger from "../utils/logger";
 import { HttpException } from "../exceptions/root";
-import next from "next";
 
 export const errorHandler = (
   err: HttpException,
@@ -10,7 +9,6 @@ export const errorHandler = (
   next: NextFunction
 ) => {
   const status = typeof err.statusCode === "number" ? err.statusCode : 500;
-  console.log(err);
   logger.error(err.message, { stack: err.stack });
   if (err.stack?.startsWith("PrismaClientInitializationError")) {
     err = {
