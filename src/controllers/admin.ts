@@ -18,14 +18,14 @@ export const approvePaymentByAdmin = async (
         id,
       },
       select: {
-        SellerDashboard: true,
+        sellerDashboard: true,
       },
     });
   } catch (error) {
     next(new NotFound("Store not found", ErrorCode.NOT_FOUND));
   }
   validateAcceptPayment.parse({ id, orderId });
-  const deliveryUpdate = await prisma.orderDeliveryStatus.findFirst({
+  const deliveryUpdate = await prisma.orderDetails.findMany({
     where: {
       AND: [{ orderId: orderId }, { status: "DELIVERED" }, { storeId: id }],
     },
@@ -37,37 +37,8 @@ export const approvePaymentByAdmin = async (
       },
     });
     if (!alreadyPaid) {
-      const order = await prisma.order.findFirst({
-        where: {
-          id: orderId,
-        },
-        select: {
-          products: {
-            where: {
-              storeId: id,
-            },
-            select: {
-              id: true,
-              amount: true,
-              store: {
-                select: {
-                  shippingFee: true,
-                },
-              },
-            },
-          },
-          quantity: true,
-        },
-      });
-      const amount =
-        (order?.products
-          .map(
-            (product) =>
-              product.amount *
-              (order.quantity.find((q) => q.id === product.id)?.quantity || 0)
-          )
-          .reduce((x, y) => x + y, 0) || 0) +
-        (order?.products[0].store.shippingFee || 0);
+      const amount = deliveryUpdate.map((details) => details.amount + details.shippingFee).reduce((x,y) => x+y, 0)
+
 
       await prisma.sellerDashboard.upsert({
         where: {
@@ -104,6 +75,4 @@ export const approvePaymentByAdmin = async (
   } else {
     return returnJSONError(res, { message: "Order not delivered" });
   }
-
-  return returnJSONSuccess(res);
 };

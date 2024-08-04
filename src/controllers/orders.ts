@@ -24,26 +24,32 @@ export const getOrders = async (req: Request, res: Response) => {
     select: {
       id: true,
       orderId: true,
-      quantity: true,
-      amount: true,
-      status: true,
-      products: {
+      orderDetails: {
         select: {
-          name: true,
+          status: true,
+          quantity: true,
           id: true,
-          details: true,
-          itemCondition: true,
-          coverImage: true,
           amount: true,
-          store: {
+          shippingFee: true,
+          product: {
             select: {
               name: true,
               id: true,
-              image: true,
+              details: true,
+              itemCondition: true,
+              coverImage: true,
+              store: {
+                select: {
+                  name: true,
+                  id: true,
+                  image: true,
+                },
+              },
             },
           },
         },
       },
+      amount: true,
     },
   });
   returnJSONSuccess(res, {
@@ -62,34 +68,40 @@ export const getOrderById = async (
     try {
       const order = await prisma.order.findFirstOrThrow({
         where: {
-          AND: [{ id: id }, { payment_status: true }],
+          AND: [{ id: id }, { paymentStatus: true }],
         },
         select: {
           id: true,
           orderId: true,
-          quantity: true,
           amount: true,
-          status: true,
-          products: {
+          orderDetails: {
             select: {
-              name: true,
+              status: true,
+              quantity: true,
               id: true,
-              details: true,
-              itemCondition: true,
-              coverImage: true,
               amount: true,
-              store: {
+              shippingFee: true,
+              product: {
                 select: {
-                  id: true,
                   name: true,
-                  image: true,
+                  id: true,
+                  details: true,
+                  itemCondition: true,
+                  coverImage: true,
+                  store: {
+                    select: {
+                      name: true,
+                      id: true,
+                      image: true,
+                    },
+                  },
                 },
               },
             },
           },
         },
       });
-      returnJSONSuccess(res);
+      returnJSONSuccess(res, { data: order });
     } catch (error) {
       next(new NotFound("Order not found", ErrorCode.NOT_FOUND));
     }

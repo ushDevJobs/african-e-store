@@ -6,6 +6,7 @@ import { BadRequest } from "../exceptions/bad-request";
 import { ErrorCode } from "../exceptions/root";
 import { NotFound } from "../exceptions/not-found";
 import { RequestUser } from "../types";
+import { extendAmount } from "../prisma/extensions";
 
 export const getCategories = async (req: Request, res: Response) => {
   const { _limit, _page } = req.query;
@@ -38,24 +39,19 @@ export const getCategories = async (req: Request, res: Response) => {
   });
   const count = await prisma.category.count({
     where: {
-      AND: [
-        {
-          products: {
-            some: {
+      products: {
+        some: {
+          AND: [
+            {
               id: {
                 not: undefined,
               },
             },
-          },
+            { deleted: false },
+            { publish: true },
+          ],
         },
-        {
-          products: {
-            some: {
-              publish: true,
-            },
-          },
-        },
-      ],
+      },
     },
   });
   const page = (+validatedPag.data?._page! - 1) * (_limit ? +_limit : count);
@@ -88,9 +84,7 @@ export const getCategories = async (req: Request, res: Response) => {
       ? {
           products: {
             where: {
-              publish: true,
-
-              ...addCondition,
+              AND: [{ publish: true }, { deleted: false }, { ...addCondition }],
             },
             select: {
               id: true,
@@ -111,49 +105,34 @@ export const getCategories = async (req: Request, res: Response) => {
       ? {
           _count: {
             select: {
-              products: true,
+              products: {
+                where: {
+                  AND: [{ publish: true }, { deleted: false }],
+                },
+              },
             },
           },
         }
       : {};
   const categories = await prisma
-    .$extends({
-      result: {
-        product: {
-          amount: {
-            needs: { amount: true },
-            compute(product) {
-              const profit = settings.profitPercent;
-              return parseFloat(
-                (product.amount + (product.amount * profit) / 100).toFixed(2)
-              );
-            },
-          },
-        },
-      },
-    })
+    .$extends(extendAmount(settings))
     .category.findMany({
       skip: page,
       take: +_limit! || undefined,
       where: {
-        AND: [
-          {
-            products: {
-              some: {
+        products: {
+          some: {
+            AND: [
+              {
                 id: {
                   not: undefined,
                 },
               },
-            },
+              { publish: true },
+              { deleted: false },
+            ],
           },
-          {
-            products: {
-              some: {
-                publish: true,
-              },
-            },
-          },
-        ],
+        },
       },
       select: {
         id: true,
@@ -171,28 +150,9 @@ export const getCategories = async (req: Request, res: Response) => {
   });
 };
 export const getAllCategories = async (req: Request, res: Response) => {
-  const { _limit, _page } = req.query;
-
-  const validatedPag = validatePagination.safeParse({
-    _page: +_page!,
-  });
-  const count = await prisma.category.count({});
-  const page = (+validatedPag.data?._page! - 1) * (_limit ? +_limit : count);
-
-  const categories = await prisma.category.findMany({
-    skip: page,
-    take: +_limit! || undefined,
-    select: {
-      id: true,
-      name: true,
-      createdAt: true,
-    },
-  });
-
+  const categories = await prisma.category.findMany();
   return returnJSONSuccess(res, {
     data: categories,
-    totalPages: Math.ceil(count / (_limit ? +_limit : count)),
-    hasMore: validatedPag.data?._page! * (_limit ? +_limit : count) < count,
   });
 };
 export const getCategoryById = async (
@@ -226,21 +186,7 @@ export const getCategoryById = async (
 
   if (id) {
     const categoryWithProducts = await prisma
-      .$extends({
-        result: {
-          product: {
-            amount: {
-              needs: { amount: true },
-              compute(product) {
-                const profit = settings.profitPercent;
-                return parseFloat(
-                  (product.amount + (product.amount * profit) / 100).toFixed(2)
-                );
-              },
-            },
-          },
-        },
-      })
+      .$extends(extendAmount(settings))
       .category.findFirst({
         where: {
           id,
@@ -253,7 +199,7 @@ export const getCategoryById = async (
           createdAt: true,
           products: {
             where: {
-              publish: true,
+              AND: [{ publish: true }, { deleted: false }],
             },
             select: {
               id: true,

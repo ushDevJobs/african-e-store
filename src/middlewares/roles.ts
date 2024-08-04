@@ -77,33 +77,7 @@ export async function checkStore(
     next(new NotFound("Store not found", ErrorCode.NOT_FOUND));
   }
 }
-export async function checkUserAccessibility(
-  req: Request,
-  _: Response,
-  next: NextFunction
-) {
-  const { id } = req.query;
-  if (id) {
-    const user = req.user as RequestUser;
-    const checkCart = await prisma.cart.findFirst({
-      where: {
-        AND: [
-          {
-            id: id as string,
-            userId: user.id,
-          },
-        ],
-      },
-      select: { id: true },
-    });
-    if (checkCart) next();
-    else {
-      next(new NotFound("Cart Item not found", ErrorCode.NOT_FOUND));
-    }
-  } else {
-    next(new BadRequest("Invalid Request Parameters", ErrorCode.BAD_REQUEST));
-  }
-}
+
 export async function checkStoreId(
   req: Request,
   _: Response,

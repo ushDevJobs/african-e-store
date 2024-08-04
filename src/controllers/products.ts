@@ -14,6 +14,7 @@ import { NotFound } from "../exceptions/not-found";
 import { DatabaseException } from "../exceptions/datebase-exception";
 import { getPositiveReview } from "./store";
 import { Prisma } from "@prisma/client";
+import { extendAmount } from "../prisma/extensions";
 
 export const updateProduct = async (req: Request, res: Response) => {
   const { id } = req.params;
@@ -50,9 +51,9 @@ export const updateProduct = async (req: Request, res: Response) => {
     newImageArray = req.body.images;
   }
   const validatedProduct = validatecreateProduct.parse(req.body);
-  const categ = await prisma.product.findFirst({
+  const categ = await prisma.product.findFirstOrThrow({
     where: {
-      id,
+      AND: [{ id }, { deleted: false }],
     },
     select: {
       categories: true,
@@ -103,52 +104,29 @@ export const addProduct = async (
     where: { userId: user.id },
     select: { id: true },
   });
-  console.log(req.body.date, !!req.body.date);
-  try {
-    await prisma.product.create({
-      data: {
-        coverImage: images.length > 0 ? images[0] : "",
-        itemCondition: validatedProduct.condition,
-        name: validatedProduct.name,
-        amount: validatedProduct.price,
-        endBiddingDate:
-          req.body.date !== "undefined"
-            ? new Date(req.body.date) || null
-            : null,
-        images: images as Prisma.JsonArray,
-        salesType: validatedProduct.salesType,
-        details: validatedProduct.description,
-        quantity: validatedProduct.quantity,
-        publish: validatedProduct.publish === "false" ? false : true,
-        storeId: storeId.id,
-        categories: {
-          connect: [{ id: req.body.category }],
-        },
+
+  await prisma.product.create({
+    data: {
+      coverImage: images.length > 0 ? images[0] : "",
+      itemCondition: validatedProduct.condition,
+      name: validatedProduct.name,
+      amount: validatedProduct.price,
+      endBiddingDate:
+        req.body.date && req.body.date !== "undefined"
+          ? new Date(req.body.date) || null
+          : null,
+      images: images as Prisma.JsonArray,
+      salesType: validatedProduct.salesType,
+      details: validatedProduct.description,
+      quantity: validatedProduct.quantity,
+      publish: validatedProduct.publish === "false" ? false : true,
+      storeId: storeId.id,
+      categories: {
+        connect: [{ id: req.body.category }],
       },
-    });
-    return returnJSONSuccess(res);
-  } catch (error: any) {
-    const generatedError = createPrismaError(error);
-    if (generatedError) {
-      next(
-        new DatabaseException(
-          generatedError,
-          400,
-          ErrorCode.DUPLICATE_FIELD,
-          error
-        )
-      );
-    } else {
-      next(
-        new DatabaseException(
-          "Failed to create product",
-          ErrorCode.FAILED_TO_ADD_PRODUCT,
-          500,
-          error
-        )
-      );
-    }
-  }
+    },
+  });
+  return returnJSONSuccess(res);
 };
 
 export const getProductById = async (req: Request, res: Response) => {
@@ -160,24 +138,10 @@ export const getProductById = async (req: Request, res: Response) => {
   const user = req.user as RequestUser;
   const { id } = req.params;
   let product = await prisma
-    .$extends({
-      result: {
-        product: {
-          amount: {
-            needs: { amount: true },
-            compute(product) {
-              const profit = settings.profitPercent;
-              return parseFloat(
-                (product.amount + (product.amount * profit) / 100).toFixed(2)
-              );
-            },
-          },
-        },
-      },
-    })
-    .product.findFirst({
+    .$extends(extendAmount(settings))
+    .product.findFirstOrThrow({
       where: {
-        AND: [{ id }, { publish: true }],
+        AND: [{ id }, { publish: true }, { deleted: false }],
       },
       select: {
         id: true,
@@ -208,18 +172,14 @@ export const getProductById = async (req: Request, res: Response) => {
     where: {
       AND: [
         {
-          orderDelivered: {
+          orderDetails: {
             some: {
               AND: [
                 { status: "DELIVERED" },
                 { storeId: product?.store.id },
                 {
-                  order: {
-                    products: {
-                      some: {
-                        id: product?.id || "",
-                      },
-                    },
+                  product: {
+                    id: product?.id || "",
                   },
                 },
               ],
@@ -239,18 +199,14 @@ export const getProductById = async (req: Request, res: Response) => {
     where: {
       AND: [
         {
-          orderDelivered: {
+          orderDetails: {
             some: {
               AND: [
                 { status: "DELIVERED" },
                 { storeId: product?.store.id },
                 {
-                  order: {
-                    products: {
-                      some: {
-                        id: product?.id || "",
-                      },
-                    },
+                  product: {
+                    id: product?.id || "",
                   },
                 },
               ],
@@ -286,11 +242,31 @@ export const getProductById = async (req: Request, res: Response) => {
 };
 export const deleteProductById = async (req: Request, res: Response) => {
   const { id } = req.params;
-  const product = await prisma.product.delete({
+  const product = await prisma.order.findFirst({
     where: {
-      id,
+      orderDetails: {
+        some: {
+          productId: id,
+        },
+      },
     },
   });
+  if (product) {
+    await prisma.product.update({
+      where: {
+        id,
+      },
+      data: {
+        deleted: true,
+      },
+    });
+  } else {
+    await prisma.product.delete({
+      where: {
+        id,
+      },
+    });
+  }
   return returnJSONSuccess(res);
 };
 export const getFavouriteProducts = async (

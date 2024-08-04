@@ -20,24 +20,23 @@ export const paymentIntent = async (req: Request, res: Response) => {
   const order = await prisma.order.create({
     data: {
       amount,
-      quantity: cart,
-      products: {
-        connect: products.map((product) => ({ id: product.id })),
-      },
       orderId: generateRandomNumbers(7),
       userId: user.id,
-      status: {
-        create: Array.from(
-          new Set(products.map((product) => product.storeId))
-        ).map((id) => ({ storeId: id })),
-      },
-      stores: {
-        connect: products.map((product) => ({ id: product.storeId })),
+      orderDetails: {
+        createMany: {
+          data: products.map((product) => ({
+            amount: product.amount,
+            quantity: cart.find((q) => q.id === product.id)!.quantity,
+            productId: product.id,
+            storeId: product.store.id,
+            shippingFee: product.store.shippingFee,
+          })),
+        },
       },
     },
     select: {
       id: true,
-      quantity: true,
+      orderDetails: true,
     },
   });
   try {
@@ -83,19 +82,19 @@ export const handlePaymentSuccess = async (req: Request, res: Response) => {
           id: o_id as string,
         },
         data: {
-          payment_status: true,
-          transaction_id: payment_intent as string,
-          date_paid: new Date(),
+          paymentStatus: true,
+          transactionId: payment_intent as string,
+          datePaid: new Date(),
         },
         select: {
           id: true,
           amount: true,
-          quantity: true,
+          orderDetails: true,
         },
       });
       try {
         await prisma.$transaction(
-          order.quantity.map((q) =>
+          order.orderDetails.map((q) =>
             prisma.product.update({
               where: {
                 id: q.id,
@@ -155,6 +154,7 @@ const getTotal = async (cart: { id: string; quantity: number }[]) => {
         storeId: true,
         store: {
           select: {
+            id: true,
             shippingFee: true,
           },
         },
@@ -166,9 +166,7 @@ const getTotal = async (cart: { id: string; quantity: number }[]) => {
         product.amount *
         (cart.find((cart) => cart.id === product.id)?.quantity || 1)
     )
-    .reduce((x, y, i, e) => {
-      return x + y;
-    }, 0);
+    .reduce((x, y) => x + y, 0);
 
   const filteredProducts: any[] = [];
   products.filter(

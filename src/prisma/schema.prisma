@@ -23,7 +23,6 @@ model User {
   telephone         String?
   country           String?
   accountType       AccountType     @default(BUYER)
-  cartItems         Cart[]
   orders            Order[]
   myRatings         Rating[]
   store             Store?          @relation(name: "myPersonalStore")
@@ -47,17 +46,16 @@ model Store {
   userId                  String                    @unique
   createdAt               DateTime                  @default(now())
   updatedAt               DateTime                  @updatedAt
-  orders                  Order[]
   products                Product[]
   user                    User                      @relation(fields: [userId], references: [id], onDelete: Cascade, name: "myPersonalStore")
   favourite               User[]                    @relation(name: "myFavouriteStores")
-  SellerDashboard         SellerDashboard?
-  SellerPaymentHistory    SellerPaymentHistory[]
-  SellerWithdrawalHistory SellerWithdrawalHistory[]
-  orderDeliveryStatus     orderDeliveryStatus[]
+  sellerDashboard         SellerDashboard?
+  sellerPaymentHistory    SellerPaymentHistory[]
+  sellerWithdrawalHistory SellerWithdrawalHistory[]
   shippingFee             Float                     @default(2.99)
   sellerMessage           sellerMessage[]
   bankDetails             BankDetails?
+  orderDetails            OrderDetails[]
 
   @@map("store")
 }
@@ -82,11 +80,11 @@ model Product {
   discountPercentage Float          @default(0)
   createdAt          DateTime       @default(now())
   updatedAt          DateTime       @updatedAt
-  carts              Cart[]
-  orders             Order[]
   store              Store          @relation(fields: [storeId], references: [id], onDelete: Cascade)
   categories         Category[]
   favourite          User[]
+  orderDetails       OrderDetails[]
+  deleted            Boolean        @default(false)
 
   @@unique([storeId, name])
   @@map("products")
@@ -102,66 +100,53 @@ model Category {
   @@map("categories")
 }
 
-model Cart {
-  id        String   @id @default(uuid())
-  quantity  Int      @default(1)
-  productId String
-  userId    String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([productId, userId])
-  @@map("carts")
-}
-
 model Order {
   id                   String                 @id @default(cuid())
   orderId              Int                    @unique
   amount               Float
-  /// [orderQuantity]
-  quantity             Json                   @default("[]")
-  status               orderDeliveryStatus[]
   userId               String?
   createdAt            DateTime               @default(now())
   updatedAt            DateTime               @updatedAt
-  products             Product[]
-  stores               Store[]
   user                 User?                  @relation(fields: [userId], references: [id])
-  transaction_id       String?
-  payment_status       Boolean                @default(false)
-  date_paid            DateTime?
+  transactionId        String?
+  paymentStatus        Boolean                @default(false)
+  datePaid             DateTime?
   sellerPaymentHistory SellerPaymentHistory[]
-  rating               Rating[]
+  orderDetails         OrderDetails[]
 
   @@map("orders")
 }
 
-model Tracker {
-  id                  String               @id @default(uuid())
-  progress            Int                  @default(0)
-  currentLocation     String?
-  description         String?              @db.VarChar(255)
-  status              TrackerStatus        @default(PENDING)
-  createdAt           DateTime             @default(now())
-  updatedAt           DateTime             @updatedAt
-  orderDeliveryStatus orderDeliveryStatus?
+model OrderDetails {
+  id          String      @id @default(uuid())
+  amount      Float
+  quantity    Int
+  status      OrderStatus @default(PENDING)
+  order       Order       @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderId     String
+  product     Product     @relation(fields: [productId], references: [id])
+  productId   String
+  shippingFee Float
+  store       Store       @relation(fields: [storeId], references: [id])
+  storeId     String
+  updatedAt   DateTime    @updatedAt
+  createdAt   DateTime    @default(now())
+  review      Rating?     @relation(fields: [ratingId], references: [id])
+  ratingId    String?
 
-  @@map("deliverytracker")
+  @@unique([orderId, productId])
+  @@map("orderdetails")
 }
 
 model Rating {
-  id             String                @id @default(uuid())
-  rating         Int
-  review         String
-  userId         String
-  order          Order                 @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  orderId        String
-  createdAt      DateTime              @default(now())
-  updatedAt      DateTime              @updatedAt
-  user           User                  @relation(fields: [userId], references: [id], onDelete: NoAction)
-  orderDelivered orderDeliveryStatus[]
+  id           String         @id @default(uuid())
+  rating       Int
+  review       String
+  userId       String
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  user         User           @relation(fields: [userId], references: [id], onDelete: NoAction)
+  orderDetails OrderDetails[]
 
   @@map("ratings")
 }
@@ -188,7 +173,7 @@ model SellerPaymentHistory {
   storeId           String
   order             Order            @relation(fields: [orderId], references: [id], onDelete: Cascade)
   orderId           String           @unique
-  SellerDashboard   SellerDashboard? @relation(fields: [sellerDashboardId], references: [id])
+  sellerDashboard   SellerDashboard? @relation(fields: [sellerDashboardId], references: [id])
   sellerDashboardId String?
 
   @@map("sellerspaymenthistory")
@@ -197,29 +182,14 @@ model SellerPaymentHistory {
 model SellerWithdrawalHistory {
   id                String           @id @default(uuid())
   amount            Float            @default(0)
-  createdAt         DateTime         @default(now())
   store             Store            @relation(fields: [storeId], references: [id], onDelete: Cascade)
   storeId           String
   sellerDashboard   SellerDashboard? @relation(fields: [sellerDashboardId], references: [id])
   sellerDashboardId String?
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
 
   @@map("sellerswithdrawalhistory")
-}
-
-model orderDeliveryStatus {
-  id        String      @id @default(uuid())
-  order     Order       @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  orderId   String
-  store     Store       @relation(fields: [storeId], references: [id])
-  storeId   String
-  status    OrderStatus @default(PENDING)
-  tracker   Tracker?    @relation(fields: [trackerId], references: [id])
-  trackerId String?     @unique
-  reviews   Rating[]
-  updatedAt DateTime    @updatedAt
-  createdAt DateTime    @default(now())
-
-  @@map("orderdeliverystatus")
 }
 
 model Sessions {

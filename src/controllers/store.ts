@@ -97,7 +97,7 @@ const getStoreFullDetails = async (id: string, isStoreId = false) => {
   });
   const ratings = await prisma.rating.groupBy({
     where: {
-      orderDelivered: {
+      orderDetails: {
         some: {
           AND: [{ status: "DELIVERED" }, { storeId: store.id }],
         },
@@ -109,7 +109,7 @@ const getStoreFullDetails = async (id: string, isStoreId = false) => {
 
   let avg = await prisma.rating.aggregate({
     where: {
-      orderDelivered: {
+      orderDetails: {
         some: {
           AND: [{ status: "DELIVERED" }, { storeId: store.id }],
         },
@@ -126,22 +126,11 @@ const getStoreFullDetails = async (id: string, isStoreId = false) => {
 
   const totalItemSold = await prisma.order.count({
     where: {
-      AND: [
-        {
-          status: {
-            some: {
-              status: "DELIVERED",
-            },
-          },
+      orderDetails: {
+        some: {
+          AND: [{ status: "DELIVERED" }, { storeId: store.id }],
         },
-        {
-          stores: {
-            some: {
-              id: store.id,
-            },
-          },
-        },
-      ],
+      },
     },
   });
   // const totalRatingByUsers = await prisma.rating.groupBy({
@@ -184,7 +173,7 @@ export const getPositiveReview = async (id: string) => {
     where: {
       AND: [
         {
-          orderDelivered: {
+          orderDetails: {
             some: {
               AND: [{ status: "DELIVERED" }, { storeId: id }],
             },
@@ -297,6 +286,7 @@ export const searchStoreProducts = async (
               contains: q as string,
             },
           },
+          { deleted: false },
         ],
       },
     });
@@ -306,24 +296,16 @@ export const searchStoreProducts = async (
     next(new BadRequest("Invalid request parameters", ErrorCode.BAD_REQUEST));
   }
 };
-export const getStoreProducts = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const getStoreProducts = async (req: Request, res: Response) => {
   const user = req.user as RequestUser;
-  const store = await prisma.store.findFirstOrThrow({
-    where: { userId: user.id },
-    select: { id: true },
-  });
   const categories = await prisma.store.findFirstOrThrow({
     where: {
-      id: store.id,
+      userId: user.id,
     },
     select: {
       products: {
         where: {
-          publish: true,
+          AND: [{ publish: true }, { deleted: false }],
         },
         select: {
           id: true,
@@ -345,11 +327,7 @@ export const getStoreProducts = async (
 
   return res.status(200).json({ status: true, data: categories.products });
 };
-export const getStoreDraftProducts = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const getStoreDraftProducts = async (req: Request, res: Response) => {
   const user = req.user as RequestUser;
   const store = await prisma.store.findFirstOrThrow({
     where: { userId: user.id },
@@ -362,7 +340,7 @@ export const getStoreDraftProducts = async (
     select: {
       products: {
         where: {
-          publish: false,
+          AND: [{ publish: true }, { deleted: false }],
         },
         select: {
           id: true,
@@ -567,10 +545,10 @@ const getCategory = async (id: string, store = true) => {
   const condition = store ? { id: id } : { userId: id };
   const categories = await prisma.category.findMany({
     where: {
-      AND: [
-        {
-          products: {
-            some: {
+      products: {
+        some: {
+          AND: [
+            {
               OR: [
                 { storeId: id },
                 {
@@ -580,19 +558,18 @@ const getCategory = async (id: string, store = true) => {
                 },
               ],
             },
-          },
-        },
-        {
-          products: {
-            some: {
+            {
               id: {
                 not: undefined,
               },
             },
-          },
+            { deleted: false },
+            { publish: true },
+          ],
         },
-      ],
+      },
     },
+
     select: {
       name: true,
       id: true,
@@ -624,7 +601,7 @@ const getReviewsForStore = async (id: string) => {
     where: {
       AND: [
         {
-          orderDelivered: {
+          orderDetails: {
             some: {
               AND: [{ status: "DELIVERED" }, { storeId: id }],
             },
@@ -642,20 +619,13 @@ const getReviewsForStore = async (id: string) => {
           id: true,
         },
       },
-      orderDelivered: {
+      orderDetails: {
         select: {
-          order: {
+          product: {
             select: {
-              products: {
-                where: {
-                  storeId: id,
-                },
-                select: {
-                  name: true,
-                  id: true,
-                  coverImage: true,
-                },
-              },
+              name: true,
+              id: true,
+              coverImage: true,
             },
           },
         },
@@ -675,13 +645,13 @@ export const getStoreOrders = async (req: Request, res: Response) => {
     where: {
       AND: [
         {
-          stores: {
+          orderDetails: {
             some: {
               id: store.id,
             },
           },
         },
-        { payment_status: true },
+        { paymentStatus: true },
       ],
     },
     select: {
@@ -689,7 +659,7 @@ export const getStoreOrders = async (req: Request, res: Response) => {
       orderId: true,
       amount: true,
       createdAt: true,
-      status: {
+      orderDetails: {
         where: {
           storeId: store.id,
         },
@@ -697,25 +667,21 @@ export const getStoreOrders = async (req: Request, res: Response) => {
           id: true,
           status: true,
           storeId: true,
+          product: {
+            select: {
+              id: true,
+              name: true,
+              amount: true,
+              coverImage: true,
+            },
+          },
         },
       },
-      quantity: true,
       user: {
         select: {
           fullname: true,
           id: true,
           address: true,
-        },
-      },
-      products: {
-        where: {
-          storeId: store.id,
-        },
-        select: {
-          id: true,
-          name: true,
-          amount: true,
-          coverImage: true,
         },
       },
     },
@@ -729,11 +695,19 @@ export const updateDeliveryStatusOfOrder = async (
 ) => {
   const { status } = req.body;
   const { id } = req.params;
+  const store = await prisma.store.findFirstOrThrow({
+    where: {
+      userId: (req.user as RequestUser).id,
+    },
+    select: {
+      id: true,
+    },
+  });
   const stat =
     status === 3 ? "DELIVERED" : status === 2 ? "DISPATCHED" : "PENDING";
-  const order = await prisma.orderDeliveryStatus.update({
+  const order = await prisma.orderDetails.updateMany({
     where: {
-      id: id,
+      AND: [{ orderId: id }, { storeId: store.id }],
     },
     data: {
       status: stat,
@@ -790,7 +764,7 @@ export const getAboutStore = async (req: Request, res: Response) => {
 
   const fufilledOrders = await prisma.order.aggregate({
     where: {
-      status: {
+      orderDetails: {
         some: {
           AND: [
             {
@@ -839,13 +813,13 @@ export const getIncomeAndTransactionsFromStore = async (
     where: {
       AND: [
         {
-          status: {
+          orderDetails: {
             some: {
               status: "DELIVERED",
             },
           },
         },
-        { payment_status: true },
+        { paymentStatus: true },
       ],
     },
     select: {
@@ -853,15 +827,21 @@ export const getIncomeAndTransactionsFromStore = async (
       amount: true,
       createdAt: true,
       orderId: true,
-      status: {
+      orderDetails: {
         where: {
           storeId: store.id,
         },
         select: {
           status: true,
+          product: {
+            select: {
+              name: true,
+              amount: true,
+              coverImage: true,
+            },
+          },
         },
       },
-      quantity: true,
       sellerPaymentHistory: {
         where: {
           storeId: store.id,
@@ -876,16 +856,6 @@ export const getIncomeAndTransactionsFromStore = async (
           fullname: true,
           id: true,
           address: true,
-        },
-      },
-      products: {
-        where: {
-          storeId: store.id,
-        },
-        select: {
-          name: true,
-          amount: true,
-          coverImage: true,
         },
       },
     },
