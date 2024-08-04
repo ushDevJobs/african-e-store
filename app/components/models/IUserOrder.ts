@@ -27,6 +27,7 @@ export interface Products {
   details: string;
   itemCondition: string;
   coverImage: string;
+  amount: number;
   store: Store;
 }
 

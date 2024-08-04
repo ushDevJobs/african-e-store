@@ -123,11 +123,15 @@ const OrdersPage = (props: Props) => {
                                                             <p style={{ fontSize: '12px' }} className={getStatusColor(status.status)} key={status.id}>{status.status}</p>
                                                         ))}
                                                     </div>
-                                                    <div className={styles.price}>
-                                                        <h3>&pound;{order.amount.toLocaleString()}</h3>
-                                                        <p>Shipping here</p>
-                                                        {/* <p>Returns accepted</p> */}
-                                                    </div>
+                                                    {order.products.map((product, index) => (
+                                                        <div className={styles.price} key={index}>
+                                                            <h3>&pound;{(product.amount *
+                                                                (order.quantity.find((q) => q.id === product.id)
+                                                                    ?.quantity || 0)).toLocaleString()}</h3>
+                                                            <p>Shipping here</p>
+                                                            {/* <p>Returns accepted</p> */}
+                                                        </div>
+                                                    ))}
                                                     <div className={styles.trackOrder}>
                                                         <button
                                                             onClick={() => {
