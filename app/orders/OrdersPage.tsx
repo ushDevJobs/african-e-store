@@ -102,7 +102,6 @@ const OrdersPage = (props: Props) => {
                                                                 <div className="relative w-10 h-10 rounded-full">
                                                                     {product.store.image ? <Image src={product.store.image} alt='store image' className='rounded-full object-cover' fill /> : <UserIcon />}
                                                                 </div>
-                                                                {/* {product.store.image ?? <UserIcon />}  */}
                                                                 <span>{product.store.name}</span>
                                                             </div>
                                                         ))}
@@ -128,7 +127,7 @@ const OrdersPage = (props: Props) => {
                                                             <h3>&pound;{(product.amount *
                                                                 (order.quantity.find((q) => q.id === product.id)
                                                                     ?.quantity || 0)).toLocaleString()}</h3>
-                                                            <p>Shipping here</p>
+                                                            {/*<p>Shipping here</p>*/}
                                                             {/* <p>Returns accepted</p> */}
                                                         </div>
                                                     ))}
@@ -150,7 +149,7 @@ const OrdersPage = (props: Props) => {
                                             {orders.map(order => (
                                                 <div key={order.id} className='flex flex-col'>
                                                     <div className='flex flex-col gap-4'>
-                                                        {order.products.slice(0, 1).map((product,index) => (
+                                                        {order.products.slice(0, 1).map((product, index) => (
                                                             <div className='flex items-center gap-3' key={index}>
                                                                 <div className="relative w-8 h-8">
                                                                     {product.store.image ? <Image src={product.store.image} alt='store image' fill className='rounded-full object-cover' /> : <UserIcon />}
@@ -158,7 +157,7 @@ const OrdersPage = (props: Props) => {
                                                                 <span>{product.store.name}</span>
                                                             </div>
                                                         ))}
-                                                        {order.products.slice(0, 1).map((product,index) => (
+                                                        {order.products.slice(0, 1).map((product, index) => (
                                                             <div className='flex gap-4' key={index}>
                                                                 <div className="relative w-14 h-14 rounded-full">
                                                                     <Image src={product.coverImage} alt='product image' fill className='rounded-xl object-cover' />
@@ -174,7 +173,7 @@ const OrdersPage = (props: Props) => {
                                                                     ))}
                                                                     <div className='mt-1'>
                                                                         <h3 className='font-medium text-lg'>&pound;{order.amount.toLocaleString()}</h3>
-                                                                        <p>Shipping here</p>
+                                                                        {/*<p>Shipping here</p>*/}
                                                                         {/* <p>Returns accepted</p> */}
                                                                     </div>
                                                                 </div>
