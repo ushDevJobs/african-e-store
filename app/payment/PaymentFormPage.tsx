@@ -36,7 +36,7 @@ const PaymentFormPage = (props: Props) => {
         credentials: "include",
       })
         .then((res) => res.json())
-        .then((data) => setAmount(data.data.amount));
+          .then((data) => setAmount(data.data && data.data.amount));
       
       runOnce.current++;
     }

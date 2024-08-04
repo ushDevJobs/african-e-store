@@ -566,6 +566,17 @@ export function useFetchShippingFee() {
 
     return fetchShippingFee;
 }
+export function useFetchUserAddress() {
+    async function fetchUserAddress() {
+        // Fire the request
+        const response = await API.get(ApiRoutes.FetchUserAddress);
+
+        // Return the response
+        return response;
+    }
+
+    return fetchUserAddress;
+}
 export function useFetchBankDetail() {
     async function fetchBankDetail() {
         // Fire the request

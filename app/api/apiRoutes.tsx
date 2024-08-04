@@ -128,6 +128,8 @@ export default class ApiRoutes {
 
     static FetchBankDetail: string = "api/stores/store/profile/bank";
 
+    static FetchUserAddress: string = "api/user/address";
+
     static userImages: string = "images/user";
 
     static FetchReviews: string = "api/stores/store/reviews";

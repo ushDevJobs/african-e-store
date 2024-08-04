@@ -1,9 +1,7 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import styles from "./Checkout.module.scss";
 import Image from "next/image";
-import images from "@/public/images";
-import { RectangleIcon } from "../components/SVGs/SVGicons";
 import QuantityButton from "../components/QuantityButton";
 import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
@@ -13,6 +11,7 @@ import {
     increment,
     totalPriceSelector,
 } from "../redux/features/cart/cartSlice";
+import { useUserAddress } from "../context/UserAddressContext";
 
 type Props = {};
 
@@ -20,6 +19,7 @@ const CheckoutPage = (props: Props) => {
     const dispatch = useDispatch();
     const cartItems = useSelector((state: RootState) => state.cart.cartItems);
     const totalPrice = useSelector(totalPriceSelector);
+    const { userAddress } = useUserAddress();
     // Step 1: Extract the store IDs
     const storeIds = cartItems.map(item => item.product.store.id);
     const storeShippingFee = cartItems[0].product.store.shippingFee;
@@ -29,6 +29,7 @@ const CheckoutPage = (props: Props) => {
 
     // Step 3: Calculate the shipping fee
     const shippingFee = uniqueStoreIds.length * storeShippingFee;
+
     return (
         <div className={styles.main}>
             <h1>Checkout</h1>
@@ -81,9 +82,8 @@ const CheckoutPage = (props: Props) => {
 
                     <div className={styles.address}>
                         <h3>Ship to</h3>
-                        <p>User address from google </p>
-                        <p>Country</p>
-                        <p>Number</p>
+                        <p>{userAddress?.city},<br /> <br /> {userAddress?.country}</p>
+                        {/* <p>{userAddress.}</p> */}
                         <button className={styles.edit}>Change</button>
                     </div>
                     <div className={styles.coupon}>
@@ -95,18 +95,6 @@ const CheckoutPage = (props: Props) => {
                     </div>
                 </div>
                 <div className={styles.rhs}>
-                    {/* <div className={styles.method}>
-                        <h3>Payment method </h3>
-
-                        <div className={styles.paymentOptions}>
-                            <span><RectangleIcon /></span>
-                            <select name="" id="">
-                                <option value="">Paypal</option>
-                            </select>
-                        </div>
-
-                    </div> */}
-
                     <div className={styles.payment}>
                         <div className={styles.item}>
                             <p>Item ({cartItems.length})</p>

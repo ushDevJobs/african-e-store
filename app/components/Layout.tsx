@@ -24,6 +24,7 @@ import { createCustomErrorMessages } from './constants/catchError';
 import { store } from '../redux/store';
 import { Provider } from "react-redux";
 import { initializeIcons, loadTheme } from '@fluentui/react';
+import { UserAddressProvider } from '../context/UserAddressContext';
 
 interface LayoutProps {
     children?: ReactNode;
@@ -115,30 +116,32 @@ const Layout: FunctionComponent<LayoutProps> = ({ children }): ReactElement => {
             {!loaderIsVisible && (
                 <>
                     <AccountStatusProvider>
-                        <Provider store={store}>
-                            <Toaster
-                                position='bottom-center'
-                                richColors
-                                closeButton
-                                toastOptions={{
-                                    duration: 3000,
-                                    unstyled: false,
-                                }}
-                            />
-                            {(pathname.includes('/signup') || pathname.includes('/login') || pathname.includes('/verification')) ? <RegistrationNav /> : <Navbar />}
+                        <UserAddressProvider>
+                            <Provider store={store}>
+                                <Toaster
+                                    position='bottom-center'
+                                    richColors
+                                    closeButton
+                                    toastOptions={{
+                                        duration: 3000,
+                                        unstyled: false,
+                                    }}
+                                />
+                                {(pathname.includes('/signup') || pathname.includes('/login') || pathname.includes('/verification')) ? <RegistrationNav /> : <Navbar />}
 
-                            {!['/', '/login', '/verification', '/signup', '/seller/signup', '/seller/login'].includes(pathname) &&
-                                <NextBreadcrumb
-                                    homeElement={'Home'}
-                                    separator={<span>&gt;</span>}
-                                    activeClasses='text-[#2c7865]'
-                                    containerClasses='flex py-5 bg-white'
-                                    listClasses='hover:underline mx-1 md:mx-2 font-bold'
-                                    capitalizeLinks
-                                />}
-                            {children}
-                            {(pathname.includes('/signup') || pathname.includes('/login') || pathname.includes('/verification')) ? <RegistrationFooter /> : <Footer />}
-                        </Provider>
+                                {!['/', '/login', '/verification', '/signup', '/seller/signup', '/seller/login'].includes(pathname) &&
+                                    <NextBreadcrumb
+                                        homeElement={'Home'}
+                                        separator={<span>&gt;</span>}
+                                        activeClasses='text-[#2c7865]'
+                                        containerClasses='flex py-5 bg-white'
+                                        listClasses='hover:underline mx-1 md:mx-2 font-bold'
+                                        capitalizeLinks
+                                    />}
+                                {children}
+                                {(pathname.includes('/signup') || pathname.includes('/login') || pathname.includes('/verification')) ? <RegistrationFooter /> : <Footer />}
+                            </Provider>
+                        </UserAddressProvider>
                     </AccountStatusProvider>
                 </>
             )}

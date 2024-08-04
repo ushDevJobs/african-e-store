@@ -5,11 +5,12 @@ import Image from 'next/image'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../redux/store'
 import PaymentFormPage from './PaymentFormPage'
+import { useUserAddress } from '../context/UserAddressContext'
 
 type Props = {}
 
 const PaymentPage = (props: Props) => {
-    const dispatch = useDispatch()
+    const { userAddress } = useUserAddress();
     const cartItems = useSelector((state: RootState) => state.cart.cartItems);
     return (
         <div className={styles.main}>
@@ -38,7 +39,7 @@ const PaymentPage = (props: Props) => {
                                         </div>
                                         <div className={styles.delivery}>
                                             <h3>Ship to </h3>
-                                            <p>User address from google </p>
+                                            <p>{userAddress?.city},<br /> <br /> {userAddress?.country}</p>
                                             {/* <p>Country</p>
                                             <p>Number</p> */}
                                         </div>

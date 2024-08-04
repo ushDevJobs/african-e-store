@@ -41,7 +41,7 @@ const PaymentCheckoutPage = ({ amount }: { amount: number }) => {
                 .then((res) => res.json())
                 .then((data) => {
                     setOrderId(data.data && data.data.orderId);
-                    setClientSecret(data.data.clientSecret);
+                    setClientSecret(data.data && data.data.clientSecret);
                 });
             runOnce.current++;
         }
