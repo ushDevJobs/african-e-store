@@ -13,6 +13,7 @@ const Footer = (props: Props) => {
     const isMobile = windowRes.width && windowRes.width < 768;
     const onMobile = typeof isMobile == 'boolean' && isMobile;
     const onDesktop = typeof isMobile == 'boolean' && !isMobile;
+    const currentYear = new Date().getFullYear();
     return (
         <div className={styles.footerContainer}>
             {onMobile &&
@@ -34,22 +35,22 @@ const Footer = (props: Props) => {
             <div className={styles.links}>
                 <ul>
                     <h3>Buy</h3>
-                    <Link href={'/'}>
+                    <Link href={'/login'}>
                         <li>Stores</li>
                     </Link>
-                    <Link href={'/'}>
+                    <Link href={'/signup'}>
                         <li>Registration</li>
                     </Link>
-                    <Link href={'/'}>
+                    {/* <Link href={'/'}>
                         <li>Money back guarantee </li>
-                    </Link>
+                    </Link> */}
                 </ul>
                 <ul>
                     <h3>Sell</h3>
-                    <Link href={'/'}>
+                    <Link href={'/login'}>
                         <li>Your store </li>
                     </Link>
-                    <Link href={'/'}>
+                    <Link href={'/seller/signup'}>
                         <li>Start selling </li>
                     </Link>
                 </ul>
@@ -67,12 +68,12 @@ const Footer = (props: Props) => {
                 </ul>
                 <ul>
                     <h3>About us </h3>
-                    <Link href={'/'}>
+                    {/* <Link href={'/'}>
                         <li>News</li>
                     </Link>
                     <Link href={'/'}>
                         <li>Careers</li>
-                    </Link>
+                    </Link> */}
                     <Link href={'/'}>
                         <li>Policies </li>
                     </Link>
@@ -85,10 +86,10 @@ const Footer = (props: Props) => {
                     <Link href={'/'}>
                         <li>contact us </li>
                     </Link>
-                    <Link href={'/'}>
+                    <Link href={'/help'}>
                         <li>Help center</li>
                     </Link>
-                    <Link href={'/'}>
+                    <Link href={'/faq'}>
                         <li>FAQ&apos;s </li>
                     </Link>
                 </ul>
@@ -108,7 +109,9 @@ const Footer = (props: Props) => {
                     </div>
                 </div>
             }
-            <div className={styles.copyright}>  Copyright @ Rayvvin 2024 </div>
+            <div className={styles.copyright}>
+                Copyright @ Rayvvin {currentYear}
+            </div>
         </div>
     )
 }
