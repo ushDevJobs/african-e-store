@@ -46,8 +46,8 @@ const EditProductModal = ({
     const updateProduct = useUpdateProduct();
     const fetchCategories = useFetchCategoriesWithoutProducts();
     const [formValues, setFormValues] = useState<AddProductRequest>();
-    console.log({ selectedProduct });
-    console.log({ formValues });
+    // console.log({ selectedProduct });
+    // console.log({ formValues });
     const [isLoading, setIsLoading] = useState(false);
 
     const [selectedConditions, setSelectedConditions] = useState<string>("");
@@ -285,9 +285,9 @@ const EditProductModal = ({
                 selectedProduct.categories.length > 0 &&
                 selectedProduct.categories[0].id
             ); // Ensure the category state is set
-            console.log(
-                selectedProduct.categories ? selectedProduct.categories[0].id : ""
-            );
+            // console.log(
+            //     selectedProduct.categories ? selectedProduct.categories[0].id : ""
+            // );
         }
     }, [selectedProduct]);
 

@@ -43,7 +43,7 @@ const OrdersPage = (props: Props) => {
         }
         await fetchOrders()
             .then((response) => {
-                console.log("Response: ", response.data.data);
+                // console.log("Response: ", response.data.data);
                 setOrders(response.data.data);
             })
             .catch((error) => {

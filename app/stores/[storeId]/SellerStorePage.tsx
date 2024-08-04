@@ -69,7 +69,7 @@ const SellerStorePage = ({ params }: Props) => {
 
         await fetchStore(storeId)
             .then((response) => {
-                console.log("Response: ", response.data.data);
+                // console.log("Response: ", response.data.data);
                 setStore(response.data.data);
             })
             .catch((error) => {

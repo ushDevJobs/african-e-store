@@ -18,11 +18,11 @@ const FeedBack = ({ storeId }: Props) => {
 
         await fetchReviews(storeId)
             .then((response) => {
-                console.log(response.data.data);
+                // console.log(response.data.data);
                 setReviews(response.data.data)
             })
             .catch((error) => {
-                console.log(error);
+                // console.log(error);
                 const errorMessage = createCustomErrorMessages(error.response?.data);
                 toast.error(errorMessage);
             })

@@ -25,7 +25,7 @@ const AboutSeller = ({ store, isFetchingStore }: Props) => {
         setIsFetchingSummary(true);
         await fetchSummary()
             .then((response) => {
-                console.log("Response: ", response.data.data);
+                // console.log("Response: ", response.data.data);
                 setSummary(response.data.data);
             })
             .catch((error) => {

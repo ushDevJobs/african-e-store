@@ -41,7 +41,7 @@ const PaymentFormPage = (props: Props) => {
       runOnce.current++;
     }
   }, []);
-  console.log(!!amount, amount);
+//   console.log(!!amount, amount);
 
   return (
     <main className="p-5 text-white text-center rounded-md bg-[#f7fafa]">

@@ -22,7 +22,7 @@ export const UserAddressProvider = ({ children }: { children: ReactNode }) => {
 
         await fetchAddress()
             .then((response) => {
-                console.log("Response: ", response.data);
+                // console.log("Response: ", response.data);
                 setUserAddress(response.data.data);
             })
             .catch((error) => {

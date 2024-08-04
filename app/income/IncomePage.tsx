@@ -25,7 +25,7 @@ const IncomePage = (props: Props) => {
         setIsFetchingIncome(true);
         await fetchIncome()
             .then((response) => {
-                console.log("Response: ", response.data.data);
+                // console.log("Response: ", response.data.data);
                 setIncome(response.data.data);
             })
             .catch((error) => {

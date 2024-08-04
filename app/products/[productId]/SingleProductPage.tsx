@@ -24,7 +24,7 @@ const SingleProductPage = ({ params }: Props) => {
     const productId = params.productId;
     const [product, setProduct] = useState<ProductResponse>();
     const [isFetchingProduct, setIsFetchingProduct] = useState<boolean>(true);
-    console.log({ product })
+    // console.log({ product })
     const addProductToFavorite = useAddProductsToFavorite();
     const removeProductFromFavorite = useRemoveProductFromFavorite()
     const { accountStatus, fetchAccountStatus } = useAccountStatus();
@@ -42,7 +42,7 @@ const SingleProductPage = ({ params }: Props) => {
             .catch((error) => {
                 const errorMessage = createCustomErrorMessages(error.response?.data)
                 toast.error(errorMessage);
-                console.log(errorMessage);
+                // console.log(errorMessage);
             })
             .finally(() => {
                 setIsFetchingProduct(false);
@@ -55,7 +55,7 @@ const SingleProductPage = ({ params }: Props) => {
             .then((response) => {
 
                 // Log response 
-                console.log(response);
+                // console.log(response);
 
                 handleFetchProduct()
                 // Display success 

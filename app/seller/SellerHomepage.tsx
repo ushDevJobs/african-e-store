@@ -106,7 +106,7 @@ const SellerHomePage = (props: Props) => {
         }
         await fetchDrafts()
             .then((response) => {
-                console.log("Response: ", response.data.data);
+                // console.log("Response: ", response.data.data);
                 setDrafts(response.data.data);
             })
             .catch((error) => {

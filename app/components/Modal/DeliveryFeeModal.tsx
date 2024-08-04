@@ -32,7 +32,7 @@ const DeliveryFeeModal = ({ visibility, setVisibility }: Props) => {
 
         await fetchShippingFee()
             .then((response) => {
-                console.log("Response: ", response.data.data);
+                // console.log("Response: ", response.data.data);
                 setFee(response.data.data);
             })
             .catch((error) => {
@@ -55,7 +55,7 @@ const DeliveryFeeModal = ({ visibility, setVisibility }: Props) => {
         await updateShippingFee(updatedShippingFee)
             .then((response) => {
                 // Log response
-                console.log(response);
+                // console.log(response);
 
                 // Display success
                 toast.success('Success, shipping fee updated');

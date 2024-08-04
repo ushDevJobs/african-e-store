@@ -80,7 +80,7 @@ const SellerDeliveryStatus = ({
             setVisibility(false);
             handleFetchOrders({ clearPreviousOrders: true })
         } catch (err) {
-            console.log(err);
+            // console.log(err);
         } finally {
             setIsUpdating(false);
         }
