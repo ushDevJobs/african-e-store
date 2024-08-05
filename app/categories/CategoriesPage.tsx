@@ -204,7 +204,7 @@ const CategoriesPage = () => {
                                         </div>
                                     ))
                                 ) : (
-                                    <p className='text-center flex flex-col items-center justify-center h-[40vh] text-gray-400 text-base'>No Products found</p>
+                                    <p className='text-center flex flex-col items-center justify-center h-[40vh] text-gray-400 text-base'>No Product found</p>
                                 )}
                             </div>
                             {filteredCategories.length > 0 && filteredCategories && (
