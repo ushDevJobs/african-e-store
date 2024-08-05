@@ -14,29 +14,29 @@ const RecentlyViewed = (props: Props) => {
                     <div className={styles.image}>
                         <Image fill src={images.cashew} alt='product image' />
                     </div>
-                    <p>Dog food 3 pcs bag </p>
-                    <h4>$250</h4>
+                    <p>Cashew </p>
+                    <h4>&pound;250</h4>
                 </div>
                 <div className={styles.card}>
                     <div className={styles.image}>
                         <Image fill src={images.cashew} alt='product image' />
                     </div>
-                    <p>Dog food 3 pcs bag </p>
-                    <h4>$250</h4>
+                    <p>Cashew </p>
+                    <h4>&pound;250</h4>
                 </div>
                 <div className={styles.card}>
                     <div className={styles.image}>
                         <Image fill src={images.cashew} alt='product image' />
                     </div>
-                    <p>Dog food 3 pcs bag </p>
-                    <h4>$250</h4>
+                    <p>Cashew </p>
+                    <h4>&pound;250</h4>
                 </div>
                 <div className={styles.card}>
                     <div className={styles.image}>
                         <Image fill src={images.cashew} alt='product image' />
                     </div>
-                    <p>Dog food 3 pcs bag </p>
-                    <h4>$250</h4>
+                    <p>Cashew </p>
+                    <h4>&pound;250</h4>
                 </div>
             </div>
         </div>
