@@ -39,6 +39,8 @@ const CategoriesPage = () => {
     const totalPages = totalCategories;
     const categoryRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
 
+    const [searchQuery, setSearchQuery] = useState<string>('');
+
     const goToPage = (page: number) => {
         if (page >= 1 && page <= totalPages) {
             router.push(`/categories?page=${page}`);
@@ -109,6 +111,24 @@ const CategoriesPage = () => {
         }
     };
 
+    // const filteredCategories = categories.map(category => ({
+    //     ...category,
+    //     products: category.products.filter(product =>
+    //         product.name.toLowerCase().includes(searchQuery.toLowerCase())
+    //     )
+    // }));
+
+    // Filter categories based on search query
+    const filteredCategories = categories
+        .map(category => ({
+            ...category,
+            products: category.products.filter(product =>
+                product.name.toLowerCase().includes(searchQuery.toLowerCase())
+            )
+        }))
+        .filter(category => category.products.length > 0); // Only include categories with matching products
+
+
     return (
         <motion.div
             initial="closed"
@@ -118,11 +138,18 @@ const CategoriesPage = () => {
                 <div className={styles.main}>
                     <CategoriesHeader mainText='Explore different categories' subText='Search for any product in different categories on Rayvvin' />
                     {onMobile &&
-                        <div className="w-full flex items-center gap-4 justify-end mb-2 ml-auto">
+                        <div className="w-full flex items-center gap-4 justify-end mb-4 ml-auto">
                             <span className='flex items-center gap-2 cursor-pointer'><SortIcon /> Sort</span>
                             <span onClick={() => setIsFilterOpen(true)} className='flex items-center gap-2 cursor-pointer'><FilterIcon /> Filter </span>
                         </div>
                     }
+                    <div className="mb-7 ">
+                        <input type="text" placeholder='Search for products'
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            className='p-4 rounded-full border-gray-400 border outline-none text-base text-black w-full md:w-[400px] lg:w-[500px]'
+                        />
+                    </div>
                     <div className={styles.contents}>
                         {onDesktop &&
                             <div className={styles.lhs} style={{ position: 'relative' }}>
@@ -130,8 +157,8 @@ const CategoriesPage = () => {
                             </div>}
 
                         <div className={styles.rhs}>
-                            <div className='flex flex-col gap-10'>
-                                {categories.map((category, index) => (
+                            {/* <div className='flex flex-col gap-10'>
+                                {filteredCategories.map((category, index) => (
                                     <div className='flex flex-col'
                                         key={category.id}
                                         ref={(el) => { categoryRefs.current[category.id.toString()] = el; }}>
@@ -151,10 +178,36 @@ const CategoriesPage = () => {
                                     </div>
                                 ))}
 
-                                {categories && categories.length === 0 &&
+                                {filteredCategories && filteredCategories.length === 0 &&
                                     <p className='text-center flex flex-col items-center justify-center h-[40vh] text-gray-400 text-base'>No Product available</p>}
+                            </div> */}
+
+                            <div className='flex flex-col gap-10'>
+                                {filteredCategories.length > 0 ? (
+                                    filteredCategories.map((category, index) => (
+                                        <div className='flex flex-col'
+                                            key={category.id}
+                                            ref={(el) => { categoryRefs.current[category.id.toString()] = el; }}>
+                                            <h3>{category.name}</h3>
+                                            <div className={styles.cards}>
+                                                {category.products.map((product, index) => (
+                                                    <Link href={`/products/${product.id}`} className={styles.card} key={product.id} id={category.id.toString()}>
+                                                        <div className={styles.image}>
+                                                            <Image fill src={product.coverImage} alt='product image' />
+                                                        </div>
+                                                        <p className='text-lg font-medium'>{product.name} </p>
+                                                        <span className='text-gray-400 text-sm '>{product.details}</span>
+                                                        <h4>&pound;{product.amount.toLocaleString()}</h4>
+                                                    </Link>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    ))
+                                ) : (
+                                    <p className='text-center flex flex-col items-center justify-center h-[40vh] text-gray-400 text-base'>No Products found</p>
+                                )}
                             </div>
-                            {categories.length > 0 && categories && (
+                            {filteredCategories.length > 0 && filteredCategories && (
                                 <div className={styles.pagination}>
                                     <button onClick={() => goToPage(currentPage - 1)} disabled={currentPage === 1} style={currentPage === 1 ? { cursor: 'not-allowed', opacity: '0.5' } : { cursor: 'pointer' }}><LeftArrowIcon /></button>
                                     <div className={styles.value}>

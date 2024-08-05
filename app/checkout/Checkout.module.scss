@@ -157,6 +157,11 @@
           align-self: center;
           gap: 30px;
 
+          @include tablet {
+            flex-direction: column;
+            gap: 15px;
+          }
+
           input {
             max-width: 220px;
             border: 1px solid #828282;
@@ -167,6 +172,11 @@
             &::placeholder {
               color: #828282;
               font-size: 14px;
+            }
+
+            @include tablet {
+              max-width: 100%;
+              padding: 16px;
             }
           }
 
@@ -183,6 +193,10 @@
             &:disabled {
               pointer-events: none;
               opacity: 0.6;
+            }
+
+            @include tablet {
+             min-width: 100%;
             }
           }
         }

@@ -39,7 +39,7 @@ const PaymentPage = (props: Props) => {
                                         </div>
                                         <div className={styles.delivery}>
                                             <h3>Ship to </h3>
-                                            <p>{userAddress?.city},<br /> <br /> {userAddress?.country}</p>
+                                            {userAddress ? <p>{userAddress?.city}<br /> <br /> {userAddress?.country}</p> : <p>No address available</p>}
                                             {/* <p>Country</p>
                                             <p>Number</p> */}
                                         </div>
