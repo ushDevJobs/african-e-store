@@ -577,6 +577,17 @@ export function useFetchUserAddress() {
 
     return fetchUserAddress;
 }
+export function useFetchRecommendedProduct() {
+    async function fetchRecommendedProduct() {
+        // Fire the request
+        const response = await API.get(ApiRoutes.FetchRecommendedProduct);
+
+        // Return the response
+        return response;
+    }
+
+    return fetchRecommendedProduct;
+}
 export function useFetchBankDetail() {
     async function fetchBankDetail() {
         // Fire the request
