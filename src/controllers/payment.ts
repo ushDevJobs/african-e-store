@@ -8,6 +8,7 @@ import {
   returnJSONSuccess,
 } from "../utils/functions";
 import { OrderQuantity, RequestUser } from "../types";
+import logger from "../utils/logger";
 
 const stripe = new Stripe(process.env.STRIPE_S_KEY!, {
   typescript: true,
@@ -108,7 +109,7 @@ export const handlePaymentSuccess = async (req: Request, res: Response) => {
           )
         );
       } catch (error) {
-        console.log(error);
+        logger.error(error);
       }
 
       res.redirect(

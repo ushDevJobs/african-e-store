@@ -1,6 +1,6 @@
 {
     "info": {
-        "_postman_id": "3cf2f440-9499-4e07-b841-a208b6164670",
+        "_postman_id": "be65454f-2ce1-4e3e-8ae2-db252986e78c",
         "name": "Rayvvin with env",
         "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
         "description": ""
@@ -183,23 +183,6 @@
                                 }
                             },
                             "raw": "{\n  \"email\":\"segunade041@gmail.com\",\n  \"password\":\"password\",\n  \"fullname\":\"Captain Joe\",\n  \"confirmPassword\":\"password\",\n  \"telephone\":\"07044651989\",\n  \"companyName\":\"Megatron Gamings\",\n  \"country\":\"Nigeria\"\n}"
-                        }
-                    }
-                },
-                {
-                    "name": "Login Google Auth",
-                    "request": {
-                        "method": "GET",
-                        "url": {
-                            "raw": "{{host}}/api/auth/google",
-                            "path": [
-                                "api",
-                                "auth",
-                                "google"
-                            ],
-                            "host": [
-                                "{{host}}"
-                            ]
                         }
                     }
                 }
@@ -921,12 +904,12 @@
                     "request": {
                         "method": "GET",
                         "url": {
-                            "raw": "{{host}}/api/products/product/clyidg2xl000h32yntphb3see",
+                            "raw": "{{host}}/api/products/product/clzb7miw70005qymvescggu5",
                             "path": [
                                 "api",
                                 "products",
                                 "product",
-                                "clyidg2xl000h32yntphb3see"
+                                "clzb7miw70005qymvescggu5"
                             ],
                             "host": [
                                 "{{host}}"
@@ -954,7 +937,7 @@
                             "formdata": [
                                 {
                                     "key": "price",
-                                    "value": "10",
+                                    "value": "50",
                                     "type": "default"
                                 },
                                 {
@@ -964,7 +947,7 @@
                                 },
                                 {
                                     "key": "quantity",
-                                    "value": "5000",
+                                    "value": "500",
                                     "type": "default"
                                 },
                                 {
@@ -998,6 +981,26 @@
                                     "key": "salesType",
                                     "value": "ONCE",
                                     "type": "default"
+                                },
+                                {
+                                    "key": "images",
+                                    "src": "c:\\Users\\USER\\Downloads\\phil-desforges-8DJ62Bk38BI-unsplash.jpg",
+                                    "type": "file"
+                                },
+                                {
+                                    "key": "images",
+                                    "src": "c:\\Users\\USER\\Downloads\\nicolas-bichon-cCguzQuxEuw-unsplash.jpg",
+                                    "type": "file"
+                                },
+                                {
+                                    "key": "images",
+                                    "src": "c:\\Users\\USER\\Downloads\\howard-bouchevereau-RSCirJ70NDM-unsplash.jpg",
+                                    "type": "file"
+                                },
+                                {
+                                    "key": "images",
+                                    "src": "c:\\Users\\USER\\Downloads\\nicolas-bichon-ZhV4iqAXxyA-unsplash.jpg",
+                                    "type": "file"
                                 }
                             ]
                         }
@@ -1156,22 +1159,17 @@
                             ]
                         }
                     }
-                }
-            ]
-        },
-        {
-            "name": "Payment",
-            "item": [
+                },
                 {
-                    "name": "Checkout",
+                    "name": "Get recommended products",
                     "request": {
-                        "method": "POST",
+                        "method": "GET",
                         "url": {
-                            "raw": "{{host}}/api/payment/checkout",
+                            "raw": "{{host}}/api/products/recommended",
                             "path": [
                                 "api",
-                                "payment",
-                                "checkout"
+                                "products",
+                                "recommended"
                             ],
                             "host": [
                                 "{{host}}"
@@ -1179,6 +1177,28 @@
                         }
                     }
                 },
+                {
+                    "name": "Get Recently Viewed",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{host}}/api/products/recently-viewed",
+                            "path": [
+                                "api",
+                                "products",
+                                "recently-viewed"
+                            ],
+                            "host": [
+                                "{{host}}"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Payment",
+            "item": [
                 {
                     "name": "Get Amount",
                     "request": {

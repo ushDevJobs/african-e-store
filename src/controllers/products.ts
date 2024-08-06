@@ -15,6 +15,7 @@ import { DatabaseException } from "../exceptions/datebase-exception";
 import { getPositiveReview } from "./store";
 import { Prisma } from "@prisma/client";
 import { extendAmount } from "../prisma/extensions";
+import logger from "../utils/logger";
 
 export const updateProduct = async (req: Request, res: Response) => {
   const { id } = req.params;
@@ -137,6 +138,7 @@ export const getProductById = async (req: Request, res: Response) => {
   });
   const user = req.user as RequestUser;
   const { id } = req.params;
+
   let product = await prisma
     .$extends(extendAmount(settings))
     .product.findFirstOrThrow({
@@ -176,10 +178,10 @@ export const getProductById = async (req: Request, res: Response) => {
             some: {
               AND: [
                 { status: "DELIVERED" },
-                { storeId: product?.store.id },
+                { storeId: product.store.id },
                 {
                   product: {
-                    id: product?.id || "",
+                    id: product.id,
                   },
                 },
               ],
@@ -230,15 +232,36 @@ export const getProductById = async (req: Request, res: Response) => {
   let avgRating = (rating._avg.rating || 0).toString().includes(".")
     ? (rating._avg.rating || 0).toFixed(1)
     : (rating._avg.rating || 0).toFixed(0);
-  return returnJSONSuccess(res, {
-    data: product,
-    ratings: {
-      avgRating: parseFloat(avgRating),
-      totalRating: rating._count.rating || 0,
-      storePositiveFeeback: await getPositiveReview(product?.store.id!),
-      productRatings,
-    },
-  });
+  try {
+    await prisma.viewsTracker.upsert({
+      where: {
+        userId_productId: {
+          userId: user.id,
+          productId: id,
+        },
+      },
+      create: {
+        userId: user.id,
+        productId: id,
+        updatedAt: new Date(),
+      },
+      update: {
+        updatedAt: new Date(),
+      },
+    });
+  } catch (error) {
+    logger.error(error);
+  } finally {
+    return returnJSONSuccess(res, {
+      data: product,
+      ratings: {
+        avgRating: parseFloat(avgRating),
+        totalRating: rating._count.rating || 0,
+        storePositiveFeeback: await getPositiveReview(product?.store.id!),
+        productRatings,
+      },
+    });
+  }
 };
 export const deleteProductById = async (req: Request, res: Response) => {
   const { id } = req.params;
@@ -351,4 +374,64 @@ export const removeProductFromFavourite = async (
   } else {
     next(new BadRequest("Invalid Request Parameter", ErrorCode.BAD_REQUEST));
   }
+};
+export const getRecentlyViewedProductsForLoggedUser = async (
+  req: Request,
+  res: Response
+) => {
+  const products = await prisma.viewsTracker.findMany({
+    where: {
+      userId: (req.user as RequestUser).id,
+    },
+    orderBy: {
+      updatedAt: "desc",
+    },
+    take: 8,
+    select: {
+      product: {
+        select: {
+          id: true,
+          coverImage: true,
+          amount: true,
+          name: true,
+        },
+      },
+    },
+  });
+  returnJSONSuccess(res, { data: products });
+};
+export const getRecommendedProducts = async (req: Request, res: Response) => {
+  const count = await prisma.product.count({
+    where: {
+      AND: [{ publish: true }, { deleted: false }],
+    },
+  });
+  const randomUsed: number[] = [];
+  const getRandomSkips = () => Math.floor(Math.random() * count);
+  const transactions = [];
+  for (let i = 1; i <= 8; i++) {
+    let randomSkip = getRandomSkips();
+    if (randomUsed.includes(randomSkip)) {
+      continue;
+    } else {
+      transactions.push(
+        prisma.product.findFirst({
+          skip: randomSkip,
+          take: 1,
+          where: {
+            AND: [{ publish: true }, { deleted: false }],
+          },
+          select: {
+            id: true,
+            coverImage: true,
+            amount: true,
+            name: true,
+          },
+        })
+      );
+      randomUsed.push(randomSkip);
+    }
+  }
+  const recommended = await prisma.$transaction(transactions);
+  return returnJSONSuccess(res, { recommended });
 };

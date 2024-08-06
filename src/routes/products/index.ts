@@ -13,8 +13,11 @@ import {
   getFavouriteProducts,
   addProductToFavourite,
   removeProductFromFavourite,
+  getRecentlyViewedProductsForLoggedUser,
+  getRecommendedProducts,
 } from "../../controllers/products";
 import { uploadProductImage } from "../../config/configOptions";
+import { checkAuth } from "../../middlewares/auth";
 
 const router = Router();
 
@@ -27,6 +30,12 @@ router
   )
   .delete([sellerRoleCheck], rootErrorHandler(deleteProductById));
 
+router.get(
+  "/recently-viewed",
+  checkAuth,
+  rootErrorHandler(getRecentlyViewedProductsForLoggedUser)
+);
+router.get("/recommended", rootErrorHandler(getRecommendedProducts));
 router.post(
   "/product",
   [sellerRoleCheck, uploadProductImage.array("images")],

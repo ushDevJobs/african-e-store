@@ -8,29 +8,45 @@ import {
   PrismaClientKnownRequestError,
   PrismaClientValidationError,
 } from "@prisma/client/runtime/library";
+import { ErrorCode } from "../exceptions/root";
 export const createPrismaError = (error: Error) => {
   if (error instanceof PrismaClientKnownRequestError) {
-    let errorMessage;
+    let errorMessage: { message: string; code?: number } = { message: "" };
     switch (error.code) {
       case "P2002":
-        errorMessage = `Duplicate data\n ${
-          process.env.NODE_ENV !== "production" && error.message
-        } `;
+        errorMessage = {
+          message: `Duplicate data\n ${
+            process.env.NODE_ENV !== "production" && error.message
+          } `,
+        };
         break;
       case "P2025":
-        errorMessage = `Record not found\n ${
-          process.env.NODE_ENV !== "production" && error.message
-        } `;
+        if (error.name === "NotFoundError") {
+          errorMessage = {
+            message: `Not Found\n ${
+              process.env.NODE_ENV !== "production" && error.message
+            }`,
+            code: ErrorCode.NOT_FOUND,
+          };
+        } else {
+          errorMessage = {
+            message: `Record Not found\n ${
+              process.env.NODE_ENV !== "production" && error.message
+            }`,
+          };
+        }
         break;
       default:
-        errorMessage = error.message;
+        errorMessage = { message: error.message };
     }
     return errorMessage;
   }
   if (error instanceof PrismaClientValidationError) {
-    return `Invalid Data Sent\n ${
-      process.env.NODE_ENV !== "production" && error.message
-    } `;
+    return {
+      message: `Invalid Data Sent\n ${
+        process.env.NODE_ENV !== "production" && error.message
+      } `,
+    };
   }
   return null;
 };

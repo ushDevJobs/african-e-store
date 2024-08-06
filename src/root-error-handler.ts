@@ -34,11 +34,11 @@ export const rootErrorHandler = (method: Function) => {
         return next(exception);
       }
       const message = createPrismaError(error);
-      if (message) {
+      if (message?.message) {
         exception = new DatabaseException(
-          message,
+          message.message,
           400,
-          ErrorCode.BAD_REQUEST,
+          message.code ? message.code : ErrorCode.BAD_REQUEST,
           error
         );
         return next(exception);
