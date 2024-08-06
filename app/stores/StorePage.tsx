@@ -10,6 +10,7 @@ import { createCustomErrorMessages } from '../components/constants/catchError'
 import { toast } from 'sonner'
 import Link from 'next/link'
 import { FullPageLoader } from '../Loader/ComponentLoader'
+import images from '@/public/images'
 
 type Props = {}
 
@@ -121,7 +122,7 @@ const StorePage = (props: Props) => {
                     {filteredStores?.map((store, index) => (
                         <div className={styles.card} key={index}>
                             <div className={styles.image}>
-                                {store.image && <Image fill src={store.image} alt='product image' />}
+                                {store.image ? <Image fill src={store.image} alt='store image' /> : <Image fill src={images.deliveryImage} alt='store image' />}
 
                                 <span
                                     className='absolute right-2 top-2 bg-white p-3 cursor-pointer rounded-full'
