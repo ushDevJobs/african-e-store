@@ -1,5 +1,5 @@
-import { SellerProductsResponse } from './ISellerStore';
-import { Favorite } from './IStores';
+import { SellerProductsResponse } from "./ISellerStore";
+import { Favorite } from "./IStores";
 
 export interface ProductResponse {
   id: string;
@@ -17,8 +17,10 @@ export interface ProductResponse {
   favourite: Favorite[];
   endBiddingDate: null;
   returnPolicy: null;
-  ratings: Ratings;
+  avgRating: number;
+  totalRating: number;
   positiveFeeback: number;
+  productRatings: ProductRating[];
 }
 
 export interface Ratings {
@@ -27,8 +29,16 @@ export interface Ratings {
   storePositiveFeeback: number;
   productRatings: ProductRatings[];
 }
-
-export interface ProductRatings{}
+export interface ProductRating {
+  user: {
+    fullname: string;
+  };
+  rating: number;
+  id: string;
+  createdAt: string;
+  review: string;
+}
+export interface ProductRatings {}
 
 export interface StoreResponse {
   id: string;
