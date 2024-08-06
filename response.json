@@ -1,0 +1,82 @@
+{
+  "status": true,
+  "message": "Successful",
+  "data": [
+    {
+      "id": "clzb8kllu0001hzxht4ne971w",
+      "orderId": 5976800,
+      "amount": 4952.99,
+      "createdAt": "2024-08-01T12:12:33.761Z",
+      "orderDetails": [
+        {
+          "id": "2538de15-6c8b-4f44-b53c-dcf755da05f0",
+          "status": "DELIVERED",
+          "storeId": "clzb4tubi0001q7ci5ziz90tc",
+          "shippingFee": 2.99,
+          "amount": 4952.99,
+          "quantity": 1,
+          "product": {
+            "id": "clzb7miw70005qymvescdggu5",
+            "name": "Apple MacBook Pro 14\" (2023) - Power Meets Elegance",
+            "coverImage": "https://rayvvin.com/images/product/product_image_1722512763773_howard-bouchevereau-rscirj70ndm-unsplash.jpg"
+          }
+        }
+      ],
+      "user": {
+        "fullname": "uchenna ukeh",
+        "id": "clzb5ocps00007urxltsutj3u",
+        "address": {
+          "id": "clzb5ocps00017urxxp75h0q6",
+          "userId": "clzb5ocps00007urxltsutj3u",
+          "houseNumber": null,
+          "street": null,
+          "postCode": null,
+          "city": "dambwa",
+          "country": "United Kingdom",
+          "updatedAt": "2024-08-02T11:45:55.408Z",
+          "createdAt": "2024-08-01T10:51:30.016Z"
+        }
+      }
+    }
+  ]
+}
+
+
+
+
+
+
+{
+  "status": true,
+  "message": "Successful",
+  "data": [
+    {
+      "id": "clzb8kllu0001hzxht4ne971w",
+      "orderId": 5976800,
+      "amount": 4952.99,
+      "orderDetails": [
+        {
+          "status": "DELIVERED",
+          "quantity": 1,
+          "id": "2538de15-6c8b-4f44-b53c-dcf755da05f0",
+          "amount": 4952.99,
+          "shippingFee": 2.99,
+          "product": {
+            "name": "Apple MacBook Pro 14\" (2023) - Power Meets Elegance",
+            "id": "clzb7miw70005qymvescdggu5",
+            "details": "M2 Pro Chip: Experience lightning-fast performance with Apple's cutting-edge M2 Pro chip, delivering enhanced graphics, faster computing, and improved battery life for all your demanding tasks.\r\nStunning Liquid Retina XDR Display",
+            "itemCondition": "NEW",
+            "coverImage": "https://rayvvin.com/images/product/product_image_1722512763773_howard-bouchevereau-rscirj70ndm-unsplash.jpg",
+            "store": {
+              "name": "Joe Gamings",
+              "id": "clzb4tubi0001q7ci5ziz90tc",
+              "image": null
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "totalPages": 1,
+  "hasMore": false
+}
