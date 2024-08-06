@@ -253,11 +253,11 @@ export const getProductById = async (req: Request, res: Response) => {
     logger.error(error);
   } finally {
     return returnJSONSuccess(res, {
-      data: product,
-      ratings: {
+      data: {
+        ...product,
         avgRating: parseFloat(avgRating),
         totalRating: rating._count.rating || 0,
-        storePositiveFeeback: await getPositiveReview(product?.store.id!),
+        positiveFeeback: await getPositiveReview(product?.store.id!),
         productRatings,
       },
     });
