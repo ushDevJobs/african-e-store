@@ -1,4 +1,4 @@
-import { StatusEnums } from "./ISellerStore";
+import { OrderDetails, StatusEnums } from "./ISellerStore";
 
 export interface Quantity {
   id: string;
@@ -31,12 +31,21 @@ export interface Products {
   store: Store;
 }
 
-
 export interface UserOrderResponse {
   id: string;
   orderId: number;
-  quantity: Quantity[];
-  amount: number;
-  status: Status[];
-  products: Products[];
+  amount: true;
+  orderDetails: UserOrderDetails;
+}
+export interface UserOrderDetails extends OrderDetails {
+  product: {
+    id: string;
+    name: string;
+    coverImage: string;
+    store: {
+      name: string;
+      id: string;
+      image: string;
+    };
+  };
 }

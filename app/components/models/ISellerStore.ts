@@ -77,12 +77,28 @@ export interface StoreOrderResponse {
   amount: number;
   createdAt: string;
   orderId: number;
-  quantity: Quantity[];
-  status: Status[];
+  orderDetails: OrderDetails[];
   user: User;
-  products: Products[];
 }
 
+export interface OrderDetails {
+  id: string;
+  status: StatusEnums;
+  quantity: number;
+  shippingFee: number;
+  amount: number;
+  storeId: string;
+  product: {
+    id: string;
+    name: string;
+    coverImage: string;
+  };
+  user: {
+    fullname: string;
+    id: string;
+    address: string;
+  };
+}
 export interface Quantity {
   id: string;
   quantity: number;

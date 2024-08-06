@@ -1,3 +1,5 @@
+import { StoreOrderResponse } from "./ISellerStore";
+
 export interface IncomeResponse {
   income: Income[];
   transactions: Transactions[];
@@ -40,13 +42,6 @@ export interface Products {
   coverImage: string;
 }
 
-export interface Transactions {
-  id: string;
-  amount: number;
-  createdAt: string;
-  status: Status[];
-  quantity: Quantity[];
+export interface Transactions extends StoreOrderResponse {
   sellerPaymentHistory: SellerPaymentHistory[];
-  user: User;
-  products: Products[];
 }
