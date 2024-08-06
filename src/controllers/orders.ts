@@ -24,6 +24,7 @@ export const getOrders = async (req: Request, res: Response) => {
     select: {
       id: true,
       orderId: true,
+      amount: true,
       orderDetails: {
         select: {
           status: true,
@@ -49,7 +50,6 @@ export const getOrders = async (req: Request, res: Response) => {
           },
         },
       },
-      amount: true,
     },
   });
   returnJSONSuccess(res, {

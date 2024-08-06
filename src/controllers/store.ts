@@ -647,7 +647,7 @@ export const getStoreOrders = async (req: Request, res: Response) => {
         {
           orderDetails: {
             some: {
-              id: store.id,
+              storeId: store.id,
             },
           },
         },
@@ -667,11 +667,13 @@ export const getStoreOrders = async (req: Request, res: Response) => {
           id: true,
           status: true,
           storeId: true,
+          shippingFee: true,
+          amount: true,
+          quantity: true,
           product: {
             select: {
               id: true,
               name: true,
-              amount: true,
               coverImage: true,
             },
           },
@@ -762,7 +764,7 @@ export const getAboutStore = async (req: Request, res: Response) => {
     .map(({ amount, quantity }) => amount * quantity)
     .reduce((x, y) => x + y, 0);
 
-  const fufilledOrders = await prisma.order.aggregate({
+  const fufilledOrders = await prisma.order.count({
     where: {
       orderDetails: {
         some: {
@@ -777,9 +779,6 @@ export const getAboutStore = async (req: Request, res: Response) => {
         },
       },
     },
-    _count: {
-      _all: true,
-    },
   });
 
   const income: any =
@@ -791,7 +790,7 @@ export const getAboutStore = async (req: Request, res: Response) => {
     data: {
       income: income[0].amount || 0,
       stock,
-      fufilledOrders: fufilledOrders._count._all || 0,
+      fufilledOrders: fufilledOrders || 0,
       messages: messagesLength,
     },
   });
@@ -832,11 +831,16 @@ export const getIncomeAndTransactionsFromStore = async (
           storeId: store.id,
         },
         select: {
+          id: true,
           status: true,
+          storeId: true,
+          shippingFee: true,
+          amount: true,
+          quantity: true,
           product: {
             select: {
+              id: true,
               name: true,
-              amount: true,
               coverImage: true,
             },
           },
@@ -862,7 +866,7 @@ export const getIncomeAndTransactionsFromStore = async (
   });
   return returnJSONSuccess(res, {
     data: {
-      income: parseFloat((income as number).toFixed(2)),
+      income,
       transactions,
     },
   });
