@@ -49,6 +49,11 @@ export const getCategories = async (req: Request, res: Response) => {
             },
             { deleted: false },
             { publish: true },
+            {
+              quantity: {
+                gt: 0,
+              },
+            },
           ],
         },
       },
@@ -84,7 +89,16 @@ export const getCategories = async (req: Request, res: Response) => {
       ? {
           products: {
             where: {
-              AND: [{ publish: true }, { deleted: false }, { ...addCondition }],
+              AND: [
+                { publish: true },
+                { deleted: false },
+                {
+                  quantity: {
+                    gt: 0,
+                  },
+                },
+                { ...addCondition },
+              ],
             },
             select: {
               id: true,
@@ -107,7 +121,15 @@ export const getCategories = async (req: Request, res: Response) => {
             select: {
               products: {
                 where: {
-                  AND: [{ publish: true }, { deleted: false }],
+                  AND: [
+                    { publish: true },
+                    { deleted: false },
+                    {
+                      quantity: {
+                        gt: 0,
+                      },
+                    },
+                  ],
                 },
               },
             },
@@ -130,6 +152,11 @@ export const getCategories = async (req: Request, res: Response) => {
               },
               { publish: true },
               { deleted: false },
+              {
+                quantity: {
+                  gt: 0,
+                },
+              },
             ],
           },
         },
@@ -199,7 +226,15 @@ export const getCategoryById = async (
           createdAt: true,
           products: {
             where: {
-              AND: [{ publish: true }, { deleted: false }],
+              AND: [
+                { publish: true },
+                { deleted: false },
+                {
+                  quantity: {
+                    gt: 0,
+                  },
+                },
+              ],
             },
             select: {
               id: true,

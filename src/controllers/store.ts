@@ -153,11 +153,11 @@ const getStoreFullDetails = async (id: string, isStoreId = false) => {
     };
   };
   const ratingWithPercent = [
-    { ...findRating(1) },
-    { ...findRating(2) },
-    { ...findRating(3) },
-    { ...findRating(4) },
     { ...findRating(5) },
+    { ...findRating(4) },
+    { ...findRating(3) },
+    { ...findRating(2) },
+    { ...findRating(1) },
   ];
 
   return {
@@ -287,6 +287,11 @@ export const searchStoreProducts = async (
             },
           },
           { deleted: false },
+          {
+            quantity: {
+              gt: 0,
+            },
+          },
         ],
       },
     });
@@ -340,7 +345,7 @@ export const getStoreDraftProducts = async (req: Request, res: Response) => {
     select: {
       products: {
         where: {
-          AND: [{ publish: true }, { deleted: false }],
+          AND: [{ deleted: false }, { publish: false }],
         },
         select: {
           id: true,
@@ -525,7 +530,11 @@ export const getFavouriteStores = async (
 };
 export const getStoreCategories = async (req: Request, res: Response) => {
   const user = req.user as RequestUser;
-  const categories = await getCategory(user.id, false);
+  const store = await prisma.store.findFirstOrThrow({
+    where: { userId: user.id },
+    select: { id: true },
+  });
+  const categories = await getCategory(store.id, false);
   return returnJSONSuccess(res, { data: categories });
 };
 export const getCategoriesfromStoreById = async (
@@ -542,22 +551,12 @@ export const getCategoriesfromStoreById = async (
   }
 };
 const getCategory = async (id: string, store = true) => {
-  const condition = store ? { id: id } : { userId: id };
   const categories = await prisma.category.findMany({
     where: {
       products: {
         some: {
           AND: [
-            {
-              OR: [
-                { storeId: id },
-                {
-                  store: {
-                    userId: id,
-                  },
-                },
-              ],
-            },
+            { storeId: id },
             {
               id: {
                 not: undefined,
@@ -565,6 +564,11 @@ const getCategory = async (id: string, store = true) => {
             },
             { deleted: false },
             { publish: true },
+            {
+              quantity: {
+                gt: 0,
+              },
+            },
           ],
         },
       },
@@ -766,18 +770,23 @@ export const getAboutStore = async (req: Request, res: Response) => {
 
   const fufilledOrders = await prisma.order.count({
     where: {
-      orderDetails: {
-        some: {
-          AND: [
-            {
-              status: "DELIVERED",
+      AND: [
+        {
+          orderDetails: {
+            some: {
+              AND: [
+                {
+                  status: "DELIVERED",
+                },
+                {
+                  storeId: store.id,
+                },
+              ],
             },
-            {
-              storeId: store.id,
-            },
-          ],
+          },
         },
-      },
+        { paymentStatus: true },
+      ],
     },
   });
 
@@ -789,7 +798,7 @@ export const getAboutStore = async (req: Request, res: Response) => {
   return returnJSONSuccess(res, {
     data: {
       income: income[0].amount || 0,
-      stock,
+      stock: parseFloat(stock.toFixed(2)),
       fufilledOrders: fufilledOrders || 0,
       messages: messagesLength,
     },

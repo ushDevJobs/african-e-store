@@ -143,7 +143,16 @@ export const getProductById = async (req: Request, res: Response) => {
     .$extends(extendAmount(settings))
     .product.findFirstOrThrow({
       where: {
-        AND: [{ id }, { publish: true }, { deleted: false }],
+        AND: [
+          { id },
+          { publish: true },
+          { deleted: false },
+          {
+            quantity: {
+              gt: 0,
+            },
+          },
+        ],
       },
       select: {
         id: true,
@@ -386,7 +395,7 @@ export const getRecentlyViewedProductsForLoggedUser = async (
     orderBy: {
       updatedAt: "desc",
     },
-    take: 8,
+    take: 4,
     select: {
       product: {
         select: {
@@ -403,7 +412,15 @@ export const getRecentlyViewedProductsForLoggedUser = async (
 export const getRecommendedProducts = async (req: Request, res: Response) => {
   const count = await prisma.product.count({
     where: {
-      AND: [{ publish: true }, { deleted: false }],
+      AND: [
+        { publish: true },
+        { deleted: false },
+        {
+          quantity: {
+            gt: 0,
+          },
+        },
+      ],
     },
   });
   const randomUsed: number[] = [];
@@ -419,7 +436,15 @@ export const getRecommendedProducts = async (req: Request, res: Response) => {
           skip: randomSkip,
           take: 1,
           where: {
-            AND: [{ publish: true }, { deleted: false }],
+            AND: [
+              { publish: true },
+              { deleted: false },
+              {
+                quantity: {
+                  gt: 0,
+                },
+              },
+            ],
           },
           select: {
             id: true,
