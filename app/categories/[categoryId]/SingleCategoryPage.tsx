@@ -38,6 +38,8 @@ const SingleCategoryPage = ({ params }: Props) => {
     const limit = 4; // // Number of categories per page
     const categoryRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
 
+    const [searchQuery, setSearchQuery] = useState<string>('');
+
     const [isFilterOpen, setIsFilterOpen] = useState<boolean>(false)
 
 
@@ -67,6 +69,11 @@ const SingleCategoryPage = ({ params }: Props) => {
         }
     };
 
+    // Filter products by name
+    const filteredProducts = category?.products.filter(product =>
+        product.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
     useEffect(() => {
         handleFetchCategory();
     }, []);
@@ -88,6 +95,8 @@ const SingleCategoryPage = ({ params }: Props) => {
         // Run this effect only when the router is ready, which means: when the page is loaded
     }, [router]);
 
+
+
     return (
         <motion.div
             initial="closed"
@@ -104,6 +113,14 @@ const SingleCategoryPage = ({ params }: Props) => {
                             <span onClick={() => setIsFilterOpen(true)} className='flex items-center gap-2 cursor-pointer'><FilterIcon /> Filter </span>
                         </div>
                     }
+                    <div className="mb-7 ml-auto flex items-end justify-end">
+                        <input type="text" placeholder='Search for products'
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            className='p-4 rounded-full border-gray-400 border outline-none text-base text-black w-full md:w-[400px] lg:w-[500px]'
+                        />
+                    </div>
+
                     <div className={styles.contents}>
                         {onDesktop &&
                             <div className={styles.lhs} style={{ position: 'relative' }}>
@@ -114,8 +131,8 @@ const SingleCategoryPage = ({ params }: Props) => {
                             <div className='flex flex-col gap-10'>
                                 <div className='flex flex-col'>
                                     <h3>{category?.name}</h3>
-                                    <div className={styles.cards}>
-                                        {category?.products.map((product, index) => (
+                                    {/* <div className={styles.cards}>
+                                        {filteredProducts?.map((product, index) => (
                                             <Link href={`/products/${product.id}`} className={styles.card} key={product.id} >
                                                 <div className={styles.image}>
                                                     <Image fill src={product.coverImage} alt='product image' />
@@ -125,6 +142,22 @@ const SingleCategoryPage = ({ params }: Props) => {
                                                 <h4>&pound;{product.amount.toLocaleString()}</h4>
                                             </Link>
                                         ))}
+                                    </div> */}
+                                    <div className={styles.cards}>
+                                        {filteredProducts?.length === 0 ? (
+                                            <p className="h-[40vh] text-center flex flex-col items-center justify-center w-screen md:w-[50vw] text-gray-400">No products found</p>
+                                        ) : (
+                                            filteredProducts?.map((product, index) => (
+                                                <Link href={`/products/${product.id}`} className={styles.card} key={product.id} >
+                                                    <div className={styles.image}>
+                                                        <Image fill src={product.coverImage} alt='product image' />
+                                                    </div>
+                                                    <p>{product.name} </p>
+                                                    <p className='text-xs my-1'>{product.details} </p>
+                                                    <h4>&pound;{product.amount.toLocaleString()}</h4>
+                                                </Link>
+                                            ))
+                                        )}
                                     </div>
                                 </div>
                             </div>

@@ -16,8 +16,8 @@ const GetStarted = (props: Props) => {
                     <Image src={images.get_started} alt='image' />
                 </div>
                 <div className={styles.rhs}>
-                    <h3>See products from different suppliers in Africa </h3>
-                    <p>Lorem ipsum dolor sit amet consectetur. Tellus turpis quis nisi consequat nisl. In ultrices nisl lectus etiam arcu ipsum mauris odio tincidunt. </p>
+                    <h3>Explore Products from Top Suppliers Across Africa </h3>
+                    <p>Discover a wide range of products from reliable suppliers throughout Africa. Get the best deals and high-quality items tailored to your needs. Join our platform to start exploring today!</p>
               <Link href={'/signup'}> <button>Sign up</button></Link>
                    
                 </div>

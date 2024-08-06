@@ -4,9 +4,9 @@ import CartPage from './CartPage'
 type Props = {}
 
 const Cart = (props: Props) => {
-  return (
-<CartPage/>
-  )
+    return (
+        <CartPage />
+    )
 }
 
 export default Cart

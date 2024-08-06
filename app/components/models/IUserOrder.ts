@@ -35,17 +35,28 @@ export interface UserOrderResponse {
   id: string;
   orderId: number;
   amount: true;
-  orderDetails: UserOrderDetails;
+  orderDetails: UserOrderDetails[];
 }
-export interface UserOrderDetails extends OrderDetails {
-  product: {
-    id: string;
-    name: string;
-    coverImage: string;
-    store: {
-      name: string;
-      id: string;
-      image: string;
-    };
-  };
+export interface UserOrderDetails {
+  status: StatusEnums;
+  quantity: number;
+  id:string;
+  amount:number;
+  shippingFee: number;
+  product: Product;
+}
+
+export interface Product {
+  id: string;
+  name: string;
+  coverImage: string;
+  store: Store;
+  details: string;
+  itemCondition: string;
+}
+
+export interface Store {
+  name: string;
+  id: string;
+  image: string;
 }

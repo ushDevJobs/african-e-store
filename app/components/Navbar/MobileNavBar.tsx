@@ -149,6 +149,11 @@ const MobileNavBar = ({ navIsOpen, setNavIsOpen, isDropdownOpen,
                                     </li>
                                 </Link>
 
+                                <Link href="/stores" onClick={() => setNavIsOpen(false)}>
+                                    <li className={pathname == "/stores" ? styles.active : ""}>
+                                        Stores
+                                    </li>
+                                </Link>
                                 <Link href="/saved-items" onClick={() => setNavIsOpen(false)}>
                                     <li className={pathname == "/saved-items" ? styles.active : ""}>
                                         Saved Items

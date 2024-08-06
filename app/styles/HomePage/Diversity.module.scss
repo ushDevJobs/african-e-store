@@ -3,7 +3,7 @@
 .main {
   @include sectionPadding;
   padding-top: 80px;
-  padding-bottom: 80px;
+  padding-bottom: 100px;
 
   h2 {
     text-align: center;
@@ -53,7 +53,7 @@
         font-size: 24px !important;
         color: #cbf6dd;
         font-weight: 800;
-        margin-bottom: 20px !important;
+        margin-bottom: 10px !important;
         text-align: left !important;
 
         @include smallLaptop {
@@ -85,7 +85,7 @@
         border-radius: 37px;
         cursor: pointer;
         margin-right: auto;
-        margin-top: 30px;
+        margin-top: 20px;
 
         @include smallLaptop {
           padding: 8px 20px;
@@ -160,6 +160,8 @@
         color: white;
         display: flex;
         flex-direction: column;
+        align-items: center;
+        justify-content: center;
 
         h2 {
           font-size: 24px !important;
@@ -171,9 +173,11 @@
           color: #cbf6dd;
         }
         span {
-          font-size: 12px;
+          font-size: 16px;
           color: #fff;
-          line-height: 16px;
+          line-height: 20px;
+          margin: 0 auto;
+          text-align: center;
           font-weight: 300;
         }
         button {

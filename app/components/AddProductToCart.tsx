@@ -138,7 +138,7 @@ const AddProductToCart = ({ product, isFetchingProduct, handleAddProductToFavori
                                             </span>
                                         ))}
                                     </span> */}
-                                    <span className='flex items-center'>
+                                    {/* <span className='flex items-center'>
                                         {[1, 2, 3, 4].map((_, index) => (
                                             <span key={index} className={index != 5 ? 'mr-1' : ''}>
                                                 <RatingIcon colored={true} />
@@ -149,7 +149,7 @@ const AddProductToCart = ({ product, isFetchingProduct, handleAddProductToFavori
                                                 <RatingIcon />
                                             </span>
                                         ))}
-                                    </span>
+                                    </span> */}
                                     {/* <p className='text-base text-[#2C7865]'>(121 review)</p> */}
                                 </div>
                             )}

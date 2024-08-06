@@ -139,9 +139,9 @@
             position: absolute;
             background-color: #828282;
             color: #fff;
-            padding: 0 4px;
+            padding: 1px 4px 0;
             border-radius: 50%;
-            font-size: 12px;
+            font-size: 10px;
             top: -4px;
             left: 12px;
           }
@@ -272,7 +272,7 @@
         justify-content: space-between;
         padding: 0 3%;
 
-        &:hover{
+        &:hover {
           color: #2c7865;
         }
       }

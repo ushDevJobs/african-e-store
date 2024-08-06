@@ -20,7 +20,7 @@ const NextBreadcrumb = ({ homeElement, separator, containerClasses, listClasses,
 
     return (
         <div>
-            <ul className={`${containerClasses} ${styles.main} pt-32 md:pt-24 px-0 flex flex-wrap w-full md:px-2`} >
+            <ul className={`${containerClasses} ${styles.main} pt-32 md:pt-24 px-0 flex flex-wrap w-full md:px-10 lg:px-20`} >
                 <li className={listClasses}><Link href={'/'}>{homeElement}</Link></li>
                 {pathNames.length > 0 && separator}
                 {

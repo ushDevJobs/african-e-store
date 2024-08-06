@@ -12,8 +12,11 @@ type Props = {
 };
 
 const UserDeliveryStatus = ({ visibility, setVisibility, selectedOrder }: Props) => {
-    const status = selectedOrder?.status[0].status;
+    // const status = selectedOrder?.orderDetails[0] && selectedOrder?.orderDetails[0].status;
+    // const status = selectedOrder?.status[0].status;
 
+    const status = selectedOrder?.orderDetails[0] && selectedOrder?.orderDetails[0].status;
+    console.log({ status });
     const isActive = (currentStatus: StatusEnums) => {
         if (status === StatusEnums.Pending && currentStatus === StatusEnums.Pending) return true;
         if (status === StatusEnums.Dispatched && (currentStatus === StatusEnums.Pending || currentStatus === StatusEnums.Dispatched)) return true;
@@ -55,7 +58,7 @@ const UserDeliveryStatus = ({ visibility, setVisibility, selectedOrder }: Props)
                         </div>
                         <div className="flex flex-col items-start">
                             <p>Order purchased</p>
-                            <span>{moment(selectedOrder?.status[0].createdAt).format("DD-MM-YYYY")}</span>
+                            {/* <span>{moment(selectedOrder?.status[0].createdAt).format("DD-MM-YYYY")}</span> */}
                         </div>
                     </div>
 
@@ -72,7 +75,7 @@ const UserDeliveryStatus = ({ visibility, setVisibility, selectedOrder }: Props)
                         </div>
                         <div className="flex flex-col items-start">
                             <p>Order dispatched</p>
-                            <span>{moment(selectedOrder?.status[0].createdAt).format("DD-MM-YYYY")}</span>
+                            {/* <span>{moment(selectedOrder?.status[0].createdAt).format("DD-MM-YYYY")}</span> */}
                         </div>
                     </div>
 
@@ -83,7 +86,7 @@ const UserDeliveryStatus = ({ visibility, setVisibility, selectedOrder }: Props)
                             {isActive(StatusEnums.Delivered) ? <WhiteDeliveredIcon /> : <DeliveredIcon />}
                         </button>
                         <p>Order delivered</p>
-                            <span>{moment(selectedOrder?.status[0].createdAt).format("DD-MM-YYYY")}</span>
+                        {/* <span>{moment(selectedOrder?.status[0].createdAt).format("DD-MM-YYYY")}</span> */}
                     </div>
                 </div>
             </div>

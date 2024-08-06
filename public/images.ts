@@ -21,6 +21,7 @@ import singleProduct2 from './images/singleProduct2.png';
 import singleproduct3 from './images/singleproduct3.png';
 import noProduct from './images/noProduct.png';
 import emptyCart from './images/emptyCart.png';
+import deliveryImage from './images/deliveryImage.png';
 
 export default {
   emptyCart,
@@ -45,4 +46,5 @@ export default {
   singleProduct2,
   singleproduct3,
   category_mobile_header,
+  deliveryImage
 };

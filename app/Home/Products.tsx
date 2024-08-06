@@ -21,11 +21,10 @@ const Products = (props: Props) => {
                         <Image src={images.product} alt='image' />
                         <div className={styles.contents}>
                             <h1>keep track of your products </h1>
-                            <p>Lorem ipsum dolor sit amet consectetur. Tellus turpis quis nisi consequat nisl. In ultrices nisl lectus etiam arcu ipsum mauris odio tincidunt. Tellus imperdiet pulvinar turpis vitae eu pellentesque aliquet. Rhoncus tortor augue fringilla purus sagittis mi scelerisque porta habitant.</p>
+                            <p>Effortlessly manage your inventory and keep track of your products. Our platform provides tools to help you monitor stock levels, track sales, and ensure you never run out of your best-selling items. Stay organized and focus on growing your business.</p>
                             <Link href={'/seller/signup'}>   <button>
                                 Open a store
                             </button></Link>
-
                         </div>
                     </div>
                 </div>

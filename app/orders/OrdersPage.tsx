@@ -3,9 +3,6 @@ import React, { useEffect, useState } from 'react'
 import styles from './Orders.module.scss'
 import RecentlyViewed from '../components/RecentlyViewed'
 import Recommendations from '../components/Recommendations'
-import { UserIcon } from '../components/SVGs/SVGicons'
-import Image from 'next/image'
-import images from '@/public/images'
 import { useFetchUserOrders } from '../api/apiClients'
 import { UserOrderResponse } from '../components/models/IUserOrder'
 import { createCustomErrorMessages } from '../components/constants/catchError'
@@ -14,6 +11,8 @@ import { FullPageLoader } from '../Loader/ComponentLoader'
 import { StatusEnums } from '../components/models/ISellerStore'
 import useResponsiveness from '../components/hooks/responsiveness-hook'
 import UserDeliveryStatus from './UserDeliveryStatus'
+import Image from 'next/image'
+import { UserIcon } from '../components/SVGs/SVGicons'
 
 type Props = {}
 
@@ -97,38 +96,33 @@ const OrdersPage = (props: Props) => {
                                             {orders.map(order => (
                                                 <div key={order.id} className={styles.order}>
                                                     <div className={styles.item}>
-                                                        {order.products.slice(0, 1).map((product, index) => (
+                                                        {order.orderDetails.map((detail,index)=>(
                                                             <div className={styles.storeName} key={index}>
                                                                 <div className="relative w-10 h-10 rounded-full">
-                                                                    {product.store.image ? <Image src={product.store.image} alt='store image' className='rounded-full object-cover' fill /> : <UserIcon />}
+                                                                    {detail.product.store.image ? <Image src={detail.product.coverImage} alt='store image' className='rounded-full object-cover' fill /> : <UserIcon />}
                                                                 </div>
-                                                                <span>{product.store.name}</span>
+                                                                <span>{detail.product.store.name}</span>
                                                             </div>
                                                         ))}
-                                                        {order.products.slice(0, 1).map((product, index) => (
+                                                        {order.orderDetails.slice(0, 1).map((detail, index) => (
                                                             <div className={styles.productInfos} key={index}>
                                                                 <div className={styles.image}>
-                                                                    <Image src={product.coverImage} alt='product image' fill />
+                                                                    <Image src={detail.product.coverImage} alt='product image' fill />
                                                                 </div>
                                                                 <div className={styles.info}>
-                                                                    <h4>{product.name}</h4>
-                                                                    <p>Condition: {product.itemCondition}</p>
-                                                                    <h5>Quantity <span> {order.quantity.find((q) => q.id === product.id)
-                                                                        ?.quantity || 0}</span></h5>
+                                                                    <h4>{detail.product.name}</h4>
+                                                                    <p>Condition: {detail.product.itemCondition}</p>
+                                                                    <h5>Quantity <span> {detail.quantity} </span></h5>
                                                                 </div>
                                                             </div>
                                                         ))}
-                                                        {order.status.slice(0, 1).map(status => (
-                                                            <p style={{ fontSize: '12px' }} className={getStatusColor(status.status)} key={status.id}>{status.status}</p>
+                                                        {order.orderDetails.slice(0, 1).map((status,index) => (
+                                                            <p style={{ fontSize: '12px' }} className={getStatusColor(status.status)} key={index}>{status.status}</p>
                                                         ))}
                                                     </div>
-                                                    {order.products.map((product, index) => (
+                                                    {order.orderDetails.map((detail, index) => (
                                                         <div className={styles.price} key={index}>
-                                                            <h3>&pound;{(product.amount *
-                                                                (order.quantity.find((q) => q.id === product.id)
-                                                                    ?.quantity || 0)).toLocaleString()}</h3>
-                                                            {/*<p>Shipping here</p>*/}
-                                                            {/* <p>Returns accepted</p> */}
+                                                            <h3>&pound;{(detail.quantity * detail.amount).toLocaleString()}</h3>
                                                         </div>
                                                     ))}
                                                     <div className={styles.trackOrder}>
@@ -149,32 +143,34 @@ const OrdersPage = (props: Props) => {
                                             {orders.map(order => (
                                                 <div key={order.id} className='flex flex-col'>
                                                     <div className='flex flex-col gap-4'>
-                                                        {order.products.slice(0, 1).map((product, index) => (
+                                                        {order.orderDetails.slice(0, 1).map((detail, index) => (
                                                             <div className='flex items-center gap-3' key={index}>
                                                                 <div className="relative w-8 h-8">
-                                                                    {product.store.image ? <Image src={product.store.image} alt='store image' fill className='rounded-full object-cover' /> : <UserIcon />}
+                                                                    {detail.product.store.image ? <Image src={detail.product.store.image} alt='store image' fill className='rounded-full object-cover' /> : <UserIcon />}
                                                                 </div>
-                                                                <span>{product.store.name}</span>
+                                                                <span>{detail.product.store.name}</span>
                                                             </div>
                                                         ))}
-                                                        {order.products.slice(0, 1).map((product, index) => (
+                                                        {order.orderDetails.slice(0, 1).map((detail, index) => (
                                                             <div className='flex gap-4' key={index}>
                                                                 <div className="relative w-14 h-14 rounded-full">
-                                                                    <Image src={product.coverImage} alt='product image' fill className='rounded-xl object-cover' />
+                                                                    <Image src={detail.product.coverImage} alt='product image' fill className='rounded-xl object-cover' />
                                                                 </div>
                                                                 <div className=''>
-                                                                    <h4>{product.name}</h4>
-                                                                    <p>Condition: {product.itemCondition}</p>
-                                                                    <h5>Quantity <span> {order.quantity.find((q) => q.id === product.id)
+                                                                    <h4>{detail.product.name}</h4>
+                                                                    <p>Condition: {detail.product.itemCondition}</p>
+                                                                    {/* <h5>Quantity <span> {order.quantity.find((q) => q.id === product.id)
                                                                         ?.quantity || 0}</span>
-                                                                    </h5>
-                                                                    {order.status.slice(0, 1).map(status => (
-                                                                        <p style={{ fontSize: '12px', marginTop: '4px' }} className={getStatusColor(status.status)} key={status.id}>{status.status}</p>
-                                                                    ))}
+                                                                    </h5> */}
+                                                                    <h5>Quantity <span> {detail.quantity} </span></h5>
+
+                                                                    {/* {order.orderDetails.status.slice(0, 1).map(status => ( */}
+                                                                        <p style={{ fontSize: '12px', marginTop: '4px' }} className={getStatusColor(detail.status)} key={detail.id}>{detail.status}</p>
+                                                                    {/* ))} */}
                                                                     <div className='mt-1'>
-                                                                        <h3 className='font-medium text-lg'>&pound;{order.amount.toLocaleString()}</h3>
-                                                                        {/*<p>Shipping here</p>*/}
-                                                                        {/* <p>Returns accepted</p> */}
+                                                                        {/* <h3 className='font-medium text-lg'>&pound;{order.amount.toLocaleString()}</h3> */}
+
+                                                                        <h3>&pound;{(detail.quantity * detail.amount).toLocaleString()}</h3>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -191,7 +187,7 @@ const OrdersPage = (props: Props) => {
                                         </div>
                                     )}
                                 </div>
-                                <RecentlyViewed />
+                                {/* <RecentlyViewed /> */}
                                 <Recommendations />
                             </>
                         ) : (

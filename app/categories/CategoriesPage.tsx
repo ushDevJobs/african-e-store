@@ -143,7 +143,7 @@ const CategoriesPage = () => {
                             <span onClick={() => setIsFilterOpen(true)} className='flex items-center gap-2 cursor-pointer'><FilterIcon /> Filter </span>
                         </div>
                     }
-                    <div className="mb-7 ">
+                    <div className="mb-7 ml-auto flex items-end justify-end">
                         <input type="text" placeholder='Search for products'
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}

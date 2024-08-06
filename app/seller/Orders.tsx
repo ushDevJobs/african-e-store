@@ -56,7 +56,7 @@ const Orders = ({ orders, isFetchingOrders, handleFetchOrders }: Props) => {
 
     const filteredOrders = orders?.filter(order => {
         if (filterOrder === 'all') return true;
-        return order.status.some(status => status.status === filterOrder);
+        return order.orderDetails.some(status => status.status === filterOrder);
     });
     const statusRef = useRef<HTMLDivElement>(null);
     useOuterClick(statusRef, setIsDropdownVisible);
@@ -138,38 +138,39 @@ const Orders = ({ orders, isFetchingOrders, handleFetchOrders }: Props) => {
                     {filteredOrders?.map((order, index) => (
                         <div className="flex gap-4" key={index}>
                             <div className="bg-[#D9EDBF] text-[#2C7865] text-xl font-medium rounded-2xl flex flex-col gap-1 justify-center items-center min-w-[168px] h-[219px]">
-                                {order.products.length}{" "}
-                                {order.products.length > 1 ? "items" : "item"}
+                                {order.orderDetails.length}{" "}
+                                {order.orderDetails.length > 1 ? "items" : "item"}
                                 <BoxIcon />
                             </div>
 
                             <div className="">
-                                {order.products.slice(0, 1).map((product, index) => (
+                                {order.orderDetails.slice(0, 1).map((detail, index) => (
                                     <>
                                         <p className="text-[#6F6F6F] text-lg mb-2">
-                                            {product.name}
+                                            {detail.product.name}
                                         </p>
                                         <span className="text-[#1E1E1E] text-lg mb-4">
                                             Item number: {order.orderId}
                                         </span>
                                         <h4 className="font-medium text-xl text-[#1E1E1E] mb-1">
                                             &pound;
-                                            {(
-                                                order?.products
+                                            {(detail.amount * detail.quantity).toLocaleString() }
+                                            {/* {(
+                                                order?.orderDetails
                                                     .map(
-                                                        (product) =>
+                                                        (detail) =>
                                                             product.amount *
                                                             (order.quantity.find((q) => q.id === product.id)
                                                                 ?.quantity || 0)
                                                     )
                                                     .reduce((x, y) => x + y, 0) || 0
-                                            ).toLocaleString()}
+                                            ).toLocaleString()} */}
                                         </h4>
                                         <div className={`text-sm mb-6 whitespace-nowrap`}>
-                                            {order.status.map((status) => (
-                                                <p key={status.id}
-                                                    style={{ color: getStatusColor(status.status) }}
-                                                >{getStatusLabel(status.status)}</p>
+                                            {order.orderDetails.map((detail) => (
+                                                <p key={detail.id}
+                                                    style={{ color: getStatusColor(detail.status) }}
+                                                >{getStatusLabel(detail.status)}</p>
                                             ))}
                                         </div>
                                     </>

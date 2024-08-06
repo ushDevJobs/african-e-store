@@ -26,7 +26,7 @@ const AboutSection = (props: Props) => {
             text: '24/7 service',
             subtext: "Rayvvin let's you connect with Africans all around the globe in exchange for goods and services",
             linkText: 'See Items ',
-            link: '/'
+            link: '/signup'
         },
     ]
     return (

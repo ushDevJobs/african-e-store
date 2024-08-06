@@ -93,12 +93,14 @@ export interface OrderDetails {
     name: string;
     coverImage: string;
   };
-  user: {
-    fullname: string;
-    id: string;
-    address: string;
-  };
+//   user: {
+//     fullname: string;
+//     id: string;
+//     address: Address;
+//   };
 }
+
+
 export interface Quantity {
   id: string;
   quantity: number;

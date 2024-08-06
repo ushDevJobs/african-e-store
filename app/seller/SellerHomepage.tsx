@@ -224,7 +224,7 @@ const SellerHomePage = (props: Props) => {
                             onClick={() => setActiveTab(TabIndex.Orders)}
                             className={activeTab === TabIndex.Orders ? styles.active : ''}
                         >
-                            Orders {orders && <span className='!bg-[#2C7865] !text-white font-medium !text-sm !px-[5px] !py-[1px] rounded-full'>{orders?.length}</span>}
+                            Orders {orders && <span className='!bg-[#2C7865] !text-white font-medium !text-sm !px-[4px] !py-[2px] rounded-full'>{orders?.length}</span>}
                         </span>
                         <span
                             onClick={() => setActiveTab(TabIndex.About)}
