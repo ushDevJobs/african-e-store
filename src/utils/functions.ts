@@ -136,7 +136,7 @@ export const isValidated = (result: any[]) => result.length > 0;
 export const generateRandomNumbers = (repeatNumber: number = 4) => {
   let otp = "";
 
-  for (let i = 0; i < length; i++) {
+  for (let i = 0; i < repeatNumber; i++) {
     // Generate a random digit between 0 and 9
     const randomDigit = Math.floor(Math.random() * 10);
     otp += randomDigit.toString();

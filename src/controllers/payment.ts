@@ -9,6 +9,7 @@ import {
 } from "../utils/functions";
 import { OrderQuantity, RequestUser } from "../types";
 import logger from "../utils/logger";
+import { extendAmount } from "../prisma/extensions";
 
 const stripe = new Stripe(process.env.STRIPE_S_KEY!, {
   typescript: true,
@@ -17,7 +18,26 @@ const stripe = new Stripe(process.env.STRIPE_S_KEY!, {
 export const paymentIntent = async (req: Request, res: Response) => {
   const user = req.user as RequestUser;
   const cart: OrderQuantity = req.body.id;
-  const { amount, products } = await getTotal(cart);
+  const { amount } = await getTotal(cart);
+  const products = await prisma.product.findMany({
+    where: {
+      id: {
+        in: cart.map((cart: any) => cart.id) as [],
+      },
+    },
+    select: {
+      name: true,
+      id: true,
+      amount: true,
+      storeId: true,
+      store: {
+        select: {
+          id: true,
+          shippingFee: true,
+        },
+      },
+    },
+  });
   const order = await prisma.order.create({
     data: {
       amount,
@@ -127,21 +147,7 @@ const getTotal = async (cart: { id: string; quantity: number }[]) => {
     },
   });
   const products = await prisma
-    .$extends({
-      result: {
-        product: {
-          amount: {
-            needs: { amount: true },
-            compute(product) {
-              const profit = settings.profitPercent;
-              return parseFloat(
-                (product.amount + (product.amount * profit) / 100).toFixed(2)
-              );
-            },
-          },
-        },
-      },
-    })
+    .$extends(extendAmount(settings))
     .product.findMany({
       where: {
         id: {

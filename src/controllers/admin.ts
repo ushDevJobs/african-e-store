@@ -37,8 +37,11 @@ export const approvePaymentByAdmin = async (
       },
     });
     if (!alreadyPaid) {
-      const amount = deliveryUpdate.map((details) => details.amount + details.shippingFee).reduce((x,y) => x+y, 0)
-
+      const amount = deliveryUpdate
+        .map(
+          (details) => details.amount * details.quantity + details.shippingFee
+        )
+        .reduce((x, y) => x + y, 0);
 
       await prisma.sellerDashboard.upsert({
         where: {
