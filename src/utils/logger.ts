@@ -1,4 +1,7 @@
 import dotenv from "dotenv";
+import fs from "fs";
+import morgan from "morgan";
+import path from "path";
 dotenv.config({ path: "../.env" });
 import winston, { format } from "winston";
 const logger = winston.createLogger({
@@ -27,4 +30,18 @@ if (process.env.NODE_ENV !== "production") {
     })
   );
 }
+export const morganLogger =
+  process.env.NODE_ENV === "production"
+    ? morgan("combined", {
+        skip: function (req, res) {
+          return res.statusCode < 400;
+        },
+        stream: fs.createWriteStream(
+          path.resolve(__dirname, "../logs/access.log"),
+          {
+            flags: "a",
+          }
+        ),
+      })
+    : morgan("dev");
 export default logger;

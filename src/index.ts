@@ -11,13 +11,13 @@ import { errorHandler } from "./middlewares/errorhandler";
 const app = express();
 const PORT = process.env.PORT || 3000;
 import morgan from "morgan";
-import logger from "./utils/logger";
+import logger, { morganLogger } from "./utils/logger";
 import passport from "passport";
 import { initializePassport } from "./config/passport.config";
 import flash from "express-flash";
 import next from "next";
 import path from "path";
-
+import fs from "fs";
 // express middleware
 app.set("trust proxy", 1);
 app.use(cors(corsConfig));
@@ -35,11 +35,10 @@ app.use(express.json());
 app.use(compression());
 app.use(flash());
 app.use(sessionMiddleware);
-app.use(morgan("dev"));
+app.use(morganLogger);
 initializePassport(passport);
 app.use(passport.initialize());
 app.use(passport.session());
-// images route
 app.use("/images", express.static(path.join(__dirname, "images")));
 app.use("/api", router);
 if (process.env.NODE_ENV === "production") {
