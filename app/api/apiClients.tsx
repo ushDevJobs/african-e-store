@@ -588,6 +588,17 @@ export function useFetchRecommendedProduct() {
 
     return fetchRecommendedProduct;
 }
+export function useFetchReviewedProduct() {
+    async function fetchReviewedProduct() {
+        // Fire the request
+        const response = await API.get(ApiRoutes.FetchReviewedProduct);
+
+        // Return the response
+        return response;
+    }
+
+    return fetchReviewedProduct;
+}
 export function useFetchBankDetail() {
     async function fetchBankDetail() {
         // Fire the request

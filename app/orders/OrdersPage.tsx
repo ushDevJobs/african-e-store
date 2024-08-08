@@ -188,8 +188,8 @@ const OrdersPage = (props: Props) => {
                                     )}
 
                                 </div>
-                                {/* <RecentlyViewed /> */}
                                 <Recommendations />
+                                <RecentlyViewed />
                             </>
                         ) : (
                             <p className='text-gray-500 text-center flex flex-col items-center justify-center h-[30vh]'>No orders</p>

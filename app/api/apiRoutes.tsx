@@ -131,6 +131,8 @@ export default class ApiRoutes {
     static FetchUserAddress: string = "api/user/address";
     
     static FetchRecommendedProduct: string = "api/products/recommended";
+    
+    static FetchReviewedProduct: string = "api/products/recently-viewed";
 
     static userImages: string = "images/user";
 

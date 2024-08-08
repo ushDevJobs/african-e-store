@@ -137,8 +137,8 @@ const CartPage = (props: Props) => {
                         </Link>
                     </div>
                 )}
-                {/* <RecentlyViewed /> */}
                 <Recommendations />
+                <RecentlyViewed />
             </div>
         </>
     );
