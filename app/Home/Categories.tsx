@@ -74,6 +74,22 @@ const Categories = (props: Props) => {
         // Run this effect only when the router is ready, which means: when the page is loaded
     }, [router]);
 
+
+    useEffect(() => {
+        // Set up an interval to change categories every 3 seconds
+        const intervalId = setInterval(() => {
+            setActiveTab(prevActiveTab => {
+                if (retrievedCategories && retrievedCategories.length) {
+                    return (prevActiveTab === retrievedCategories.slice(0, 6).length - 1 ? 0 : prevActiveTab + 1);
+                }
+                return prevActiveTab;
+            });
+        }, 2000);
+
+        // Clean up the interval on component unmount
+        return () => clearInterval(intervalId);
+    }, [retrievedCategories]);
+
     return (
         <div className={styles.main}>
             <h2>Explore our amazing categories</h2>

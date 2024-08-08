@@ -9,7 +9,7 @@ import { TimesIcon } from '../components/SVGs/SVGicons';
 type Props = {
     categories?: CategoriesResponse[];
     activeCategory?: string;
-    retrievedCategories?: CategoriesResponse[] | undefined;
+    retrievedCategories?: CategoriesResponse[];
     onCategoryClick: (categoryId: string) => void;
     setIsFilterOpen: React.Dispatch<React.SetStateAction<boolean>>
 }

@@ -6,7 +6,7 @@ import Link from 'next/link';
 type Props = {
     categories?: CategoriesResponse[];
     activeCategory?: string;
-    retrievedCategories?: CategoriesResponse[] | undefined;
+    retrievedCategories?: CategoriesResponse[];
     onCategoryClick: (categoryId: string) => void;
 }
 

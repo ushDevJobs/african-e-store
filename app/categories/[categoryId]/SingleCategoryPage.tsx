@@ -1,11 +1,11 @@
 'use client'
 import React, { useEffect, useRef, useState } from 'react'
 import styles from '../Categories.module.scss'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { CategoriesResponse, CategoryResponse } from '@/app/components/models/AllCategories'
 import useResponsiveness from '@/app/components/hooks/responsiveness-hook'
-import { FilterIcon, SortIcon } from '@/app/components/SVGs/SVGicons'
-import { useFetchSingleCategory } from '@/app/api/apiClients'
+import { FilterIcon, LeftArrowIcon, RightArrowIcon, SortIcon } from '@/app/components/SVGs/SVGicons'
+import { useFetchCategories, useFetchSingleCategory } from '@/app/api/apiClients'
 import { createCustomErrorMessages } from '@/app/components/constants/catchError'
 import { toast } from 'sonner'
 import CategoriesSettingsBar from '@/app/components/CategoriesSettingsBar'
@@ -23,25 +23,35 @@ type Props = {
 
 const SingleCategoryPage = ({ params }: Props) => {
     const windowRes = useResponsiveness();
-    const fetchCategory = useFetchSingleCategory()
+    const fetchCategory = useFetchSingleCategory() 
+     const fetchCategories = useFetchCategories()
+    const searchParams = useSearchParams()
     const isMobile = windowRes.width && windowRes.width < 768;
     const onMobile = typeof isMobile == 'boolean' && isMobile;
     const onDesktop = typeof isMobile == 'boolean' && !isMobile;
     const router = useRouter()
     const categoryId = params.categoryId;
-    const [retrievedCategories, setRetrievedCategories] = useState<CategoriesResponse[]>();
 
     const [category, setCategory] = useState<CategoryResponse>();
     const [isFetchingCategory, setIsFetchingCategory] = useState<boolean>(true);
 
-    const [currentPage, setCurrentPage] = useState<number>(1); // Track current page
-    const limit = 4; // // Number of categories per page
+    const [retrievedCategories, setRetrievedCategories] = useState<CategoriesResponse[]>([]);
+    const [isFetchingCategories, setIsFetchingCategories] = useState<boolean>(true);
     const categoryRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
 
     const [searchQuery, setSearchQuery] = useState<string>('');
 
     const [isFilterOpen, setIsFilterOpen] = useState<boolean>(false)
+    const [totalCategories, setTotalCategories] = useState<number>(0)
+    const [currentPage, setCurrentPage] = useState<number>(() => parseInt(searchParams.get("page") ?? "1")); // Track current page
+    const limit = 6; // Number of categories per page
+    const totalPages = totalCategories;
 
+    const goToPage = (page: number) => {
+        if (page >= 1 && page <= totalPages) {
+            router.push(`/categories/${categoryId}?page=${page}`);
+        }
+    };
 
     async function handleFetchCategory() {
 
@@ -62,10 +72,30 @@ const SingleCategoryPage = ({ params }: Props) => {
             });
     }
 
+    // const handleCategoryClick = (categoryId: string) => {
+    //     const element = categoryRefs.current[categoryId];
+    //     if (element) {
+    //         element.scrollIntoView({ behavior: 'smooth' });
+    //     }
+    // };
+
     const handleCategoryClick = (categoryId: string) => {
         const element = categoryRefs.current[categoryId];
         if (element) {
-            element.scrollIntoView({ behavior: 'smooth' });
+            window.scrollTo({
+                top: element.offsetTop - 100, // Adjust the offset value as needed
+                behavior: 'smooth'
+            });
+        }
+    };
+
+    const mobileHandleCategoryClick = (categoryId: string) => {
+        const element = categoryRefs.current[categoryId];
+        if (element) {
+            window.scrollTo({
+                top: element.offsetTop - 900, // Adjust the offset value as needed
+                behavior: 'smooth'
+            });
         }
     };
 
@@ -74,35 +104,52 @@ const SingleCategoryPage = ({ params }: Props) => {
         product.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
+    async function handleFetchAllCategories() {
+
+        // Start loader
+        setIsFetchingCategories(true);
+
+        await fetchCategories(currentPage, limit)
+            .then((response) => {
+                // console.log("Response: ", response.data.data);
+                setRetrievedCategories(response.data.data);
+                setTotalCategories(response.data.totalPages)
+            })
+            .catch((error) => {
+                const errorMessage = createCustomErrorMessages(error.response?.data)
+                toast.error(errorMessage);
+            })
+            .finally(() => {
+                setIsFetchingCategories(false);
+            });
+    }
+
+    useEffect(() => {
+        const totalPages = totalCategories
+        if (currentPage > totalPages && totalPages > 0) {
+            goToPage(totalPages); // Redirect to the last page if current page exceeds total pages
+        }
+    }, [retrievedCategories, currentPage]);
+
+    useEffect(() => {
+        handleFetchAllCategories();
+    }, [currentPage]);
+
     useEffect(() => {
         handleFetchCategory();
     }, []);
 
     useEffect(() => {
-        if (router) {
-            // Get the retrieved categories placed
-            const _retrievedCategories = sessionStorage.getItem(
-                StorageKeys.AllCategories
-            );
-
-            // If we have a retrieved categoriess...
-            if (_retrievedCategories) {
-                // Update the state
-                setRetrievedCategories(JSON.parse(_retrievedCategories) as CategoriesResponse[]);
-            }
-        }
-
-        // Run this effect only when the router is ready, which means: when the page is loaded
-    }, [router]);
-
-
+        const pageParam = parseInt((searchParams.get('page') as string) || '1', 10);
+        setCurrentPage(pageParam);
+    }, [searchParams]);
 
     return (
         <motion.div
             initial="closed"
             animate={isFilterOpen ? "opened" : "closed"}
         >
-            {isFilterOpen && <MobileSettingsBar setIsFilterOpen={setIsFilterOpen} retrievedCategories={retrievedCategories} onCategoryClick={handleCategoryClick} />}
+            {isFilterOpen && <MobileSettingsBar setIsFilterOpen={setIsFilterOpen} retrievedCategories={retrievedCategories} onCategoryClick={mobileHandleCategoryClick} />}
 
             {!category && isFetchingCategory ? <CategoriesSkeletonLoader /> :
                 <div className={styles.main}>
@@ -131,18 +178,6 @@ const SingleCategoryPage = ({ params }: Props) => {
                             <div className='flex flex-col gap-10'>
                                 <div className='flex flex-col'>
                                     <h3>{category?.name}</h3>
-                                    {/* <div className={styles.cards}>
-                                        {filteredProducts?.map((product, index) => (
-                                            <Link href={`/products/${product.id}`} className={styles.card} key={product.id} >
-                                                <div className={styles.image}>
-                                                    <Image fill src={product.coverImage} alt='product image' />
-                                                </div>
-                                                <p>{product.name} </p>
-                                                <p className='text-xs my-1'>{product.details} </p>
-                                                <h4>&pound;{product.amount.toLocaleString()}</h4>
-                                            </Link>
-                                        ))}
-                                    </div> */}
                                     <div className={styles.cards}>
                                         {filteredProducts?.length === 0 ? (
                                             <p className="h-[40vh] text-center flex flex-col items-center justify-center w-screen md:w-[50vw] text-gray-400">No products found</p>
@@ -161,7 +196,7 @@ const SingleCategoryPage = ({ params }: Props) => {
                                     </div>
                                 </div>
                             </div>
-                            {/* {categories.length > 0 && categories && (
+                            {retrievedCategories && retrievedCategories?.length > 0 && (
                               <div className={styles.pagination}>
                                   <button onClick={() => goToPage(currentPage - 1)} disabled={currentPage === 1} style={currentPage === 1 ? { cursor: 'not-allowed', opacity: '0.5' } : { cursor: 'pointer' }}><LeftArrowIcon /></button>
                                   <div className={styles.value}>
@@ -173,7 +208,7 @@ const SingleCategoryPage = ({ params }: Props) => {
                                   </div>
                                   <button onClick={() => goToPage(currentPage + 1)} disabled={currentPage >= totalPages} style={currentPage >= totalPages ? { cursor: 'not-allowed', opacity: '0.5' } : { cursor: 'pointer' }}><RightArrowIcon /></button>
                               </div>
-                          )} */}
+                          )}
                         </div>
 
 

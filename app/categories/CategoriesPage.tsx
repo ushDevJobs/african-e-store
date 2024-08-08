@@ -35,7 +35,7 @@ const CategoriesPage = () => {
     const [isFilterOpen, setIsFilterOpen] = useState<boolean>(false)
 
     const [currentPage, setCurrentPage] = useState<number>(() => parseInt(searchParams.get("page") ?? "1")); // Track current page
-    const limit = 6; // // Number of categories per page
+    const limit = 6; // Number of categories per page
     const totalPages = totalCategories;
     const categoryRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
 
@@ -58,7 +58,7 @@ const CategoriesPage = () => {
                 setTotalCategories(response.data.totalPages)
                 // Persist all categories data in session storage
                 // sessionStorage.setItem(
-                //     StorageKeys.AllCategories,
+                //     StorageKeys.SelectedCategories,
                 //     JSON.stringify(response.data.data)
                 // );
             })
@@ -104,19 +104,32 @@ const CategoriesPage = () => {
         };
     }, [categories]);
 
+    // const handleCategoryClick = (categoryId: string) => {
+    //     const element = categoryRefs.current[categoryId];
+    //     if (element) {
+    //         element.scrollIntoView({ behavior: 'smooth' });
+    //     }
+    // };
+
     const handleCategoryClick = (categoryId: string) => {
         const element = categoryRefs.current[categoryId];
         if (element) {
-            element.scrollIntoView({ behavior: 'smooth' });
+            window.scrollTo({
+                top: element.offsetTop - 100, // Adjust the offset value as needed
+                behavior: 'smooth'
+            });
         }
     };
 
-    // const filteredCategories = categories.map(category => ({
-    //     ...category,
-    //     products: category.products.filter(product =>
-    //         product.name.toLowerCase().includes(searchQuery.toLowerCase())
-    //     )
-    // }));
+    const mobileHandleCategoryClick = (categoryId: string) => {
+        const element = categoryRefs.current[categoryId];
+        if (element) {
+            window.scrollTo({
+                top: element.offsetTop - 900, // Adjust the offset value as needed
+                behavior: 'smooth'
+            });
+        }
+    };
 
     // Filter categories based on search query
     const filteredCategories = categories
@@ -133,13 +146,13 @@ const CategoriesPage = () => {
         <motion.div
             initial="closed"
             animate={isFilterOpen ? "opened" : "closed"}>
-            {isFilterOpen && <MobileSettingsBar setIsFilterOpen={setIsFilterOpen} categories={categories} activeCategory={activeCategory} onCategoryClick={handleCategoryClick} />}
+            {isFilterOpen && <MobileSettingsBar setIsFilterOpen={setIsFilterOpen} categories={categories} activeCategory={activeCategory} onCategoryClick={mobileHandleCategoryClick} />}
             {categories.length == 0 && isFetchingCategories ? <CategoriesSkeletonLoader /> :
                 <div className={styles.main}>
                     <CategoriesHeader mainText='Explore different categories' subText='Search for any product in different categories on Rayvvin' />
                     {onMobile &&
                         <div className="w-full flex items-center gap-4 justify-end mb-4 ml-auto">
-                            <span className='flex items-center gap-2 cursor-pointer'><SortIcon /> Sort</span>
+                            {/* <span className='flex items-center gap-2 cursor-pointer'><SortIcon /> Sort</span> */}
                             <span onClick={() => setIsFilterOpen(true)} className='flex items-center gap-2 cursor-pointer'><FilterIcon /> Filter </span>
                         </div>
                     }
@@ -157,40 +170,18 @@ const CategoriesPage = () => {
                             </div>}
 
                         <div className={styles.rhs}>
-                            {/* <div className='flex flex-col gap-10'>
-                                {filteredCategories.map((category, index) => (
-                                    <div className='flex flex-col'
-                                        key={category.id}
-                                        ref={(el) => { categoryRefs.current[category.id.toString()] = el; }}>
-                                        <h3>{category.name}</h3>
-                                        <div className={styles.cards}>
-                                            {category.products.map((product, index) => (
-                                                <Link href={`/products/${product.id}`} className={styles.card} key={product.id} id={category.id.toString()}>
-                                                    <div className={styles.image}>
-                                                        <Image fill src={product.coverImage} alt='product image' />
-                                                    </div>
-                                                    <p className='text-lg font-medium'>{product.name} </p>
-                                                    <span className='text-gray-400 text-sm '>{product.details}</span>
-                                                    <h4>&pound;{product.amount.toLocaleString()}</h4>
-                                                </Link>
-                                            ))}
-                                        </div>
-                                    </div>
-                                ))}
-
-                                {filteredCategories && filteredCategories.length === 0 &&
-                                    <p className='text-center flex flex-col items-center justify-center h-[40vh] text-gray-400 text-base'>No Product available</p>}
-                            </div> */}
 
                             <div className='flex flex-col gap-10'>
                                 {filteredCategories.length > 0 ? (
                                     filteredCategories.map((category, index) => (
-                                        <div className='flex flex-col'
+                                        <div className='flex flex-col '
                                             key={category.id}
-                                            ref={(el) => { categoryRefs.current[category.id.toString()] = el; }}>
-                                            <h3>{category.name}</h3>
+                                            ref={(el) => { categoryRefs.current[category.id.toString()] = el; }}
+                                        // style={{ paddingTop: '50px' }}
+                                        >
+                                            <h3 id={category.id.toString()}>{category.name}</h3>
                                             <div className={styles.cards}>
-                                                {category.products.map((product, index) => (
+                                                {category.products.slice(0, 10).map((product, index) => (
                                                     <Link href={`/products/${product.id}`} className={styles.card} key={product.id} id={category.id.toString()}>
                                                         <div className={styles.image}>
                                                             <Image fill src={product.coverImage} alt='product image' />
@@ -204,7 +195,7 @@ const CategoriesPage = () => {
                                         </div>
                                     ))
                                 ) : (
-                                    <p className='text-center flex flex-col items-center justify-center h-[40vh] text-gray-400 text-base'>No Product found</p>
+                                    <p className='text-center flex flex-col w-full md:w-[50vw] items-center justify-center h-[40vh] text-gray-400 text-base'>No Product found</p>
                                 )}
                             </div>
                             {filteredCategories.length > 0 && filteredCategories && (
