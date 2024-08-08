@@ -96,10 +96,10 @@ const OrdersPage = (props: Props) => {
                                             {orders.map(order => (
                                                 <div key={order.id} className={styles.order}>
                                                     <div className={styles.item}>
-                                                        {order.orderDetails.map((detail,index)=>(
+                                                        {order.orderDetails.slice(0, 1).map((detail,index)=>(
                                                             <div className={styles.storeName} key={index}>
                                                                 <div className="relative w-10 h-10 rounded-full">
-                                                                    {detail.product.store.image ? <Image src={detail.product.coverImage} alt='store image' className='rounded-full object-cover' fill /> : <UserIcon />}
+                                                                    {detail.product.store.image ? <Image src={detail.product.store.image} alt='store image' className='rounded-full object-cover' fill /> : <UserIcon />}
                                                                 </div>
                                                                 <span>{detail.product.store.name}</span>
                                                             </div>
@@ -120,7 +120,7 @@ const OrdersPage = (props: Props) => {
                                                             <p style={{ fontSize: '12px' }} className={getStatusColor(status.status)} key={index}>{status.status}</p>
                                                         ))}
                                                     </div>
-                                                    {order.orderDetails.map((detail, index) => (
+                                                    {order.orderDetails.slice(0, 1).map((detail, index) => (
                                                         <div className={styles.price} key={index}>
                                                             <h3>&pound;{(detail.quantity * detail.amount).toLocaleString()}</h3>
                                                         </div>
@@ -186,6 +186,7 @@ const OrdersPage = (props: Props) => {
                                             ))}
                                         </div>
                                     )}
+
                                 </div>
                                 {/* <RecentlyViewed /> */}
                                 <Recommendations />
