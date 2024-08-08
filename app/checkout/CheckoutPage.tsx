@@ -82,7 +82,7 @@ const CheckoutPage = (props: Props) => {
 
                     <div className={styles.address}>
                         <h3>Ship to</h3>
-                        {userAddress ? <p>{userAddress?.city}<br /> <br /> {userAddress?.country}</p> : <p>No address available</p>}
+                        {userAddress ? <p>{userAddress?.city}, {userAddress?.country}.</p> : <p>No address available</p>}
                         {/* <p>{userAddress.}</p> */}
                         <button className={styles.edit}>Change</button>
                     </div>

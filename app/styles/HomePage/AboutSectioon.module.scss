@@ -1,11 +1,13 @@
 @import '../reusables';
-
+.recommend {
+  @include sectionPadding;
+}
 .aboutSection {
   @include sectionPadding;
   padding-top: 80px;
   padding-bottom: 80px;
 
-  @include tablet{
+  @include tablet {
     margin-top: 30px;
   }
 

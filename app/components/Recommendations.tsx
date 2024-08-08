@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from 'react'
 import styles from '../styles/RecentlyViewed.module.scss'
 import Image from 'next/image'
-import images from '@/public/images'
 import { useFetchRecommendedProduct } from '../api/apiClients'
 import { createCustomErrorMessages } from './constants/catchError'
 import { toast } from 'sonner'

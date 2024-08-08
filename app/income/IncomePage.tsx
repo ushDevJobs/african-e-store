@@ -116,6 +116,7 @@ const IncomePage = (props: Props) => {
                                     </div>
                                 </div>
                             ))}
+                            {income.transactions.length === 0 && <p className='text-center w-full flex flex-col items-center justify-center h-[20vh] text-gray-400 text-base'>No Transaction found</p>}
                         </div>
                     </div>
                 </div>
