@@ -317,7 +317,6 @@ export const deleteProductById = async (req: Request, res: Response) => {
         id,
       },
     });
-
     (productImgs?.images as string[]).map((img) => {
       fs.unlink(
         path.resolve(__dirname, `../${img.substring(img.indexOf("/images"))}`),
