@@ -33,8 +33,13 @@ import {
   checkStoreId,
   sellerRoleCheck,
 } from "../../middlewares/roles";
-import { uploadStoreImage, uploadUsertImage } from "../../config/configOptions";
+import {
+  uploadImage,
+  uploadStoreImage,
+  uploadUsertImage,
+} from "../../config/configOptions";
 import { checkAuth } from "../../middlewares/auth";
+import { optimizeImage } from "../../middlewares/processImage";
 
 const router = Router();
 router.get("/all", rootErrorHandler(getAllStores));
@@ -98,7 +103,7 @@ router.patch(
 );
 router.patch(
   "/store/profile",
-  [sellerRoleCheck, checkStore, uploadStoreImage.single("image")],
+  [sellerRoleCheck, checkStore, uploadImage.single("image"), optimizeImage],
   rootErrorHandler(updateStoreProfile)
 );
 router

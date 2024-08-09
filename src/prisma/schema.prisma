@@ -146,6 +146,7 @@ model ViewsTracker {
   userId    String
   product   Product  @relation(fields: [productId], references: [id])
   productId String
+  ip        String?
   updatedAt DateTime @updatedAt
   createdAt DateTime @default(now())
 

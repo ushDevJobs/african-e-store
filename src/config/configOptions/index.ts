@@ -5,6 +5,8 @@ dotenv.config({ path: "../../.env" });
 import session from "express-session";
 import multer from "multer";
 import { resolve } from "path";
+import { BadRequest } from "../../exceptions/bad-request";
+import { ErrorCode } from "../../exceptions/root";
 const MysqlStore = require("express-mysql-session")(session);
 export const corsConfig: CorsOptions = {
   origin: [process.env.CLIENT_URL as string, "http://localhost:2500"],
@@ -49,20 +51,36 @@ export const sessionMiddleware = session({
     maxAge: 1000 * 60 * 60 * 24,
   },
 });
-const productImagestorage = multer.diskStorage({
-  destination: (req: Request, file, cb) => {
-    cb(null, resolve(__dirname, "../../images/product"));
-  },
-  filename: (req: Request, file, cb) => {
-    const uniqueSuffix = Date.now();
-    cb(
-      null,
-      `product_image_${uniqueSuffix}_${file.originalname
-        .toLowerCase()
-        .replace(/ /g, "_")}`
-    );
+const storage = multer.memoryStorage();
+export const uploadImage = multer({
+  storage,
+  fileFilter: (req, file, cb) => {
+    if (!file.mimetype.startsWith("image/")) {
+      return cb(
+        new BadRequest(
+          "Only image files are allowed!",
+          ErrorCode.BAD_REQUEST,
+          400
+        )
+      );
+    }
+    cb(null, true);
   },
 });
+// const productImagestorage = multer.diskStorage({
+//   destination: (req: Request, file, cb) => {
+//     cb(null, resolve(__dirname, "../../images/product"));
+//   },
+//   filename: (req: Request, file, cb) => {
+//     const uniqueSuffix = Date.now();
+//     cb(
+//       null,
+//       `product_image_${uniqueSuffix}_${file.originalname
+//         .toLowerCase()
+//         .replace(/ /g, "_")}`
+//     );
+//   },
+// });
 const userImagestorage = multer.diskStorage({
   destination: (req: Request, file, cb) => {
     cb(null, resolve(__dirname, "../../images/user"));
@@ -93,4 +111,3 @@ const storeImagestorage = multer.diskStorage({
 });
 export const uploadUsertImage = multer({ storage: userImagestorage });
 export const uploadStoreImage = multer({ storage: storeImagestorage });
-export const uploadProductImage = multer({ storage: productImagestorage });

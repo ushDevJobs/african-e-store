@@ -1,6 +1,6 @@
 import dotenv from "dotenv";
 
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { MailOptions } from "nodemailer/lib/sendmail-transport";
 import { Transporter } from "nodemailer";
 import nodemailer from "nodemailer";
@@ -9,6 +9,9 @@ import {
   PrismaClientValidationError,
 } from "@prisma/client/runtime/library";
 import { ErrorCode } from "../exceptions/root";
+import sharp from "sharp";
+import path from "path";
+import { BadRequest } from "../exceptions/bad-request";
 export const createPrismaError = (error: Error) => {
   if (error instanceof PrismaClientKnownRequestError) {
     let errorMessage: { message: string; code?: number } = { message: "" };
@@ -160,32 +163,4 @@ export const checkIfEmpty = (values: object[]): string[] => {
     }
   });
   return errors;
-};
-
-export const convertToString = (date: Date) =>
-  new Date(date).toJSON().slice(0, 10);
-
-export const formatTimeAgo = (date: Date) => {
-  let formatter = new Intl.RelativeTimeFormat(undefined, {
-    numeric: "auto",
-  });
-  const DIVISION = [
-    { amount: 60, name: "seconds" },
-    { amount: 60, name: "minutes" },
-    { amount: 24, name: "hours" },
-    { amount: 7, name: "days" },
-    { amount: 4.34524, name: "weeks" },
-    { amount: 12, name: "months" },
-    { amount: Number.POSITIVE_INFINITY, name: "years" },
-  ];
-
-  let duration = (date.valueOf() - new Date().valueOf()) / 1000;
-  for (let i = 0; i < DIVISION.length; i++) {
-    const division = DIVISION[i];
-    if (Math.abs(duration) < division.amount) {
-      // @ts-ignore
-      return formatter.format(Math.round(duration), division.name);
-    }
-    duration /= division.amount;
-  }
 };

@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { prisma } from "../prisma";
 import {
-  createPrismaError,
   extractFullUrlProducts,
   returnJSONError,
   returnJSONSuccess,
@@ -11,15 +10,20 @@ import { RequestUser } from "../types";
 import { ErrorCode } from "../exceptions/root";
 import { BadRequest } from "../exceptions/bad-request";
 import { NotFound } from "../exceptions/not-found";
-import { DatabaseException } from "../exceptions/datebase-exception";
 import { getPositiveReview } from "./store";
 import { Prisma } from "@prisma/client";
 import { extendAmount } from "../prisma/extensions";
 import logger from "../utils/logger";
+import fs from "fs";
+import path from "path";
 
 export const updateProduct = async (req: Request, res: Response) => {
   const { id } = req.params;
-  const imagesArray = (req.files as any[]) || [];
+  const imagesArray = req.files as Express.Multer.File[];
+  const productImgs = await prisma.product.findFirst({
+    where: { id },
+    select: { images: true },
+  });
   const images = [
     ...imagesArray?.map(
       (image) => extractFullUrlProducts(req) + image.filename
@@ -34,7 +38,7 @@ export const updateProduct = async (req: Request, res: Response) => {
       (index) =>
         (newImageArray[index.index] =
           images.find((i) =>
-            i.endsWith(index.name.toLowerCase().replace(/ /g, "_"))
+            i.endsWith(index.name.toLowerCase().replace(/ /g, "_") + ".webp")
           ) || "")
     );
     let availableIndex = newImageArray.map((img, i) => i);
@@ -71,10 +75,7 @@ export const updateProduct = async (req: Request, res: Response) => {
       itemCondition: validatedProduct.condition,
       name: validatedProduct.name,
       amount: validatedProduct.price,
-      endBiddingDate:
-        req.body.date && req.body.date !== ""
-          ? new Date(req.body.date) || null
-          : null,
+      endBiddingDate: validatedProduct.date,
       details: validatedProduct.description,
       images: newImageArray,
       salesType: validatedProduct.salesType,
@@ -86,6 +87,18 @@ export const updateProduct = async (req: Request, res: Response) => {
       },
     },
   });
+  (productImgs?.images as string[])
+    .filter((img) => !newImageArray.includes(img as never))
+    .map((img) => {
+      fs.unlink(
+        path.resolve(__dirname, `../${img.substring(img.indexOf("/images"))}`),
+        (error) => {
+          if (error) {
+            logger.warn("Unable to delete image");
+          }
+        }
+      );
+    });
   return returnJSONSuccess(res);
 };
 
@@ -95,7 +108,7 @@ export const addProduct = async (
   next: NextFunction
 ) => {
   const user = req.user as RequestUser;
-  const imagesArray = req.files as any[];
+  const imagesArray = req.files as Express.Multer.File[];
   const images = imagesArray.map(
     (image) => extractFullUrlProducts(req) + image.filename
   );
@@ -114,10 +127,7 @@ export const addProduct = async (
       itemCondition: validatedProduct.condition,
       name: validatedProduct.name,
       amount: validatedProduct.price,
-      endBiddingDate:
-        req.body.date && req.body.date !== "undefined"
-          ? new Date(req.body.date) || null
-          : null,
+      endBiddingDate: validatedProduct.date,
       images: images as Prisma.JsonArray,
       salesType: validatedProduct.salesType,
       details: validatedProduct.description,
@@ -171,7 +181,7 @@ export const getProductById = async (req: Request, res: Response) => {
         images: true,
         favourite: {
           where: {
-            id: user.id,
+            id: user?.id || "",
           },
           select: {
             id: true,
@@ -244,22 +254,25 @@ export const getProductById = async (req: Request, res: Response) => {
     ? (rating._avg.rating || 0).toFixed(1)
     : (rating._avg.rating || 0).toFixed(0);
   try {
-    await prisma.viewsTracker.upsert({
-      where: {
-        userId_productId: {
-          userId: user.id,
-          productId: id,
+    req.isAuthenticated() &&
+      (await prisma.viewsTracker.upsert({
+        where: {
+          userId_productId: {
+            userId: user?.id || "",
+            productId: id,
+          },
         },
-      },
-      create: {
-        userId: user.id,
-        productId: id,
-        updatedAt: new Date(),
-      },
-      update: {
-        updatedAt: new Date(),
-      },
-    });
+        create: {
+          userId: user?.id || "",
+          productId: id,
+          updatedAt: new Date(),
+          ip: req.socket.remoteAddress,
+        },
+        update: {
+          updatedAt: new Date(),
+          ip: req.socket.remoteAddress,
+        },
+      }));
   } catch (error) {
     logger.error(error);
   } finally {
@@ -295,10 +308,25 @@ export const deleteProductById = async (req: Request, res: Response) => {
       },
     });
   } else {
+    const productImgs = await prisma.product.findFirst({
+      where: { id },
+      select: { images: true },
+    });
     await prisma.product.delete({
       where: {
         id,
       },
+    });
+
+    (productImgs?.images as string[]).map((img) => {
+      fs.unlink(
+        path.resolve(__dirname, `../${img.substring(img.indexOf("/images"))}`),
+        (error) => {
+          if (error) {
+            logger.error("Unable to delete image");
+          }
+        }
+      );
     });
   }
   return returnJSONSuccess(res);
@@ -390,9 +418,16 @@ export const getRecentlyViewedProductsForLoggedUser = async (
   req: Request,
   res: Response
 ) => {
+  const where = req.isAuthenticated()
+    ? {
+        userId: (req.user as RequestUser).id,
+      }
+    : {
+        ip: req.socket.remoteAddress,
+      };
   const products = await prisma.viewsTracker.findMany({
     where: {
-      userId: (req.user as RequestUser).id,
+      ...where,
     },
     orderBy: {
       updatedAt: "desc",

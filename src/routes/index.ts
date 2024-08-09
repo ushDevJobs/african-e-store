@@ -14,7 +14,7 @@ const router = Router();
 router.use("/auth", authRoute);
 router.use("/user", checkAuth, userRoutes);
 router.use("/stores", checkAuth, storeRoutes);
-router.use("/products", checkAuth, productRoutes);
+router.use("/products", productRoutes);
 router.use("/categories", categoryRoutes);
 router.use("/orders", checkAuth, orderRoutes);
 router.use("/payment", checkAuth, paymentRoutes);

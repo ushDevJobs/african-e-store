@@ -392,11 +392,11 @@ export const updateStoreDescription = async (
 export const updateStoreProfile = async (req: Request, res: Response) => {
   const user = req.user as RequestUser;
   const { name, description } = req.body;
+  const image = req.file as Express.Multer.File;
   const storeImage = await prisma.store.findFirstOrThrow({
     where: { userId: user.id },
     select: { image: true },
   });
-  const image = req.file;
   let tempName =
     !!name && name !== ""
       ? {
@@ -409,16 +409,11 @@ export const updateStoreProfile = async (req: Request, res: Response) => {
           description: description,
         }
       : {};
-  let tempImage =
-    !!image?.filename && image?.filename !== ""
-      ? {
-          image: extractFullUrlStore(req) + image?.filename,
-        }
-      : {};
+  let tempImage = extractFullUrlStore(req) + image.filename;
   const data = {
     ...tempName,
     ...tempDescription,
-    ...tempImage,
+    image: tempImage,
   };
 
   const store = await prisma.store.update({
@@ -442,7 +437,7 @@ export const updateStoreProfile = async (req: Request, res: Response) => {
       }
     );
   }
-  returnJSONSuccess(res);
+  returnJSONSuccess(res, { data: store });
 };
 export const addStoreToFavourite = async (
   req: Request,
@@ -757,7 +752,7 @@ export const getAboutStore = async (req: Request, res: Response) => {
   });
   const products = await prisma.product.findMany({
     where: {
-      storeId: store.id,
+      AND: [{ storeId: store.id }, { publish: true }, { deleted: false }],
     },
     select: {
       quantity: true,

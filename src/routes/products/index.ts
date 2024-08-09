@@ -16,8 +16,9 @@ import {
   getRecentlyViewedProductsForLoggedUser,
   getRecommendedProducts,
 } from "../../controllers/products";
-import { uploadProductImage } from "../../config/configOptions";
+import { uploadImage } from "../../config/configOptions";
 import { checkAuth } from "../../middlewares/auth";
+import { optimizeImages } from "../../middlewares/processImage";
 
 const router = Router();
 
@@ -25,25 +26,34 @@ router
   .route("/product/:id")
   .get(rootErrorHandler(getProductById))
   .patch(
-    [checkId, mutateProductCheck, uploadProductImage.array("images")],
+    [
+      checkAuth,
+      checkId,
+      mutateProductCheck,
+      uploadImage.array("images", 4),
+      optimizeImages,
+    ],
     rootErrorHandler(updateProduct)
   )
-  .delete([sellerRoleCheck], rootErrorHandler(deleteProductById));
+  .delete([checkAuth, sellerRoleCheck], rootErrorHandler(deleteProductById));
 
 router.get(
   "/recently-viewed",
-  checkAuth,
   rootErrorHandler(getRecentlyViewedProductsForLoggedUser)
 );
 router.get("/recommended", rootErrorHandler(getRecommendedProducts));
 router.post(
   "/product",
-  [sellerRoleCheck, uploadProductImage.array("images")],
+  [checkAuth, sellerRoleCheck, uploadImage.array("images", 4), optimizeImages],
   rootErrorHandler(addProduct)
 );
 router
   .route("/favourite")
-  .get(rootErrorHandler(getFavouriteProducts))
-  .post(rootErrorHandler(addProductToFavourite));
-router.delete("/favourite/:id", rootErrorHandler(removeProductFromFavourite));
+  .get(checkAuth, rootErrorHandler(getFavouriteProducts))
+  .post(checkAuth, rootErrorHandler(addProductToFavourite));
+router.delete(
+  "/favourite/:id",
+  checkAuth,
+  rootErrorHandler(removeProductFromFavourite)
+);
 export { router as productRoutes };
