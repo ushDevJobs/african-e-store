@@ -24,7 +24,6 @@ type Props = {
 
 const AddProductToCart = ({ product, isFetchingProduct, handleAddProductToFavorite, handleRemoveProductFromFavorite }: Props) => {
     const dispatch = useDispatch();
-    const { accountStatus, fetchAccountStatus } = useAccountStatus();
     const quantityInCart = useSelector((state: RootState) => productQtyInCartSelector(state, product?.id as string));
     const router = useRouter();
     const [isPlaceABidVisible, setIsPlaceABidVisible] = useState(false);
@@ -166,7 +165,8 @@ const AddProductToCart = ({ product, isFetchingProduct, handleAddProductToFavori
                                     onClick={() => router.push('/checkout')}
                                     className={`${!quantityInCart ? 'pointer-events-none opacity-60' : ''
                                         }`}
-                                    disabled={!quantityInCart}>
+                                    disabled={!quantityInCart}
+                                    >
                                     Buy Now
                                 </button>
                                 {onDesktop && (

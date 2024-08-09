@@ -34,6 +34,7 @@ const BankDetailModal = ({ visibility, setVisibility }: Props) => {
                 toast.success('Success, bank detail updated');
                 handleFetchBankDetail(); // Refresh the bank details
                 setIsEditingInput(false);
+                setVisibility(false);
             })
             .catch((error) => {
                 const errorMessage = createCustomErrorMessages(error.response?.data);
@@ -49,16 +50,18 @@ const BankDetailModal = ({ visibility, setVisibility }: Props) => {
 
         await fetchBankDetail()
             .then((response) => {
-                setBankDetail(response.data.data);
+                // console.log(response);
+                // setBankDetail(response.data.data);
                 // Initialize form values with fetched data
                 setFormValues({
                     accountNumber: response.data.data.bankDetails.accountNumber,
                     bank: response.data.data.bankDetails.bank
                 });
+
             })
             .catch((error) => {
                 const errorMessage = createCustomErrorMessages(error.response?.data);
-                toast.error(errorMessage);
+                // toast.error(errorMessage);
             })
             .finally(() => {
                 setIsFetchingBankDetail(false);
@@ -70,7 +73,7 @@ const BankDetailModal = ({ visibility, setVisibility }: Props) => {
     }, []);
 
     const handleEdit = () => {
-        setIsEditingInput(true);
+        setIsEditingInput(true)
     };
 
     return (
@@ -94,7 +97,7 @@ const BankDetailModal = ({ visibility, setVisibility }: Props) => {
                                     type="text"
                                     name='accountNumber'
                                     placeholder='Enter account number'
-                                    value={formValues.accountNumber}
+                                    value={formValues.accountNumber ? formValues.accountNumber : ''}
                                     onChange={handleChange}
                                     className='rounded-lg border w-full border-[#ACACAC] text-base placeholder:text-[#828282] p-4 outline-none'
                                 />
@@ -105,7 +108,7 @@ const BankDetailModal = ({ visibility, setVisibility }: Props) => {
                                     type="text"
                                     name='bank'
                                     placeholder='Enter bank'
-                                    value={formValues.bank}
+                                    value={formValues.bank ? formValues.bank : ''}
                                     onChange={handleChange}
                                     className='rounded-lg border w-full border-[#ACACAC] text-base placeholder:text-[#828282] p-4 outline-none'
                                 />
@@ -121,7 +124,7 @@ const BankDetailModal = ({ visibility, setVisibility }: Props) => {
                                 <input
                                     type="text"
                                     name='accountNumber'
-                                    value={bankDetail?.bankDetails.accountNumber}
+                                    value={bankDetail?.bankDetails ? bankDetail?.bankDetails.accountNumber : ''}
                                     disabled
                                     className='rounded-lg border w-full border-[#ACACAC] text-base placeholder:text-[#828282] p-4 outline-none disabled:opacity-50 disabled:pointer-events-none'
                                 />
@@ -131,7 +134,7 @@ const BankDetailModal = ({ visibility, setVisibility }: Props) => {
                                 <input
                                     type="text"
                                     name='bank'
-                                    value={bankDetail?.bankDetails.bank}
+                                    value={bankDetail?.bankDetails ? bankDetail?.bankDetails.bank : ''}
                                     disabled
                                     className='rounded-lg border w-full border-[#ACACAC] text-base placeholder:text-[#828282] p-4 outline-none disabled:opacity-50 disabled:pointer-events-none'
                                 />

@@ -32,7 +32,7 @@ const SellerAccountPage = ({ isFetchingStore, store }: Props) => {
             />
 
             <div className={styles.main}>
-                <Link href={'/seller'} className="flex items-center w-full whitespace-nowrap gap-2 mb-8 mt-6">
+                <Link href={'/seller'} className="flex items-center w-full whitespace-nowrap gap-2 mb-8 md:mt-6">
                     <span className='bg-[#ECF8F5] w-9 h-9 rounded-full grid place-items-center'><LeftCaretArrowIcon /></span>
                     <h1 className='text-[#828282] text-2xl md:text-4xl font-medium'> My Account</h1>
                 </Link>

@@ -62,12 +62,14 @@ export const cartSlice = createSlice({
         // decrement the item quantity
         selectedItem.qty--;
 
+        toast.success('Item removed from cart');
         // If the item quantity is 0...
         if (selectedItem.qty === 0) {
           // Remove the item from the cart
           state.cartItems = state.cartItems.filter(
             (el) => el.product.id !== action.payload.id
           );
+          // toast.success('Item removed from cart');
         }
       }
       // Save cart items to local storage after each modification

@@ -116,15 +116,15 @@ const SellerStorePage = ({ params }: Props) => {
             });
     }
 
-    //   const filteredStoreProducts = storeProducts?.filter(
-    //       (item) => item.name && item.name.toLowerCase().includes(searchQuery.toLowerCase())
-    //   );
-    const filteredCategories = storeProducts?.map((store) => ({
-        ...store,
-        products: store.products.filter((product) =>
-            product.name.toLowerCase().includes(searchQuery.toLowerCase())
-        ),
-    }));
+    const filteredCategories = storeProducts?.map(store => ({
+            ...store,
+            products: store.products.filter(product =>
+                product.name.toLowerCase().includes(searchQuery.toLowerCase())
+            )
+        }))
+        .filter(store => store.products.length > 0); // Only include categories with matching products
+
+
     useEffect(() => {
         handleFetchStore();
     }, []);

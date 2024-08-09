@@ -24,7 +24,7 @@ const SingleProductPage = ({ params }: Props) => {
     const productId = params.productId;
     const [product, setProduct] = useState<ProductResponse>();
     const [isFetchingProduct, setIsFetchingProduct] = useState<boolean>(true);
-    // console.log({ product })
+    console.log({ productId })
     const addProductToFavorite = useAddProductsToFavorite();
     const removeProductFromFavorite = useRemoveProductFromFavorite()
     const { accountStatus, fetchAccountStatus } = useAccountStatus();
@@ -50,7 +50,6 @@ const SingleProductPage = ({ params }: Props) => {
     }
 
     async function handleAddProductToFavorite(id: string) {
-
         await addProductToFavorite(id)
             .then((response) => {
 
@@ -58,13 +57,23 @@ const SingleProductPage = ({ params }: Props) => {
                 // console.log(response);
 
                 handleFetchProduct()
+
                 // Display success 
                 toast.success('Product added to favorite successfully.');
             })
             .catch((error) => {
+                // console.log(error.response?.data.errorCode);
                 // Display error
                 const errorMessage = createCustomErrorMessages(error.response?.data)
                 toast.error(errorMessage)
+
+                if (error.response?.data.errorCode === 2003) {
+
+                    // console.log('User not authenticated, redirecting to login...');
+                    router.push(`/login?redirect=/products/${productId}`);
+                    return;
+                }
+
             })
             .finally(() => {
 
@@ -108,11 +117,11 @@ const SingleProductPage = ({ params }: Props) => {
     //     }
     // }, [accountStatus !== null, productId]);
 
-    useEffect(() => {
-        if (router && !accountStatus?.accountType && !isFetchingProduct) {
-                router.push('/login');
-            }
-    }, [accountStatus, isFetchingProduct, router]);
+    // useEffect(() => {
+    //     if (router && !accountStatus?.accountType && !isFetchingProduct) {
+    //             router.push('/login');
+    //         }
+    // }, [accountStatus, isFetchingProduct, router]);
 
     return (
         <div className={styles.main}>

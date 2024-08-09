@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./SingleCategory.module.scss";
 import {
     FavoriteIcon,
@@ -11,6 +11,7 @@ import useResponsiveness from "@/app/components/hooks/responsiveness-hook";
 import Link from "next/link";
 import { ProductResponse } from "@/app/components/models/IProduct";
 import Image from "next/image";
+import { useAccountStatus } from "@/app/context/AccountStatusContext";
 
 type Props = {
     product: ProductResponse | undefined;
@@ -21,6 +22,7 @@ const SingleCategoryReviews = ({ product }: Props) => {
     const isMobile = windowRes.width && windowRes.width < 768;
     const onMobile = typeof isMobile == "boolean" && isMobile;
     const onDesktop = typeof isMobile == "boolean" && !isMobile;
+    const { accountStatus, fetchAccountStatus } = useAccountStatus();
     // Calculate total count and weighted sum for average
     // const totalCount = data.reduce((sum, item) => sum + item.count, 0);
     // const weightedSum = data.reduce((sum, item) => sum + (item.star * item.count), 0);
@@ -30,82 +32,92 @@ const SingleCategoryReviews = ({ product }: Props) => {
 
     // // Find the maximum count among all ratings
     // const maxCount = Math.max(...data.map(item => item.count));
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+    useEffect(() => {
+        if (accountStatus && accountStatus.accountType == 'BUYER') {
+            setIsLoggedIn(true);
+        } else {
+            setIsLoggedIn(false);
+        }
+    }, [accountStatus]);
     return (
-        <div className={styles.reviews}>
-            <h2>Ratings and reviews</h2>
-            <div className={styles.reviewContents}>
-                <div className={styles.lhs}>
-                    <div className={styles.top}>
-                        {onMobile && (
-                            <div className={styles.top_lhs}>
-                                {product?.store.image ? (
-                                    <div className="relative h-[60px] w-[60px] md:h-[100px] md:w-[100px]">
-                                        <Image
-                                            src={product?.store.image}
-                                            alt="Logo"
-                                            fill
-                                            className="object-cover rounded-full"
-                                        />
+        <>
+            {isLoggedIn && (
+                <div className={styles.reviews}>
+                    <h2>Ratings and reviews</h2>
+                    <div className={styles.reviewContents}>
+                        <div className={styles.lhs}>
+                            <div className={styles.top}>
+                                {onMobile && (
+                                    <div className={styles.top_lhs}>
+                                        {product?.store.image ? (
+                                            <div className="relative h-[60px] w-[60px] md:h-[100px] md:w-[100px]">
+                                                <Image
+                                                    src={product?.store.image}
+                                                    alt="Logo"
+                                                    fill
+                                                    className="object-cover rounded-full"
+                                                />
+                                            </div>
+                                        ) : (
+                                            <span className="bg-[#2C7865] h-fit p-3 rounded-full">
+                                                <UserIcon />
+                                            </span>
+                                        )}
+                                        <div className={styles.product}>
+                                            <Link
+                                                href={"/stores"}
+                                                className="text-[#828282] text-sm underline cursor-pointer"
+                                            >
+                                                {product?.store.name}
+                                            </Link>
+                                            <p className="text-[#828282] text-xs">
+                                                {product?.positiveFeeback}% positive feedback
+                                            </p>
+                                        </div>
                                     </div>
-                                ) : (
-                                    <span className="bg-[#2C7865] h-fit p-3 rounded-full">
-                                        <UserIcon />
-                                    </span>
                                 )}
-                                <div className={styles.product}>
-                                    <Link
-                                        href={"/stores"}
-                                        className="text-[#828282] text-sm underline cursor-pointer"
-                                    >
-                                        {product?.store.name}
-                                    </Link>
-                                    <p className="text-[#828282] text-xs">
-                                        {product?.positiveFeeback}% positive feedback
-                                    </p>
-                                </div>
-                            </div>
-                        )}
-                        {onDesktop && (
-                            <div className={styles.top_lhs}>
-                                {product?.store.image ? (
-                                    <div className="relative h-[60px] w-[60px] md:h-[100px] md:w-[100px]">
-                                        <Image
-                                            src={product?.store.image}
-                                            alt="Logo"
-                                            fill
-                                            className="object-cover rounded-full"
-                                        />
+                                {onDesktop && (
+                                    <div className={styles.top_lhs}>
+                                        {product?.store.image ? (
+                                            <div className="relative h-[60px] w-[60px] md:h-[100px] md:w-[100px]">
+                                                <Image
+                                                    src={product?.store.image}
+                                                    alt="Logo"
+                                                    fill
+                                                    className="object-cover rounded-full"
+                                                />
+                                            </div>
+                                        ) : (
+                                            <span className="bg-[#2C7865] h-fit p-3 rounded-full">
+                                                <UserIcon />
+                                            </span>
+                                        )}
+                                        <div className={styles.product}>
+                                            <h3 className="text-[#828282] text-lg">
+                                                {product?.store.name}
+                                            </h3>
+                                            <p className="text-[#828282] text-base">
+                                                {product?.positiveFeeback}% positive feedback{" "}
+                                                <Link
+                                                    href={"/contact-seller"}
+                                                    className="cursor-pointer text-sm text-[#2C7865] font-bold"
+                                                >
+                                                    Contact seller{" "}
+                                                </Link>
+                                            </p>
+                                        </div>
                                     </div>
-                                ) : (
-                                    <span className="bg-[#2C7865] h-fit p-3 rounded-full">
-                                        <UserIcon />
-                                    </span>
                                 )}
-                                <div className={styles.product}>
-                                    <h3 className="text-[#828282] text-lg">
-                                        {product?.store.name}
-                                    </h3>
-                                    <p className="text-[#828282] text-base">
-                                        {product?.positiveFeeback}% positive feedback{" "}
-                                        <Link
-                                            href={"/contact-seller"}
-                                            className="cursor-pointer text-sm text-[#2C7865] font-bold"
-                                        >
-                                            Contact seller{" "}
-                                        </Link>
-                                    </p>
-                                </div>
+                                {onDesktop && (
+                                    <div className={styles.top_rhs}>
+                                        {/* <span><FavoriteIcon /></span> */}
+                                        <Link href={`/stores/${product?.store.id}`}>Visit store</Link>
+                                    </div>
+                                )}
                             </div>
-                        )}
-                        {onDesktop && (
-                            <div className={styles.top_rhs}>
-                                {/* <span><FavoriteIcon /></span> */}
-                                <Link href={`/stores/${product?.store.id}`}>Visit store</Link>
-                            </div>
-                        )}
-                    </div>
-                    {/* <div className={styles.ratings}>
+                            {/* <div className={styles.ratings}>
                         <h3 className='text-[#6F6F6F] text-base font-semibold mb-5'>Product Rating </h3>
                         {onDesktop && <div className={styles.rating}>
                             <div className={styles.average}>
@@ -150,39 +162,39 @@ const SingleCategoryReviews = ({ product }: Props) => {
                             </div>}
                     </div> */}
 
-                    <div className={styles.reviewContainer}>
-                        {product?.productRatings && product?.productRatings.length > 0 ? (
-                            product?.productRatings.map((prating, i) => (
-                                <div className={styles.review} key={i}>
-                                    <span className="flex items-center">
-                                        {Array.from(
-                                            { length: prating.rating },
-                                            (_, i) => i + 1
-                                        ).map((index) => (
-                                            <span key={index} className={index != 5 ? "mr-1" : ""}>
-                                                <RatingIcon colored={true} />
+                            <div className={styles.reviewContainer}>
+                                {product?.productRatings && product?.productRatings.length > 0 ? (
+                                    product?.productRatings.map((prating, i) => (
+                                        <div className={styles.review} key={i}>
+                                            <span className="flex items-center">
+                                                {Array.from(
+                                                    { length: prating.rating },
+                                                    (_, i) => i + 1
+                                                ).map((index) => (
+                                                    <span key={index} className={index != 5 ? "mr-1" : ""}>
+                                                        <RatingIcon colored={true} />
+                                                    </span>
+                                                ))}
+                                                {5 - prating.rating > 0 &&
+                                                    Array.from(
+                                                        { length: 5 - prating.rating },
+                                                        (_, i) => i + 1
+                                                    ).map((index) => (
+                                                        <span key={index}>
+                                                            <RatingIcon />
+                                                        </span>
+                                                    ))}
                                             </span>
-                                        ))}
-                                        {5 - prating.rating > 0 &&
-                                            Array.from(
-                                                { length: 5 - prating.rating },
-                                                (_, i) => i + 1
-                                            ).map((index) => (
-                                                <span key={index}>
-                                                    <RatingIcon />
-                                                </span>
-                                            ))}
-                                    </span>
-                                    <p className="text-base text-[#4B4B4B]">{prating.review}</p>
-                                    <p className="text-xs text-[#828282]">
-                                        {new Date(prating.createdAt).toLocaleDateString()} by {prating.user.fullname}
-                                    </p>
-                                </div>
-                            ))
-                        ) : (
-                            <p className="text-center text-base h-20 flex flex-col justify-center text-gray-500">No review</p>
-                        )}
-                        {/* <div className={styles.review}>
+                                            <p className="text-base text-[#4B4B4B]">{prating.review}</p>
+                                            <p className="text-xs text-[#828282]">
+                                                {new Date(prating.createdAt).toLocaleDateString()} by {prating.user.fullname}
+                                            </p>
+                                        </div>
+                                    ))
+                                ) : (
+                                    <p className="text-center text-base h-20 flex flex-col justify-center text-gray-500">No review</p>
+                                )}
+                                {/* <div className={styles.review}>
               <span className="flex items-center">
                 {[1, 2, 3, 4].map((_, index) => (
                   <span key={index} className={index != 5 ? "mr-1" : ""}>
@@ -258,11 +270,13 @@ const SingleCategoryReviews = ({ product }: Props) => {
               </p>
               <p className="text-sm text-[#828282]">25-09-2023 by Dave</p>
             </div> */}
+                            </div>
+                        </div>
+                        <div className={styles.rhs}></div>
                     </div>
                 </div>
-                <div className={styles.rhs}></div>
-            </div>
-        </div>
+            )}
+        </>
     );
 };
 

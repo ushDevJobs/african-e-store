@@ -132,7 +132,7 @@ const Navbar = (props: Props) => {
         <div className={`${styles.navbarContainer} ${scrolled ? styles.scrolled : ''}`}>
             {onDesktop && (
                 <div className={styles.navContent}>
-                    <Link href='/' className={styles.logo}>
+                    <Link href={`${pathname.includes('/seller') ? '/seller' : '/'}`} className={styles.logo}>
                         <Image src={images.logo} alt='rayvvin logo' />
                     </Link>
 
@@ -156,7 +156,7 @@ const Navbar = (props: Props) => {
                         }
                         {isSellerLoggedIn &&
                             <Link href='/seller-account'>
-                                <li className={pathname == "/seller-account" ? 'text-[#2C7865]' : ""}>My Account</li>
+                                <li className={pathname == "/seller-account" ? '!text-[#2C7865] ' : "hover:!text-[#2C7865]"}>My Account</li>
                             </Link>
                         }
                         {!isSellerLoggedIn && (

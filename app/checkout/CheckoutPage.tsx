@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./Checkout.module.scss";
 import Image from "next/image";
 import QuantityButton from "../components/QuantityButton";
@@ -12,6 +12,8 @@ import {
     totalPriceSelector,
 } from "../redux/features/cart/cartSlice";
 import { useUserAddress } from "../context/UserAddressContext";
+import { useAccountStatus } from "../context/AccountStatusContext";
+import images from "@/public/images";
 
 type Props = {};
 
@@ -20,9 +22,10 @@ const CheckoutPage = (props: Props) => {
     const cartItems = useSelector((state: RootState) => state.cart.cartItems);
     const totalPrice = useSelector(totalPriceSelector);
     const { userAddress } = useUserAddress();
+    const { accountStatus, fetchAccountStatus } = useAccountStatus();
     // Step 1: Extract the store IDs
     const storeIds = cartItems.map(item => item.product.store.id);
-    const storeShippingFee = cartItems[0].product.store.shippingFee;
+    const storeShippingFee = cartItems[0] && cartItems[0].product.store.shippingFee;
 
     // Step 2: Make the store IDs unique
     const uniqueStoreIds = Array.from(new Set(storeIds));
@@ -30,10 +33,21 @@ const CheckoutPage = (props: Props) => {
     // Step 3: Calculate the shipping fee
     const shippingFee = uniqueStoreIds.length * storeShippingFee;
 
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+    useEffect(() => {
+        if (accountStatus && accountStatus.accountType == 'BUYER') {
+            setIsLoggedIn(true);
+        } else {
+            setIsLoggedIn(false);
+        }
+    }, [accountStatus]);
+
     return (
         <div className={styles.main}>
             <h1>Checkout</h1>
-            <div className={styles.checkoutContainer}>
+            {cartItems.length > 0 ? (
+                 <div className={styles.checkoutContainer}>
                 <div className={styles.lhs}>
                     <div className={styles.productInfos}>
                         {/* <h2>Item</h2> */}
@@ -80,12 +94,14 @@ const CheckoutPage = (props: Props) => {
                             ))}
                     </div>
 
-                    <div className={styles.address}>
-                        <h3>Ship to</h3>
-                        {userAddress ? <p>{userAddress?.city}, {userAddress?.country}.</p> : <p>No address available</p>}
-                        {/* <p>{userAddress.}</p> */}
-                        <button className={styles.edit}>Change</button>
-                    </div>
+                 {isLoggedIn && (
+                            <div className={styles.address}>
+                                <h3>Ship to</h3>
+                                {userAddress ? <p>{userAddress?.city}, {userAddress?.country}.</p> : <p>No address available</p>}
+                                {/* <p>{userAddress.}</p> */}
+                                <button className={styles.edit}>Change</button>
+                            </div>
+                 )}
                     <div className={styles.coupon}>
                         <h3>Gift cards, coupons</h3>
                         <div className={styles.coupInput}>
@@ -111,15 +127,42 @@ const CheckoutPage = (props: Props) => {
                             </p>
 
                             {/* <p>By placing your order, you agree to eBay&apos;s User Agreement and Privacy Notice</p> */}
-                            <Link href={"/payment"}>
+                            {/* <Link href={"/payment"}>
                                 <button>
                                     Pay &pound;{(totalPrice + shippingFee).toLocaleString()}
                                 </button>
-                            </Link>
+                            </Link> */}
+
+                            {isLoggedIn ?
+                               <Link href='/payment'>
+                                    <button>
+                                        Pay &pound;{(totalPrice + shippingFee).toLocaleString()}
+                                    </button>
+                                </Link>
+                                :
+                                <Link href='/login?fcp=1'>
+                                    <button>
+                                        Pay &pound;{(totalPrice + shippingFee).toLocaleString()}
+                                    </button>
+                                </Link>
+                                }
                         </div>
                     </div>
                 </div>
             </div>
+            ) :(
+                    <div className={styles.emptyCart}>
+                        <Image src={images.emptyCart} alt="empty cart image" />
+                        <p>
+                            It seems your cart is empty at the moment. Click the button below
+                            to start your order now.
+                        </p>
+                        <Link href="/products">
+                            <button>Continue</button>
+                        </Link>
+                    </div>
+            ) }
+           
         </div>
     );
 };

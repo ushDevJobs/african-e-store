@@ -1,6 +1,12 @@
+'use client'
 import Link from "next/link";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import ApiRoutes from "../api/apiRoutes";
+import { removeProducts } from "../redux/features/cart/cartSlice";
 
 export default function PaymentSuccess({ searchParams: { amount } }: { searchParams: { amount: string } }) {
+    
     return (
         <main className="max-w-6xl mx-auto p-10 pb-20 text-white text-center border m-10 rounded-md bg-[#f7fafa]">
             <div className="mb-10">

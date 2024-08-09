@@ -106,20 +106,21 @@ const LoginPage = (props: Props) => {
                     // console.log(response)
 
                     // if (response.data.status) {
-                    //     const redirectUrl = searchParams.get('redirect');
+                    const redirectUrl = searchParams.get('redirect');
 
-                    //     if (redirectUrl) {
-                    //         router.push(redirectUrl);
-                    //     } 
-                    //     // else {
-                    //     //     response.data.data.accountType === "SELLER"
-                    //     //         ? router.push("/seller")
-                    //     //         : router.push("/");
-                    //     // }
+                    if (redirectUrl) {
+                        router.push(redirectUrl);
 
-                    //     // Display success
-                    //     toast.success("You have successfully logged in.");
-                    // }
+                        toast.success("You have successfully logged in.");
+                        return;
+                    }
+                    if (searchParams.get('fcp')) {
+                        router.push('/payment');
+
+                        toast.success("You have successfully logged in.");
+                        return;
+                    }
+
                     if (response.data.status) {
                         response.data.data.accountType === "SELLER"
                             ? router.push("/seller")
