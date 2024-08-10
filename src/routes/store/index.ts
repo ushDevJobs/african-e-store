@@ -20,11 +20,8 @@ import {
   getStoreProducts,
   getStoreShippingFee,
   removeStoreFromFavourite,
-  searchForStore,
-  searchStoreProducts,
   updateDeliveryFee,
   updateDeliveryStatusOfOrder,
-  updateStoreDescription,
   updateStoreProfile,
 } from "../../controllers/store";
 import { rootErrorHandler } from "../../root-error-handler";
@@ -33,11 +30,7 @@ import {
   checkStoreId,
   sellerRoleCheck,
 } from "../../middlewares/roles";
-import {
-  uploadImage,
-  uploadStoreImage,
-  uploadUsertImage,
-} from "../../config/configOptions";
+import { uploadImage } from "../../config/configOptions";
 import { checkAuth } from "../../middlewares/auth";
 import { optimizeImage } from "../../middlewares/processImage";
 
@@ -60,79 +53,85 @@ router.get(
   checkStoreId,
   rootErrorHandler(getReviewsForStoreById)
 );
-router.get("/search", rootErrorHandler(searchForStore));
 
 router.get(
   "/store/categories",
-  [sellerRoleCheck, checkStore],
+  [checkAuth, sellerRoleCheck, checkStore],
   rootErrorHandler(getStoreCategories)
 );
 router.get(
   "/store/reviews",
-  [sellerRoleCheck, checkStore],
+  [checkAuth, sellerRoleCheck, checkStore],
   rootErrorHandler(getReviewsForLoggedInUser)
 );
 router
   .route("/favourite")
-  .get(rootErrorHandler(getFavouriteStores))
-  .post(rootErrorHandler(addStoreToFavourite));
-router.delete("/favourite/:id", rootErrorHandler(removeStoreFromFavourite));
+  .get(checkAuth, rootErrorHandler(getFavouriteStores))
+  .post(checkAuth, rootErrorHandler(addStoreToFavourite));
+router.delete(
+  "/favourite/:id",
+  checkAuth,
+  rootErrorHandler(removeStoreFromFavourite)
+);
 router
   .route("/store")
-  .get(sellerRoleCheck, rootErrorHandler(getStoreByUserLogged))
-  .post(sellerRoleCheck, rootErrorHandler(createStore));
+  .get(checkAuth, sellerRoleCheck, rootErrorHandler(getStoreByUserLogged))
+  .post(checkAuth, sellerRoleCheck, rootErrorHandler(createStore));
 router.get(
   "/store/products",
-  [sellerRoleCheck, checkStore],
+  [checkAuth, sellerRoleCheck, checkStore],
   rootErrorHandler(getStoreProducts)
 );
 router.get(
   "/store/products/draft",
-  [sellerRoleCheck, checkStore],
+  [checkAuth, sellerRoleCheck, checkStore],
   rootErrorHandler(getStoreDraftProducts)
 );
-router.get(
-  "/store/search",
-  [sellerRoleCheck, checkStore],
-  rootErrorHandler(searchStoreProducts)
-);
-router.patch(
-  "/store/description",
-  [sellerRoleCheck, checkStore],
-  rootErrorHandler(updateStoreDescription)
-);
+
 router.patch(
   "/store/profile",
-  [sellerRoleCheck, checkStore, uploadImage.single("image"), optimizeImage],
+  [
+    checkAuth,
+    sellerRoleCheck,
+    checkStore,
+    uploadImage.single("image"),
+    optimizeImage,
+  ],
   rootErrorHandler(updateStoreProfile)
 );
 router
   .route("/store/profile/bank")
-  .get([sellerRoleCheck, checkStore], getStoreBankDetails)
-  .patch([sellerRoleCheck, checkStore], rootErrorHandler(addBankDetails));
+  .get([checkAuth, sellerRoleCheck, checkStore], getStoreBankDetails)
+  .patch(
+    [checkAuth, sellerRoleCheck, checkStore],
+    rootErrorHandler(addBankDetails)
+  );
 router
   .route("/store/shipping-fee")
-  .get([sellerRoleCheck, checkStore], getStoreShippingFee)
-  .patch([sellerRoleCheck, checkStore], rootErrorHandler(updateDeliveryFee));
+  .get([checkAuth, sellerRoleCheck, checkStore], getStoreShippingFee)
+  .patch(
+    [checkAuth, sellerRoleCheck, checkStore],
+    rootErrorHandler(updateDeliveryFee)
+  );
 
 router.get(
   "/store/orders",
-  [sellerRoleCheck, checkStore],
+  [checkAuth, sellerRoleCheck, checkStore],
   rootErrorHandler(getStoreOrders)
 );
 router.get(
   "/store/about",
-  [sellerRoleCheck, checkStore],
+  [checkAuth, sellerRoleCheck, checkStore],
   rootErrorHandler(getAboutStore)
 );
 router.get(
   "/store/transactions",
-  [sellerRoleCheck, checkStore],
+  [checkAuth, sellerRoleCheck, checkStore],
   rootErrorHandler(getIncomeAndTransactionsFromStore)
 );
 router.patch(
   "/store/orders/order/:id",
-  [sellerRoleCheck, checkStore],
+  [checkAuth, sellerRoleCheck, checkStore],
   rootErrorHandler(updateDeliveryStatusOfOrder)
 );
 export { router as storeRoutes };

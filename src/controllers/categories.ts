@@ -7,10 +7,12 @@ import { ErrorCode } from "../exceptions/root";
 import { NotFound } from "../exceptions/not-found";
 import { RequestUser } from "../types";
 import { extendAmount } from "../prisma/extensions";
+import { CACHE_KEYS, clearCache } from "../middlewares/cache";
 
 export const getCategories = async (req: Request, res: Response) => {
   const { _limit, _page } = req.query;
   const user = req.user as RequestUser;
+  req.apicacheGroup = CACHE_KEYS.CATEGORIES_WITH_PRODUCTS;
   const settings = await prisma.settings.findFirstOrThrow({
     select: {
       profitPercent: true,
@@ -178,6 +180,7 @@ export const getCategories = async (req: Request, res: Response) => {
 };
 export const getAllCategories = async (req: Request, res: Response) => {
   const categories = await prisma.category.findMany();
+  req.apicacheGroup = CACHE_KEYS.CATEGORIES;
   return returnJSONSuccess(res, {
     data: categories,
   });
@@ -188,6 +191,7 @@ export const getCategoryById = async (
   next: NextFunction
 ) => {
   const { id } = req.params;
+  req.apicacheGroup = CACHE_KEYS.CATEGORY + id;
   const { _limit, _page } = req.query;
   const user = req.user as RequestUser;
   const settings = await prisma.settings.findFirstOrThrow({
@@ -274,6 +278,9 @@ export const updateCategory = async (
         name: name,
       },
     });
+    clearCache(CACHE_KEYS.CATEGORY + id);
+    clearCache(CACHE_KEYS.CATEGORIES_WITH_PRODUCTS);
+    clearCache(CACHE_KEYS.CATEGORIES);
     if (!category) {
       return next(new NotFound("Category not found", ErrorCode.NOT_FOUND));
     }

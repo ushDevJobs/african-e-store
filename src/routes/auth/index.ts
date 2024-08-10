@@ -13,6 +13,7 @@ import passport from "passport";
 import { rootErrorHandler } from "../../root-error-handler";
 import { checkAuth } from "../../middlewares/auth";
 import { RequestUser } from "../../types";
+import { cache } from "../../middlewares/cache";
 
 const router = Router();
 

@@ -129,6 +129,7 @@ model OrderDetails {
   product     Product     @relation(fields: [productId], references: [id])
   productId   String
   shippingFee Float
+  interest    Float
   store       Store       @relation(fields: [storeId], references: [id])
   storeId     String
   updatedAt   DateTime    @updatedAt
@@ -142,15 +143,17 @@ model OrderDetails {
 
 model ViewsTracker {
   id        String   @id @default(uuid())
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String
+  user      User?    @relation(fields: [userId], references: [id])
+  userId    String?
   product   Product  @relation(fields: [productId], references: [id])
   productId String
-  ip        String?
-  updatedAt DateTime @updatedAt
+  ipAddress String?
+  viewedAt  DateTime @updatedAt
   createdAt DateTime @default(now())
 
   @@unique([userId, productId])
+  @@unique([ipAddress, productId])
+  @@map("productviews")
 }
 
 model Rating {

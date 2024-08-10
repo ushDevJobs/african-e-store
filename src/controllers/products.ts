@@ -16,13 +16,20 @@ import { extendAmount } from "../prisma/extensions";
 import logger from "../utils/logger";
 import fs from "fs";
 import path from "path";
+import { CACHE_KEYS, clearCache } from "../middlewares/cache";
 
 export const updateProduct = async (req: Request, res: Response) => {
   const { id } = req.params;
   const imagesArray = req.files as Express.Multer.File[];
+  const user = req.user as RequestUser;
   const productImgs = await prisma.product.findFirst({
     where: { id },
-    select: { images: true },
+    select: {
+      images: true,
+      id: true,
+      store: { select: { userId: true } },
+      categories: true,
+    },
   });
   const images = [
     ...imagesArray?.map(
@@ -99,6 +106,16 @@ export const updateProduct = async (req: Request, res: Response) => {
         }
       );
     });
+  clearCache(CACHE_KEYS.PRODUCTS);
+  clearCache(CACHE_KEYS.PRODUCT + id);
+  clearCache(CACHE_KEYS.STORE_ABOUT + user.id);
+  clearCache(CACHE_KEYS.PRODUCT + user.id);
+  clearCache(CACHE_KEYS.STORE_PRODUCTS + user.id);
+  clearCache(CACHE_KEYS.FAVORITE_PRODUCT + user.id);
+  clearCache(CACHE_KEYS.CATEGORIES_WITH_PRODUCTS);
+  clearCache(CACHE_KEYS.CATEGORY + productImgs?.categories[0].id);
+  clearCache(CACHE_KEYS.STORE_CATEGORIES_ID + productImgs?.id);
+
   return returnJSONSuccess(res);
 };
 
@@ -139,6 +156,14 @@ export const addProduct = async (
       },
     },
   });
+  clearCache(CACHE_KEYS.PRODUCTS);
+  clearCache(CACHE_KEYS.PRODUCT + user.id);
+  clearCache(CACHE_KEYS.STORE_ABOUT + user.id);
+  clearCache(CACHE_KEYS.STORE_PRODUCTS + user.id);
+  clearCache(CACHE_KEYS.FAVORITE_PRODUCT + user.id);
+  clearCache(CACHE_KEYS.CATEGORIES_WITH_PRODUCTS);
+  clearCache(CACHE_KEYS.STORE_CATEGORIES_ID + storeId.id);
+  clearCache(CACHE_KEYS.CATEGORY + req.body.category);
   return returnJSONSuccess(res);
 };
 
@@ -150,7 +175,7 @@ export const getProductById = async (req: Request, res: Response) => {
   });
   const user = req.user as RequestUser;
   const { id } = req.params;
-
+  req.apicacheGroup = CACHE_KEYS.PRODUCT + id;
   let product = await prisma
     .$extends(extendAmount(settings))
     .product.findFirstOrThrow({
@@ -253,29 +278,49 @@ export const getProductById = async (req: Request, res: Response) => {
   let avgRating = (rating._avg.rating || 0).toString().includes(".")
     ? (rating._avg.rating || 0).toFixed(1)
     : (rating._avg.rating || 0).toFixed(0);
+
   try {
+    const where = req.isAuthenticated()
+      ? {
+          userId_productId: {
+            userId: user.id,
+            productId: id,
+          },
+        }
+      : {
+          ipAddress_productId: {
+            ipAddress: req.socket.remoteAddress || "",
+            productId: id,
+          },
+        };
+    const data = req.isAuthenticated()
+      ? {
+          userId: user.id,
+          ipAddress: req.socket.remoteAddress,
+        }
+      : {
+          ipAddress: req.socket.remoteAddress,
+        };
     req.isAuthenticated() &&
       (await prisma.viewsTracker.upsert({
         where: {
-          userId_productId: {
-            userId: user?.id || "",
-            productId: id,
-          },
+          ...where,
         },
         create: {
-          userId: user?.id || "",
+          ...data,
           productId: id,
-          updatedAt: new Date(),
-          ip: req.socket.remoteAddress,
+          viewedAt: new Date(),
         },
         update: {
-          updatedAt: new Date(),
-          ip: req.socket.remoteAddress,
+          viewedAt: new Date(),
+          ...data,
         },
       }));
   } catch (error) {
     logger.error(error);
   } finally {
+    clearCache(CACHE_KEYS.RECENTLY_VIEWED_PRODUCTS);
+
     return returnJSONSuccess(res, {
       data: {
         ...product,
@@ -289,6 +334,17 @@ export const getProductById = async (req: Request, res: Response) => {
 };
 export const deleteProductById = async (req: Request, res: Response) => {
   const { id } = req.params;
+  const productImgs = await prisma.product.findFirst({
+    where: { id },
+    select: {
+      images: true,
+      store: {
+        select: {
+          userId: true,
+        },
+      },
+    },
+  });
   const product = await prisma.order.findFirst({
     where: {
       orderDetails: {
@@ -308,10 +364,6 @@ export const deleteProductById = async (req: Request, res: Response) => {
       },
     });
   } else {
-    const productImgs = await prisma.product.findFirst({
-      where: { id },
-      select: { images: true },
-    });
     await prisma.product.delete({
       where: {
         id,
@@ -328,6 +380,9 @@ export const deleteProductById = async (req: Request, res: Response) => {
       );
     });
   }
+  clearCache(CACHE_KEYS.PRODUCTS);
+  clearCache(CACHE_KEYS.PRODUCT + id);
+  clearCache(CACHE_KEYS.STORE_ABOUT + productImgs?.store.userId);
   return returnJSONSuccess(res);
 };
 export const getFavouriteProducts = async (
@@ -337,6 +392,7 @@ export const getFavouriteProducts = async (
 ) => {
   const user = req.user as RequestUser;
   try {
+    req.apicacheGroup = CACHE_KEYS.FAVORITE_PRODUCT + user.id;
     const favourite = await prisma.user.findFirstOrThrow({
       where: {
         id: user.id,
@@ -377,6 +433,14 @@ export const addProductToFavourite = async (
           },
         },
       });
+      clearCache(CACHE_KEYS.PRODUCTS);
+      clearCache(CACHE_KEYS.PRODUCT + id);
+      clearCache(CACHE_KEYS.STORE_PRODUCTS + user.id);
+      clearCache(CACHE_KEYS.FAVORITE_PRODUCT);
+      clearCache(CACHE_KEYS.CATEGORIES_WITH_PRODUCTS);
+      clearCache(CACHE_KEYS.CATEGORIES);
+      clearCache(CACHE_KEYS.STORE_CATEGORIES_ID);
+
       return returnJSONSuccess(res);
     } catch (error) {
       return returnJSONError(res, { message: "Unable to add to favourite" });
@@ -405,6 +469,8 @@ export const removeProductFromFavourite = async (
           },
         },
       });
+      clearCache(CACHE_KEYS.PRODUCTS);
+      clearCache(CACHE_KEYS.FAVORITE_PRODUCT);
       return returnJSONSuccess(res);
     } catch (error) {
       return returnJSONError(res, { message: "Unable to add to favourite" });
@@ -417,6 +483,7 @@ export const getRecentlyViewedProductsForLoggedUser = async (
   req: Request,
   res: Response
 ) => {
+  req.apicacheGroup = CACHE_KEYS.RECENTLY_VIEWED_PRODUCTS;
   const where = req.isAuthenticated()
     ? {
         userId: (req.user as RequestUser).id,
@@ -429,7 +496,7 @@ export const getRecentlyViewedProductsForLoggedUser = async (
       ...where,
     },
     orderBy: {
-      updatedAt: "desc",
+      viewedAt: "desc",
     },
     take: 4,
     select: {
@@ -446,6 +513,8 @@ export const getRecentlyViewedProductsForLoggedUser = async (
   returnJSONSuccess(res, { data: products });
 };
 export const getRecommendedProducts = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  req.apicacheGroup = CACHE_KEYS.RECOMMENDED_PRODUCTS + id;
   const count = await prisma.product.count({
     where: {
       AND: [

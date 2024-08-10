@@ -10,14 +10,21 @@ import { paymentRoutes } from "./payment";
 import { sellerRoleCheck } from "../middlewares/roles";
 import { adminRoute } from "./admin";
 import { userRoutes } from "./user";
+import { cacheSuccess } from "../middlewares/cache";
+import apicache from "apicache";
 const router = Router();
 router.use("/auth", authRoute);
-router.use("/user", checkAuth, userRoutes);
-router.use("/stores", checkAuth, storeRoutes);
+router.use("/user", checkAuth, cacheSuccess, userRoutes);
+router.use("/stores", cacheSuccess, storeRoutes);
 router.use("/products", productRoutes);
-router.use("/categories", categoryRoutes);
-router.use("/orders", checkAuth, orderRoutes);
+router.use("/categories", cacheSuccess, categoryRoutes);
+router.use("/orders", checkAuth, cacheSuccess, orderRoutes);
 router.use("/payment", checkAuth, paymentRoutes);
 router.use("/admin", checkAuth, sellerRoleCheck, adminRoute);
-
+router.get("/cache", (req, res) => {
+  res.json(apicache.getIndex());
+});
+router.get("/clear", (req, res) => {
+  res.json(apicache.clear("stores"));
+});
 export default router;

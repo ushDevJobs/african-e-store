@@ -26,3 +26,10 @@ declare global {
     type sellerPaid = SellerPaid | [];
   }
 }
+declare global {
+  namespace Express {
+    interface Request {
+      apicacheGroup?: string;
+    }
+  }
+}

@@ -19,12 +19,13 @@ import {
 import { uploadImage } from "../../config/configOptions";
 import { checkAuth } from "../../middlewares/auth";
 import { optimizeImages } from "../../middlewares/processImage";
-
+import { cache, cacheStatus200, cacheSuccess } from "../../middlewares/cache";
+import { RequestUser } from "../../types";
 const router = Router();
 
 router
   .route("/product/:id")
-  .get(rootErrorHandler(getProductById))
+  .get(cacheSuccess, rootErrorHandler(getProductById))
   .patch(
     [
       checkAuth,
@@ -39,9 +40,24 @@ router
 
 router.get(
   "/recently-viewed",
+  cacheSuccess,
   rootErrorHandler(getRecentlyViewedProductsForLoggedUser)
 );
-router.get("/recommended", rootErrorHandler(getRecommendedProducts));
+router.get(
+  "/recommended",
+  (req, res, next) => {
+    let newId = req.isAuthenticated()
+      ? (req.user as RequestUser).id
+      : req.socket.remoteAddress || "";
+    req.params.id = newId;
+    let modified = req.originalUrl + "/" + newId;
+    req.originalUrl = modified;
+    req.url = modified;
+    next();
+  },
+  cache("5 minutes", cacheStatus200),
+  rootErrorHandler(getRecommendedProducts)
+);
 router.post(
   "/product",
   [checkAuth, sellerRoleCheck, uploadImage.array("images", 4), optimizeImages],
@@ -49,10 +65,10 @@ router.post(
 );
 router
   .route("/favourite")
-  .get(checkAuth, rootErrorHandler(getFavouriteProducts))
+  .get(checkAuth, cacheSuccess, rootErrorHandler(getFavouriteProducts))
   .post(checkAuth, rootErrorHandler(addProductToFavourite));
 router.delete(
-  "/favourite/:id",
+  "/favourite",
   checkAuth,
   rootErrorHandler(removeProductFromFavourite)
 );

@@ -4,6 +4,7 @@ import { prisma } from "../prisma";
 import { returnJSONError, returnJSONSuccess } from "../utils/functions";
 import { NotFound } from "../exceptions/not-found";
 import { ErrorCode } from "../exceptions/root";
+import { CACHE_KEYS, clearCache } from "../middlewares/cache";
 
 export const approvePaymentByAdmin = async (
   req: Request,
@@ -12,13 +13,15 @@ export const approvePaymentByAdmin = async (
 ) => {
   const { id } = req.params;
   const { orderId } = req.body;
+  let store;
   try {
-    const store = await prisma.store.findFirstOrThrow({
+    store = await prisma.store.findFirstOrThrow({
       where: {
         id,
       },
       select: {
         sellerDashboard: true,
+        userId: true,
       },
     });
   } catch (error) {
@@ -71,6 +74,8 @@ export const approvePaymentByAdmin = async (
           },
         },
       });
+      clearCache(CACHE_KEYS.STORE_ABOUT + store?.userId);
+      clearCache(CACHE_KEYS.STORE_TRANSACTIONS + store?.userId);
       return returnJSONSuccess(res);
     } else {
       return returnJSONError(res, { message: "Order already paid out" });

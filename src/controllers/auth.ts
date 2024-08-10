@@ -12,6 +12,8 @@ import { validateRegData, validateSellerRegData } from "../schema/users";
 import { compareSync, hashSync } from "bcrypt";
 import { InternalException } from "../exceptions/internal-exception";
 import { NotFound } from "../exceptions/not-found";
+import { CACHE_KEYS, clearCache } from "../middlewares/cache";
+import { RequestUser } from "../types";
 
 export const accountStatus = (req: Request, res: Response) => {
   res.json(req.user);
@@ -344,6 +346,9 @@ export const logout = async (
   res: Response,
   next: NextFunction
 ) => {
+  clearCache(CACHE_KEYS.USER_STATUS + (req.user as RequestUser).id);
+  clearCache(CACHE_KEYS.USER_ADDRESS + (req.user as RequestUser).id);
+  clearCache(CACHE_KEYS.USER_ORDERS + (req.user as RequestUser).id);
   req.logout((err) => {
     if (err) {
       return next(err);

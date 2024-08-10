@@ -14,6 +14,7 @@ import { BadRequest } from "../exceptions/bad-request";
 import fs from "fs";
 import path from "path";
 import logger from "../utils/logger";
+import { CACHE_KEYS, clearCache } from "../middlewares/cache";
 export const getAllStores = async (
   req: Request,
   res: Response,
@@ -21,10 +22,23 @@ export const getAllStores = async (
 ) => {
   try {
     const user = req.user as RequestUser;
+    req.apicacheGroup = CACHE_KEYS.STORES;
     const { _limit, _page } = req.query;
     const validatedPag = validatePagination.safeParse({
       _page: +_page!,
     });
+    const addFavourite = req.isAuthenticated()
+      ? {
+          favourite: {
+            where: {
+              id: user.id,
+            },
+            select: {
+              id: true,
+            },
+          },
+        }
+      : {};
     const count = await prisma.store.count();
     const page = (+validatedPag.data?._page! - 1) * (_limit ? +_limit : count);
     const stores = await prisma.store.findMany({
@@ -41,14 +55,7 @@ export const getAllStores = async (
             fullname: true,
           },
         },
-        favourite: {
-          where: {
-            id: user.id,
-          },
-          select: {
-            id: true,
-          },
-        },
+        ...addFavourite,
       },
     });
     return returnJSONSuccess(res, {
@@ -57,27 +64,8 @@ export const getAllStores = async (
       hasMore: validatedPag.data?._page! * (_limit ? +_limit : count) < count,
     });
   } catch (error) {
+    console.log(error);
     next(new NotFound("Store not found", ErrorCode.NOT_FOUND));
-  }
-};
-export const searchForStore = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const { q } = req.query;
-  if (q && q !== "") {
-    const stores = await prisma.store.findMany({
-      where: {
-        name: {
-          contains: q as string,
-        },
-      },
-    });
-
-    return returnJSONSuccess(res, { data: stores });
-  } else {
-    next(new BadRequest("Invalid request parameters", ErrorCode.BAD_REQUEST));
   }
 };
 const getStoreFullDetails = async (id: string, isStoreId = false) => {
@@ -99,7 +87,15 @@ const getStoreFullDetails = async (id: string, isStoreId = false) => {
     where: {
       orderDetails: {
         some: {
-          AND: [{ status: "DELIVERED" }, { storeId: store.id }],
+          AND: [
+            { status: "DELIVERED" },
+            { storeId: store.id },
+            {
+              order: {
+                paymentStatus: true,
+              },
+            },
+          ],
         },
       },
     },
@@ -111,7 +107,15 @@ const getStoreFullDetails = async (id: string, isStoreId = false) => {
     where: {
       orderDetails: {
         some: {
-          AND: [{ status: "DELIVERED" }, { storeId: store.id }],
+          AND: [
+            { status: "DELIVERED" },
+            { storeId: store.id },
+            {
+              order: {
+                paymentStatus: true,
+              },
+            },
+          ],
         },
       },
     },
@@ -126,23 +130,19 @@ const getStoreFullDetails = async (id: string, isStoreId = false) => {
 
   const totalItemSold = await prisma.order.count({
     where: {
-      orderDetails: {
-        some: {
-          AND: [{ status: "DELIVERED" }, { storeId: store.id }],
+      AND: [
+        {
+          orderDetails: {
+            some: {
+              AND: [{ status: "DELIVERED" }, { storeId: store.id }],
+            },
+          },
         },
-      },
+        { paymentStatus: true },
+      ],
     },
   });
-  // const totalRatingByUsers = await prisma.rating.groupBy({
-  //   where: {
-  //     orderDelivered: {
-  //       some: {
-  //         AND: [{ status: "DELIVERED" }, { storeId: store.id }],
-  //       },
-  //     },
-  //   },
-  //   by: ["userId"],
-  // });
+
   const feedback = (((avg._sum.rating || 0) / avg._count || 0) * 100) / 5;
   const findRating = (number: number) => {
     const rate = ratings.find((rating) => rating.rating === number);
@@ -206,6 +206,7 @@ export const getStoreByUserLogged = async (
   next: NextFunction
 ) => {
   const user = req.user as RequestUser;
+  req.apicacheGroup = CACHE_KEYS.STORE + user.id;
   try {
     return returnJSONSuccess(res, { data: await getStoreFullDetails(user.id) });
   } catch (error) {
@@ -219,6 +220,8 @@ export const getStoreById = async (
 ) => {
   try {
     const { id } = req.params;
+    req.apicacheGroup = CACHE_KEYS.STORE_ID + id;
+
     if (id) {
       return returnJSONSuccess(res, {
         data: await getStoreFullDetails(id, true),
@@ -236,6 +239,7 @@ export const getProductsOfStoreById = async (
   next: NextFunction
 ) => {
   const { id } = req.params;
+  req.apicacheGroup = CACHE_KEYS.STORE_CATEGORIES_ID + id;
   if (id && id !== "") {
     const categories = await getCategory(id);
     return returnJSONSuccess(res, { data: categories });
@@ -263,46 +267,9 @@ export const createStore = async (req: Request, res: Response) => {
   }
   return res.status(200).json({ status: true, data: checkIfStore });
 };
-export const searchStoreProducts = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const user = req.user as RequestUser;
-  const { q } = req.query;
-  if (q && q !== "") {
-    const store = await prisma.store.findFirstOrThrow({
-      where: {
-        userId: user.id,
-      },
-    });
-    const products = await prisma.product.findMany({
-      where: {
-        AND: [
-          { storeId: store.id },
-          { publish: true },
-          {
-            name: {
-              contains: q as string,
-            },
-          },
-          { deleted: false },
-          {
-            quantity: {
-              gt: 0,
-            },
-          },
-        ],
-      },
-    });
-
-    return res.status(200).json({ status: true, data: products });
-  } else {
-    next(new BadRequest("Invalid request parameters", ErrorCode.BAD_REQUEST));
-  }
-};
 export const getStoreProducts = async (req: Request, res: Response) => {
   const user = req.user as RequestUser;
+  req.apicacheGroup = CACHE_KEYS.STORE_PRODUCTS + user.id;
   const categories = await prisma.store.findFirstOrThrow({
     where: {
       userId: user.id,
@@ -334,6 +301,7 @@ export const getStoreProducts = async (req: Request, res: Response) => {
 };
 export const getStoreDraftProducts = async (req: Request, res: Response) => {
   const user = req.user as RequestUser;
+  req.apicacheGroup = CACHE_KEYS.STORE_DRAFT + user.id;
   const store = await prisma.store.findFirstOrThrow({
     where: { userId: user.id },
     select: { id: true },
@@ -364,30 +332,6 @@ export const getStoreDraftProducts = async (req: Request, res: Response) => {
   });
 
   return res.status(200).json({ status: true, data: categories.products });
-};
-export const updateStoreDescription = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const user = req.user as RequestUser;
-  const { description } = req.body;
-  if (description && description !== "") {
-    const updateDescription = await prisma.store.update({
-      where: {
-        userId: user.id,
-      },
-      data: {
-        description,
-      },
-      select: {
-        description: true,
-      },
-    });
-    return returnJSONSuccess(res, { data: updateDescription });
-  } else {
-    next(new BadRequest("Invalid Request Parameters", ErrorCode.BAD_REQUEST));
-  }
 };
 export const updateStoreProfile = async (req: Request, res: Response) => {
   const user = req.user as RequestUser;
@@ -427,9 +371,14 @@ export const updateStoreProfile = async (req: Request, res: Response) => {
       image: true,
     },
   });
+  clearCache(CACHE_KEYS.STORE + user.id);
+  clearCache(CACHE_KEYS.STORES);
   if (storeImage.image && storeImage.image !== "") {
     fs.unlink(
-      path.resolve(__dirname, `../images/store/${storeImage.image}`),
+      path.resolve(
+        __dirname,
+        `../${storeImage.image.substring(storeImage.image.indexOf("/images"))}`
+      ),
       (error) => {
         if (error) {
           logger.error("Unable to delete image");
@@ -459,6 +408,9 @@ export const addStoreToFavourite = async (
           },
         },
       });
+      clearCache(CACHE_KEYS.STORES);
+      clearCache(CACHE_KEYS.FAVORITE_STORE + id);
+      clearCache(CACHE_KEYS.STORE + id);
       return returnJSONSuccess(res);
     } catch (error) {
       return returnJSONError(res, { message: "Unable to add to favourite" });
@@ -487,6 +439,9 @@ export const removeStoreFromFavourite = async (
           },
         },
       });
+      clearCache(CACHE_KEYS.STORES);
+      clearCache(CACHE_KEYS.FAVORITE_STORE + id);
+      clearCache(CACHE_KEYS.STORE + id);
       return returnJSONSuccess(res);
     } catch (error) {
       return returnJSONError(res, { message: "Unable to add to favourite" });
@@ -501,6 +456,7 @@ export const getFavouriteStores = async (
   next: NextFunction
 ) => {
   const user = req.user as RequestUser;
+  req.apicacheGroup = CACHE_KEYS.FAVORITE_STORE + user.id;
   try {
     const favourite = await prisma.user.findFirstOrThrow({
       where: {
@@ -525,6 +481,7 @@ export const getFavouriteStores = async (
 };
 export const getStoreCategories = async (req: Request, res: Response) => {
   const user = req.user as RequestUser;
+  req.apicacheGroup = CACHE_KEYS.STORE_CATEGORIES + user.id;
   const store = await prisma.store.findFirstOrThrow({
     where: { userId: user.id },
     select: { id: true },
@@ -538,6 +495,7 @@ export const getCategoriesfromStoreById = async (
   next: NextFunction
 ) => {
   const { id } = req.params;
+  req.apicacheGroup = CACHE_KEYS.STORE_CATEGORIES_ID + id;
   if (id && id !== "") {
     const categories = await getCategory(id);
     return returnJSONSuccess(res, { data: categories });
@@ -573,7 +531,40 @@ const getCategory = async (id: string, store = true) => {
       name: true,
       id: true,
       createdAt: true,
-      products: true,
+      products: {
+        where: {
+          AND: [
+            { storeId: id },
+            {
+              id: {
+                not: undefined,
+              },
+            },
+            { deleted: false },
+            { publish: true },
+            {
+              quantity: {
+                gt: 0,
+              },
+            },
+          ],
+        },
+        select: {
+          id: true,
+          name: true,
+          itemCondition: true,
+          salesType: true,
+          endBiddingDate: true,
+          amount: true,
+          quantity: true,
+          details: true,
+          publish: true,
+          coverImage: true,
+          images: true,
+          storeId: true,
+          createdAt: true,
+        },
+      },
     },
   });
   return categories;
@@ -583,6 +574,7 @@ export const getReviewsForLoggedInUser = async (
   res: Response
 ) => {
   const user = req.user as RequestUser;
+  req.apicacheGroup = CACHE_KEYS.STORE_REVIEWS + user.id;
   const store = await prisma.store.findFirstOrThrow({
     where: { userId: user.id },
     select: { id: true },
@@ -592,6 +584,7 @@ export const getReviewsForLoggedInUser = async (
 };
 export const getReviewsForStoreById = async (req: Request, res: Response) => {
   const { id } = req.params;
+  req.apicacheGroup = CACHE_KEYS.STORE_REVIEWS_ID + id;
   const reviews = await getReviewsForStore(id);
   return returnJSONSuccess(res, { data: reviews });
 };
@@ -635,6 +628,7 @@ const getReviewsForStore = async (id: string) => {
 };
 export const getStoreOrders = async (req: Request, res: Response) => {
   const { id } = req.user as RequestUser;
+  req.apicacheGroup = CACHE_KEYS.STORE_ORDERS + id;
   const store = await prisma.store.findFirstOrThrow({
     where: {
       userId: id,
@@ -695,10 +689,11 @@ export const updateDeliveryStatusOfOrder = async (
   res: Response
 ) => {
   const { status } = req.body;
+  const user = req.user as RequestUser;
   const { id } = req.params;
   const store = await prisma.store.findFirstOrThrow({
     where: {
-      userId: (req.user as RequestUser).id,
+      userId: user.id,
     },
     select: {
       id: true,
@@ -714,6 +709,8 @@ export const updateDeliveryStatusOfOrder = async (
       status: stat,
     },
   });
+  clearCache(CACHE_KEYS.STORE_ORDERS + user.id);
+  clearCache(CACHE_KEYS.STORE_TRANSACTIONS + user.id);
   returnJSONSuccess(res, { data: order });
 };
 export const addBankDetails = async (req: Request, res: Response) => {
@@ -741,11 +738,13 @@ export const addBankDetails = async (req: Request, res: Response) => {
       accountNumber,
     },
   });
-
+  clearCache(CACHE_KEYS.STORE + id);
+  clearCache(CACHE_KEYS.STORE_BANK + id);
   returnJSONSuccess(res, { data: store });
 };
 export const getAboutStore = async (req: Request, res: Response) => {
   const { id } = req.user as RequestUser;
+  req.apicacheGroup = CACHE_KEYS.STORE_ABOUT + id;
   const store = await prisma.store.findFirstOrThrow({
     where: { userId: id },
     select: { id: true, sellerMessage: true },
@@ -808,7 +807,7 @@ export const getIncomeAndTransactionsFromStore = async (
     where: { userId: id },
     select: { id: true },
   });
-
+  req.apicacheGroup = CACHE_KEYS.STORE_TRANSACTIONS + id;
   const income =
     await prisma.$queryRaw`SELECT DATE(createdAt) AS createdAt, sum(amount) AS amount FROM sellerspaymenthistory WHERE storeId = ${store.id} GROUP BY MONTH(createdAt)`;
 
@@ -877,19 +876,23 @@ export const getIncomeAndTransactionsFromStore = async (
 };
 export const updateDeliveryFee = async (req: Request, res: Response) => {
   const { fee } = req.body;
-
+  const user = req.user as RequestUser;
   await prisma.store.update({
     where: {
-      userId: (req.user as RequestUser).id,
+      userId: user.id,
     },
     data: {
       shippingFee: fee,
     },
   });
+  clearCache(CACHE_KEYS.STORE_DELIVERY_FEE + user.id);
+  clearCache(CACHE_KEYS.STORE_TRANSACTIONS + user.id);
+  clearCache(CACHE_KEYS.STORE_ORDERS + user.id);
   return returnJSONSuccess(res);
 };
 export const getStoreShippingFee = async (req: Request, res: Response) => {
   const { id } = req.user as RequestUser;
+  req.apicacheGroup = CACHE_KEYS.STORE_DELIVERY_FEE + id;
   const fee = await prisma.store.findFirstOrThrow({
     where: {
       user: {
@@ -904,6 +907,7 @@ export const getStoreShippingFee = async (req: Request, res: Response) => {
 };
 export const getStoreBankDetails = async (req: Request, res: Response) => {
   const { id } = req.user as RequestUser;
+  req.apicacheGroup = CACHE_KEYS.STORE_BANK + id;
   const fee = await prisma.store.findFirstOrThrow({
     where: {
       user: {

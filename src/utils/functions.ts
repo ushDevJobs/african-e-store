@@ -1,6 +1,4 @@
-import dotenv from "dotenv";
-
-import { NextFunction, Request, Response } from "express";
+import { Request, Response } from "express";
 import { MailOptions } from "nodemailer/lib/sendmail-transport";
 import { Transporter } from "nodemailer";
 import nodemailer from "nodemailer";
@@ -9,9 +7,6 @@ import {
   PrismaClientValidationError,
 } from "@prisma/client/runtime/library";
 import { ErrorCode } from "../exceptions/root";
-import sharp from "sharp";
-import path from "path";
-import { BadRequest } from "../exceptions/bad-request";
 export const createPrismaError = (error: Error) => {
   if (error instanceof PrismaClientKnownRequestError) {
     let errorMessage: { message: string; code?: number } = { message: "" };
@@ -115,6 +110,10 @@ export const returnJSONSuccess = (
   rest?: object | undefined,
   status = 200
 ) => {
+  responseObject.set({
+    "Cache-Control": "public, max-age=0, must-revalidate",
+    Pragma: "no-cache",
+  });
   responseObject.status(status);
   return responseObject.json({
     status: true,

@@ -12,7 +12,7 @@ const nextConfig = {
       },
       {
         protocol:'https',
-        hostname:'newrayvinn.rapidsuite.ng',
+        hostname:'rayvvin.com',
         port:'',
         pathname:'/images/**'
       }

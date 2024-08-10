@@ -6,6 +6,8 @@ import { validatePagination } from "../schema/categories";
 import { BadRequest } from "../exceptions/bad-request";
 import { ErrorCode } from "../exceptions/root";
 import { NotFound } from "../exceptions/not-found";
+import { CACHE_KEYS } from "../middlewares/cache";
+import { extendOrderAmount } from "../prisma/extensions";
 
 export const getOrders = async (req: Request, res: Response) => {
   const { _limit, _page } = req.query;
@@ -13,13 +15,14 @@ export const getOrders = async (req: Request, res: Response) => {
   const validatedPag = validatePagination.safeParse({
     _page: +_page!,
   });
+  req.apicacheGroup = CACHE_KEYS.USER_ORDERS + user.id;
   const count = await prisma.order.count({ where: { userId: user.id } });
   const page = (+validatedPag.data?._page! - 1) * (_limit ? +_limit : count);
-  const orders = await prisma.order.findMany({
+  const orders = await prisma.$extends(extendOrderAmount()).order.findMany({
     skip: page,
     take: +_limit! || undefined,
     where: {
-      userId: user.id,
+      AND: [{ userId: user.id }, { paymentStatus: true }],
     },
     select: {
       id: true,

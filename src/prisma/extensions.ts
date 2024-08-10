@@ -16,3 +16,18 @@ export const extendAmount = (settings: { profitPercent: number }) => {
     },
   });
 };
+export const extendOrderAmount = () => {
+  return Prisma.defineExtension({
+    result: {
+      orderDetails: {
+        amount: {
+          needs: { amount: true, interest: true },
+          compute(details) {
+            const percent = (details.amount * details.interest) / 100;
+            return parseFloat((details.amount + percent).toFixed(2));
+          },
+        },
+      },
+    },
+  });
+};

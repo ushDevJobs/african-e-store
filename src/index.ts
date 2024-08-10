@@ -18,6 +18,7 @@ import flash from "express-flash";
 import next from "next";
 import path from "path";
 import fs from "fs";
+import { cache } from "./middlewares/cache";
 // express middleware
 app.set("trust proxy", 1);
 app.use(cors(corsConfig));
@@ -39,7 +40,11 @@ app.use(morganLogger);
 initializePassport(passport);
 app.use(passport.initialize());
 app.use(passport.session());
-app.use("/images", express.static(path.join(__dirname, "images")));
+app.use(
+  "/images",
+  cache("2 minutes"),
+  express.static(path.join(__dirname, "images"))
+);
 app.use("/api", router);
 if (process.env.NODE_ENV === "production") {
   const nextApp = next({ dev: false });

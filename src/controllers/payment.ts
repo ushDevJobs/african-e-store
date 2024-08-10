@@ -10,6 +10,7 @@ import {
 import { OrderQuantity, RequestUser } from "../types";
 import logger from "../utils/logger";
 import { extendAmount } from "../prisma/extensions";
+import { CACHE_KEYS, clearCache } from "../middlewares/cache";
 
 const stripe = new Stripe(process.env.STRIPE_S_KEY!, {
   typescript: true,
@@ -18,7 +19,7 @@ const stripe = new Stripe(process.env.STRIPE_S_KEY!, {
 export const paymentIntent = async (req: Request, res: Response) => {
   const user = req.user as RequestUser;
   const cart: OrderQuantity = req.body.id;
-  const { amount } = await getTotal(cart);
+  const { amount, interest } = await getTotal(cart);
   const products = await prisma.product.findMany({
     where: {
       id: {
@@ -34,6 +35,7 @@ export const paymentIntent = async (req: Request, res: Response) => {
         select: {
           id: true,
           shippingFee: true,
+          userId: true,
         },
       },
     },
@@ -51,6 +53,7 @@ export const paymentIntent = async (req: Request, res: Response) => {
             productId: product.id,
             storeId: product.store.id,
             shippingFee: product.store.shippingFee,
+            interest,
           })),
         },
       },
@@ -70,7 +73,12 @@ export const paymentIntent = async (req: Request, res: Response) => {
       description: `${products.map((p) => p.name).join(", ")}`,
       metadata: { order_id: order.id },
     });
-
+    products.map((p) => {
+      clearCache(CACHE_KEYS.STORE_ABOUT + p.store.userId);
+      clearCache(CACHE_KEYS.STORE_TRANSACTIONS + p.store.userId);
+      clearCache(CACHE_KEYS.STORE_ORDERS + p.store.userId);
+    });
+    clearCache(CACHE_KEYS.USER_ORDERS + user.id);
     return returnJSONSuccess(res, {
       data: {
         clientSecret: intent.client_secret,
@@ -95,7 +103,7 @@ export const getAmount = async (req: Request, res: Response) => {
 };
 export const handlePaymentSuccess = async (req: Request, res: Response) => {
   const { o_id, payment_intent, redirect_status } = req.query;
-
+  const user = req.user as RequestUser;
   if (redirect_status && o_id && payment_intent && o_id !== "") {
     if (redirect_status === "succeeded") {
       const order = await prisma.order.update({
@@ -110,7 +118,17 @@ export const handlePaymentSuccess = async (req: Request, res: Response) => {
         select: {
           id: true,
           amount: true,
-          orderDetails: true,
+          orderDetails: {
+            select: {
+              store: {
+                select: {
+                  userId: true,
+                },
+              },
+              id: true,
+              quantity: true,
+            },
+          },
         },
       });
       try {
@@ -128,6 +146,12 @@ export const handlePaymentSuccess = async (req: Request, res: Response) => {
             })
           )
         );
+        order.orderDetails.map((p) => {
+          clearCache(CACHE_KEYS.STORE_ABOUT + p.store.userId);
+          clearCache(CACHE_KEYS.STORE_TRANSACTIONS + p.store.userId);
+          clearCache(CACHE_KEYS.STORE_ORDERS + p.store.userId);
+        });
+        clearCache(CACHE_KEYS.USER_ORDERS + user.id);
       } catch (error) {
         logger.error(error);
       }
@@ -185,5 +209,9 @@ const getTotal = async (cart: { id: string; quantity: number }[]) => {
     .map((product) => product.store.shippingFee)
     .reduce((x, y) => x + y, 0);
   const amount = (productAmount + parseFloat(SHiPPING_FEE)).toFixed(2);
-  return { amount: parseFloat(amount), products };
+  return {
+    amount: parseFloat(amount),
+    products,
+    interest: settings.profitPercent,
+  };
 };
