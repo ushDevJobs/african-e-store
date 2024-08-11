@@ -30,7 +30,7 @@ const CartPage = (props: Props) => {
     const onDesktop = typeof isMobile == "boolean" && !isMobile;
     return (
         <>
-            <div className={`${styles.cartSection} pt-24`}>
+            <div className={styles.cartSection}>
                 {cartItems && cartItems.length > 0 ? (
                     <>
                         <h1>My Cart({cartItems.length > 0 && <>{cartItems.length}</>})</h1>

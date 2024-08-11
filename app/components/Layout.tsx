@@ -15,7 +15,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import RegistrationNav from './RegistrationNav';
 import RegistrationFooter from './RegistrationFooter';
 import NextBreadcrumb from './Breadcrumbs';
-import { Toaster, toast } from 'sonner';
+import { Toaster } from 'sonner';
 import { AccountStatusProvider } from '../context/AccountStatusContext';
 import { useFetchCategories } from '../api/apiClients';
 import { CategoriesResponse } from './models/AllCategories';
