@@ -15,6 +15,7 @@ import fs from "fs";
 import path from "path";
 import logger from "../utils/logger";
 import { CACHE_KEYS, clearCache } from "../middlewares/cache";
+import { extendAmount } from "../prisma/extensions";
 export const getAllStores = async (
   req: Request,
   res: Response,
@@ -504,69 +505,76 @@ export const getCategoriesfromStoreById = async (
   }
 };
 const getCategory = async (id: string, store = true) => {
-  const categories = await prisma.category.findMany({
-    where: {
-      products: {
-        some: {
-          AND: [
-            { storeId: id },
-            {
-              id: {
-                not: undefined,
-              },
-            },
-            { deleted: false },
-            { publish: true },
-            {
-              quantity: {
-                gt: 0,
-              },
-            },
-          ],
-        },
-      },
-    },
-
+  const settings = await prisma.settings.findFirstOrThrow({
     select: {
-      name: true,
-      id: true,
-      createdAt: true,
-      products: {
-        where: {
-          AND: [
-            { storeId: id },
-            {
-              id: {
-                not: undefined,
-              },
-            },
-            { deleted: false },
-            { publish: true },
-            {
-              quantity: {
-                gt: 0,
-              },
-            },
-          ],
-        },
-        select: {
-          id: true,
-          name: true,
-          itemCondition: true,
-          salesType: true,
-          endBiddingDate: true,
-          amount: true,
-          quantity: true,
-          details: true,
-          publish: true,
-          coverImage: true,
-          images: true,
-          storeId: true,
-          createdAt: true,
-        },
-      },
+      profitPercent: true,
     },
   });
+  const categories = await prisma
+    .$extends(extendAmount(settings))
+    .category.findMany({
+      where: {
+        products: {
+          some: {
+            AND: [
+              { storeId: id },
+              {
+                id: {
+                  not: undefined,
+                },
+              },
+              { deleted: false },
+              { publish: true },
+              {
+                quantity: {
+                  gt: 0,
+                },
+              },
+            ],
+          },
+        },
+      },
+
+      select: {
+        name: true,
+        id: true,
+        createdAt: true,
+        products: {
+          where: {
+            AND: [
+              { storeId: id },
+              {
+                id: {
+                  not: undefined,
+                },
+              },
+              { deleted: false },
+              { publish: true },
+              {
+                quantity: {
+                  gt: 0,
+                },
+              },
+            ],
+          },
+          select: {
+            id: true,
+            name: true,
+            itemCondition: true,
+            salesType: true,
+            endBiddingDate: true,
+            amount: true,
+            quantity: true,
+            details: true,
+            publish: true,
+            coverImage: true,
+            images: true,
+            storeId: true,
+            createdAt: true,
+          },
+        },
+      },
+    });
   return categories;
 };
 export const getReviewsForLoggedInUser = async (

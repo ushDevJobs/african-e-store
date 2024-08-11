@@ -42,7 +42,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(
   "/images",
-  cache("2 minutes"),
+  cache("120 minutes"),
   express.static(path.join(__dirname, "images"))
 );
 app.use("/api", router);
