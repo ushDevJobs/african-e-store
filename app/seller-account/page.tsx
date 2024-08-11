@@ -39,11 +39,14 @@ const SellerAccount = (props: Props) => {
         handleFetchStore();
     }, []);
     return (
-        <SellerAccountPage
+          <div className="pt-24">
+             <SellerAccountPage
             store={store}
             isFetchingStore={isFetchingStore}
         // Logout={Logout}
         />
+        </div>
+     
     )
 }
 

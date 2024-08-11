@@ -5,7 +5,9 @@ type Props = {}
 
 const ContactSeller = (props: Props) => {
   return (
-  <ContactSellerPage/>
+    <div className="pt-24">
+       <ContactSellerPage/>
+        </div>
   )
 }
 

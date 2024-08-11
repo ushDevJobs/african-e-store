@@ -5,7 +5,10 @@ type Props = {}
 
 const Returns = (props: Props) => {
     return (
-        <ReturnsPage />
+
+        <div className="pt-24">
+            <ReturnsPage />
+        </div>
     )
 }
 

@@ -4,9 +4,12 @@ import StorePage from './StorePage'
 type Props = {}
 
 const Stores = (props: Props) => {
-  return (
-    <StorePage/>
-  )
+    return (
+        <div className="pt-24">
+            <StorePage />
+        </div>
+
+    )
 }
 
 export default Stores

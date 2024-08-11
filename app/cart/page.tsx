@@ -5,7 +5,10 @@ type Props = {}
 
 const Cart = (props: Props) => {
     return (
-        <CartPage />
+
+        <div className="pt-24">
+            <CartPage />
+        </div>
     )
 }
 

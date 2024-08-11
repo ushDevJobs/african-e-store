@@ -6,7 +6,9 @@ type Props = {
 
 const SingleCategory = ({params}: Props) => {
   return (
-      <SingleCategoryPage params={params}/>
+     <div className="pt-24">
+          <SingleCategoryPage params={params} />
+     </div>
   )
 }
 

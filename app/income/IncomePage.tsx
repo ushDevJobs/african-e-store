@@ -121,7 +121,7 @@ const IncomePage = (props: Props) => {
                     </div>
                 </div>
             ) : (
-                <p className="text-center text-[#666666] mt-10 h-[40vh]">
+                <p className="text-center text-[#666666] mt-10 h-[40vh] flex flex-col items-center justify-center">
                     No data available
                 </p>
             )}

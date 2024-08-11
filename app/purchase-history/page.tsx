@@ -5,7 +5,10 @@ type Props = {}
 
 const PurchaseHistory = (props: Props) => {
   return (
-      <PurchaseHistoryPage/>
+      
+        <div className="pt-24">
+           <PurchaseHistoryPage/>
+        </div>
   )
 }
 

@@ -6,9 +6,12 @@ type Props = {
 }
 
 const SellerStore = ({ params }: Props) => {
-  return (
-      <SellerStorePage params={params}/>
-  )
+    return (
+        <div className="pt-24">
+            <SellerStorePage params={params} />
+        </div>
+
+    )
 }
 
 export default SellerStore

@@ -4,9 +4,11 @@ import CategoriesPage from './CategoriesPage'
 type Props = {}
 
 const Categories = (props: Props) => {
-  return (
-    <CategoriesPage/>
-  )
+    return (
+        <div className="pt-24">
+            <CategoriesPage />
+        </div>
+    )
 }
 
 export default Categories
