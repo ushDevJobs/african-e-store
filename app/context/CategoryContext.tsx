@@ -6,6 +6,7 @@ import { CategoriesResponse } from "../components/models/AllCategories";
 type CategoriesContextType = {
     categories: CategoriesResponse[] | null;
     handleFetchAllCategories: () => void;
+    isFetchingCategories: boolean;
 }
 
 const CategoriesContext = createContext<CategoriesContextType | undefined>(undefined);
@@ -43,7 +44,7 @@ export const CategoriesProvider = ({ children }: { children: ReactNode }) => {
     }, []);
 
     return (
-        <CategoriesContext.Provider value={{ categories, handleFetchAllCategories }}>
+        <CategoriesContext.Provider value={{ categories, handleFetchAllCategories, isFetchingCategories }}>
             {children}
         </CategoriesContext.Provider>
     );

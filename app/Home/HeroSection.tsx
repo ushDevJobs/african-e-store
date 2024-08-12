@@ -8,13 +8,14 @@ import { CategoriesResponse } from '../components/models/AllCategories'
 import { useRouter } from 'next/navigation'
 import { StorageKeys } from '../components/constants/StorageKeys'
 import { useCategories } from '../context/CategoryContext'
+import { FullPageLoader } from '../Loader/ComponentLoader'
 
 type Props = {}
 
 const HeroSection = (props: Props) => {
     const router = useRouter()
 
-    const { categories, handleFetchAllCategories } = useCategories();
+    const { categories, handleFetchAllCategories, isFetchingCategories } = useCategories();
     useEffect(() => {
         handleFetchAllCategories();
     }, []);
@@ -40,13 +41,14 @@ const HeroSection = (props: Props) => {
                             </div>
                         </div>
                     )
-                        // : (
-                        //     <span className="!text-center !ml-3 !z-20 !text-white !text-sm">
-                        //         No category available
-                        //     </span>
-                        // )
                     }
+                    {!categories && isFetchingCategories && (
+                        <div className="h-28">
+                            <FullPageLoader />
+                        </div>
+                    )}
                 </div>
+
             </div>
         </div>
     );

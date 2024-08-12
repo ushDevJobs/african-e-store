@@ -19,6 +19,7 @@ import { useSelector } from 'react-redux';
 import MobileNavBar from './MobileNavBar';
 import useOuterClick from '../hooks/useOuterClick';
 import { useCategories } from '@/app/context/CategoryContext';
+import { FullPageLoader } from '@/app/Loader/ComponentLoader';
 
 type Props = {}
 
@@ -34,7 +35,7 @@ const Navbar = (props: Props) => {
     const isMobile = windowRes.width && windowRes.width < 768;
     const onMobile = typeof isMobile == 'boolean' && isMobile;
     const onDesktop = typeof isMobile == 'boolean' && !isMobile;
-     const { categories, handleFetchAllCategories } = useCategories();
+    const { categories, handleFetchAllCategories, isFetchingCategories } = useCategories();
 
     const [isCategoryDropdownOpen, setIsCategoryDropdownOpen] = useState(false);
     const [isLoginDropdownOpen, setIsLoginDropdownOpen] = useState(false);
@@ -165,15 +166,19 @@ const Navbar = (props: Props) => {
                                                     </Link>
                                                 </div>
                                             ))}
-
-                                            <Link
+                                            {!categories && isFetchingCategories && (
+                                                <div className="h-28 w-full grid place-items-center ">
+                                                    <FullPageLoader className='w-6 h-6' />
+                                                </div>
+                                            )}
+                                            {categories && <Link
                                                 className='whitespace-nowrap text-[#2C7865] text-sm'
                                                 href='/categories'
                                                 onClick={() => setIsCategoryDropdownOpen(false)}
                                             >
                                                 See all
                                                 {/* See all categories */}
-                                            </Link>
+                                            </Link>}
                                         </div>
                                         <div className={styles.rhs}>
                                             <Image src={images.category_dropdown_image} alt='category iamge' />
