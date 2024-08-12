@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import React, { useEffect } from 'react'
 import styles from '../checkout/Checkout.module.scss'
 import Image from 'next/image'
 import { useDispatch, useSelector } from 'react-redux'
@@ -10,8 +10,12 @@ import { useUserAddress } from '../context/UserAddressContext'
 type Props = {}
 
 const PaymentPage = (props: Props) => {
-    const { userAddress } = useUserAddress();
+    const { userAddress, fetchUserAddress } = useUserAddress();
     const cartItems = useSelector((state: RootState) => state.cart.cartItems);
+
+    useEffect(() => {
+        fetchUserAddress();
+    }, []);
     return (
         <div className={styles.main}>
             <h1>Pay with card </h1>
