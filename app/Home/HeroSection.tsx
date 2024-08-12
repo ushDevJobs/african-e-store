@@ -7,29 +7,17 @@ import Link from 'next/link'
 import { CategoriesResponse } from '../components/models/AllCategories'
 import { useRouter } from 'next/navigation'
 import { StorageKeys } from '../components/constants/StorageKeys'
+import { useCategories } from '../context/CategoryContext'
 
 type Props = {}
 
 const HeroSection = (props: Props) => {
     const router = useRouter()
-    const [retrievedCategories, setRetrievedCategories] = useState<CategoriesResponse[]>();
 
+    const { categories, handleFetchAllCategories } = useCategories();
     useEffect(() => {
-        if (router) {
-
-            // Get the retrieved categories placed
-            const _retrievedCategories = sessionStorage.getItem(
-                StorageKeys.AllCategories
-            );
-
-            // If we have a retrieved categoriess...
-            if (_retrievedCategories) {
-                // Update the state
-                setRetrievedCategories(JSON.parse(_retrievedCategories) as CategoriesResponse[]);
-            }
-        }
-        // Run this effect only when the router is ready, which means: when the page is loaded
-    }, [router]);
+        handleFetchAllCategories();
+    }, []);
     return (
         <div className={styles.heroSection}>
             <div className={styles.backgroundImage}>
@@ -37,11 +25,11 @@ const HeroSection = (props: Props) => {
                 <div className={styles.contents}>
                     <h1>An African Goods marketplace</h1>
                     <p>Buy and sell to Africans all over the globe with Rayvvin, create a buyer or seller account on our platform to get started.</p>
-                    {retrievedCategories && (
+                    {categories && (
                         <div className={styles.categories}>
                             <h3 className='!mx-auto !text-center'>Suggested categories</h3>
                             <div className={styles.links}>
-                                {retrievedCategories.slice(0, 6).map((category) => (
+                                {categories.slice(0, 6).map((category) => (
                                     <Link
                                         key={category.id}
                                         href={`/categories/${category.id}?${category.name}`}

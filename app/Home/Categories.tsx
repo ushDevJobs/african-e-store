@@ -3,12 +3,9 @@ import React, { useEffect, useState } from 'react'
 import styles from '../styles/HomePage/CategoriesSection.module.scss'
 import { LeftArrowIcon, LongArrowIcon, RightArrowIcon } from '../components/SVGs/SVGicons'
 import Link from 'next/link'
-import images from '@/public/images'
 import Image from 'next/image'
 import useResponsiveness from '../components/hooks/responsiveness-hook'
-import { useRouter } from 'next/navigation'
-import { CategoriesResponse } from '../components/models/AllCategories'
-import { StorageKeys } from '../components/constants/StorageKeys'
+import { useCategories } from '../context/CategoryContext'
 
 type Props = {}
 
@@ -18,10 +15,8 @@ const Categories = (props: Props) => {
     const onMobile = typeof isMobile == 'boolean' && isMobile;
     const onDesktop = typeof isMobile == 'boolean' && !isMobile;
 
-    const [isRetrievingCategories, setIsRetrievingCategories] = useState<boolean>(true);
+    const { categories, handleFetchAllCategories } = useCategories();
 
-    const router = useRouter()
-    const [retrievedCategories, setRetrievedCategories] = useState<CategoriesResponse[]>();
     const [activeTab, setActiveTab] = useState(0);
 
     const handleTabClick = (index: number) => {
@@ -30,8 +25,8 @@ const Categories = (props: Props) => {
 
     const scrollLeft = () => {
         setActiveTab(prevActiveTab => {
-            if (retrievedCategories?.length) {
-                return (prevActiveTab === 0 ? retrievedCategories.slice(0, 6).length - 1 : prevActiveTab - 1);
+            if (categories?.length) {
+                return (prevActiveTab === 0 ? categories.slice(0, 6).length - 1 : prevActiveTab - 1);
             }
             return prevActiveTab; // or handle the undefined case appropriately
         });
@@ -40,47 +35,24 @@ const Categories = (props: Props) => {
 
     const scrollRight = () => {
         setActiveTab(prevActiveTab => {
-            if (retrievedCategories?.length) {
-                return (prevActiveTab === retrievedCategories.slice(0, 6).length - 1 ? 0 : prevActiveTab + 1);
+            if (categories?.length) {
+                return (prevActiveTab === categories.slice(0, 6).length - 1 ? 0 : prevActiveTab + 1);
             }
             return prevActiveTab;
         });
     };
 
     useEffect(() => {
-        if (router) {
-            setIsRetrievingCategories(true);
-
-            // Get the retrieved categories placed
-            const _retrievedCategories = sessionStorage.getItem(
-                StorageKeys.AllCategories
-            );
-
-            // If we have a retrieved categoriess...
-            if (_retrievedCategories) {
-                setIsRetrievingCategories(false);
-                // Update the state
-                setRetrievedCategories(JSON.parse(_retrievedCategories) as CategoriesResponse[]);
-            } else {
-                // Simulate an API call to fetch categories
-                setTimeout(() => {
-                    setIsRetrievingCategories(false);
-                    // Example: Set empty array if no categories are available
-                    setRetrievedCategories([]);
-                }, 2000);
-            }
-        }
-
-        // Run this effect only when the router is ready, which means: when the page is loaded
-    }, [router]);
+        handleFetchAllCategories();
+    }, []);
 
 
     useEffect(() => {
         // Set up an interval to change categories every 3 seconds
         const intervalId = setInterval(() => {
             setActiveTab(prevActiveTab => {
-                if (retrievedCategories && retrievedCategories.length) {
-                    return (prevActiveTab === retrievedCategories.slice(0, 6).length - 1 ? 0 : prevActiveTab + 1);
+                if (categories && categories.length) {
+                    return (prevActiveTab === categories.slice(0, 6).length - 1 ? 0 : prevActiveTab + 1);
                 }
                 return prevActiveTab;
             });
@@ -88,7 +60,7 @@ const Categories = (props: Props) => {
 
         // Clean up the interval on component unmount
         return () => clearInterval(intervalId);
-    }, [retrievedCategories]);
+    }, [categories]);
 
     return (
         <div className={styles.main}>
@@ -102,7 +74,7 @@ const Categories = (props: Props) => {
                 }
                 <div className={styles.controller}>
                     <div className={styles.tab}>
-                        {retrievedCategories?.slice(0, 6).map((tab, index) => (
+                        {categories?.slice(0, 6).map((tab, index) => (
                             <span
                                 key={index}
                                 className={index === activeTab ? styles.activeTab : ''}
@@ -113,9 +85,9 @@ const Categories = (props: Props) => {
                         ))}
                     </div>
                     <div className={styles.cards}>
-                        {retrievedCategories && retrievedCategories.length > 0 && (
-                            retrievedCategories[activeTab].products.length > 0 ? (
-                                retrievedCategories[activeTab].products.slice(0, 3).map((product, productIndex) => (
+                        {categories && categories.length > 0 && (
+                            categories[activeTab].products.length > 0 ? (
+                                categories[activeTab].products.slice(0, 3).map((product, productIndex) => (
                                     <Link href={`/products/${product.id}?${product.name}`} className={styles.card} key={productIndex}>
                                         <div className={styles.images}>
                                             <Image src={product.coverImage} alt='product image' fill />

@@ -18,6 +18,7 @@ import { RootState } from '@/app/redux/store';
 import { useSelector } from 'react-redux';
 import MobileNavBar from './MobileNavBar';
 import useOuterClick from '../hooks/useOuterClick';
+import { useCategories } from '@/app/context/CategoryContext';
 
 type Props = {}
 
@@ -29,11 +30,11 @@ const Navbar = (props: Props) => {
     const pathname = usePathname();
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const { accountStatus, fetchAccountStatus } = useAccountStatus();
-    const [retrievedCategories, setRetrievedCategories] = useState<CategoriesResponse[]>();
     const windowRes = useResponsiveness();
     const isMobile = windowRes.width && windowRes.width < 768;
     const onMobile = typeof isMobile == 'boolean' && isMobile;
     const onDesktop = typeof isMobile == 'boolean' && !isMobile;
+     const { categories, handleFetchAllCategories } = useCategories();
 
     const [isCategoryDropdownOpen, setIsCategoryDropdownOpen] = useState(false);
     const [isLoginDropdownOpen, setIsLoginDropdownOpen] = useState(false);
@@ -92,6 +93,10 @@ const Navbar = (props: Props) => {
     }, []);
 
     useEffect(() => {
+        handleFetchAllCategories();
+    }, []);
+
+    useEffect(() => {
         if (accountStatus && accountStatus.accountType == 'BUYER') {
             setIsLoggedIn(true);
         } else {
@@ -107,22 +112,6 @@ const Navbar = (props: Props) => {
         }
     }, [accountStatus]);
 
-    useEffect(() => {
-        if (router) {
-            // Get the retrieved categories placed
-            const _retrievedCategories = sessionStorage.getItem(
-                StorageKeys.AllCategories
-            );
-
-            // If we have a retrieved categoriess...
-            if (_retrievedCategories) {
-                // Update the state
-                setRetrievedCategories(JSON.parse(_retrievedCategories) as CategoriesResponse[]);
-            }
-        }
-
-        // Run this effect only when the router is ready, which means: when the page is loaded
-    }, [router]);
 
     const userDropdownRef = useRef<HTMLDivElement>(null);
     useOuterClick(userDropdownRef, setIsLoginDropdownOpen);
@@ -166,7 +155,7 @@ const Navbar = (props: Props) => {
                                 {isCategoryDropdownOpen && (
                                     <ul className={styles.dropdownContainer} ref={catDropdownRef}>
                                         <div className={styles.lhs}>
-                                            {retrievedCategories?.slice(0, 6).map((category) => (
+                                            {categories?.slice(0, 6).map((category) => (
                                                 <div className={styles.category} key={category.id}>
                                                     <Link
                                                         href={`/categories/${category.id}?${category.name}`}
@@ -267,7 +256,7 @@ const Navbar = (props: Props) => {
             {onMobile && (
                 <MobileNavBar navIsOpen={navIsOpen} setNavIsOpen={setNavIsOpen} isDropdownOpen={isDropdownOpen}
                     setIsDropdownOpen={setIsDropdownOpen}
-                    retrievedCategories={retrievedCategories}
+                    categories={categories}
                     isLoggedIn={isLoggedIn}
                     isSellerLoggedIn={isSellerLoggedIn}
                     cartItems={cartItems}

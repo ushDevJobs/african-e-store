@@ -25,6 +25,7 @@ import { store } from '../redux/store';
 import { Provider } from "react-redux";
 import { initializeIcons, loadTheme } from '@fluentui/react';
 import { UserAddressProvider } from '../context/UserAddressContext';
+import { CategoriesProvider } from '../context/CategoryContext';
 
 interface LayoutProps {
     children?: ReactNode;
@@ -105,31 +106,33 @@ const Layout: FunctionComponent<LayoutProps> = ({ children }): ReactElement => {
         }
     }, [iswindow]);
 
-    useEffect(() => {
-        if (router) {
-            handleFetchAllCategories();
-        }
-    }, [router]);
+    // useEffect(() => {
+    //     if (router) {
+    //         handleFetchAllCategories();
+    //     }
+    // }, [router]);
 
     return (
         <>
             {!loaderIsVisible && (
                 <>
-                    <AccountStatusProvider>
+                    <CategoriesProvider>
                         <UserAddressProvider>
-                            <Provider store={store}>
-                                <Toaster
-                                    position='bottom-center'
-                                    richColors
-                                    closeButton
-                                    toastOptions={{
-                                        duration: 3000,
-                                        unstyled: false,
-                                    }}
-                                />
-                                {(pathname.includes('/signup') || pathname.includes('/login') || pathname.includes('/verification')) ? <RegistrationNav /> : <Navbar />}
+                            <AccountStatusProvider>
 
-                                {/* {!['/', '/login', '/verification', '/signup', '/seller/signup', '/seller/login'].includes(pathname) &&
+                                <Provider store={store}>
+                                    <Toaster
+                                        position='bottom-center'
+                                        richColors
+                                        closeButton
+                                        toastOptions={{
+                                            duration: 3000,
+                                            unstyled: false,
+                                        }}
+                                    />
+                                    {(pathname.includes('/signup') || pathname.includes('/login') || pathname.includes('/verification')) ? <RegistrationNav /> : <Navbar />}
+
+                                    {/* {!['/', '/login', '/verification', '/signup', '/seller/signup', '/seller/login'].includes(pathname) &&
                                     <NextBreadcrumb
                                         homeElement={'Home'}
                                         separator={<span>&gt;</span>}
@@ -138,11 +141,13 @@ const Layout: FunctionComponent<LayoutProps> = ({ children }): ReactElement => {
                                         listClasses='hover:underline mx-1 md:mx-2 font-bold'
                                         capitalizeLinks
                                     />} */}
-                                {children}
-                                {(pathname.includes('/signup') || pathname.includes('/login') || pathname.includes('/verification')) ? <RegistrationFooter /> : <Footer />}
-                            </Provider>
+                                    {children}
+                                    {(pathname.includes('/signup') || pathname.includes('/login') || pathname.includes('/verification')) ? <RegistrationFooter /> : <Footer />}
+                                </Provider>
+
+                            </AccountStatusProvider>
                         </UserAddressProvider>
-                    </AccountStatusProvider>
+                    </CategoriesProvider>
                 </>
             )}
 

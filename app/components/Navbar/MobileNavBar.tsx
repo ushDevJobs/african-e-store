@@ -12,7 +12,7 @@ type Props = {
     setNavIsOpen: React.Dispatch<React.SetStateAction<boolean>>
     isDropdownOpen: boolean
     setIsDropdownOpen: React.Dispatch<React.SetStateAction<boolean>>
-    retrievedCategories: CategoriesResponse[] | undefined
+    categories: CategoriesResponse[] | null
     isLoggedIn: boolean
     isSellerLoggedIn: boolean
     cartItems: CartItem[]
@@ -20,7 +20,7 @@ type Props = {
 }
 
 const MobileNavBar = ({ navIsOpen, setNavIsOpen, isDropdownOpen,
-    setIsDropdownOpen, retrievedCategories, isLoggedIn, cartItems,
+    setIsDropdownOpen, categories, isLoggedIn, cartItems,
     isSellerLoggedIn, Logout }: Props) => {
     const pathname = usePathname();
     const dropdownRef = useRef<HTMLLIElement>(null);
@@ -77,7 +77,7 @@ const MobileNavBar = ({ navIsOpen, setNavIsOpen, isDropdownOpen,
 
                                 {isDropdownOpen && (
                                     <ul className={styles.dropdownContainer}>
-                                        {retrievedCategories?.slice(0, 6).map((category, index) => (
+                                        {categories?.slice(0, 6).map((category, index) => (
                                             <Link
                                                 href={`/categories/${category.id}?${category.name}`}
                                                 key={index}
