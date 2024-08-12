@@ -156,7 +156,7 @@ const SingleCategoryPage = ({ params }: Props) => {
                     <SingleCategoriesHeader mainText={category?.name} subText='Search for any product in different categories on Rayvvin' />
                     {onMobile &&
                         <div className="w-full flex items-center gap-4 justify-end mb-2 ml-auto">
-                            <span className='flex items-center gap-2 cursor-pointer'><SortIcon /> Sort</span>
+                            {/* <span className='flex items-center gap-2 cursor-pointer'><SortIcon /> Sort</span> */}
                             <span onClick={() => setIsFilterOpen(true)} className='flex items-center gap-2 cursor-pointer'><FilterIcon /> Filter </span>
                         </div>
                     }
