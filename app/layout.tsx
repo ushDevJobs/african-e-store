@@ -9,8 +9,8 @@ import NextTopLoader from 'nextjs-toploader';
 const josefinSans = Josefin_Sans({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-    title: "Africa e-store website",
-    description: "Africa e-store website",
+    title: "Rayvvin website",
+    description: "Rayvvin website",
 };
 
 export default async function RootLayout({
