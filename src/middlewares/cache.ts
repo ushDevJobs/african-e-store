@@ -1,6 +1,7 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import apicache from "apicache";
 import url from "url";
+import { RequestUser } from "../types";
 export const cacheStatus200 = (req: Request, res: Response) =>
   res.statusCode === 200;
 export const cache = apicache.middleware;
@@ -12,7 +13,7 @@ export enum CACHE_KEYS {
   PRODUCTS = "products",
   PRODUCT = "product-",
   FAVORITE_PRODUCT = "favorite-products",
-  RECENTLY_VIEWED_PRODUCTS = "recently-viewed-products",
+  RECENTLY_VIEWED_PRODUCTS = "recently-viewed-products-",
   RECOMMENDED_PRODUCTS = "recommended-products-",
   STORES = "stores",
   STORE = "store-",
@@ -34,3 +35,13 @@ export enum CACHE_KEYS {
   USER_STATUS = "user-status-",
 }
 export const clearCache = (target: string) => apicache.clear(target);
+export const modifyUrl = (req: Request, res: Response, next: NextFunction) => {
+  let newId = req.isAuthenticated()
+    ? (req.user as RequestUser).id
+    : req.ip || "";
+  req.params.id = newId;
+  let modified = req.originalUrl + "/" + newId;
+  req.originalUrl = modified;
+  req.url = modified;
+  next();
+};

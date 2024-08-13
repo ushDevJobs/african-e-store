@@ -289,37 +289,39 @@ export const getProductById = async (req: Request, res: Response) => {
         }
       : {
           ipAddress_productId: {
-            ipAddress: req.socket.remoteAddress || "",
+            ipAddress: req.ip || "",
             productId: id,
           },
         };
     const data = req.isAuthenticated()
       ? {
           userId: user.id,
-          ipAddress: req.socket.remoteAddress,
+          ipAddress: req.ip,
         }
       : {
-          ipAddress: req.socket.remoteAddress,
+          ipAddress: req.ip,
         };
-    req.isAuthenticated() &&
-      (await prisma.viewsTracker.upsert({
-        where: {
-          ...where,
-        },
-        create: {
-          ...data,
-          productId: id,
-          viewedAt: new Date(),
-        },
-        update: {
-          viewedAt: new Date(),
-          ...data,
-        },
-      }));
+    await prisma.viewsTracker.upsert({
+      where: {
+        ...where,
+      },
+      create: {
+        ...data,
+        productId: id,
+        viewedAt: new Date(),
+      },
+      update: {
+        viewedAt: new Date(),
+        ...data,
+      },
+    });
   } catch (error) {
     logger.error(error);
   } finally {
-    clearCache(CACHE_KEYS.RECENTLY_VIEWED_PRODUCTS);
+    let newId = req.isAuthenticated()
+      ? (req.user as RequestUser).id
+      : req.ip || "";
+    clearCache(CACHE_KEYS.RECENTLY_VIEWED_PRODUCTS + newId);
 
     return returnJSONSuccess(res, {
       data: {
@@ -483,13 +485,14 @@ export const getRecentlyViewedProductsForLoggedUser = async (
   req: Request,
   res: Response
 ) => {
-  req.apicacheGroup = CACHE_KEYS.RECENTLY_VIEWED_PRODUCTS;
+  const { id } = req.params;
+  req.apicacheGroup = CACHE_KEYS.RECENTLY_VIEWED_PRODUCTS + id;
   const where = req.isAuthenticated()
     ? {
         userId: (req.user as RequestUser).id,
       }
     : {
-        ip: req.socket.remoteAddress,
+        ip: req.ip,
       };
   const products = await prisma.viewsTracker.findMany({
     where: {

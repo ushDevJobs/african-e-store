@@ -19,8 +19,12 @@ import {
 import { uploadImage } from "../../config/configOptions";
 import { checkAuth } from "../../middlewares/auth";
 import { optimizeImages } from "../../middlewares/processImage";
-import { cache, cacheStatus200, cacheSuccess } from "../../middlewares/cache";
-import { RequestUser } from "../../types";
+import {
+  cache,
+  cacheStatus200,
+  cacheSuccess,
+  modifyUrl,
+} from "../../middlewares/cache";
 const router = Router();
 
 router
@@ -45,16 +49,7 @@ router.get(
 );
 router.get(
   "/recommended",
-  (req, res, next) => {
-    let newId = req.isAuthenticated()
-      ? (req.user as RequestUser).id
-      : req.socket.remoteAddress || "";
-    req.params.id = newId;
-    let modified = req.originalUrl + "/" + newId;
-    req.originalUrl = modified;
-    req.url = modified;
-    next();
-  },
+  modifyUrl,
   cache("5 minutes", cacheStatus200),
   rootErrorHandler(getRecommendedProducts)
 );

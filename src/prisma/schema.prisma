@@ -190,10 +190,11 @@ model SellerPaymentHistory {
   store             Store            @relation(fields: [storeId], references: [id], onDelete: Cascade)
   storeId           String
   order             Order            @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  orderId           String           @unique
+  orderId           String
   sellerDashboard   SellerDashboard? @relation(fields: [sellerDashboardId], references: [id])
   sellerDashboardId String?
 
+  @@unique([storeId, orderId])
   @@map("sellerspaymenthistory")
 }
 

@@ -36,7 +36,10 @@ export const approvePaymentByAdmin = async (
   if (deliveryUpdate) {
     const alreadyPaid = await prisma.sellerPaymentHistory.findUnique({
       where: {
-        orderId: orderId,
+        storeId_orderId: {
+          orderId: orderId,
+          storeId: id,
+        },
       },
     });
     if (!alreadyPaid) {

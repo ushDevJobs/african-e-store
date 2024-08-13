@@ -19,6 +19,7 @@ import next from "next";
 import path from "path";
 import fs from "fs";
 import { cache } from "./middlewares/cache";
+import { checkRequestType } from "./middlewares/auth";
 // express middleware
 app.set("trust proxy", 1);
 app.use(cors(corsConfig));

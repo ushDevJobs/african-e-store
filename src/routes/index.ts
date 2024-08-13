@@ -25,6 +25,6 @@ router.get("/cache", (req, res) => {
   res.json(apicache.getIndex());
 });
 router.get("/clear", (req, res) => {
-  res.json(apicache.clear("stores"));
+  res.json(apicache.clear(""));
 });
 export default router;
