@@ -1,28 +1,24 @@
 import React from 'react'
-import { CategoriesResponse } from '../components/models/AllCategories';
-import styles from '../styles/MobileCategoriesSettingsBar.module.scss'
+import styles from '../../styles/MobileCategoriesSettingsBar.module.scss'
 import Link from 'next/link';
 import { motion } from "framer-motion";
-import { mobileMenuVariant } from '../components/animations/navbarAnimations';
-import { TimesIcon } from '../components/SVGs/SVGicons';
-import { usePathname } from 'next/navigation';
+import { TimesIcon } from '../SVGs/SVGicons';
+import { StoreCategoriesResponse } from '../models/IStores';
+import { mobileMenuVariant } from '../animations/navbarAnimations';
 
 type Props = {
-    categories?: CategoriesResponse[];
     activeCategory?: string;
-    retrievedCategories?: CategoriesResponse[];
     onCategoryClick: (categoryId: string) => void;
     setIsFilterOpen: React.Dispatch<React.SetStateAction<boolean>>
+    storeCategories: StoreCategoriesResponse[] | undefined
 }
 
-const MobileSettingsBar = ({
-    categories,
+const MobileStoreSettingsBar = ({
     activeCategory,
-    retrievedCategories,
     onCategoryClick,
-    setIsFilterOpen
+    setIsFilterOpen,
+    storeCategories
 }: Props) => {
-    const pathname = usePathname()
     return (
         <motion.div className={`${styles.settingsBar}`} variants={mobileMenuVariant({ direction: "fromLeft" })}>
             <span onClick={() => setIsFilterOpen(false)} className='ml-auto cursor-pointer flex items-end justify-end mb-4 w-fit'>
@@ -31,9 +27,9 @@ const MobileSettingsBar = ({
 
             <div className={`${styles.catgoriesFilter} mb-3`}>
                 <h3>Categories</h3>
-                {categories &&
+                {storeCategories &&
                     <ul>
-                        {categories && categories.map((category) => (
+                        {storeCategories && storeCategories.map((category) => (
                             <li key={category.id}
                                 className={activeCategory === category.name ? styles.active : ''}
                                 onClick={() => {
@@ -46,16 +42,16 @@ const MobileSettingsBar = ({
                             </li>
                         ))}
 
-                        {categories && categories.length === 0 &&
+                        {storeCategories && storeCategories.length === 0 &&
                             <li className='text-center flex flex-col items-center justify-center mt-4 text-gray-400 text-base'>
                                 No category available</li>
                         }
                     </ul>}
-                {retrievedCategories &&
+                {/* {retrievedCategories &&
                     <ul>
                         {retrievedCategories.map((category) => (
                             <Link href={`/categories/${category.id}?${category.name}`} key={category.id} onClick={() => setIsFilterOpen(false)}>
-                                <li className={pathname == `${category.name}` ? styles.active : ""} >
+                                <li>
                                     {category.name}
                                 </li>
                             </Link>
@@ -64,7 +60,7 @@ const MobileSettingsBar = ({
                             <li className='text-center flex flex-col items-center justify-center mt-4 text-gray-400 text-base'>
                                 No category available</li>
                         }
-                    </ul>}
+                    </ul>} */}
             </div>
 
             <div className={styles.condition}>
@@ -96,4 +92,4 @@ const MobileSettingsBar = ({
     )
 }
 
-export default MobileSettingsBar
+export default MobileStoreSettingsBar

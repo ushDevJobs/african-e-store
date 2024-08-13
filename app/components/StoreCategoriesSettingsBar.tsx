@@ -7,9 +7,10 @@ type Props = {
     storeCategories: StoreCategoriesResponse[] | undefined
     isFetchingStoreCategories: boolean
     activeCategory: string
+    onCategoryClick: (categoryId: string) => void;
 }
 
-const StoreCategoriesSettingsBar = ({ storeCategories, isFetchingStoreCategories, activeCategory }: Props) => {
+const StoreCategoriesSettingsBar = ({ storeCategories, isFetchingStoreCategories, activeCategory, onCategoryClick }: Props) => {
     return (
         <>
             {!storeCategories && isFetchingStoreCategories ? <StoreSettingsBarSkeletonLoader /> : (
@@ -20,11 +21,12 @@ const StoreCategoriesSettingsBar = ({ storeCategories, isFetchingStoreCategories
                             {storeCategories && storeCategories.map((category) => (
                                 <li key={category.id}
                                     className={activeCategory === category.name ? styles.active : ''}
+                                    onClick={() => onCategoryClick(category.id)}
                                 >
                                     {category.name}
                                 </li>
                             ))}
-                            {storeCategories?.length == 0  &&
+                            {storeCategories?.length == 0 &&
                                 <li className='text-center flex flex-col items-center justify-center mt-4 text-gray-400 text-sm'>
                                     No category available</li>
                             }

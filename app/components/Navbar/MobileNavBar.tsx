@@ -27,7 +27,7 @@ const MobileNavBar = ({ navIsOpen, setNavIsOpen, isDropdownOpen,
     return (
         <div className={styles.mobileNavbarContainer}>
             <div className={styles.navbar}>
-                <Link href={`${pathname.includes('/seller') ? '/seller' : '/'}`} onClick={() => setNavIsOpen(!navIsOpen)}>
+                <Link href={`${pathname.includes('/seller') ? '/seller' : '/'}`} onClick={() => setNavIsOpen(false)}>
                     <div className={styles.navbar__img}>
                         <Image src={images.logo} alt="Logo" />
                     </div>

@@ -137,7 +137,7 @@ const StorePage = (props: Props) => {
                                     {store.favourite.length === 0 ? <FavoriteIcon /> : <FilledLoveIcon />}
                                 </span>
                             </div>
-                            <Link href={`/stores/${store.id}`} className="flex flex-col gap-2 w-fit">
+                            <Link href={`/stores/${store.id}`} className="flex flex-col gap-2 w-full">
                                 <h4 className='text-[#828282] text-base'>{store.name} </h4>
                                 {store.description &&
                                     <p className="text-sm text-[#828282]] mb-1">

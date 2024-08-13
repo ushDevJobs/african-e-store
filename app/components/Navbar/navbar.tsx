@@ -12,8 +12,6 @@ import { useLogout } from '@/app/api/apiClients';
 import { LogoutResponse } from '../models/IAccountStatus';
 import { createCustomErrorMessages } from '../constants/catchError';
 import { toast } from 'sonner';
-import { CategoriesResponse } from '../models/AllCategories';
-import { StorageKeys } from '../constants/StorageKeys';
 import { RootState } from '@/app/redux/store';
 import { useSelector } from 'react-redux';
 import MobileNavBar from './MobileNavBar';

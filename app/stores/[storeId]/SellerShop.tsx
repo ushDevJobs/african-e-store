@@ -22,6 +22,9 @@ type Props = {
         name: string;
       }[]
     | undefined;
+    categoryRefs: React.MutableRefObject<{
+        [key: string]: HTMLDivElement | null;
+    }>
 };
 
 const SellerShop = ({
@@ -29,6 +32,7 @@ const SellerShop = ({
   isFetchingProducts,
   filteredCategories,
   handleFetchStoreCategories,
+  categoryRefs
 }: Props) => {
   const noProductsFound =
     !filteredCategories || filteredCategories.length === 0;
@@ -43,13 +47,13 @@ const SellerShop = ({
         </p>
       ) : (
         <div className="flex flex-col gap-10">
-          {filteredCategories.map((store) => (
-            <div className="flex flex-col" key={store.id}>
-              <h3 className="text-lg font-semibold mb-5 text-[#333]">
-                {store.name}
+          {filteredCategories.map((category) => (
+              <div className="flex flex-col" key={category.id} ref={(el) => { categoryRefs.current[category.id.toString()] = el; }}>
+                  <h3 id={category.id.toString()} className="text-lg font-semibold mb-5 text-[#2c7865] border-b-2 w-fit border-b-[#2c7865]">
+                {category.name}
               </h3>
               <div className={styles.cards}>
-                {store.products.map((product) => (
+                {category.products.map((product) => (
                   <Link
                     href={`/products/${product.id}`}
                     className={styles.card}
