@@ -1,6 +1,13 @@
 import { Router } from "express";
-import { getLoggedusersAddress } from "../../controllers/user";
+import {
+  getLoggedusersAddress,
+  updateuserAddress,
+} from "../../controllers/user";
+import { rootErrorHandler } from "../../root-error-handler";
 
 const router = Router();
-router.route("/address").get(getLoggedusersAddress).post();
+router
+  .route("/address")
+  .get(rootErrorHandler(getLoggedusersAddress))
+  .post(rootErrorHandler(updateuserAddress));
 export { router as userRoutes };

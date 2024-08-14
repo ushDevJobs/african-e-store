@@ -31,5 +31,9 @@ declare global {
     interface Request {
       apicacheGroup?: string;
     }
+    interface Locals {
+      profit: number;
+      storeId?: string;
+    }
   }
 }

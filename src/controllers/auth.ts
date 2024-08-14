@@ -356,3 +356,15 @@ export const logout = async (
     res.status(200).json({ status: true });
   });
 };
+export const localLoginSuccess = async (req: Request, res: Response) => {
+  res
+    .status(200)
+    .json({ status: true, message: "Login Successful", data: req.user });
+};
+export const googleLoginSuccess = async (req: Request, res: Response) => {
+  res.redirect(
+    `${process.env.CLIENT_URL}${
+      (req.user as RequestUser).accountType === "SELLER" ? "/seller" : "/"
+    }`
+  );
+};

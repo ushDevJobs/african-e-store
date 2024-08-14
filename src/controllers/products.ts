@@ -17,6 +17,7 @@ import logger from "../utils/logger";
 import fs from "fs";
 import path from "path";
 import { CACHE_KEYS, clearCache } from "../middlewares/cache";
+import { getProfit } from "../middlewares";
 
 export const updateProduct = async (req: Request, res: Response) => {
   const { id } = req.params;
@@ -168,16 +169,12 @@ export const addProduct = async (
 };
 
 export const getProductById = async (req: Request, res: Response) => {
-  const settings = await prisma.settings.findFirstOrThrow({
-    select: {
-      profitPercent: true,
-    },
-  });
+  const profit = await getProfit();
   const user = req.user as RequestUser;
   const { id } = req.params;
   req.apicacheGroup = CACHE_KEYS.PRODUCT + id;
   let product = await prisma
-    .$extends(extendAmount(settings))
+    .$extends(extendAmount(profit))
     .product.findFirstOrThrow({
       where: {
         AND: [
@@ -316,7 +313,7 @@ export const getProductById = async (req: Request, res: Response) => {
       },
     });
   } catch (error) {
-    logger.error(error);
+    console.log(error);
   } finally {
     let newId = req.isAuthenticated()
       ? (req.user as RequestUser).id
@@ -393,23 +390,26 @@ export const getFavouriteProducts = async (
   next: NextFunction
 ) => {
   const user = req.user as RequestUser;
+  const profit = await getProfit();
   try {
     req.apicacheGroup = CACHE_KEYS.FAVORITE_PRODUCT + user.id;
-    const favourite = await prisma.user.findFirstOrThrow({
-      where: {
-        id: user.id,
-      },
-      select: {
-        favouriteProducts: {
-          where: {
-            publish: true,
-          },
-          include: {
-            store: true,
+    const favourite = await prisma
+      .$extends(extendAmount(profit))
+      .user.findFirstOrThrow({
+        where: {
+          id: user.id,
+        },
+        select: {
+          favouriteProducts: {
+            where: {
+              publish: true,
+            },
+            include: {
+              store: true,
+            },
           },
         },
-      },
-    });
+      });
     returnJSONSuccess(res, { data: favourite.favouriteProducts });
   } catch (error) {
     next(new NotFound("User not found", ErrorCode.NOT_FOUND));

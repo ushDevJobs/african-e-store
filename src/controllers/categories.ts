@@ -8,16 +8,14 @@ import { NotFound } from "../exceptions/not-found";
 import { RequestUser } from "../types";
 import { extendAmount } from "../prisma/extensions";
 import { CACHE_KEYS, clearCache } from "../middlewares/cache";
+import { getProfit } from "../middlewares";
 
 export const getCategories = async (req: Request, res: Response) => {
+  console.log("running");
   const { _limit, _page } = req.query;
   const user = req.user as RequestUser;
   req.apicacheGroup = CACHE_KEYS.CATEGORIES_WITH_PRODUCTS;
-  const settings = await prisma.settings.findFirstOrThrow({
-    select: {
-      profitPercent: true,
-    },
-  });
+  const profit = await getProfit();
   const addFavourite = req.isAuthenticated()
     ? {
         favourite: {
@@ -139,7 +137,7 @@ export const getCategories = async (req: Request, res: Response) => {
         }
       : {};
   const categories = await prisma
-    .$extends(extendAmount(settings))
+    .$extends(extendAmount(profit))
     .category.findMany({
       skip: page,
       take: +_limit! || undefined,
@@ -194,11 +192,7 @@ export const getCategoryById = async (
   req.apicacheGroup = CACHE_KEYS.CATEGORY + id;
   const { _limit, _page } = req.query;
   const user = req.user as RequestUser;
-  const settings = await prisma.settings.findFirstOrThrow({
-    select: {
-      profitPercent: true,
-    },
-  });
+  const profit = await getProfit();
   const addFavourite = req.isAuthenticated()
     ? {
         favourite: {
@@ -217,7 +211,7 @@ export const getCategoryById = async (
 
   if (id) {
     const categoryWithProducts = await prisma
-      .$extends(extendAmount(settings))
+      .$extends(extendAmount(profit))
       .category.findFirst({
         where: {
           id,

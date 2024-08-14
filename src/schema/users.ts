@@ -51,3 +51,11 @@ export const validateSellerRegData = z
     message: "Passwords does not match",
     path: ["confirmPassword"],
   });
+export const validateAddress = z.object({
+  city: z.string().min(1, "Must be more than 1 character"),
+  houseNumber: z.string().optional(),
+  street: z.string().optional(),
+  postCode: z.number().optional(),
+  country: z.string().optional(),
+});
+export type Address = z.infer<typeof validateAddress>;

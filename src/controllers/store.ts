@@ -16,6 +16,7 @@ import path from "path";
 import logger from "../utils/logger";
 import { CACHE_KEYS, clearCache } from "../middlewares/cache";
 import { extendAmount } from "../prisma/extensions";
+import { getProfit } from "../middlewares";
 export const getAllStores = async (
   req: Request,
   res: Response,
@@ -505,13 +506,9 @@ export const getCategoriesfromStoreById = async (
   }
 };
 const getCategory = async (id: string, store = true) => {
-  const settings = await prisma.settings.findFirstOrThrow({
-    select: {
-      profitPercent: true,
-    },
-  });
+  const profit = await getProfit();
   const categories = await prisma
-    .$extends(extendAmount(settings))
+    .$extends(extendAmount(profit))
     .category.findMany({
       where: {
         products: {

@@ -1,6 +1,6 @@
 {
     "info": {
-        "_postman_id": "be65454f-2ce1-4e3e-8ae2-db252986e78c",
+        "_postman_id": "1e54be9b-8f44-43dd-b95e-8521c0849c7b",
         "name": "Rayvvin with env",
         "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
         "description": ""
@@ -31,7 +31,7 @@
                                     "language": "json"
                                 }
                             },
-                            "raw": "{\n  \"email\":\"segunade041@gmail.com\",\n  \"password\":\"password\"\n}"
+                            "raw": "{\n  \"email\":\"iwumeziep@gmail.com\",\n  \"password\":\"password\"\n}"
                         }
                     }
                 },
@@ -196,17 +196,15 @@
                     "request": {
                         "method": "GET",
                         "url": {
-                            "raw": "{{host}}/api/categories",
+                            "raw": "{{host}}/api/categories?_page=1&_limit=6",
                             "query": [
                                 {
                                     "key": "_page",
-                                    "value": "4",
-                                    "disabled": true
+                                    "value": "1"
                                 },
                                 {
                                     "key": "_limit",
-                                    "value": "1",
-                                    "disabled": true
+                                    "value": "6"
                                 },
                                 {
                                     "key": "condition",
@@ -235,16 +233,25 @@
                     "request": {
                         "method": "GET",
                         "url": {
-                            "raw": "{{host}}/api/categories/category/793e6b2c-3599-11ef-b974-bc",
+                            "raw": "{{host}}/api/categories/category/793c6285-3599-11ef-b974-bc",
                             "path": [
                                 "api",
                                 "categories",
                                 "category",
-                                "793e6b2c-3599-11ef-b974-bc"
+                                "793c6285-3599-11ef-b974-bc"
                             ],
                             "host": [
                                 "{{host}}"
                             ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            },
+                            "raw": "{\n  \"name\":\"food stuff\"\n}"
                         }
                     }
                 },
@@ -253,7 +260,7 @@
                     "request": {
                         "method": "GET",
                         "url": {
-                            "raw": "{{host}}/api/categories/all?products=true",
+                            "raw": "{{host}}/api/categories/all",
                             "query": [
                                 {
                                     "key": "_page",
@@ -272,7 +279,8 @@
                                 },
                                 {
                                     "key": "products",
-                                    "value": "true"
+                                    "value": "true",
+                                    "disabled": true
                                 }
                             ],
                             "variable": [],
@@ -324,32 +332,6 @@
                             "host": [
                                 "{{host}}"
                             ]
-                        }
-                    }
-                },
-                {
-                    "name": "Create Store",
-                    "request": {
-                        "method": "POST",
-                        "url": {
-                            "raw": "{{host}}/api/stores/store",
-                            "path": [
-                                "api",
-                                "stores",
-                                "store"
-                            ],
-                            "host": [
-                                "{{host}}"
-                            ]
-                        },
-                        "body": {
-                            "mode": "raw",
-                            "options": {
-                                "raw": {
-                                    "language": "json"
-                                }
-                            },
-                            "raw": "{\n  \"name\":\"Electrox\",\n  \"description\":\"Get all your electronic gadgets\",\n  \"country\":\"nigeria\"\n}"
                         }
                     }
                 },
@@ -689,24 +671,6 @@
                             ]
                         }
                     }
-                },
-                {
-                    "name": "Get Order By Id",
-                    "request": {
-                        "method": "GET",
-                        "url": {
-                            "raw": "{{host}}/api/orders/order/cxkosoawepaoeiw",
-                            "path": [
-                                "api",
-                                "orders",
-                                "order",
-                                "cxkosoawepaoeiw"
-                            ],
-                            "host": [
-                                "{{host}}"
-                            ]
-                        }
-                    }
                 }
             ]
         },
@@ -735,7 +699,14 @@
                     "request": {
                         "method": "GET",
                         "url": {
-                            "raw": "{{host}}/api/stores/all",
+                            "raw": "{{host}}/api/stores/all?limit=2",
+                            "query": [
+                                {
+                                    "key": "limit",
+                                    "value": "2"
+                                }
+                            ],
+                            "variable": [],
                             "path": [
                                 "api",
                                 "stores",
@@ -752,13 +723,13 @@
                     "request": {
                         "method": "GET",
                         "url": {
-                            "raw": "{{host}}/api/stores/store/id/clxg6pce40000goqspbxwannr",
+                            "raw": "{{host}}/api/stores/store/id/clzmtsg3k00018mbo98j0frxn",
                             "path": [
                                 "api",
                                 "stores",
                                 "store",
                                 "id",
-                                "clxg6pce40000goqspbxwannr"
+                                "clzmtsg3k00018mbo98j0frxn"
                             ],
                             "host": [
                                 "{{host}}"
@@ -821,13 +792,13 @@
                     "request": {
                         "method": "GET",
                         "url": {
-                            "raw": "{{host}}/api/stores/store/id/clxzbyp0q0001n7p96lu2xg1w/categories",
+                            "raw": "{{host}}/api/stores/store/id/clzmtsg3k00018mbo98j0frxn/categories",
                             "path": [
                                 "api",
                                 "stores",
                                 "store",
                                 "id",
-                                "clxzbyp0q0001n7p96lu2xg1w",
+                                "clzmtsg3k00018mbo98j0frxn",
                                 "categories"
                             ],
                             "host": [
@@ -904,12 +875,12 @@
                     "request": {
                         "method": "GET",
                         "url": {
-                            "raw": "{{host}}/api/products/product/clzb7miw70005qymvescggu5",
+                            "raw": "{{host}}/api/products/product/clzgyneu80001zg44y5tjxxir",
                             "path": [
                                 "api",
                                 "products",
                                 "product",
-                                "clzb7miw70005qymvescggu5"
+                                "clzgyneu80001zg44y5tjxxir"
                             ],
                             "host": [
                                 "{{host}}"
@@ -1238,12 +1209,12 @@
                     "request": {
                         "method": "POST",
                         "url": {
-                            "raw": "{{host}}/api/admin/approve-payment/clz2dp2t3000112kuqllkyh3h",
+                            "raw": "{{host}}/api/admin/approve-payment/clzb4tubi0001q7ci5ziz90tc",
                             "path": [
                                 "api",
                                 "admin",
                                 "approve-payment",
-                                "clz2dp2t3000112kuqllkyh3h"
+                                "clzb4tubi0001q7ci5ziz90tc"
                             ],
                             "host": [
                                 "{{host}}"
@@ -1256,7 +1227,32 @@
                                     "language": "json"
                                 }
                             },
-                            "raw": "{\n\"orderId\":\"clzb20abt0001ta41gbfl2who\"\n}"
+                            "raw": "{\n\"orderId\":\"clzjppeaj0001ioi7cnf6q3m8\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "check cache",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{host}}/api/cache",
+                            "path": [
+                                "api",
+                                "cache"
+                            ],
+                            "host": [
+                                "{{host}}"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            },
+                            "raw": "{\n  \"name\":\"carmella\"\n}"
                         }
                     }
                 }
@@ -1279,6 +1275,32 @@
                             "host": [
                                 "{{host}}"
                             ]
+                        }
+                    }
+                },
+                {
+                    "name": "Edit User Address ",
+                    "request": {
+                        "method": "POST",
+                        "url": {
+                            "raw": "{{host}}/api/user/address",
+                            "path": [
+                                "api",
+                                "user",
+                                "address"
+                            ],
+                            "host": [
+                                "{{host}}"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            },
+                            "raw": "{\n  \"city\":\"Carlifonia\",\n  \"country\": \"London\",\n  \"street\":\"Wall bells Street\",\n  \"postCode\":45677\n}"
                         }
                     }
                 }

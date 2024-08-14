@@ -12,6 +12,7 @@ import { adminRoute } from "./admin";
 import { userRoutes } from "./user";
 import { cacheSuccess } from "../middlewares/cache";
 import apicache from "apicache";
+import { getProfit } from "../middlewares";
 const router = Router();
 router.use("/auth", authRoute);
 router.use("/user", checkAuth, cacheSuccess, userRoutes);

@@ -11,6 +11,7 @@ import { OrderQuantity, RequestUser } from "../types";
 import logger from "../utils/logger";
 import { extendAmount } from "../prisma/extensions";
 import { CACHE_KEYS, clearCache } from "../middlewares/cache";
+import { getProfit } from "../middlewares";
 
 const stripe = new Stripe(process.env.STRIPE_S_KEY!, {
   typescript: true,
@@ -165,13 +166,9 @@ export const handlePaymentSuccess = async (req: Request, res: Response) => {
   }
 };
 const getTotal = async (cart: { id: string; quantity: number }[]) => {
-  const settings = await prisma.settings.findFirstOrThrow({
-    select: {
-      profitPercent: true,
-    },
-  });
+  const profit = await getProfit();
   const products = await prisma
-    .$extends(extendAmount(settings))
+    .$extends(extendAmount(profit))
     .product.findMany({
       where: {
         id: {
@@ -212,6 +209,6 @@ const getTotal = async (cart: { id: string; quantity: number }[]) => {
   return {
     amount: parseFloat(amount),
     products,
-    interest: settings.profitPercent,
+    interest: profit,
   };
 };

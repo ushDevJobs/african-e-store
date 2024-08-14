@@ -4,3 +4,4 @@ export const validateCreateStore = z.object({
   description: z.string(),
   location: z.string().optional(),
 });
+export const validateStoreId = z.string().min(1);

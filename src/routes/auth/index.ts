@@ -8,12 +8,15 @@ import {
   logout,
   registerSeller,
   resendOTP,
+  localLoginSuccess,
+  googleLoginSuccess,
 } from "../../controllers/auth";
 import passport from "passport";
 import { rootErrorHandler } from "../../root-error-handler";
 import { checkAuth } from "../../middlewares/auth";
 import { RequestUser } from "../../types";
 import { cache } from "../../middlewares/cache";
+import { prisma } from "../../prisma";
 
 const router = Router();
 
@@ -23,10 +26,7 @@ router.post(
     failureRedirect: "login/error",
     failureFlash: true,
   }),
-  (req: Request, res: Response) =>
-    res
-      .status(200)
-      .json({ status: true, message: "Login Successful", data: req.user })
+  localLoginSuccess
 );
 router.get(
   "/google",
@@ -40,13 +40,7 @@ router.get(
     failureRedirect: "google/error",
     failureFlash: true,
   }),
-  (req, res) => {
-    res.redirect(
-      `${process.env.CLIENT_URL}${
-        (req.user as RequestUser).accountType === "SELLER" ? "/seller" : "/"
-      }`
-    );
-  }
+  googleLoginSuccess
 );
 router.get("/login/error", rootErrorHandler(loginAuthError));
 router.get("/google/error", rootErrorHandler(googleAuthError));
