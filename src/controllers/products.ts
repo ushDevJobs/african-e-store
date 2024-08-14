@@ -218,17 +218,15 @@ export const getProductById = async (req: Request, res: Response) => {
       AND: [
         {
           orderDetails: {
-            some: {
-              AND: [
-                { status: "DELIVERED" },
-                { storeId: product.store.id },
-                {
-                  product: {
-                    id: product.id,
-                  },
+            AND: [
+              { status: "DELIVERED" },
+              { storeId: product.store.id },
+              {
+                product: {
+                  id: product.id,
                 },
-              ],
-            },
+              },
+            ],
           },
         },
       ],
@@ -245,17 +243,15 @@ export const getProductById = async (req: Request, res: Response) => {
       AND: [
         {
           orderDetails: {
-            some: {
-              AND: [
-                { status: "DELIVERED" },
-                { storeId: product?.store.id },
-                {
-                  product: {
-                    id: product?.id || "",
-                  },
+            AND: [
+              { status: "DELIVERED" },
+              { storeId: product?.store.id },
+              {
+                product: {
+                  id: product?.id || "",
                 },
-              ],
-            },
+              },
+            ],
           },
         },
       ],

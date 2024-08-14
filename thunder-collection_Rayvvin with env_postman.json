@@ -1,6 +1,6 @@
 {
     "info": {
-        "_postman_id": "1e54be9b-8f44-43dd-b95e-8521c0849c7b",
+        "_postman_id": "30122909-a260-478c-882b-a12187a5b92f",
         "name": "Rayvvin with env",
         "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
         "description": ""
@@ -156,33 +156,6 @@
                             "host": [
                                 "{{host}}"
                             ]
-                        }
-                    }
-                },
-                {
-                    "name": "Register Seller",
-                    "request": {
-                        "method": "POST",
-                        "url": {
-                            "raw": "{{host}}/api/auth/register/seller",
-                            "path": [
-                                "api",
-                                "auth",
-                                "register",
-                                "seller"
-                            ],
-                            "host": [
-                                "{{host}}"
-                            ]
-                        },
-                        "body": {
-                            "mode": "raw",
-                            "options": {
-                                "raw": {
-                                    "language": "json"
-                                }
-                            },
-                            "raw": "{\n  \"email\":\"segunade041@gmail.com\",\n  \"password\":\"password\",\n  \"fullname\":\"Captain Joe\",\n  \"confirmPassword\":\"password\",\n  \"telephone\":\"07044651989\",\n  \"companyName\":\"Megatron Gamings\",\n  \"country\":\"Nigeria\"\n}"
                         }
                     }
                 }
@@ -669,6 +642,51 @@
                             "host": [
                                 "{{host}}"
                             ]
+                        }
+                    }
+                },
+                {
+                    "name": "Purchase History",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{host}}/api/orders/delivered",
+                            "path": [
+                                "api",
+                                "orders",
+                                "delivered"
+                            ],
+                            "host": [
+                                "{{host}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Make review",
+                    "request": {
+                        "method": "POST",
+                        "url": {
+                            "raw": "{{host}}/api/orders/order/review/kflfkldkfdlfkdflk",
+                            "path": [
+                                "api",
+                                "orders",
+                                "order",
+                                "review",
+                                "kflfkldkfdlfkdflk"
+                            ],
+                            "host": [
+                                "{{host}}"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            },
+                            "raw": "{\n  \"rating\":5,\n  \"review\":\"very good\"\n}"
                         }
                     }
                 }

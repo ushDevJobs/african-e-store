@@ -11,7 +11,6 @@ import { CACHE_KEYS, clearCache } from "../middlewares/cache";
 import { getProfit } from "../middlewares";
 
 export const getCategories = async (req: Request, res: Response) => {
-  console.log("running");
   const { _limit, _page } = req.query;
   const user = req.user as RequestUser;
   req.apicacheGroup = CACHE_KEYS.CATEGORIES_WITH_PRODUCTS;

@@ -17,7 +17,6 @@ export const getLoggedusersAddress = async (req: Request, res: Response) => {
   return returnJSONSuccess(res, { data: address });
 };
 export const updateuserAddress = async (req: Request, res: Response) => {
-  console.log("not cache");
   const user = req.user as RequestUser;
   let validated = validateAddress.parse(req.body);
   let data: Address = { city: "" };

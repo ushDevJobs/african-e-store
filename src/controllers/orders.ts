@@ -6,8 +6,9 @@ import { validatePagination } from "../schema/categories";
 import { BadRequest } from "../exceptions/bad-request";
 import { ErrorCode } from "../exceptions/root";
 import { NotFound } from "../exceptions/not-found";
-import { CACHE_KEYS } from "../middlewares/cache";
+import { CACHE_KEYS, clearCache } from "../middlewares/cache";
 import { extendOrderAmount } from "../prisma/extensions";
+import { validateReview } from "../schema/users";
 
 export const getOrders = async (req: Request, res: Response) => {
   const { _limit, _page } = req.query;
@@ -111,4 +112,69 @@ export const getOrderById = async (
   } else {
     next(new BadRequest("Invalid request parameters", ErrorCode.BAD_REQUEST));
   }
+};
+export const getAllDeliveredOrders = async (req: Request, res: Response) => {
+  const user = req.user as RequestUser;
+  req.apicacheGroup = CACHE_KEYS.USER_DELIVERED_ORDERS + user.id;
+  const orders = await prisma.order.findMany({
+    where: {
+      AND: [
+        { userId: user.id },
+        { paymentStatus: true },
+        {
+          orderDetails: {
+            some: {
+              status: "DELIVERED",
+            },
+          },
+        },
+      ],
+    },
+  });
+  returnJSONSuccess(res, { data: orders });
+};
+export const rateOrder = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const user = req.user as RequestUser;
+  const { id } = req.params;
+  const validated = validateReview.parse(req.body);
+  const checkifDelivered = await prisma.orderDetails.findFirstOrThrow({
+    where: {
+      id,
+    },
+    select: {
+      status: true,
+      productId: true,
+      storeId: true,
+    },
+  });
+  if (checkifDelivered.status !== "DELIVERED") {
+    return next(
+      new BadRequest("Order has not been delivered", ErrorCode.BAD_REQUEST)
+    );
+  }
+  await prisma.rating.upsert({
+    where: {
+      orderDetailsId: id,
+    },
+    update: {
+      ...validated,
+    },
+    create: {
+      ...validated,
+      userId: user.id,
+      orderDetailsId: id,
+    },
+  });
+  clearCache(CACHE_KEYS.PRODUCT + checkifDelivered.productId);
+  clearCache(CACHE_KEYS.STORE + checkifDelivered.storeId);
+  clearCache(CACHE_KEYS.STORE_ID + checkifDelivered.storeId);
+  clearCache(CACHE_KEYS.STORE_ABOUT + checkifDelivered.storeId);
+  clearCache(CACHE_KEYS.STORE_REVIEWS + checkifDelivered.storeId);
+  clearCache(CACHE_KEYS.STORE_REVIEWS_ID + checkifDelivered.storeId);
+
+  returnJSONSuccess(res);
 };

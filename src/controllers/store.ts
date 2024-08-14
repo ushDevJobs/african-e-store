@@ -88,17 +88,15 @@ const getStoreFullDetails = async (id: string, isStoreId = false) => {
   const ratings = await prisma.rating.groupBy({
     where: {
       orderDetails: {
-        some: {
-          AND: [
-            { status: "DELIVERED" },
-            { storeId: store.id },
-            {
-              order: {
-                paymentStatus: true,
-              },
+        AND: [
+          { status: "DELIVERED" },
+          { storeId: store.id },
+          {
+            order: {
+              paymentStatus: true,
             },
-          ],
-        },
+          },
+        ],
       },
     },
     by: ["rating"],
@@ -108,17 +106,15 @@ const getStoreFullDetails = async (id: string, isStoreId = false) => {
   let avg = await prisma.rating.aggregate({
     where: {
       orderDetails: {
-        some: {
-          AND: [
-            { status: "DELIVERED" },
-            { storeId: store.id },
-            {
-              order: {
-                paymentStatus: true,
-              },
+        AND: [
+          { status: "DELIVERED" },
+          { storeId: store.id },
+          {
+            order: {
+              paymentStatus: true,
             },
-          ],
-        },
+          },
+        ],
       },
     },
     _avg: {
@@ -176,9 +172,7 @@ export const getPositiveReview = async (id: string) => {
       AND: [
         {
           orderDetails: {
-            some: {
-              AND: [{ status: "DELIVERED" }, { storeId: id }],
-            },
+            AND: [{ status: "DELIVERED" }, { storeId: id }],
           },
         },
         {
@@ -599,9 +593,7 @@ const getReviewsForStore = async (id: string) => {
       AND: [
         {
           orderDetails: {
-            some: {
-              AND: [{ status: "DELIVERED" }, { storeId: id }],
-            },
+            AND: [{ status: "DELIVERED" }, { storeId: id }],
           },
         },
       ],
@@ -714,6 +706,14 @@ export const updateDeliveryStatusOfOrder = async (
       status: stat,
     },
   });
+  const o = await prisma.order.findFirst({
+    where: {
+      id,
+    },
+    select: { userId: true },
+  });
+  clearCache(CACHE_KEYS.USER_ORDERS + o?.userId);
+  clearCache(CACHE_KEYS.USER_DELIVERED_ORDERS + o?.userId);
   clearCache(CACHE_KEYS.STORE_ORDERS + user.id);
   clearCache(CACHE_KEYS.STORE_TRANSACTIONS + user.id);
   returnJSONSuccess(res, { data: order });

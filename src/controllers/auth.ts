@@ -346,9 +346,10 @@ export const logout = async (
   res: Response,
   next: NextFunction
 ) => {
-  clearCache(CACHE_KEYS.USER_STATUS + (req.user as RequestUser).id);
-  clearCache(CACHE_KEYS.USER_ADDRESS + (req.user as RequestUser).id);
-  clearCache(CACHE_KEYS.USER_ORDERS + (req.user as RequestUser).id);
+  const user = req.user as RequestUser;
+  clearCache(CACHE_KEYS.USER_ADDRESS + user.id);
+  clearCache(CACHE_KEYS.USER_ORDERS + user.id);
+  clearCache(CACHE_KEYS.USER_DELIVERED_ORDERS + user.id);
   req.logout((err) => {
     if (err) {
       return next(err);

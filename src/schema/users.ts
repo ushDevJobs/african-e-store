@@ -58,4 +58,8 @@ export const validateAddress = z.object({
   postCode: z.number().optional(),
   country: z.string().optional(),
 });
+export const validateReview = z.object({
+  rating: z.number().positive().int().min(1).max(5),
+  review: z.string().min(2, "Length to small"),
+});
 export type Address = z.infer<typeof validateAddress>;
