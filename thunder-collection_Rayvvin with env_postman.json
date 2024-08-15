@@ -1,6 +1,6 @@
 {
     "info": {
-        "_postman_id": "30122909-a260-478c-882b-a12187a5b92f",
+        "_postman_id": "dab8c11c-57c5-4910-b972-dfcc85caff47",
         "name": "Rayvvin with env",
         "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
         "description": ""
@@ -623,6 +623,24 @@
                             "port": "3000"
                         }
                     }
+                },
+                {
+                    "name": "Get Store Messages",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{host}}/api/stores/store/messages",
+                            "path": [
+                                "api",
+                                "stores",
+                                "store",
+                                "messages"
+                            ],
+                            "host": [
+                                "{{host}}"
+                            ]
+                        }
+                    }
                 }
             ]
         },
@@ -687,199 +705,6 @@
                                 }
                             },
                             "raw": "{\n  \"rating\":5,\n  \"review\":\"very good\"\n}"
-                        }
-                    }
-                }
-            ]
-        },
-        {
-            "name": "Stores (Public)",
-            "item": [
-                {
-                    "name": "Get favourite Stores",
-                    "request": {
-                        "method": "GET",
-                        "url": {
-                            "raw": "{{host}}/api/stores/favourite",
-                            "path": [
-                                "api",
-                                "stores",
-                                "favourite"
-                            ],
-                            "host": [
-                                "{{host}}"
-                            ]
-                        }
-                    }
-                },
-                {
-                    "name": "All Stores",
-                    "request": {
-                        "method": "GET",
-                        "url": {
-                            "raw": "{{host}}/api/stores/all?limit=2",
-                            "query": [
-                                {
-                                    "key": "limit",
-                                    "value": "2"
-                                }
-                            ],
-                            "variable": [],
-                            "path": [
-                                "api",
-                                "stores",
-                                "all"
-                            ],
-                            "host": [
-                                "{{host}}"
-                            ]
-                        }
-                    }
-                },
-                {
-                    "name": "Get Store By Id",
-                    "request": {
-                        "method": "GET",
-                        "url": {
-                            "raw": "{{host}}/api/stores/store/id/clzmtsg3k00018mbo98j0frxn",
-                            "path": [
-                                "api",
-                                "stores",
-                                "store",
-                                "id",
-                                "clzmtsg3k00018mbo98j0frxn"
-                            ],
-                            "host": [
-                                "{{host}}"
-                            ]
-                        }
-                    }
-                },
-                {
-                    "name": "Search Store",
-                    "request": {
-                        "method": "GET",
-                        "url": {
-                            "raw": "{{host}}/api/stores/search?q=payt",
-                            "query": [
-                                {
-                                    "key": "q",
-                                    "value": "payt"
-                                }
-                            ],
-                            "variable": [],
-                            "path": [
-                                "api",
-                                "stores",
-                                "search"
-                            ],
-                            "host": [
-                                "{{host}}"
-                            ]
-                        }
-                    }
-                },
-                {
-                    "name": "Add Store As Favourite",
-                    "request": {
-                        "method": "POST",
-                        "url": {
-                            "raw": "{{host}}/api/stores/favourite",
-                            "path": [
-                                "api",
-                                "stores",
-                                "favourite"
-                            ],
-                            "host": [
-                                "{{host}}"
-                            ]
-                        },
-                        "body": {
-                            "mode": "raw",
-                            "options": {
-                                "raw": {
-                                    "language": "json"
-                                }
-                            },
-                            "raw": "{\n  \"id\":\"clxzo8tld0004bh1anjkhru02\"\n}"
-                        }
-                    }
-                },
-                {
-                    "name": "Get Categories of a Store",
-                    "request": {
-                        "method": "GET",
-                        "url": {
-                            "raw": "{{host}}/api/stores/store/id/clzmtsg3k00018mbo98j0frxn/categories",
-                            "path": [
-                                "api",
-                                "stores",
-                                "store",
-                                "id",
-                                "clzmtsg3k00018mbo98j0frxn",
-                                "categories"
-                            ],
-                            "host": [
-                                "{{host}}"
-                            ]
-                        }
-                    }
-                },
-                {
-                    "name": "Get Products of a Store",
-                    "request": {
-                        "method": "GET",
-                        "url": {
-                            "raw": "{{host}}/api/stores/store/id/clxz0e5sy0004519exvf5593z/products",
-                            "path": [
-                                "api",
-                                "stores",
-                                "store",
-                                "id",
-                                "clxz0e5sy0004519exvf5593z",
-                                "products"
-                            ],
-                            "host": [
-                                "{{host}}"
-                            ]
-                        }
-                    }
-                },
-                {
-                    "name": "Remove Store As Favourite",
-                    "request": {
-                        "method": "DELETE",
-                        "url": {
-                            "raw": "{{host}}/api/stores/favourite/clxzo8tld0004bh1anjkhru02",
-                            "path": [
-                                "api",
-                                "stores",
-                                "favourite",
-                                "clxzo8tld0004bh1anjkhru02"
-                            ],
-                            "host": [
-                                "{{host}}"
-                            ]
-                        }
-                    }
-                },
-                {
-                    "name": "Get reviews of a Store",
-                    "request": {
-                        "method": "GET",
-                        "url": {
-                            "raw": "{{host}}/api/stores/store/id/clxzbyp0q0001n7p96lu2xg1w/reviews",
-                            "path": [
-                                "api",
-                                "stores",
-                                "store",
-                                "id",
-                                "clxzbyp0q0001n7p96lu2xg1w",
-                                "reviews"
-                            ],
-                            "host": [
-                                "{{host}}"
-                            ]
                         }
                     }
                 }
@@ -1319,6 +1144,61 @@
                                 }
                             },
                             "raw": "{\n  \"city\":\"Carlifonia\",\n  \"country\": \"London\",\n  \"street\":\"Wall bells Street\",\n  \"postCode\":45677\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Message seller",
+                    "request": {
+                        "method": "POST",
+                        "url": {
+                            "raw": "{{host}}/api/user/message/clzb4tubi0001q7ci5ziz90tc",
+                            "path": [
+                                "api",
+                                "user",
+                                "message",
+                                "clzb4tubi0001q7ci5ziz90tc"
+                            ],
+                            "host": [
+                                "{{host}}"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            },
+                            "raw": "{\n  \"message\": \"whatever\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Message seller For Product",
+                    "request": {
+                        "method": "POST",
+                        "url": {
+                            "raw": "{{host}}/api/user/message/product/clzb4tubi0001q7ci5ziz90tc",
+                            "path": [
+                                "api",
+                                "user",
+                                "message",
+                                "product",
+                                "clzb4tubi0001q7ci5ziz90tc"
+                            ],
+                            "host": [
+                                "{{host}}"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            },
+                            "raw": "{\n  \"message\": \"I need this product in bulk\",\n    \"productId\":\"clzgyneu80001zg44y5tjxxir\"\n}"
                         }
                     }
                 }
