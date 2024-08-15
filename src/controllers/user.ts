@@ -3,7 +3,12 @@ import { prisma } from "../prisma";
 import { RequestUser } from "../types";
 import { returnJSONSuccess } from "../utils/functions";
 import { CACHE_KEYS, clearCache } from "../middlewares/cache";
-import { Address, validateAddress } from "../schema/users";
+import {
+  Address,
+  validateAddress,
+  validateMessage,
+  validateProductMessage,
+} from "../schema/users";
 
 export const getLoggedusersAddress = async (req: Request, res: Response) => {
   const user = req.user as RequestUser;
@@ -36,5 +41,53 @@ export const updateuserAddress = async (req: Request, res: Response) => {
     },
   });
   clearCache(CACHE_KEYS.USER_ADDRESS + user.id);
+  returnJSONSuccess(res);
+};
+export const messageSeller = async (req: Request, res: Response) => {
+  const message = validateMessage.parse(req.body.message);
+  const { id } = req.params;
+  const user = req.user as RequestUser;
+  let mess = await prisma.sellerMessage.create({
+    data: {
+      message: message,
+      from: "USER",
+      userId: user.id,
+      storeId: id,
+    },
+    select: {
+      store: {
+        select: {
+          userId: true,
+        },
+      },
+    },
+  });
+  clearCache(CACHE_KEYS.STORE_MESSAGES + mess.store.userId);
+  clearCache(CACHE_KEYS.STORE_ABOUT + mess.store.userId);
+
+  returnJSONSuccess(res);
+};
+export const messageSellerForProduct = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const validated = validateProductMessage.parse(req.body);
+  const user = req.user as RequestUser;
+  const mess = await prisma.sellerMessage.create({
+    data: {
+      message: validated.message,
+      from: "USER",
+      userId: user.id,
+      storeId: id,
+      productId: validated.productId,
+    },
+    select: {
+      store: {
+        select: {
+          userId: true,
+        },
+      },
+    },
+  });
+  clearCache(CACHE_KEYS.STORE_MESSAGES + mess.store.userId);
+  clearCache(CACHE_KEYS.STORE_ABOUT + mess.store.userId);
   returnJSONSuccess(res);
 };

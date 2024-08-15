@@ -63,3 +63,8 @@ export const validateReview = z.object({
   review: z.string().min(2, "Length to small"),
 });
 export type Address = z.infer<typeof validateAddress>;
+export const validateMessage = z.string().min(5, "Length to small");
+export const validateProductMessage = z.object({
+  message: z.string().min(5, "Length to small"),
+  productId: z.string(),
+});

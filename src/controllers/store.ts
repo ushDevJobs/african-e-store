@@ -752,7 +752,12 @@ export const getAboutStore = async (req: Request, res: Response) => {
   req.apicacheGroup = CACHE_KEYS.STORE_ABOUT + id;
   const store = await prisma.store.findFirstOrThrow({
     where: { userId: id },
-    select: { id: true, sellerMessage: true },
+    select: { id: true },
+  });
+  const messagesLength = await prisma.sellerMessage.count({
+    where: {
+      storeId: store.id,
+    },
   });
   const products = await prisma.product.findMany({
     where: {
@@ -793,7 +798,6 @@ export const getAboutStore = async (req: Request, res: Response) => {
     await prisma.$queryRaw`SELECT sum(amount) as amount FROM sellerspaymenthistory WHERE storeId = ${
       store.id
     } AND MONTH(createdAt) = MONTH(${new Date()})`;
-  const messagesLength = store.sellerMessage.length;
   return returnJSONSuccess(res, {
     data: {
       income: income[0].amount || 0,
@@ -924,4 +928,34 @@ export const getStoreBankDetails = async (req: Request, res: Response) => {
     },
   });
   return returnJSONSuccess(res, { data: fee });
+};
+export const getStoreMessages = async (req: Request, res: Response) => {
+  const user = req.user as RequestUser;
+  req.apicacheGroup = CACHE_KEYS.STORE_MESSAGES + user.id;
+  const messages = await prisma.sellerMessage.findMany({
+    where: {
+      store: {
+        userId: user.id,
+      },
+    },
+    select: {
+      id: true,
+      from: true,
+      message: true,
+      user: {
+        select: {
+          fullname: true,
+          email: true,
+          id: true,
+        },
+      },
+      product: {
+        select: {
+          name: true,
+          id: true,
+        },
+      },
+    },
+  });
+  returnJSONSuccess(res, { data: messages });
 };

@@ -16,6 +16,7 @@ import {
   getStoreByUserLogged,
   getStoreCategories,
   getStoreDraftProducts,
+  getStoreMessages,
   getStoreOrders,
   getStoreProducts,
   getStoreShippingFee,
@@ -118,6 +119,11 @@ router.get(
   "/store/orders",
   [checkAuth, sellerRoleCheck, checkStore],
   rootErrorHandler(getStoreOrders)
+);
+router.get(
+  "/store/messages",
+  [checkAuth, sellerRoleCheck, checkStore],
+  rootErrorHandler(getStoreMessages)
 );
 router.get(
   "/store/about",

@@ -62,31 +62,32 @@ model Store {
 }
 
 model Product {
-  id                 String         @id @default(cuid())
+  id                 String          @id @default(cuid())
   name               String
   itemCondition      ItemContitions
-  salesType          SalesType      @default(ONCE)
+  salesType          SalesType       @default(ONCE)
   endBiddingDate     DateTime?
-  amount             Float          @default(0)
-  quantity           Int            @default(0)
-  details            String         @db.VarChar(255)
-  publish            Boolean        @default(true)
+  amount             Float           @default(0)
+  quantity           Int             @default(0)
+  details            String          @db.VarChar(255)
+  publish            Boolean         @default(true)
   coverImage         String
   /// [productImages]
-  images             Json?          @default("[]")
+  images             Json?           @default("[]")
   returnPolicy       String?
   location           String?
   storeId            String
-  discount           Boolean        @default(false)
-  discountPercentage Float          @default(0)
-  createdAt          DateTime       @default(now())
-  updatedAt          DateTime       @updatedAt
-  store              Store          @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  discount           Boolean         @default(false)
+  discountPercentage Float           @default(0)
+  createdAt          DateTime        @default(now())
+  updatedAt          DateTime        @updatedAt
+  store              Store           @relation(fields: [storeId], references: [id], onDelete: Cascade)
   categories         Category[]
   favourite          User[]
   orderDetails       OrderDetails[]
-  deleted            Boolean        @default(false)
+  deleted            Boolean         @default(false)
   views              ViewsTracker[]
+  sellerMessage      sellerMessage[]
 
   @@unique([storeId, name])
   @@map("products")
@@ -227,6 +228,8 @@ model sellerMessage {
   user      User?        @relation(fields: [userId], references: [id])
   userId    String?
   message   String
+  product   Product?     @relation(fields: [productId], references: [id])
+  productId String?
   createdAt DateTime     @default(now())
   updatedAt DateTime     @updatedAt
 
