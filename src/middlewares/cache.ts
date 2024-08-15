@@ -27,6 +27,7 @@ export enum CACHE_KEYS {
   STORE_ORDERS = "store-orders-",
   STORE_TRANSACTIONS = "store-transactions-",
   STORE_BANK = "store-bank-",
+  STORE_MESSAGES = "store-messages-",
   STORE_ABOUT = "store-about-",
   STORE_DELIVERY_FEE = "store-fee-",
   USER_ORDERS = "user-orders-",
