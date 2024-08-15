@@ -9,6 +9,7 @@ import {
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import ApiRoutes from "../api/apiRoutes";
+import { toast } from "sonner";
 
 const PaymentCheckoutPage = ({ amount }: { amount: number }) => {
   const cartItems = useSelector((state: RootState) => state.cart.cartItems);
@@ -59,6 +60,7 @@ const PaymentCheckoutPage = ({ amount }: { amount: number }) => {
     if (submitError) {
       setErrorMessage(submitError.message);
       setLoading(false);
+      toast.error(submitError.message);
       return;
     }
 
@@ -74,9 +76,7 @@ const PaymentCheckoutPage = ({ amount }: { amount: number }) => {
       // This point is only reached if there's an immediate error when
       // confirming the payment. Show the error to your customer (for example, payment details incomplete)
       setErrorMessage(error.message);
-    } else {
-      // The payment UI automatically closes with a success animation.
-      // Your customer is redirected to your `return_url`.
+      toast.error(error.message);
     }
 
     setLoading(false);
