@@ -30,7 +30,7 @@ const SavedItemsPage = (props: Props) => {
 
         await fetchSavedProducts()
             .then((response) => {
-                // console.log("Response: ", response.data.data);
+                console.log("Response: ", response.data.data);
                 setSavedProducts(response.data.data);
             })
             .catch((error) => {
@@ -107,9 +107,9 @@ const SavedItemsPage = (props: Props) => {
                                             <p className='text-[#828282] text-sm'>Status: {product.salesType}</p>
                                         </div>
                                     </div>
-                                    <div className="flex flex-col gap-3">
+                                    <div className="flex flex-col">
                                         <h3 className='text-[#1E1E1E] text-xl font-medium'>&pound;{product.amount}</h3>
-                                        <p className='text-[#6F6F6F] text-sm '>Shipping &pound;shipping fee here</p>
+                                        {/* <p className='text-[#6F6F6F] text-sm '>Shipping &pound;shipping fee here</p> */}
                                         <p className='text-[#6F6F6F] text-sm '>{product.returnPolicy == 'true' ? 'Returns accepted' : 'Returns not accepted'}</p>
                                     </div>
                                 </div>
@@ -131,9 +131,9 @@ const SavedItemsPage = (props: Props) => {
                                 </span>
                             </div>
                             <div className="flex flex-col gap-2">
-                                <Link className='font-medium text-[#828282] border-b border-b-[#828282] text-lg' href={`/stores/${product.store.id}`}>{product.store.name}</Link>
+                                <Link className='font-medium text-[#828282] w-fit border-b border-b-[#828282] text-lg' href={`/stores/${product.store.id}`}>{product.store.name}</Link>
                                 <h2 className='text-[#1E1E1E] max-w-[207px] text-sm leading-4'>{product.name}</h2>
-                                <h3 className='text-[#1E1E1E] text-sm font-medium'>&pound;{product.amount} + €16 shipping </h3>
+                                <h3 className='text-[#1E1E1E] text-sm font-medium'>&pound;{product.amount}</h3>
                                 <p className='text-[#828282] text-xs'>Condition: {product.itemCondition} </p>
                                 <p className='text-[#828282] text-xs'>Status: {product.salesType}</p>
                             </div>
@@ -143,7 +143,7 @@ const SavedItemsPage = (props: Props) => {
                 )}
             </div>
             {isFetchingSavedProducts && (
-               <FullPageLoader />
+                <FullPageLoader />
             )}
             {savedProducts?.length == 0 &&
                 <p className={styles.loaderText}>No saved product found</p>

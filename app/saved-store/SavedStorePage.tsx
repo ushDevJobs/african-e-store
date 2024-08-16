@@ -72,24 +72,31 @@ const SavedStorePage = (props: Props) => {
             <p className='text-[#828282] text-base mb-8'>See sellers that you have saved </p>
             <div className='flex flex-col gap-4 max-h-[500px] overflow-y-auto'>
                 {savedStoreStores?.map((store) => (
-                    <div className='flex items-center justify-between bg-[#F7FAFA] rounded-lg py-5 px-7' key={store.storeDetails.id}>
-                        <div className="flex items-center gap-8">
-                            <span className='bg-[#2C7865] h-fit p-8 rounded-full'><UserIcon /></span>
-                            <div className="text-[#828282] flex flex-col gap-2">
-                                <h2 className='text-xl underline font-medium'>{store.storeDetails.name}</h2>
-                                <p className='text-sm mb-2'>{store.storeDetails.description}</p>
-                                <div className="flex gap-2 items-center">
-                                    <span className='flex items-center gap-1'><DotIcon />{store.feedback}&#37; Feedback </span>
-                                    <span className='flex items-center gap-1'><DotIcon />{store?.totalItemSold == 0 ? '0' : store?.totalItemSold} {store?.totalItemSold > 1 ? "Items Sold" : "Item Sold"}</span>
-                                </div>
+                    <div className='flex items-center h-full justify-between bg-[#F7FAFA] relative rounded-lg p-4 md:py-5 md:px-7' key={store.storeDetails.id}>
+                    <span onClick={(e) => {
+                        e.preventDefault(); // Prevent navigation on click
+                        handleRemoveStoreFromFavorite('112');
+                    }}
+                        className='p-3 cursor-pointer absolute top-0 right-0 rounded-full border border-[#828282]  md:hidden'><FilledLoveIcon />
+                    </span>
+                    <div className="flex items-center gap-8">
+                        <span className='bg-[#2C7865] h-fit p-3 md:p-8 rounded-full'><UserIcon /></span>
+                        <div className="text-[#828282] flex flex-col gap-2">
+                            <h2 className='text-xl underline font-medium'>{store.storeDetails.name}</h2>
+                            <p className='text-sm mb-1 md:mb-2'>{store.storeDetails.description}</p>
+                            <div className="flex gap-2 items-center">
+                                    <span className='flex items-center text-sm md:text-base gap-1'><DotIcon />{store.feedback}&#37; Feedback </span>
+                                    <span className='flex items-center gap-1 text-sm md:text-base'><DotIcon />{store?.totalItemSold == 0 ? '0' : store?.totalItemSold} {store?.totalItemSold > 1 ? "Items Sold" : "Item Sold"}</span>
                             </div>
                         </div>
-                        <span onClick={(e) => {
-                            e.preventDefault(); // Prevent navigation on click
-                            handleRemoveStoreFromFavorite(store.storeDetails.id);
-                        }}
-                            className='p-3 cursor-pointer rounded-full border border-[#828282]'><FilledLoveIcon /></span>
                     </div>
+                    <span onClick={(e) => {
+                        e.preventDefault(); // Prevent navigation on click
+                        handleRemoveStoreFromFavorite('112');
+                    }}
+                        className='p-3 cursor-pointer rounded-full border border-[#828282] hidden md:block'><FilledLoveIcon />
+                    </span>
+                </div>
                 ))}
             </div>
             {isFetchingSavedStores && (
