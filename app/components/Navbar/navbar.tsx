@@ -229,8 +229,11 @@ const Navbar = (props: Props) => {
                                             <Link href={'/saved-items'} onClick={() => setIsLoginDropdownOpen(false)}>
                                                 Saved Items
                                             </Link>
-                                            <Link href={'/orders'}>
+                                            <Link href={'/orders'} onClick={() => setIsLoginDropdownOpen(false)}>
                                                 Track order
+                                            </Link>
+                                            <Link href={'/purchase-history'} onClick={() => setIsLoginDropdownOpen(false)}>
+                                                Purchase History
                                             </Link>
                                             <button className={'hover:opacity-70'} onClick={() => {
                                                 setIsLoginDropdownOpen(false)

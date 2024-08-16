@@ -9,6 +9,7 @@ import { DeliveryStatus } from "../components/models/IOrderDeliveryStatus";
 import { ShippingFeeRequest } from "../components/models/IShippingFee";
 import { BankDetailRequest } from "../components/models/IBankDetails";
 import { UserAddressRequest } from "../components/models/IUserAddress";
+import { ReviewRequest } from "../components/Modal/ReviewModal";
 
 export const API = axios.create({
     baseURL: ApiRoutes.BASE_URL_DEV,
@@ -626,4 +627,15 @@ export function useFetchBankDetail() {
     }
 
     return fetchBankDetail;
+}
+export function useAddReview() {
+    async function addReview(id: string, data: ReviewRequest) {
+        // Fire the request
+        const response = await API.post(`${ApiRoutes.AddReview}/${id}`, data);
+
+        // Return the response
+        return response;
+    }
+
+    return addReview;
 }

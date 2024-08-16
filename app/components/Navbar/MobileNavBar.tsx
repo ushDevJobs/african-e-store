@@ -164,6 +164,11 @@ const MobileNavBar = ({ navIsOpen, setNavIsOpen, isDropdownOpen,
                                         Saved Store
                                     </li>
                                 </Link>
+                                <Link href="/purchase-history" onClick={() => setNavIsOpen(false)}>
+                                    <li className={pathname == "/purchase-history" ? styles.active : ""}>
+                                        Purchase History
+                                    </li>
+                                </Link>
 
                                 <Link href="/cart" onClick={() => setNavIsOpen(false)}>
                                     <li className={pathname == "/cart" ? styles.active : ""}>
