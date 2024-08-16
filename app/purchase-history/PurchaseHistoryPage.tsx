@@ -7,6 +7,7 @@ import images from '@/public/images'
 import { FaCheck } from 'react-icons/fa'
 import ReviewModal from '../components/Modal/ReviewModal'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 type Props = {}
 
 const PurchaseHistoryPage = (props: Props) => {
@@ -22,17 +23,16 @@ const PurchaseHistoryPage = (props: Props) => {
                     <div className="flex flex-col gap-8 bg-[#F7FAFA] rounded-lg py-5 px-7">
                         <div className="flex gap-2 items-center">
                             <span className='bg-[#2C7865] h-fit p-3 rounded-full'><UserIcon /></span>
-                            <p className='font-medium text-[#828282] border-b border-b-[#828282] text-xl'>Chavo global mobile device store LTD.</p>
+                            <p className='font-medium text-[#828282] w-fit border-b border-b-[#828282] text-base md:text-xl'>Chavo global mobile device store LTD.</p>
                         </div>
-                        <div className="flex flex-col md:flex-row md:items-center md:justify-between">
-                            <div className="flex items-center gap-10">
-                                <div className="relative w-[113px] h-[137px]"> <Image src={images.cart_prooduct_image} fill alt='product image' /></div>
+                        <div className="flex flex-col md:flex-row md:gap-10 md:items-center md:justify-between">
+                            <div className="flex items-center gap-10 mb-8 md:mb-0">
+                                <div className="relative w-[100px] h-[100px] md:w-[113px] md:h-[137px]"> <Image src={images.cart_prooduct_image} fill alt='product image' /></div>
                                 <div className="flex flex-col gap-3">
-                                    <h2 className=' text-[#1E1E1E] text-xl border-b border-b-[#1E1E1E]'>Samsung Galaxy S21 5G SM-G991U Factory Unlocked 128GB Phantom Gray C</h2>
-                                    <h3 className='font-medium text-[#1E1E1E] text-xl'>US $164.99</h3>
+                                    <h2 className=' text-[#1E1E1E] text-base md:text-xl border-b border-b-[#1E1E1E]'>Samsung Galaxy S21 5G SM-G991U Factory Unlocked 128GB Phantom Gray C</h2>
+                                    <h3 className='font-medium text-[#1E1E1E] text-base md:text-xl'>&pound;164.99</h3>
                                     <ul className='flex flex-wrap gap-3 text-[#828282] text-sm'>
-                                        <li>Shipping US $164.99</li>
-                                        <li>Shipping US $164.99</li>
+                                        <li>Shipping &pound;164.99</li>
                                         <li>Status: Auction</li>
                                         <li>20-08-24</li>
                                         <li>Home Delivery</li>
@@ -41,11 +41,11 @@ const PurchaseHistoryPage = (props: Props) => {
                                 </div>
                             </div>
 
-                            <button onClick={() => setReviewModal(true)} className='bg-[#2C7865] flex items-center gap-2 text-white text-sm font-medium rounded-3xl py-4 px-8'><EmptyStarIcon /> Leave a review</button>
+                            <button onClick={() => setReviewModal(true)} className='bg-[#2C7865] flex items-center gap-2 whitespace-nowrap text-white text-sm font-medium rounded-3xl py-4 px-8'><EmptyStarIcon /> Leave a review</button>
                         </div>
                         <div className="flex gap-5 items-center text-sm font-medium">
-                            <button className='text-[#2C7865] border-b border-b-[#2C7865]'>See Details</button>
-                            <button className='text-[#FD6A02] border-b border-b-[#FD6A02]'>Report item</button>
+                            {/* <button className='text-[#2C7865] border-b border-b-[#2C7865]'>See Details</button> */}
+                            <Link href='/report-item' className='text-[#FD6A02] border-b border-b-[#FD6A02]'>Report item</Link>
                         </div>
                     </div>
                 </div>
