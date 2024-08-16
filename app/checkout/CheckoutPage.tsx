@@ -14,6 +14,7 @@ import {
 import { useUserAddress } from "../context/UserAddressContext";
 import { useAccountStatus } from "../context/AccountStatusContext";
 import images from "@/public/images";
+import EditAddressModal from "../components/Modal/EditAddressModal";
 
 type Props = {};
 
@@ -34,6 +35,7 @@ const CheckoutPage = (props: Props) => {
     const shippingFee = uniqueStoreIds.length * storeShippingFee;
 
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [isEditAddressModalVisible, setIsEditAddressModalVisible] = useState(false);
 
     useEffect(() => {
         if (accountStatus && accountStatus.accountType == 'BUYER') {
@@ -48,7 +50,9 @@ const CheckoutPage = (props: Props) => {
     }, []);
 
     return (
-        <div className={styles.main}>
+        <>
+        <EditAddressModal visibility={isEditAddressModalVisible} setVisibility={setIsEditAddressModalVisible}/> 
+         <div className={styles.main}>
             <h1>Checkout</h1>
             {cartItems.length > 0 ? (
                 <div className={styles.checkoutContainer}>
@@ -101,9 +105,9 @@ const CheckoutPage = (props: Props) => {
                         {isLoggedIn && (
                             <div className={styles.address}>
                                 <h3>Ship to</h3>
-                                {userAddress ? <p>{userAddress?.city}, {userAddress?.country}.</p> : <p>No address available</p>}
+                                {userAddress ? <p>{userAddress?.street}, {userAddress?.city}, {userAddress?.country}.</p> : <p>No address available</p>}
                                 {/* <p>{userAddress.}</p> */}
-                                <button className={styles.edit}>Change</button>
+                                <button onClick={() => setIsEditAddressModalVisible(true)} className={styles.edit}>Update Address</button>
                             </div>
                         )}
                         <div className={styles.coupon}>
@@ -168,6 +172,8 @@ const CheckoutPage = (props: Props) => {
             )}
 
         </div>
+        </>
+      
     );
 };
 

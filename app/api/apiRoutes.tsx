@@ -141,6 +141,8 @@ export default class ApiRoutes {
   static FetchStoreOrders: string = "api/stores/store/orders";
 
   static UpdateDeliveryStatus: string = "api/stores/store/orders/order";
+  
+    static UpdateUserAddress: string = "api/user/address";
 
   static FetchStoreSummary: string = "api/stores/store/about";
 

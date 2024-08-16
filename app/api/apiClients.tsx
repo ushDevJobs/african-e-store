@@ -8,6 +8,7 @@ import { RegisterSellerRequest } from "../components/models/IRegisterSeller";
 import { DeliveryStatus } from "../components/models/IOrderDeliveryStatus";
 import { ShippingFeeRequest } from "../components/models/IShippingFee";
 import { BankDetailRequest } from "../components/models/IBankDetails";
+import { UserAddressRequest } from "../components/models/IUserAddress";
 
 export const API = axios.create({
     baseURL: ApiRoutes.BASE_URL_DEV,
@@ -554,6 +555,22 @@ export function useUpdateBankDetail() {
 
     // Return function to update a BankDetail
     return updateBankDetail;
+}
+export function useUpdateUserAddress() {
+    /**
+     * Send request to API server to update a UserAddress
+     * @returns The response for the API request
+     */
+    async function updateUserAddress(data: UserAddressRequest) {
+        // Send request to update a UserAddress
+        let response = await API.post(`${ApiRoutes.UpdateUserAddress}`, data);
+
+        // Return response
+        return response;
+    }
+
+    // Return function to update a UserAddress
+    return updateUserAddress;
 }
 export function useFetchShippingFee() {
     async function fetchShippingFee() {
