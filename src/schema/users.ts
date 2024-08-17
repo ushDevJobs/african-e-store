@@ -23,8 +23,8 @@ export const validateRegData = z
       .string({ message: "telephone is required" })
       .min(10, phoneErrorMessage),
     country: z.string().min(2, countryErrorMessage).optional(),
-    address: z
-      .string({ message: "Address required" })
+    city: z
+      .string({ message: "City required" })
       .min(2, "Must be more than 2 words"),
   })
   .refine((data) => data.password === data.confirmPassword, {
@@ -46,6 +46,9 @@ export const validateSellerRegData = z
       .string({ message: "telephone is required" })
       .min(10, phoneErrorMessage),
     country: z.string().min(2, countryErrorMessage).optional(),
+    city: z
+      .string({ message: "City required" })
+      .min(2, "Must be more than 2 words"),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords does not match",

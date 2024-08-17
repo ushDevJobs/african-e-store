@@ -34,11 +34,14 @@ export const register = async (
         email: req.body.email,
         fullname: req.body.fullname,
         telephone: req.body.telephone,
-        country: req.body.country,
         password: hashSync(req.body.password, 10),
         address: {
           create: {
-            city: req.body.address,
+            city: req.body.city,
+            country: req.body.country,
+            street: req.body.street,
+            postCode: req.body.postCode,
+            houseNumber: req.body.houseNumber,
           },
         },
       },
@@ -156,12 +159,20 @@ export const registerSeller = async (
         country: req.body.country,
         telephone: req.body.telephone,
         password: hashSync(req.body.password, 10),
-
         store: {
           create: {
             name: req.body.companyName,
             description: "",
             location: req.body.country,
+          },
+        },
+        address: {
+          create: {
+            city: req.body.city,
+            country: req.body.country,
+            street: req.body.street,
+            postCode: req.body.postCode,
+            houseNumber: req.body.houseNumber,
           },
         },
       },
