@@ -40,6 +40,16 @@ const CategoriesPage = () => {
     const categoryRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
 
     const [searchQuery, setSearchQuery] = useState<string>('');
+    const [selectedConditions, setSelectedConditions] = useState<string[]>([]);
+
+    const handleConditionChange = (condition: string) => {
+        console.log({ condition });
+        setSelectedConditions(prevConditions =>
+            prevConditions.includes(condition)
+                ? prevConditions.filter(productCondition => productCondition !== condition)
+                : [...prevConditions, condition]
+        );
+    };
 
     const goToPage = (page: number) => {
         if (page >= 1 && page <= totalPages) {
@@ -104,13 +114,6 @@ const CategoriesPage = () => {
         };
     }, [categories]);
 
-    // const handleCategoryClick = (categoryId: string) => {
-    //     const element = categoryRefs.current[categoryId];
-    //     if (element) {
-    //         element.scrollIntoView({ behavior: 'smooth' });
-    //     }
-    // };
-
     const handleCategoryClick = (categoryId: string) => {
         const element = categoryRefs.current[categoryId];
         if (element) {
@@ -132,12 +135,22 @@ const CategoriesPage = () => {
     };
 
     // Filter categories based on search query
+    // const filteredCategories = categories
+    //     .map(category => ({
+    //         ...category,
+    //         products: category.products.filter(product =>
+    //             product.name.toLowerCase().includes(searchQuery.toLowerCase())
+    //         )
+    //     }))
+    //     .filter(category => category.products.length > 0); // Only include categories with matching products
     const filteredCategories = categories
         .map(category => ({
             ...category,
-            products: category.products.filter(product =>
-                product.name.toLowerCase().includes(searchQuery.toLowerCase())
-            )
+            products: category.products
+                .filter(product =>
+                    product.name.toLowerCase().includes(searchQuery.toLowerCase()) &&
+                    (selectedConditions.length === 0 || selectedConditions.includes(product.itemCondition))
+                )
         }))
         .filter(category => category.products.length > 0); // Only include categories with matching products
 
@@ -146,7 +159,9 @@ const CategoriesPage = () => {
         <motion.div
             initial="closed"
             animate={isFilterOpen ? "opened" : "closed"}>
-            {isFilterOpen && <MobileSettingsBar setIsFilterOpen={setIsFilterOpen} categories={categories} activeCategory={activeCategory} onCategoryClick={mobileHandleCategoryClick} />}
+            {isFilterOpen && <MobileSettingsBar setIsFilterOpen={setIsFilterOpen} categories={categories} activeCategory={activeCategory} onCategoryClick={mobileHandleCategoryClick}
+                selectedConditions={selectedConditions}
+                handleConditionChange={handleConditionChange} />}
             {categories.length == 0 && isFetchingCategories ? <CategoriesSkeletonLoader /> :
                 <div className={styles.main}>
                     <CategoriesHeader mainText='Explore different categories' subText='Search for any product in different categories on Rayvvin' />
@@ -166,7 +181,8 @@ const CategoriesPage = () => {
                     <div className={styles.contents}>
                         {onDesktop &&
                             <div className={styles.lhs} style={{ position: 'relative' }}>
-                                <CategoriesSettingsBar categories={categories} activeCategory={activeCategory} onCategoryClick={handleCategoryClick} />
+                                <CategoriesSettingsBar categories={categories} activeCategory={activeCategory} onCategoryClick={handleCategoryClick} selectedConditions={selectedConditions}
+                                    handleConditionChange={handleConditionChange} />
                             </div>}
 
                         <div className={styles.rhs}>

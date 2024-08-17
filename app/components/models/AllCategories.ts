@@ -23,7 +23,7 @@ export interface CategoriesResponse {
 export interface SingleProducts {
   id: string;
   name: string;
-  itemCondition: string | null;
+  itemCondition: string;
   amount: number;
   quantity: number;
   details: string;

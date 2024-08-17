@@ -11,13 +11,17 @@ type Props = {
     onCategoryClick: (categoryId: string) => void;
     setIsFilterOpen: React.Dispatch<React.SetStateAction<boolean>>
     storeCategories: StoreCategoriesResponse[] | undefined
+    selectedConditions: string[]
+    handleConditionChange: (condition: string) => void
 }
 
 const MobileStoreSettingsBar = ({
     activeCategory,
     onCategoryClick,
     setIsFilterOpen,
-    storeCategories
+    storeCategories,
+    selectedConditions,
+    handleConditionChange
 }: Props) => {
     return (
         <motion.div className={`${styles.settingsBar}`} variants={mobileMenuVariant({ direction: "fromLeft" })}>
@@ -47,18 +51,37 @@ const MobileStoreSettingsBar = ({
                                 No category available</li>
                         }
                     </ul>}
-        
+
             </div>
 
             <div className={styles.condition}>
                 <h3>Condition</h3>
                 <div className={styles.field}>
-                    <input type="checkbox" name="" id="" />
-                    <label htmlFor="">New (12)</label>
+                    <input
+                        type="checkbox"
+                        id="new"
+                        checked={selectedConditions && selectedConditions.includes('NEW')}
+                        onChange={() => handleConditionChange('NEW')}
+                    />
+                    <label htmlFor="new">New</label>
                 </div>
                 <div className={styles.field}>
-                    <input type="checkbox" name="" id="" />
-                    <label htmlFor="">Used (12)</label>
+                    <input
+                        type="checkbox"
+                        id="used"
+                        checked={selectedConditions && selectedConditions.includes('USED')}
+                        onChange={() => handleConditionChange('USED')}
+                    />
+                    <label htmlFor="used">Used</label>
+                </div>
+                <div className={styles.field}>
+                    <input
+                        type="checkbox"
+                        id="refurbished"
+                        checked={selectedConditions && selectedConditions.includes('REFURBISHED')}
+                        onChange={() => handleConditionChange('REFURBISHED')}
+                    />
+                    <label htmlFor="refurbished">Refurbished</label>
                 </div>
             </div>
             <div className={styles.priceFilter}>

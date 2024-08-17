@@ -8,10 +8,13 @@ type Props = {
     activeCategory?: string;
     retrievedCategories?: CategoriesResponse[];
     onCategoryClick: (categoryId: string) => void;
+    selectedConditions: string[]
+    handleConditionChange: (condition: string) => void;
 }
 
-const CategoriesSettingsBar = ({ categories, activeCategory, retrievedCategories, onCategoryClick }: Props) => {
-
+const CategoriesSettingsBar = ({ categories, activeCategory, retrievedCategories, onCategoryClick, selectedConditions,
+    handleConditionChange }: Props) => {
+    console.log('handleConditionChange:', handleConditionChange); 
     return (
         <div className={`${styles.settingsBar} hidden md:block`}>
             <div className={styles.catgoriesFilter}>
@@ -22,7 +25,7 @@ const CategoriesSettingsBar = ({ categories, activeCategory, retrievedCategories
                             <li key={category.id}
                                 className={activeCategory === category.name ? styles.active : ''}
                                 onClick={() => onCategoryClick(category.id)}
-                           >
+                            >
                                 {category.name}
                             </li>
                         ))}
@@ -47,16 +50,34 @@ const CategoriesSettingsBar = ({ categories, activeCategory, retrievedCategories
                         }
                     </ul>}
             </div>
-
             <div className={styles.condition}>
                 <h3>Condition</h3>
                 <div className={styles.field}>
-                    <input type="checkbox" name="" id="" />
-                    <label htmlFor="">New (12)</label>
+                    <input
+                        type="checkbox"
+                        id="new"
+                        checked={selectedConditions && selectedConditions.includes('NEW')}
+                        onChange={() => handleConditionChange('NEW')}
+                    />
+                    <label htmlFor="new">New</label>
                 </div>
                 <div className={styles.field}>
-                    <input type="checkbox" name="" id="" />
-                    <label htmlFor="">Used (12)</label>
+                    <input
+                        type="checkbox"
+                        id="used"
+                        checked={selectedConditions && selectedConditions.includes('USED')}
+                        onChange={() => handleConditionChange('USED')}
+                    />
+                    <label htmlFor="used">Used</label>
+                </div>
+                <div className={styles.field}>
+                    <input
+                        type="checkbox"
+                        id="refurbished"
+                        checked={selectedConditions && selectedConditions.includes('REFURBISHED')}
+                        onChange={() => handleConditionChange('REFURBISHED')}
+                    />
+                    <label htmlFor="refurbished">Refurbished</label>
                 </div>
             </div>
             <div className={styles.priceFilter}>

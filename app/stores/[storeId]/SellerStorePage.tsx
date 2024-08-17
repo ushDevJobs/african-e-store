@@ -70,6 +70,15 @@ const SellerStorePage = ({ params }: Props) => {
     const [activeCategory, setActiveCategory] = useState<string>("");
 
     const [isFilterOpen, setIsFilterOpen] = useState<boolean>(false)
+    const [selectedConditions, setSelectedConditions] = useState<string[]>([]);
+
+    const handleConditionChange = (condition: string) => {
+        setSelectedConditions(prevConditions =>
+            prevConditions.includes(condition)
+                ? prevConditions.filter(productCondition => productCondition !== condition)
+                : [...prevConditions, condition]
+        );
+    };
 
     async function handleFetchStore() {
         // Start loader
@@ -124,18 +133,39 @@ const SellerStorePage = ({ params }: Props) => {
             });
     }
 
+    const handleCategoryClick = (categoryId: string) => {
+        const element = categoryRefs.current[categoryId];
+        if (element) {
+            window.scrollTo({
+                top: element.offsetTop - 100, // Adjust the offset value as needed
+                behavior: 'smooth'
+            });
+        }
+    };
+
+    const mobileHandleCategoryClick = (categoryId: string) => {
+        const element = categoryRefs.current[categoryId];
+        if (element) {
+            window.scrollTo({
+                top: element.offsetTop - 900, // Adjust the offset value as needed
+                behavior: 'smooth'
+            });
+        }
+    };
+
     const filteredCategories = storeProducts?.map(store => ({
         ...store,
         products: store.products.filter(product =>
-            product.name.toLowerCase().includes(searchQuery.toLowerCase())
+            product.name.toLowerCase().includes(searchQuery.toLowerCase()) &&
+            (selectedConditions.length === 0 || selectedConditions.includes(product.itemCondition))
         )
     }))
         .filter(store => store.products.length > 0); // Only include categories with matching products
 
-
     useEffect(() => {
         handleFetchStore();
     }, []);
+
     useEffect(() => {
         handleFetchStoreCategories();
         handleFetchStoreProducts();
@@ -158,119 +188,102 @@ const SellerStorePage = ({ params }: Props) => {
         };
     }, [storeCategories]);
 
-    const handleCategoryClick = (categoryId: string) => {
-        const element = categoryRefs.current[categoryId];
-        if (element) {
-            window.scrollTo({
-                top: element.offsetTop - 100, // Adjust the offset value as needed
-                behavior: 'smooth'
-            });
-        }
-    };
-
-    const mobileHandleCategoryClick = (categoryId: string) => {
-        const element = categoryRefs.current[categoryId];
-        if (element) {
-            window.scrollTo({
-                top: element.offsetTop - 900, // Adjust the offset value as needed
-                behavior: 'smooth'
-            });
-        }
-    };
-
     return (
         <motion.div
             initial="closed"
             animate={isFilterOpen ? "opened" : "closed"}>
-            {isFilterOpen && <MobileStoreSettingsBar setIsFilterOpen={setIsFilterOpen} storeCategories={storeCategories} activeCategory={activeCategory} onCategoryClick={mobileHandleCategoryClick} />}
+            {isFilterOpen && <MobileStoreSettingsBar setIsFilterOpen={setIsFilterOpen} storeCategories={storeCategories} activeCategory={activeCategory} onCategoryClick={mobileHandleCategoryClick} selectedConditions={selectedConditions}
+                handleConditionChange={handleConditionChange} />}
 
             <div className={styles.main}>
-            {onDesktop && (
-                <SellerStoreRating store={store} isFetchingStore={isFetchingStore} />
-            )}
-            <div className={styles.tab}>
-                {activeTab === TabIndex.Shop && (
-                    <div className={styles.lhs}>
-                        <StoreCategoriesSettingsBar
-                            storeCategories={storeCategories}
-                            isFetchingStoreCategories={isFetchingStoreCategories}
-                            activeCategory={activeCategory}
-                            onCategoryClick={handleCategoryClick}
-                        />
-                    </div>
+                {onDesktop && (
+                    <SellerStoreRating store={store} isFetchingStore={isFetchingStore} />
                 )}
-                <div className={styles.rhs}>
-                    {!storeCategories && isFetchingStoreCategories ? (
-                        <StoreInputSkeletonLoader />
-                    ) : (
-                        activeTab === TabIndex.Shop && (
-                            <div className={styles.search}>
-                                <SearchIcon />
-                                <input
-                                    type="text"
-                                    placeholder="Search items in shop"
-                                    value={searchQuery}
-                                    onChange={(e) => setSearchQuery(e.target.value)}
-                                />
-                            </div>
-                        )
-                    )}
-                    {!storeCategories && isFetchingStoreCategories ? (
-                        <StoreTabsSkeletonLoader />
-                    ) : (
-                        <div className={styles.tabSection}>
-                            <span
-                                onClick={() => setActiveTab(TabIndex.Shop)}
-                                className={activeTab === TabIndex.Shop ? styles.active : ""}
-                            >
-                                Shop
-                            </span>
-                            <span
-                                onClick={() => setActiveTab(TabIndex.About)}
-                                className={activeTab === TabIndex.About ? styles.active : ""}
-                            >
-                                About
-                            </span>
-                            <span
-                                onClick={() => setActiveTab(TabIndex.Feedback)}
-                                className={activeTab === TabIndex.Feedback ? styles.active : ""}
-                            >
-                                Feedback
-                            </span>
+                <div className={styles.tab}>
+                    {activeTab === TabIndex.Shop && (
+                        <div className={styles.lhs}>
+                            <StoreCategoriesSettingsBar
+                                storeCategories={storeCategories}
+                                isFetchingStoreCategories={isFetchingStoreCategories}
+                                activeCategory={activeCategory}
+                                onCategoryClick={handleCategoryClick}
+                                selectedConditions={selectedConditions}
+                                handleConditionChange={handleConditionChange}
+                            />
                         </div>
                     )}
-                    {onMobile && (
-                        <SellerStoreRating
-                            store={store}
-                            isFetchingStore={isFetchingStore}
-                        />
-                    )}
-                    {onMobile && (
-                        <div className="w-full flex items-center gap-4 justify-end mb-2 ml-auto">
-                            {/* <span className="flex items-center gap-2 cursor-pointer">
+                    <div className={styles.rhs}>
+                        {!storeCategories && isFetchingStoreCategories ? (
+                            <StoreInputSkeletonLoader />
+                        ) : (
+                            activeTab === TabIndex.Shop && (
+                                <div className={styles.search}>
+                                    <SearchIcon />
+                                    <input
+                                        type="text"
+                                        placeholder="Search items in shop"
+                                        value={searchQuery}
+                                        onChange={(e) => setSearchQuery(e.target.value)}
+                                    />
+                                </div>
+                            )
+                        )}
+                        {!storeCategories && isFetchingStoreCategories ? (
+                            <StoreTabsSkeletonLoader />
+                        ) : (
+                            <div className={styles.tabSection}>
+                                <span
+                                    onClick={() => setActiveTab(TabIndex.Shop)}
+                                    className={activeTab === TabIndex.Shop ? styles.active : ""}
+                                >
+                                    Shop
+                                </span>
+                                <span
+                                    onClick={() => setActiveTab(TabIndex.About)}
+                                    className={activeTab === TabIndex.About ? styles.active : ""}
+                                >
+                                    About
+                                </span>
+                                <span
+                                    onClick={() => setActiveTab(TabIndex.Feedback)}
+                                    className={activeTab === TabIndex.Feedback ? styles.active : ""}
+                                >
+                                    Feedback
+                                </span>
+                            </div>
+                        )}
+                        {onMobile && (
+                            <SellerStoreRating
+                                store={store}
+                                isFetchingStore={isFetchingStore}
+                            />
+                        )}
+                        {onMobile && (
+                            <div className="w-full flex items-center gap-4 justify-end mb-2 ml-auto">
+                                {/* <span className="flex items-center gap-2 cursor-pointer">
                                 <SortIcon /> Sort
                             </span> */}
                                 <span onClick={() => setIsFilterOpen(true)} className="flex items-center gap-2 cursor-pointer">
-                                <FilterIcon /> Filter{" "}
-                            </span>
-                        </div>
-                    )}
-                    {activeTab === TabIndex.Shop && (
-                        <SellerShop
-                            filteredCategories={filteredCategories}
-                            storeProducts={storeProducts}
-                            isFetchingProducts={isFetchingProducts}
-                            handleFetchStoreCategories={handleFetchStoreCategories}
-                            categoryRefs={categoryRefs}
-                        />
-                    )}
-                    {activeTab === TabIndex.About && <AboutSeller store={store} isFetchingStore={isFetchingStore} />}
-                    {activeTab === TabIndex.Feedback && <FeedBack storeId={storeId} />}
+                                    <FilterIcon /> Filter{" "}
+                                </span>
+                            </div>
+                        )}
+                        {activeTab === TabIndex.Shop && (
+                            <SellerShop
+                                filteredCategories={filteredCategories}
+                                storeProducts={storeProducts}
+                                isFetchingProducts={isFetchingProducts}
+                                handleFetchStoreCategories={handleFetchStoreCategories}
+                                categoryRefs={categoryRefs}
+                            />
+                        )}
+                        {activeTab === TabIndex.About && <AboutSeller store={store} isFetchingStore={isFetchingStore} />}
+                        {activeTab === TabIndex.Feedback && <FeedBack storeId={storeId} />}
+                    </div>
                 </div>
             </div>
-        </div>      
-            </motion.div>
-      
+        </motion.div>
+
     );
 };
 

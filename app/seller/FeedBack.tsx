@@ -49,7 +49,14 @@ const FeedBack = (props: Props) => {
                                         <div className="flex flex-col gap-3">
                                             <div className="flex items-center gap-10">
                                                 <p className='whitespace-nowrap'>{review.user.fullname}</p>
-                                                <p>date</p>
+                                                {/* <p>date</p> */}
+                                            </div>
+                                            <div className="flex gap-1">
+                                                {[...Array(5)].map((_, starIndex) => (
+                                                    <span key={starIndex} style={{ color: starIndex < review.rating ? '#FF9800' : 'gray' }}>
+                                                        ★
+                                                    </span>
+                                                ))}
                                             </div>
                                             <p className='font-medium max-w-600px] text-start'>{review.review}</p>
                                         </div>

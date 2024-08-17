@@ -23,8 +23,8 @@ type Props = {
 
 const SingleCategoryPage = ({ params }: Props) => {
     const windowRes = useResponsiveness();
-    const fetchCategory = useFetchSingleCategory() 
-     const fetchCategories = useFetchCategories()
+    const fetchCategory = useFetchSingleCategory()
+    const fetchCategories = useFetchCategories()
     const searchParams = useSearchParams()
     const isMobile = windowRes.width && windowRes.width < 768;
     const onMobile = typeof isMobile == 'boolean' && isMobile;
@@ -46,6 +46,16 @@ const SingleCategoryPage = ({ params }: Props) => {
     const [currentPage, setCurrentPage] = useState<number>(() => parseInt(searchParams.get("page") ?? "1")); // Track current page
     const limit = 6; // Number of categories per page
     const totalPages = totalCategories;
+    const [selectedConditions, setSelectedConditions] = useState<string[]>([]);
+
+    const handleConditionChange = (condition: string) => {
+        console.log({ condition });
+        setSelectedConditions(prevConditions =>
+            prevConditions.includes(condition)
+                ? prevConditions.filter(productCondition => productCondition !== condition)
+                : [...prevConditions, condition]
+        );
+    };
 
     const goToPage = (page: number) => {
         if (page >= 1 && page <= totalPages) {
@@ -72,13 +82,6 @@ const SingleCategoryPage = ({ params }: Props) => {
             });
     }
 
-    // const handleCategoryClick = (categoryId: string) => {
-    //     const element = categoryRefs.current[categoryId];
-    //     if (element) {
-    //         element.scrollIntoView({ behavior: 'smooth' });
-    //     }
-    // };
-
     const handleCategoryClick = (categoryId: string) => {
         const element = categoryRefs.current[categoryId];
         if (element) {
@@ -101,7 +104,8 @@ const SingleCategoryPage = ({ params }: Props) => {
 
     // Filter products by name
     const filteredProducts = category?.products.filter(product =>
-        product.name.toLowerCase().includes(searchQuery.toLowerCase())
+        product.name.toLowerCase().includes(searchQuery.toLowerCase()) &&
+        (selectedConditions.length === 0 || selectedConditions.includes(product.itemCondition as string))
     );
 
     async function handleFetchAllCategories() {
@@ -149,7 +153,8 @@ const SingleCategoryPage = ({ params }: Props) => {
             initial="closed"
             animate={isFilterOpen ? "opened" : "closed"}
         >
-            {isFilterOpen && <MobileSettingsBar setIsFilterOpen={setIsFilterOpen} retrievedCategories={retrievedCategories} onCategoryClick={mobileHandleCategoryClick} />}
+            {isFilterOpen && <MobileSettingsBar setIsFilterOpen={setIsFilterOpen} retrievedCategories={retrievedCategories} onCategoryClick={mobileHandleCategoryClick}
+                selectedConditions={selectedConditions} handleConditionChange={handleConditionChange} />}
 
             {!category && isFetchingCategory ? <CategoriesSkeletonLoader /> :
                 <div className={styles.main}>
@@ -171,7 +176,8 @@ const SingleCategoryPage = ({ params }: Props) => {
                     <div className={styles.contents}>
                         {onDesktop &&
                             <div className={styles.lhs} style={{ position: 'relative' }}>
-                                <CategoriesSettingsBar retrievedCategories={retrievedCategories} onCategoryClick={handleCategoryClick} />
+                                <CategoriesSettingsBar retrievedCategories={retrievedCategories} onCategoryClick={handleCategoryClick} selectedConditions={selectedConditions}
+                                    handleConditionChange={handleConditionChange} />
                             </div>}
 
                         <div className={styles.rhs}>
@@ -180,7 +186,7 @@ const SingleCategoryPage = ({ params }: Props) => {
                                     <h3>{category?.name}</h3>
                                     <div className={styles.cards}>
                                         {filteredProducts?.length === 0 ? (
-                                            <p className="h-[40vh] text-center flex flex-col items-center justify-center w-screen md:w-[50vw] text-gray-400">No products found</p>
+                                            <p className="h-[40vh] text-center flex flex-col items-center justify-center w-screen md:w-[50vw] text-gray-400">No result found</p>
                                         ) : (
                                             filteredProducts?.map((product, index) => (
                                                 <Link href={`/products/${product.id}`} className={styles.card} key={product.id} >
@@ -197,18 +203,18 @@ const SingleCategoryPage = ({ params }: Props) => {
                                 </div>
                             </div>
                             {retrievedCategories && retrievedCategories?.length > 0 && (
-                              <div className={styles.pagination}>
-                                  <button onClick={() => goToPage(currentPage - 1)} disabled={currentPage === 1} style={currentPage === 1 ? { cursor: 'not-allowed', opacity: '0.5' } : { cursor: 'pointer' }}><LeftArrowIcon /></button>
-                                  <div className={styles.value}>
-                                      {Array.from({ length: totalPages }, (_, index) => (
-                                          <span key={index + 1} onClick={() => goToPage(index + 1)}
-                                              style={currentPage === index + 1 ? { backgroundColor: '#2c7865', color: '#fff' } : {}}
-                                          >{index + 1}</span>
-                                      ))}
-                                  </div>
-                                  <button onClick={() => goToPage(currentPage + 1)} disabled={currentPage >= totalPages} style={currentPage >= totalPages ? { cursor: 'not-allowed', opacity: '0.5' } : { cursor: 'pointer' }}><RightArrowIcon /></button>
-                              </div>
-                          )}
+                                <div className={styles.pagination}>
+                                    <button onClick={() => goToPage(currentPage - 1)} disabled={currentPage === 1} style={currentPage === 1 ? { cursor: 'not-allowed', opacity: '0.5' } : { cursor: 'pointer' }}><LeftArrowIcon /></button>
+                                    <div className={styles.value}>
+                                        {Array.from({ length: totalPages }, (_, index) => (
+                                            <span key={index + 1} onClick={() => goToPage(index + 1)}
+                                                style={currentPage === index + 1 ? { backgroundColor: '#2c7865', color: '#fff' } : {}}
+                                            >{index + 1}</span>
+                                        ))}
+                                    </div>
+                                    <button onClick={() => goToPage(currentPage + 1)} disabled={currentPage >= totalPages} style={currentPage >= totalPages ? { cursor: 'not-allowed', opacity: '0.5' } : { cursor: 'pointer' }}><RightArrowIcon /></button>
+                                </div>
+                            )}
                         </div>
 
 

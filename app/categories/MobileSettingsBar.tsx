@@ -13,6 +13,8 @@ type Props = {
     retrievedCategories?: CategoriesResponse[];
     onCategoryClick: (categoryId: string) => void;
     setIsFilterOpen: React.Dispatch<React.SetStateAction<boolean>>
+    selectedConditions: string[]
+    handleConditionChange: (condition: string) => void
 }
 
 const MobileSettingsBar = ({
@@ -20,7 +22,9 @@ const MobileSettingsBar = ({
     activeCategory,
     retrievedCategories,
     onCategoryClick,
-    setIsFilterOpen
+    setIsFilterOpen,
+    selectedConditions,
+    handleConditionChange
 }: Props) => {
     const pathname = usePathname()
     return (
@@ -70,12 +74,35 @@ const MobileSettingsBar = ({
             <div className={styles.condition}>
                 <h3>Condition</h3>
                 <div className={styles.field}>
-                    <input type="checkbox" name="" id="" />
-                    <label htmlFor="">New (12)</label>
+                    <input
+                        type="checkbox"
+                        id="new"
+                        checked={selectedConditions && selectedConditions.includes('NEW')}
+                        onChange={() => handleConditionChange('NEW')}
+                    // onClick={() => setIsFilterOpen(false)}
+                    />
+                    <label htmlFor="new">New</label>
                 </div>
                 <div className={styles.field}>
-                    <input type="checkbox" name="" id="" />
-                    <label htmlFor="">Used (12)</label>
+                    <input
+                        type="checkbox"
+                        id="used"
+                        checked={selectedConditions && selectedConditions.includes('USED')}
+                        onChange={() => handleConditionChange('USED')}
+                    // onClick={() => setIsFilterOpen(false)}
+
+                    />
+                    <label htmlFor="used">Used</label>
+                </div>
+                <div className={styles.field}>
+                    <input
+                        type="checkbox"
+                        id="refurbished"
+                        checked={selectedConditions && selectedConditions.includes('REFURBISHED')}
+                        onChange={() => handleConditionChange('REFURBISHED')}
+                    // onClick={() => setIsFilterOpen(false)}
+                    />
+                    <label htmlFor="refurbished">Refurbished</label>
                 </div>
             </div>
             <div className={styles.priceFilter}>
