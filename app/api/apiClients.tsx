@@ -628,6 +628,17 @@ export function useFetchBankDetail() {
 
     return fetchBankDetail;
 }
+export function useFetchPurchaseHistory() {
+    async function fetchPurchaseHistory() {
+        // Fire the request
+        const response = await API.get(ApiRoutes.FetchPurchaseHistory);
+
+        // Return the response
+        return response;
+    }
+
+    return fetchPurchaseHistory;
+}
 export function useAddReview() {
     async function addReview(id: string, data: ReviewRequest) {
         // Fire the request
