@@ -24,7 +24,7 @@ const SingleProductPage = ({ params }: Props) => {
     const productId = params.productId;
     const [product, setProduct] = useState<ProductResponse>();
     const [isFetchingProduct, setIsFetchingProduct] = useState<boolean>(true);
-    console.log({ productId })
+    // console.log({ productId })
     const addProductToFavorite = useAddProductsToFavorite();
     const removeProductFromFavorite = useRemoveProductFromFavorite()
     const { accountStatus, fetchAccountStatus } = useAccountStatus();

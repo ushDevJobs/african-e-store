@@ -26,7 +26,7 @@ const RecentlyViewed = (props: Props) => {
       .then((response) => {
         // console.log("Response: ", response.data.reviewed);
         setProducts(response.data.data);
-        console.log(response.data);
+        // console.log(response.data);
       })
       .catch((error) => {
         const errorMessage = createCustomErrorMessages(error.response?.data);

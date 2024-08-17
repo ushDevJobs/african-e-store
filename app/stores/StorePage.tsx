@@ -31,7 +31,7 @@ const StorePage = (props: Props) => {
 
         await fetchStores()
             .then((response) => {
-                console.log("Response: ", response.data.data);
+                // console.log("Response: ", response.data.data);
 
                 setStores(response.data.data);
             })

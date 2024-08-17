@@ -72,7 +72,7 @@ const EditProductModal = ({
       let newIndex = [...imagesIndex];
       newIndex[i] = { index: index, name: selectedFile.name };
       setImagesIndex(newIndex);
-      console.log({ check, index, newIndex });
+    //   console.log({ check, index, newIndex });
     } else {
       setImagesIndex((prev) => [
         ...prev,

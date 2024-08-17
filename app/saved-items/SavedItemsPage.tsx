@@ -30,7 +30,7 @@ const SavedItemsPage = (props: Props) => {
 
         await fetchSavedProducts()
             .then((response) => {
-                console.log("Response: ", response.data.data);
+                // console.log("Response: ", response.data.data);
                 setSavedProducts(response.data.data);
             })
             .catch((error) => {

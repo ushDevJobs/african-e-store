@@ -35,7 +35,7 @@ const PurchaseHistoryPage = (props: Props) => {
         }
         await fetchPurchaseHistory()
             .then((response) => {
-                console.log("Response: ", response.data.data);
+                // console.log("Response: ", response.data.data);
                 setHistories(response.data.data);
             })
             .catch((error) => {
