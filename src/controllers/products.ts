@@ -289,7 +289,6 @@ export const getProductById = async (req: Request, res: Response) => {
     const data = req.isAuthenticated()
       ? {
           userId: user.id,
-          ipAddress: req.ip,
         }
       : {
           ipAddress: req.ip,
