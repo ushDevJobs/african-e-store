@@ -45,23 +45,30 @@ const FeedBack = ({ storeId }: Props) => {
                             <h2 className='text-2xl font-medium mb-8 text-black'>All Feedbacks ({reviews?.length})</h2>
                             <div className="flex flex-col gap-10 overflow-y-auto max-h-[800px]">
                                 {reviews?.map((review, index) => (
-                                    <div className="flex justify-between max-w-full md:max-w-[800px] text-[#828282]" key={index}>
-                                        <div className="flex flex-col gap-3">
-                                            <div className="flex items-center gap-10">
-                                                <p className='whitespace-nowrap'>{review.user.fullname}</p>
-                                                <p>date</p>
+                                        <div className="flex justify-between max-w-full md:max-w-[800px] text-[#828282]" key={index}>
+                                            <div className="flex flex-col">
+                                                <div className="flex items-center gap-10">
+                                                    <p className='whitespace-nowrap text-black text-base font-semibold'>{review.user.fullname}</p>
+                                                    {/* <p>date</p> */}
+                                                </div>
+                                                <div className="flex gap-1">
+                                                    {[...Array(5)].map((_, starIndex) => (
+                                                        <span key={starIndex} style={{ color: starIndex < review.rating ? '#FF9800' : 'gray' }}>
+                                                            ★
+                                                        </span>
+                                                    ))}
+                                                </div>
+                                                <p className='font-medium max-w-[600px] text-sm text-start'>{review.review}</p>
                                             </div>
-                                            <p className='font-medium max-w-600px] text-start'>{review.review}</p>
+                                            <span className='text-sm font-medium'>Verified Purchase</span>
                                         </div>
-                                        <span className='text-sm font-medium'>Verified Purchase</span>
-                                    </div>
                                 ))}
                             </div>
                         </>
                     )
                 }
                 {!reviews && isFetchingReviews && (
-                  <FullPageLoader/>
+                    <FullPageLoader />
                 )}
 
                 {reviews?.length == 0 && !isFetchingReviews && (
