@@ -60,3 +60,36 @@ export interface Store {
   id: string;
   image: string;
 }
+
+export interface PurchaseHistoryResponse {
+  id: string;
+  user: {
+    id: string;
+    address: {
+      city: string;
+      country: string;
+      street: string;
+      postCode: number;
+      houseNumber: null;
+    };
+  };
+  orderDetails: PurchaseOrderDetails[];
+}
+
+export interface PurchaseOrderDetails {
+  id: string;
+  orderId: string;
+  amount: number;
+  shippingFee: number;
+  status: StatusEnums;
+  product: {
+    name: string;
+    id: string;
+    coverImage:string;
+  };
+  store: {
+    name: string;
+    id: string;
+    image: string | null;
+  };
+}
