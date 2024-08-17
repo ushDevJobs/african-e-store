@@ -2,8 +2,6 @@
 import React, { useEffect, useState } from "react";
 import styles from "./SingleCategory.module.scss";
 import {
-    FavoriteIcon,
-    GreenStarIcon,
     RatingIcon,
     UserIcon,
 } from "@/app/components/SVGs/SVGicons";
@@ -22,7 +20,7 @@ const SingleCategoryReviews = ({ product }: Props) => {
     const isMobile = windowRes.width && windowRes.width < 768;
     const onMobile = typeof isMobile == "boolean" && isMobile;
     const onDesktop = typeof isMobile == "boolean" && !isMobile;
-    const { accountStatus, fetchAccountStatus } = useAccountStatus();
+    const { accountStatus } = useAccountStatus();
     // Calculate total count and weighted sum for average
     // const totalCount = data.reduce((sum, item) => sum + item.count, 0);
     // const weightedSum = data.reduce((sum, item) => sum + (item.star * item.count), 0);
@@ -164,112 +162,43 @@ const SingleCategoryReviews = ({ product }: Props) => {
 
                             <div className={styles.reviewContainer}>
                                 {product?.productRatings && product?.productRatings.length > 0 ? (
-                                    product?.productRatings.map((prating, i) => (
+                                    product?.productRatings.map((productRating, i) => (
                                         <div className={styles.review} key={i}>
-                                            <span className="flex items-center">
+                                            {/* <span className="flex items-center">
                                                 {Array.from(
-                                                    { length: prating.rating },
+                                                    { length: productRating.rating },
                                                     (_, i) => i + 1
                                                 ).map((index) => (
                                                     <span key={index} className={index != 5 ? "mr-1" : ""}>
                                                         <RatingIcon colored={true} />
                                                     </span>
                                                 ))}
-                                                {5 - prating.rating > 0 &&
+                                                {5 - productRating.rating > 0 &&
                                                     Array.from(
-                                                        { length: 5 - prating.rating },
+                                                        { length: 5 - productRating.rating },
                                                         (_, i) => i + 1
                                                     ).map((index) => (
                                                         <span key={index}>
                                                             <RatingIcon />
                                                         </span>
                                                     ))}
-                                            </span>
-                                            <p className="text-base text-[#4B4B4B]">{prating.review}</p>
+                                            </span> */}
+                                            <div className="flex gap-1">
+                                                {[...Array(5)].map((_, starIndex) => (
+                                                    <span key={starIndex} style={{ color: starIndex < productRating.rating ? '#FF9800' : 'gray', fontSize: '20px' }}>
+                                                        ★
+                                                    </span>
+                                                ))}
+                                            </div>
+                                            <p className="text-base text-[#4B4B4B]">{productRating.review}</p>
                                             <p className="text-xs text-[#828282]">
-                                                {new Date(prating.createdAt).toLocaleDateString()} by {prating.user.fullname}
+                                                {new Date(productRating.createdAt).toLocaleDateString()} by {productRating.user.fullname}
                                             </p>
                                         </div>
                                     ))
                                 ) : (
                                     <p className="text-center text-base h-20 flex flex-col justify-center text-gray-500">No review</p>
                                 )}
-                                {/* <div className={styles.review}>
-              <span className="flex items-center">
-                {[1, 2, 3, 4].map((_, index) => (
-                  <span key={index} className={index != 5 ? "mr-1" : ""}>
-                    <RatingIcon colored={true} />
-                  </span>
-                ))}
-                {[1].map((_, index) => (
-                  <span key={index}>
-                    <RatingIcon />
-                  </span>
-                ))}
-              </span>
-              <p className="text-base text-[#4B4B4B]">
-                Good Phone, nice screen resolution, fast charging. All I ever
-                wanted.
-              </p>
-              <p className="text-sm text-[#828282]">25-09-2023 by Dave</p>
-            </div>
-            <div className={styles.review}>
-              <span className="flex items-center">
-                {[1, 2, 3, 4].map((_, index) => (
-                  <span key={index} className={index != 5 ? "mr-1" : ""}>
-                    <RatingIcon colored={true} />
-                  </span>
-                ))}
-                {[1].map((_, index) => (
-                  <span key={index}>
-                    <RatingIcon />
-                  </span>
-                ))}
-              </span>
-              <p className="text-base text-[#4B4B4B]">
-                Good Phone, nice screen resolution, fast charging. All I ever
-                wanted.
-              </p>
-              <p className="text-sm text-[#828282]">25-09-2023 by Dave</p>
-            </div>
-            <div className={styles.review}>
-              <span className="flex items-center">
-                {[1, 2, 3, 4].map((_, index) => (
-                  <span key={index} className={index != 5 ? "mr-1" : ""}>
-                    <RatingIcon colored={true} />
-                  </span>
-                ))}
-                {[1].map((_, index) => (
-                  <span key={index}>
-                    <RatingIcon />
-                  </span>
-                ))}
-              </span>
-              <p className="text-base text-[#4B4B4B]">
-                Good Phone, nice screen resolution, fast charging. All I ever
-                wanted.
-              </p>
-              <p className="text-sm text-[#828282]">25-09-2023 by Dave</p>
-            </div>
-            <div className={styles.review}>
-              <span className="flex items-center">
-                {[1, 2, 3, 4].map((_, index) => (
-                  <span key={index} className={index != 5 ? "mr-1" : ""}>
-                    <RatingIcon colored={true} />
-                  </span>
-                ))}
-                {[1].map((_, index) => (
-                  <span key={index}>
-                    <RatingIcon />
-                  </span>
-                ))}
-              </span>
-              <p className="text-base text-[#4B4B4B]">
-                Good Phone, nice screen resolution, fast charging. All I ever
-                wanted.
-              </p>
-              <p className="text-sm text-[#828282]">25-09-2023 by Dave</p>
-            </div> */}
                             </div>
                         </div>
                         <div className={styles.rhs}></div>
