@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import ModalWrapper from './ModalWrapper';
-import { useFetchBankDetail, useUpdateBankDetail, useUpdateUserAddress } from '@/app/api/apiClients';
-import { BankDetailRequest, BankDetailResponse } from '../models/IBankDetails';
+import { useUpdateUserAddress } from '@/app/api/apiClients';
 import { toast } from 'sonner';
 import { createCustomErrorMessages } from '../constants/catchError';
 import { TimesIcon } from '../SVGs/SVGicons';

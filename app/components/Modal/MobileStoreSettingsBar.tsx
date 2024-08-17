@@ -47,20 +47,7 @@ const MobileStoreSettingsBar = ({
                                 No category available</li>
                         }
                     </ul>}
-                {/* {retrievedCategories &&
-                    <ul>
-                        {retrievedCategories.map((category) => (
-                            <Link href={`/categories/${category.id}?${category.name}`} key={category.id} onClick={() => setIsFilterOpen(false)}>
-                                <li>
-                                    {category.name}
-                                </li>
-                            </Link>
-                        ))}
-                        {categories && categories.length === 0 &&
-                            <li className='text-center flex flex-col items-center justify-center mt-4 text-gray-400 text-base'>
-                                No category available</li>
-                        }
-                    </ul>} */}
+        
             </div>
 
             <div className={styles.condition}>
