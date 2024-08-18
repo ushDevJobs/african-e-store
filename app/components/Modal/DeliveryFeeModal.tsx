@@ -103,7 +103,7 @@ const DeliveryFeeModal = ({ visibility, setVisibility }: Props) => {
                         <>
                             <input type="text"
                                 placeholder='Enter amount here '
-                                value={shippingFee}
+                                value={shippingFee ? shippingFee : fee?.shippingFee}
                                 onChange={(e) => setShippingFee(e.target.value)}
                                 className='rounded-lg border border-[#ACACAC] text-base placeholder:text-[#828282] p-4 outline-none'
                             />

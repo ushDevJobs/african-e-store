@@ -97,7 +97,7 @@ const BankDetailModal = ({ visibility, setVisibility }: Props) => {
                                     type="text"
                                     name='accountNumber'
                                     placeholder='Enter account number'
-                                    value={formValues.accountNumber ? formValues.accountNumber : ''}
+                                    value={formValues.accountNumber ? formValues.accountNumber : bankDetail?.bankDetails.accountNumber}
                                     onChange={handleChange}
                                     className='rounded-lg border w-full border-[#ACACAC] text-base placeholder:text-[#828282] p-4 outline-none'
                                 />
@@ -108,7 +108,7 @@ const BankDetailModal = ({ visibility, setVisibility }: Props) => {
                                     type="text"
                                     name='bank'
                                     placeholder='Enter bank'
-                                    value={formValues.bank ? formValues.bank : ''}
+                                    value={formValues.bank ? formValues.bank : bankDetail?.bankDetails.bank}
                                     onChange={handleChange}
                                     className='rounded-lg border w-full border-[#ACACAC] text-base placeholder:text-[#828282] p-4 outline-none'
                                 />

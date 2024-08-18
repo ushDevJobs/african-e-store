@@ -79,7 +79,7 @@ const EditAddressModal = ({ visibility, setVisibility }: Props) => {
                                     type="text"
                                     name='city'
                                     placeholder='Enter your city'
-                                    value={formValues.city ? formValues.city : ''}
+                                    value={formValues.city ? formValues.city : userAddress?.city}
                                     onChange={handleChange}
                                     className='rounded-lg border w-full border-[#ACACAC] text-base placeholder:text-[#828282] p-4 outline-none'
                                 />
@@ -90,7 +90,7 @@ const EditAddressModal = ({ visibility, setVisibility }: Props) => {
                                     type="text"
                                     name='postCode'
                                     placeholder='Enter postal/zip code'
-                                    value={formValues.postCode ? formValues.postCode : ''}
+                                    value={formValues.postCode ? formValues.postCode : userAddress?.postCode}
                                     onChange={handleChange}
                                     className='rounded-lg border w-full border-[#ACACAC] text-base placeholder:text-[#828282] p-4 outline-none'
                                 />
@@ -101,7 +101,7 @@ const EditAddressModal = ({ visibility, setVisibility }: Props) => {
                                     type="text"
                                     name='street'
                                     placeholder='Enter your home/delivery address'
-                                    value={formValues.street ? formValues.street : ''}
+                                    value={formValues.street ? formValues.street : userAddress?.street}
                                     onChange={handleChange}
                                     className='rounded-lg border w-full border-[#ACACAC] text-base placeholder:text-[#828282] p-4 outline-none'
                                 />
