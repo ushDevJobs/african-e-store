@@ -50,8 +50,8 @@ const BankDetailModal = ({ visibility, setVisibility }: Props) => {
 
         await fetchBankDetail()
             .then((response) => {
-                // console.log(response);
-                // setBankDetail(response.data.data);
+                console.log(response);
+                setBankDetail(response.data.data);
                 // Initialize form values with fetched data
                 setFormValues({
                     accountNumber: response.data.data.bankDetails.accountNumber,
