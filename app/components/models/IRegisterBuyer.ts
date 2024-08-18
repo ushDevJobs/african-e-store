@@ -5,8 +5,12 @@ export interface RegisterBuyerRequest {
   confirmPassword: string;
   telephone: string;
   country: string;
-  address: string;
+  //   address: string;
+  city: string;
+  postCode: number;
+  street: string;
 }
+
 export interface RegisterBuyerResponse {
   status: boolean;
   message: string;

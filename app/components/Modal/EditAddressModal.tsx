@@ -21,8 +21,6 @@ const EditAddressModal = ({ visibility, setVisibility }: Props) => {
 
     const { userAddress, fetchUserAddress } = useUserAddress();
 
-    const [isFetchingUserAddress, setIsFetchingUserAddress] = useState<boolean>(true);
-
     function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
         const { name, value } = e.target; 
         // Convert postCode to a number if the field being changed is postCode

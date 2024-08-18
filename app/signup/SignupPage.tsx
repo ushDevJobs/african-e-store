@@ -24,7 +24,10 @@ const SignupPage = (props: Props) => {
     const [fullNameErrorMsg, setFullNameErrorMsg] = useState<string | boolean>(false);
     const [emailAddressErrorMsg, setEmailAddressErrorMsg] = useState<string | boolean>(false);
     const [phoneErrorMsg, setPhoneErrorMsg] = useState<string | boolean>(false);
-    const [addressErrorMsg, setAddressErrorMsg] = useState<string | boolean>(false);
+    // const [addressErrorMsg, setAddressErrorMsg] = useState<string | boolean>(false);
+    const [postCodeErrorMsg, setPostCodeErrorMsg] = useState<string | boolean>(false);
+    const [cityErrorMsg, setCityErrorMsg] = useState<string | boolean>(false);
+    const [streetErrorMsg, setStreetErrorMsg] = useState<string | boolean>(false);
     const [passwordErrorMsg, setPasswordErrorMsg] = useState<string | boolean>(false);
     const [countryErrorMsg, setCountryErrorMsg] = useState<string | boolean>(false);
     const [cofirmPasswordErrorMsg, setCofirmPasswordErrorMsg] = useState<string | boolean>(false);
@@ -37,10 +40,19 @@ const SignupPage = (props: Props) => {
     ) {
         const { name, value } = e.target;
 
+        // Check if the name is 'postCode' and the value is not a number
+        if (name === 'postCode' && isNaN(Number(value))) {
+            setPostCodeErrorMsg("Please enter a valid postal code");
+            return;
+        }
+
+        setPostCodeErrorMsg("");
+
+        // Convert postCode to a number if the field being changed is postCode
         setFormValues({
-            ...(formValues as RegisterBuyerRequest),
-            [name]: value,
-        });
+            ...formValues,
+            [name]: name === 'postCode' ? Number(value) : value,
+        } as RegisterBuyerRequest);
 
         // If setState is not undefined...
         if (setState) {
@@ -65,7 +77,10 @@ const SignupPage = (props: Props) => {
             formValues.password.length >= 8 &&
             formValues.confirmPassword &&
             formValues.telephone &&
-            formValues.address &&
+            // formValues.address &&
+            formValues.postCode &&
+            formValues.city &&
+            formValues.street &&
             checkboxChecked
         ) {
             return true;
@@ -92,11 +107,26 @@ const SignupPage = (props: Props) => {
             } else {
                 setPhoneErrorMsg(false);
             }
-            if (!formValues?.address) {
-                setAddressErrorMsg(true);
+            if (!formValues?.postCode) {
+                setPostCodeErrorMsg(true);
             } else {
-                setAddressErrorMsg(false);
+                setPostCodeErrorMsg(false);
             }
+            if (!formValues?.city) {
+                setCityErrorMsg(true);
+            } else {
+                setCityErrorMsg(false);
+            }
+            if (!formValues?.street) {
+                setStreetErrorMsg(true);
+            } else {
+                setStreetErrorMsg(false);
+            }
+            // if (!formValues?.address) {
+            //     setAddressErrorMsg(true);
+            // } else {
+            //     setAddressErrorMsg(false);
+            // }
             if (!formValues?.password) {
                 setPasswordErrorMsg('Please enter password');
             } else if (formValues.password.length < 8) {
@@ -268,18 +298,9 @@ const SignupPage = (props: Props) => {
                             </span>
                         )}
                     </div>
-                    {/* <div className={styles.formField}>
-                        <label htmlFor=""><span>*</span>Country/region</label>
-                        <select name="" id="" >
-                            <option value="Nigeria">Nigeria </option>
-                        </select>
-                    </div> */}
                     <div className={styles.formField}>
                         <label htmlFor="telephone"><span>*</span>Tel</label>
                         <div className={styles.dial}>
-                            {/* <select name="" id="">
-                                <option value="+234">+234</option>
-                            </select> */}
                             <input
                                 type="text"
                                 name="telephone"
@@ -297,7 +318,57 @@ const SignupPage = (props: Props) => {
                     </div>
                 </div>
 
+                <div className={styles.rowForm}>
+                    <div className={styles.formField}>
+                    <label htmlFor="postCode"><span>*</span>Postal Code</label>
+                    <input
+                        type="postCode"
+                        name="postCode"
+                        id="postCode"
+                        placeholder='Please fill in postal code'
+                        value={formValues?.postCode}
+                        onChange={(e) => onformValueChange(e, setPostCodeErrorMsg)}
+                    />
+                    {postCodeErrorMsg && (
+                        <span className={styles.errorMsg}>
+                                Please enter postal code
+                        </span>
+                    )}
+                </div>
+                    <div className={styles.formField}>
+                    <label htmlFor="city"><span>*</span>City</label>
+                    <input
+                        type="city"
+                        name="city"
+                        id="city"
+                        placeholder='Please fill in city'
+                        value={formValues?.city}
+                        onChange={(e) => onformValueChange(e, setCityErrorMsg)}
+                    />
+                    {cityErrorMsg && (
+                        <span className={styles.errorMsg}>
+                            Please enter your city
+                        </span>
+                    )}
+                </div>
+                </div>
                 <div className={styles.formField}>
+                    <label htmlFor="street"><span>*</span>Street</label>
+                    <input
+                        type="street"
+                        name="street"
+                        id="street"
+                        placeholder='Please fill in street'
+                        value={formValues?.street}
+                        onChange={(e) => onformValueChange(e, setStreetErrorMsg)}
+                    />
+                    {streetErrorMsg && (
+                        <span className={styles.errorMsg}>
+                            Please enter your street
+                        </span>
+                    )}
+                </div>
+                {/* <div className={styles.formField}>
                     <label htmlFor="address"><span>*</span>Address</label>
                     <input
                         type="address"
@@ -312,11 +383,6 @@ const SignupPage = (props: Props) => {
                             Please enter your address
                         </span>
                     )}
-                </div>
-
-                {/* <div className={styles.acknowledge}>
-                    <input type="checkbox" name="" id="" />
-                    <label htmlFor="">I agree to the <Link href={'/'}>Terms of Use</Link>, and <Link href={'/'}>Privacy Policy</Link>. I agree to receive more information from Rayvvin about its products and services.</label>
                 </div> */}
                 <div className='flex flex-col mb-8 gap-2'>
                     <div className={styles.acknowledge}>
