@@ -114,7 +114,7 @@ const DeliveryFeeModal = ({ visibility, setVisibility }: Props) => {
                     ) : (
                         <>
                             <input type="text"
-                                value={fee?.shippingFee}
+                                    value={fee && fee?.shippingFee}
                                 className='rounded-lg border border-[#ACACAC] text-base placeholder:text-[#828282] p-4 outline-none disabled:opacity-50 disabled:pointer-events-none'
                                 disabled
                             />

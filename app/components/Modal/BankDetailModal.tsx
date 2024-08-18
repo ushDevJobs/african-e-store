@@ -124,7 +124,7 @@ const BankDetailModal = ({ visibility, setVisibility }: Props) => {
                                 <input
                                     type="text"
                                     name='accountNumber'
-                                    value={bankDetail?.bankDetails ? bankDetail?.bankDetails.accountNumber : ''}
+                                    value={bankDetail?.bankDetails ? bankDetail?.bankDetails.accountNumber : formValues.accountNumber}
                                     disabled
                                     className='rounded-lg border w-full border-[#ACACAC] text-base placeholder:text-[#828282] p-4 outline-none disabled:opacity-50 disabled:pointer-events-none'
                                 />
@@ -134,7 +134,7 @@ const BankDetailModal = ({ visibility, setVisibility }: Props) => {
                                 <input
                                     type="text"
                                     name='bank'
-                                    value={bankDetail?.bankDetails ? bankDetail?.bankDetails.bank : ''}
+                                    value={bankDetail?.bankDetails ? bankDetail?.bankDetails.bank : formValues.bank}
                                     disabled
                                     className='rounded-lg border w-full border-[#ACACAC] text-base placeholder:text-[#828282] p-4 outline-none disabled:opacity-50 disabled:pointer-events-none'
                                 />
