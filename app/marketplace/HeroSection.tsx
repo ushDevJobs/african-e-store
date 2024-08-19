@@ -43,12 +43,12 @@ const HeroSection = (props: Props) => {
                 <Image src={images.hero_bg} alt="hero background image" />
                 <div className={styles.contents}>
                   <h1>An African Goods marketplace</h1>
-                  <p>
+                  <p className="!mx-3">
                     Buy and sell to Africans all over the globe with Rayvvin,
                     create a buyer or seller account on our platform to get
                     started.
                   </p>
-                  {categories && (
+                  {/* {categories && (
                     <div className={styles.categories}>
                       <h3 className="!mx-auto !text-center">
                         Suggested categories
@@ -69,7 +69,7 @@ const HeroSection = (props: Props) => {
                     <div className="h-28">
                       <FullPageLoader />
                     </div>
-                  )}
+                  )} */}
                 </div>
               </div>
             </div>

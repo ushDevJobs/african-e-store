@@ -582,6 +582,8 @@ export function useFetchRecommendedProduct() {
         // Fire the request
         const response = await API.get(ApiRoutes.FetchRecommendedProduct);
 
+        console.log(response);
+
         // Return the response
         return response;
     }

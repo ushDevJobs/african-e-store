@@ -29,6 +29,7 @@
     "sass": "^1.76.0",
     "sharp": "^0.33.4",
     "sonner": "^1.4.41",
+    "splide-nextjs": "^2.4.23",
     "stripe": "^16.2.0"
   },
   "devDependencies": {

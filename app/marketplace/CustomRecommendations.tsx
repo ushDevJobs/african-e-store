@@ -1,19 +1,25 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import ProductCard from "./ProductCard"; // Assuming you have a reusable ProductCard component
+import ProductCard from "../components/ProductCard"; // Assuming you have a reusable ProductCard component
 import { useFetchRecommendedProduct } from "../api/apiClients";
-import { createCustomErrorMessages } from "./constants/catchError";
+import { createCustomErrorMessages } from "../components/constants/catchError";
 import { toast } from "sonner";
-import { RecommendedResponse } from "./models/IRecommended";
+import { RecommendedResponse } from "../components/models/IRecommended";
 import { FullPageLoader } from "../Loader/ComponentLoader";
-import useResponsiveness from "./hooks/responsiveness-hook";
-import { LeftArrowIcon, LongArrowIcon, RightArrowIcon } from "./SVGs/SVGicons";
+import useResponsiveness from "../components/hooks/responsiveness-hook";
+import {
+  LeftArrowIcon,
+  LongArrowIcon,
+  RightArrowIcon,
+} from "../components/SVGs/SVGicons";
 import Link from "next/link";
+import CountdownTimer from "./CountdownTimer";
 
 type Props = {};
 
-const Recommendations = (props: Props) => {
+const CustomRecommendations = (props: Props) => {
+  const { subtitle, title, timer } = props;
   const windowRes = useResponsiveness();
   const isMobile = windowRes.width && windowRes.width < 768;
   const onMobile = typeof isMobile == "boolean" && isMobile;
@@ -49,12 +55,22 @@ const Recommendations = (props: Props) => {
     <section className="my-12">
       <div className="flex justify-start gap-2">
         <div className="flex w-3 bg-[#d9edbf]"></div>
-        <p className="!mx-0 !text-start">Recommeded</p>
+        <p className="!mx-0 !text-start">
+          {subtitle ? subtitle : "Recommeded"}
+        </p>
       </div>
       <div className="flex justify-between items-center gap-2 mt-2 mb-6">
-        <h2 className="!mx-0 !text-start !text-[26px] text-[#6f6f6f]">
-          For You
-        </h2>
+        <div className="flex gap-2 justify-between items-end w-full xs:w-full sm:w-full lg:w-fit xl:w-fit">
+          <h2 className="!mx-0 !text-start !text-[26px] text-[#6f6f6f]">
+            {title ? title : "For You"}
+          </h2>
+          {timer && (
+            <div className="flex gap-2">
+              <CountdownTimer timeString={timer} />
+            </div>
+          )}
+        </div>
+
         {!isMobile && (
           <div className="flex gap-2">
             {/* <div
@@ -107,4 +123,4 @@ const Recommendations = (props: Props) => {
   );
 };
 
-export default Recommendations;
+export default CustomRecommendations;
