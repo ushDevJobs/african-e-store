@@ -407,7 +407,7 @@ export const addStoreToFavourite = async (
         },
       });
       clearCache(CACHE_KEYS.STORES);
-      clearCache(CACHE_KEYS.FAVORITE_STORE + id);
+      clearCache(CACHE_KEYS.FAVORITE_STORE + user.id);
       clearCache(CACHE_KEYS.STORE + user.id);
       clearCache(CACHE_KEYS.STORE_ID + id);
 
@@ -440,7 +440,7 @@ export const removeStoreFromFavourite = async (
         },
       });
       clearCache(CACHE_KEYS.STORES);
-      clearCache(CACHE_KEYS.FAVORITE_STORE + id);
+      clearCache(CACHE_KEYS.FAVORITE_STORE + user.id);
       clearCache(CACHE_KEYS.STORE + user.id);
       clearCache(CACHE_KEYS.STORE_ID + id);
 
