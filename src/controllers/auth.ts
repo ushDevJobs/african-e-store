@@ -156,7 +156,6 @@ export const registerSeller = async (
         email: req.body.email as string,
         fullname: req.body.fullname,
         accountType: "SELLER",
-        country: req.body.country,
         telephone: req.body.telephone,
         password: hashSync(req.body.password, 10),
         store: {
