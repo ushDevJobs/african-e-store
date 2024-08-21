@@ -20,7 +20,7 @@ const CategoriesSkeletonLoader: React.FC = () => {
                     <div className="skeleton h-6 w-[70%]"></div>
                     <div className="skeleton h-6 w-[70%]"></div>
                 </div>
-                <div className="flex flex-col gap-y-10 md:grid md:grid-cols-2 lg:grid-cols-3 basis-[70%]">
+                <div className="flex flex-col gap-y-10 md:grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 basis-[70%]">
                     <div className="flex flex-col space-y-5">
                         <div className="hidden skeleton h-6 w-1/2"></div>
                         <div className="flex flex-col space-y-5">

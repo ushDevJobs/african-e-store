@@ -37,7 +37,7 @@ const CountdownTimer: React.FC<CountdownTimerProps> = ({ timeString }) => {
           <div className="text-xs capitalize text-[#2c7865]">
             {['Hours', 'Minutes', 'Seconds'][index]}
           </div>
-          <div className="text-xl font-bold text-[#2c7865] py-2 pb-1 px-4 rounded">
+          <div className="text-xl font-bold text-[#2c7865] py-1 pb-1 px-4 rounded">
             {unit}
           </div>
           

@@ -46,13 +46,13 @@ const Recommendations = (props: Props) => {
   }, []);
 
   return (
-    <section className="my-12">
+    <section className="my-2 sm:my-2 md:my-4 lg:my-6 xl:my-12 !mt-3">
       <div className="flex justify-start gap-2">
         <div className="flex w-3 bg-[#d9edbf]"></div>
         <p className="!mx-0 !text-start">Recommeded</p>
       </div>
-      <div className="flex justify-between items-center gap-2 mt-2 mb-6">
-        <h2 className="!mx-0 !text-start !text-[26px] text-[#6f6f6f]">
+      <div className="flex justify-between items-center gap-2 mt-1 mb-6">
+        <h2 className="!mx-0 !text-start text-[24px] lg:text-[26px] text-[#6f6f6f]">
           For You
         </h2>
         {!isMobile && (
@@ -78,7 +78,7 @@ const Recommendations = (props: Props) => {
           </div>
         )}
       </div>
-      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 xs:grid-cols-2 sm:grid-cols-4 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-6 gap-4">
         {products?.slice(0, 8).map((product, index) => (
           <ProductCard key={index} product={product} />
         ))}

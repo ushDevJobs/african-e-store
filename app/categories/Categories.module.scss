@@ -29,61 +29,62 @@
 
       h3 {
         color: #2c7865;
-        border-bottom: 2px solid #2c7865;
-        font-size: 20px;
+        // border-bottom: 2px solid #2c7865;
+        font-size: 16px;
         font-weight: 600;
         width: fit-content;
-        margin-bottom: 38px;
+        // margin-bottom: 38px;
+        white-space: nowrap;
       }
 
-      .cards {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(30%, 1fr));
-        gap: 32px;
+      // .cards {
+      //   display: grid;
+      //   grid-template-columns: repeat(auto-fill, minmax(30%, 1fr));
+      //   gap: 32px;
 
-        @include bigTablet {
-          grid-template-columns: repeat(auto-fill, minmax(40%, 1fr));
-        }
+      //   @include bigTablet {
+      //     grid-template-columns: repeat(auto-fill, minmax(40%, 1fr));
+      //   }
 
-        @include tablet {
-          display: flex;
-          flex-direction: column;
-          width: 100%;
-        }
+      //   @include tablet {
+      //     display: flex;
+      //     flex-direction: column;
+      //     width: 100%;
+      //   }
 
-        .card {
-          .image {
-            position: relative;
-            // width: 261px;
-            height: 206px;
-            margin-bottom: 20px;
+      //   .card {
+      //     .image {
+      //       position: relative;
+      //       // width: 261px;
+      //       height: 206px;
+      //       margin-bottom: 20px;
 
-            @include tablet {
-              width: 100%;
-            }
+      //       @include tablet {
+      //         width: 100%;
+      //       }
 
-            img {
-              object-fit: cover;
-              border-radius: 22px !important;
-            }
-          }
-          p {
-            color: #828282;
-            margin-bottom: 6px;
-          }
-          span {
-            color: #828282;
-            font-size: 14px;
-            margin-bottom: 8px;
-          }
+      //       img {
+      //         object-fit: cover;
+      //         border-radius: 22px !important;
+      //       }
+      //     }
+      //     p {
+      //       color: #828282;
+      //       margin-bottom: 6px;
+      //     }
+      //     span {
+      //       color: #828282;
+      //       font-size: 14px;
+      //       margin-bottom: 8px;
+      //     }
 
-          h4 {
-            font-size: 18px;
-            color: #1e1e1e;
-            font-weight: 600;
-          }
-        }
-      }
+      //     h4 {
+      //       font-size: 18px;
+      //       color: #1e1e1e;
+      //       font-weight: 600;
+      //     }
+      //   }
+      // }
 
       .pagination {
         margin-top: 100px;

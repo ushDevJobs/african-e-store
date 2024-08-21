@@ -16,7 +16,11 @@ import {
 import Link from "next/link";
 import CountdownTimer from "./CountdownTimer";
 
-type Props = {};
+type Props = {
+  subtitle?: any;
+  title?: any;
+  timer?: any;
+};
 
 const CustomRecommendations = (props: Props) => {
   const { subtitle, title, timer } = props;
@@ -52,16 +56,16 @@ const CustomRecommendations = (props: Props) => {
   }, []);
 
   return (
-    <section className="my-12">
+    <section className="my-2 sm:my-2 md:my-4 lg:my-6 xl:my-12">
       <div className="flex justify-start gap-2">
         <div className="flex w-3 bg-[#d9edbf]"></div>
         <p className="!mx-0 !text-start">
           {subtitle ? subtitle : "Recommeded"}
         </p>
       </div>
-      <div className="flex justify-between items-center gap-2 mt-2 mb-6">
+      <div className="flex justify-between items-center gap-2 mt-1 mb-6">
         <div className="flex gap-2 justify-between items-end w-full xs:w-full sm:w-full lg:w-fit xl:w-fit">
-          <h2 className="!mx-0 !text-start !text-[26px] text-[#6f6f6f]">
+          <h2 className="!mx-0 !text-start text-[24px] lg:text-[26px] text-[#6f6f6f]">
             {title ? title : "For You"}
           </h2>
           {timer && (
@@ -94,9 +98,9 @@ const CustomRecommendations = (props: Props) => {
           </div>
         )}
       </div>
-      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 xs:grid-cols-2 sm:grid-cols-4 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-6 gap-4">
         {products?.slice(0, 8).map((product, index) => (
-          <ProductCard key={index} product={product} />
+          <ProductCard key={index} product={{ ...product, rating: 3 }} />
         ))}
       </div>
       <div className="flex justify-end mt-8">

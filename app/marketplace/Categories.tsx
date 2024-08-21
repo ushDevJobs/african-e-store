@@ -152,12 +152,12 @@ const Categories = (props: Props) => {
               // console.log(categoryProd);
               return (
                 <SplideSlide key={index}>
-                  <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 mx-2 my-4">
+                  <div className="grid grid-cols-2 xs:grid-cols-2 sm:grid-cols-4 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-6 gap-4 mx-2 my-4">
                     {categoryProd.products ? (
                       categoryProd.products
                         .slice(0, 8)
                         .map((product, productIndex) => (
-                          <ProductCard key={productIndex} product={product} />
+                          <ProductCard key={productIndex} product={{...product, details: null}} />
                         ))
                     ) : (
                       <p className="text-gray-400 text-sm text-center mx-auto w-full">

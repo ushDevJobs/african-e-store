@@ -6,7 +6,7 @@ import { useCategories } from "../context/CategoryContext"; // Custom hook for c
 import { FullPageLoader } from "../Loader/ComponentLoader"; // Loader component
 import useResponsiveness from "./hooks/responsiveness-hook";
 import { LongArrowIcon } from "./SVGs/SVGicons";
-import '../styles/HomePage/CategorySection.module.scss';
+import styles from "../styles/HomePage/CategorySection.module.scss";
 
 const CategoriesSection = () => {
   const { categories, handleFetchAllCategories, isFetchingCategories } =
@@ -21,7 +21,7 @@ const CategoriesSection = () => {
   }, []);
 
   return (
-    <section className="my-12">
+    <section className="my-2 sm:my-2 md:my-4 lg:my-6 xl:my-12">
       <div className="flex justify-start gap-2">
         <div className="flex w-3 bg-[#d9edbf]"></div>
         <p className="!mx-0 !text-start">Catgories</p>
@@ -40,9 +40,9 @@ const CategoriesSection = () => {
               <Link
                 key={category.id}
                 href={`/categories/${category.id}?${category.name}`}
-                className="category_card flex flex-col items-center justify-center bg-white border rounded-lg p-4 hover:shadow-lg transition-shadow"
+                className={`${styles.category_card} flex flex-col items-center justify-center bg-white border rounded-lg p-4 hover:shadow-lg transition-shadow `}
               >
-                <div className="w-16 h-16 mb-2 bg-gray-100 rounded-full flex items-center justify-center">
+                <div className="cat_child w-16 h-16 mb-2 bg-gray-100 rounded-full flex items-center justify-center">
                   {/* Placeholder for Category Icon/Image */}
                   <span className="text-lg font-semibold">
                     {category.name[0]}

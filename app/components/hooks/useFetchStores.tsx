@@ -14,8 +14,8 @@ export const useFetchStores = () => {
       try {
         const response = await fetchAllStores();
         setStores(response.data.stores); // Assuming the response structure
-      } catch (error) {
-        const errorMessage = createCustomErrorMessages(error.response?.data);
+      } catch (error:any) {
+        const errorMessage = createCustomErrorMessages(error?.response?.data);
         toast.error(errorMessage);
       } finally {
         setIsLoading(false);
