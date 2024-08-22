@@ -15,17 +15,22 @@ import ExploreProducts from "./ExploreProducts";
 import CategoriesSection from "../components/CategoriesSection";
 import StoresSection from "../components/StoresSection";
 import CustomRecommendations from "./CustomRecommendations";
+import CustomHeroSection from "./CustomHeroSection";
+import SecondHeroSection from "./SecondHeroSection";
+
 
 type Props = {};
 
 const Marketplace = (props: Props) => {
   return (
     <>
-      <HeroSection />
-      {/* <FlashSales /> */}
-      <div className={`${styles.recommend}`}>
-        <CategoriesSection />
-      </div>
+      {/* <div className="flex flex-col xs:flex-col sm:flex-col md:flex-col lg:flex-row xl:flex-row mx-8">
+        <div className="flex flex-col w-full max-w-[400px] h-[500px] bg-white group block border-4 overflow-hidden"></div>
+        <div className="relative flex w-full grow h-[500px] bg-red group block border-4 overflow-hidden">
+          <HeroSection />
+        </div>
+      </div> */}
+      <CustomHeroSection />
       <div className={`${styles.recommend}`}>
         <CustomRecommendations
           subtitle={"Today's"}
@@ -34,17 +39,20 @@ const Marketplace = (props: Props) => {
         />
       </div>
       <div className={`${styles.recommend}`}>
+        <CategoriesSection />
+      </div>
+
+      <div className={`${styles.recommend}`}>
         <CustomRecommendations
           subtitle={"This Month"}
           title={"Best Selling Products"}
         />
       </div>
-      <GetStarted />
+      <SecondHeroSection timer={"03:23:19"} />
       <div className={`${styles.recommend}`}>
         <Recommendations />
       </div>
       <Categories />
-      <Diversity />
 
       {/* <div className={`${styles.recommend}`}>
         <StoresSection />

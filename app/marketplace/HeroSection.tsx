@@ -28,50 +28,25 @@ const HeroSection = (props: Props) => {
         rewind: true,
         arrows: false,
         type: "loop",
-        autoplay: true,
+        autoplay: !true,
         pauseOnHover: true,
         resetProgress: false,
-        pagination: false
+        pagination: false,
       }}
       aria-label="Hero Section"
     >
       {Array.from(Array(4).keys()).map((chld, index) => {
         return (
           <SplideSlide key={index}>
-            <div className={styles.heroSection}>
-              <div className={styles.backgroundImage}>
-                <Image src={images.hero_bg} alt="hero background image" />
-                <div className={styles.contents}>
-                  <h1>An African Goods marketplace</h1>
-                  <p className="!mx-3">
-                    Buy and sell to Africans all over the globe with Rayvvin,
-                    create a buyer or seller account on our platform to get
-                    started.
-                  </p>
-                  {/* {categories && (
-                    <div className={styles.categories}>
-                      <h3 className="!mx-auto !text-center">
-                        Suggested categories
-                      </h3>
-                      <div className={styles.links}>
-                        {categories.slice(0, 6).map((category) => (
-                          <Link
-                            key={category.id}
-                            href={`/categories/${category.id}?${category.name}`}
-                          >
-                            {category.name}
-                          </Link>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                  {!categories && isFetchingCategories && (
-                    <div className="h-28">
-                      <FullPageLoader />
-                    </div>
-                  )} */}
-                </div>
-              </div>
+            <div className="relative w-full h-[500px] p-10 !bg-gradient-to-r from-purple-500 to-pink-500" style={{backgroundImage: `${images.hero_bg}`, backgroundPosition: 'cover', backgroundRepeat: 'no-repeat'}}>
+              {/* <Image
+                src={images.hero_bg}
+                alt="hero background image"
+                // fill
+                className="object-cover !rounded-lg !relative"
+                width={200}
+              /> */}
+              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Harum deleniti velit aut fugit illo magni vero corrupti officiis voluptatum voluptatem ex dignissimos consequatur ducimus doloribus consectetur est, perspiciatis minima quisquam?
             </div>
           </SplideSlide>
         );

@@ -39,36 +39,35 @@ const StoresSection = () => {
       {isLoading ? (
         <FullPageLoader />
       ) : (
-        <div className={isMobile ? styles.images : styles.imageGrid}>
-          {stores?.slice(0, 5).map((store, index) => {
-            const imageClass = styles[`image${index + 1}`];
-            // console.log(imageClass);
-            return (
+        <section className="my-8">
+          <h2 className="text-xl md:text-2xl lg:text-3xl font-bold mb-6">
+            Stores
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {stores.map((store) => (
               <Link
                 key={store.id}
                 href={`/stores/${store.id}`}
-                // className={`${styles.storeLink} ${imageClass}`}
+                className="block"
               >
-                <div className={imageClass}>
+                <div className="relative w-full h-48 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
                   {store.image && (
                     <Image
                       src={store.image}
                       alt={store.name}
-                      fill
-                      sizes="500px"
-                      //   layout="fill"
-                      //   className={styles.storeImage}
+                      layout="fill"
+                      className="object-cover"
                     />
                   )}
                 </div>
-                <div className={styles.content}>
-                  <h3>{store.name}</h3>
-                  <button>See more</button>
+                <div className="mt-4">
+                  <h3 className="text-lg font-bold">{store.name}</h3>
+                  <p className="text-sm text-gray-600">{store.description}</p>
                 </div>
               </Link>
-            );
-          })}
-        </div>
+            ))}
+          </div>
+        </section>
       )}
     </section>
   );
