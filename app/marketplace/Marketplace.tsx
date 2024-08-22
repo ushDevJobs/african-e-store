@@ -54,9 +54,9 @@ const Marketplace = (props: Props) => {
       </div>
       <Categories />
 
-      {/* <div className={`${styles.recommend}`}>
+      <div className={`${styles.recommend}`}>
         <StoresSection />
-      </div> */}
+      </div>
 
       {/* <AboutSection /> */}
       {/* <div className={`${styles.recommend}`}><Recommendations /></div> */}

@@ -27,7 +27,7 @@ export const CategoriesProvider = ({ children }: { children: ReactNode }) => {
         await fetchCategories(currentPage, limit)
             .then((response) => {
                 // console.log("Response: ", response.data.data);
-                setCategories(response.data.data);
+                setCategories(response.data.data.reverse());
                
             })
             .catch((error) => {

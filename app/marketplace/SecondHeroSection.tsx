@@ -25,12 +25,12 @@ const SecondHeroSection = (props: Props) => {
       </div>
 
       {/* Content */}
-      <div className="relative z-10 flex flex-col items-start justify-center p-6 md:p-12 lg:p-16 space-y-6 h-[500px] px-4 md:px-8 lg:px-10 xl:px-20 space-x-1 lg:space-x-4 ">
+      <div className="relative z-10 flex flex-col items-start justify-center p-6 md:p-4 lg:p-8 space-y-6 h-[400px] px-4 md:px-8 lg:px-10 xl:px-20 space-x-1 lg:space-x-4 ">
         <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold">
           Enhance Your Shopping Experience
         </h2>
         <p className="text-lg md:text-xl lg:text-2xl">
-          <CountdownTimer timeString={timer} />
+          <CountdownTimer timeString={timer} style="!text-white" />
         </p>
         <Link
           href="/shop"

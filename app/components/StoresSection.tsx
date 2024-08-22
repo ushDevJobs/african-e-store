@@ -31,11 +31,10 @@ const StoresSection = () => {
     }
 
     fetchStores();
-  }, [fetchAllStores]);
+  }, []);
 
   return (
     <section className={isMobile ? styles.mobileMain : styles.main}>
-      <h2 className={styles.title}>Stores</h2>
       {isLoading ? (
         <FullPageLoader />
       ) : (
@@ -62,7 +61,9 @@ const StoresSection = () => {
                 </div>
                 <div className="mt-4">
                   <h3 className="text-lg font-bold">{store.name}</h3>
-                  <p className="text-sm text-gray-600">{store.description}</p>
+                  <p className="text-xs text-gray-600 !text-start">
+                    {store.description}
+                  </p>
                 </div>
               </Link>
             ))}
