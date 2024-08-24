@@ -33,7 +33,7 @@ const SecondHeroSection = (props: Props) => {
           <CountdownTimer timeString={timer} style="!text-white" />
         </p>
         <Link
-          href="/shop"
+          href="/categories"
           className="inline-block bg-green-700 hover:bg-green-800 text-white py-2 px-4 rounded-lg transition"
         >
           Buy Now!

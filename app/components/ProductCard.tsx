@@ -6,6 +6,14 @@ import {
   AiOutlineHeart,
   AiOutlineShoppingCart,
 } from "react-icons/ai";
+import {
+  useAddProductsToFavorite,
+  useFetchProduct,
+  useRemoveProductFromFavorite,
+} from "@/app/api/apiClients";
+import router from "next/router";
+import { toast } from "sonner";
+import { createCustomErrorMessages } from "./constants/catchError";
 
 type ProductCardProps = {
   product: {
@@ -19,7 +27,80 @@ type ProductCardProps = {
 };
 
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
+  const fetchProduct = useFetchProduct();
+  const addProductToFavorite = useAddProductsToFavorite();
+  const removeProductFromFavorite = useRemoveProductFromFavorite();
   // console.log(product.coverImage);
+
+  //   async function handleFetchProduct() {
+
+  //     // Start loader
+  //     setIsFetchingProduct(true);
+
+  //     await fetchProduct(productId)
+  //         .then((response) => {
+  //             // console.log("Response: ", response.data.data);
+  //             setProduct(response.data.data);
+  //         })
+  //         .catch((error) => {
+  //             const errorMessage = createCustomErrorMessages(error.response?.data)
+  //             toast.error(errorMessage);
+  //             // console.log(errorMessage);
+  //         })
+  //         .finally(() => {
+  //             setIsFetchingProduct(false);
+  //         });
+  // }
+
+  async function handleAddProductToFavorite(id: string) {
+    await addProductToFavorite(id)
+      .then((response) => {
+        // Log response
+        // console.log(response);
+
+        // handleFetchProduct()
+
+        // Display success
+        toast.success("Product added to favorite successfully.");
+      })
+      .catch((error) => {
+        // console.log(error.response?.data.errorCode);
+        // Display error
+        const errorMessage = createCustomErrorMessages(error.response?.data);
+        toast.error(errorMessage);
+
+        if (error.response?.data.errorCode === 2003) {
+          // console.log('User not authenticated, redirecting to login...');
+          router.push(`/login?redirect=/products/${product.id}`);
+          return;
+        }
+      })
+      .finally(() => {
+        // Close laoder
+        // setIsLoading(false);
+      });
+  }
+
+  async function handleRemoveProductFromFavorite(id: string) {
+    await removeProductFromFavorite(id)
+      .then((response) => {
+        // Log response
+        // console.log(response);
+
+        // handleFetchProduct()
+        // Display success
+        toast.success("Product removed from favorite successfully.");
+      })
+      .catch((error) => {
+        // Display error
+        const errorMessage = createCustomErrorMessages(error.response?.data);
+        toast.error(errorMessage);
+      })
+      .finally(() => {
+        // Close laoder
+        // setIsLoading(false);
+      });
+  }
   return (
     <div
       className="relative group block border-0 overflow-hidden"
@@ -39,7 +120,9 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         <h3 className="text-sm xs:text-xs sm:text-sm md:text-md lg:text-md xl:text-md font-bold">
           {product.name}
         </h3>
-        {product.details && <p className="text-xs my-1 !text-left">{product.details} </p>}
+        {product.details && (
+          <p className="text-xs my-1 !text-left">{product.details} </p>
+        )}
         <span className="block sm:flex md:block lg:flex xl:flex items-stretch justify-between">
           <p className="text-sm sm:text-sm md:text-md lg:text-lg font-semibold text-green-600 mt-1 mx-0 !text-start">
             £{product.amount.toLocaleString()}

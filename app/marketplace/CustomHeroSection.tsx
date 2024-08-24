@@ -1,26 +1,31 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Splide, SplideSlide } from "splide-nextjs/react-splide";
 import "splide-nextjs/splide/dist/css/themes/splide-default.min.css";
-import { categories, slides } from "./data";
+import { slides } from "./data";
 import images from "@/public/images";
 import useResponsiveness from "../components/hooks/responsiveness-hook";
+import { useCategories } from "../context/CategoryContext";
 
 const CustomHeroSection: React.FC = () => {
   const windowRes = useResponsiveness();
   const isMobile = windowRes.width && windowRes.width < 768;
   const onMobile = typeof isMobile == "boolean" && isMobile;
   const onDesktop = typeof isMobile == "boolean" && !isMobile;
+  const { categories, handleFetchAllCategories } = useCategories();
+  useEffect(() => {
+    handleFetchAllCategories();
+  }, []);
   return (
     <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between py-24 lg:py-24 px-4 md:px-8 lg:px-10 xl:px-20 space-x-1 lg:space-x-4 pb-2 md:pb-4 lg:pb-4 gap-4">
       {/* Categories Column */}
       <div className="w-full lg:w-1/4 flex flex-col space-y-4 order-last xs:order-last sm:order-last md:order-last lg:order-first xl:order-first">
         <h3 className="text-xl font-semibold">Categories</h3>
         <div className="flex flex-col space-y-2">
-          {categories.map((category) => (
+          {categories?.map((category) => (
             <Link
               key={category.id}
               href={`/categories/${category.id}`}

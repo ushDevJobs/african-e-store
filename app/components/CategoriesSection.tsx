@@ -56,7 +56,7 @@ const CategoriesSection = () => {
           </div>
           <div className="flex justify-end mt-8">
             <Link
-              href="/recommeded"
+              href="/categories"
               className="bg-[#d9edbf] text-[#2c7865] flex items-center text-center w-fit py-[10px] px-[18px] gap-6 rounded-sm"
               role="button"
             >
