@@ -289,7 +289,6 @@ export const getProductById = async (req: Request, res: Response) => {
     const data = req.isAuthenticated()
       ? {
           userId: user.id,
-          ipAddress: req.ip,
         }
       : {
           ipAddress: req.ip,
@@ -434,7 +433,7 @@ export const addProductToFavourite = async (
       clearCache(CACHE_KEYS.PRODUCTS);
       clearCache(CACHE_KEYS.PRODUCT + id);
       clearCache(CACHE_KEYS.STORE_PRODUCTS + user.id);
-      clearCache(CACHE_KEYS.FAVORITE_PRODUCT);
+      clearCache(CACHE_KEYS.FAVORITE_PRODUCT + user.id);
       clearCache(CACHE_KEYS.CATEGORIES_WITH_PRODUCTS);
       clearCache(CACHE_KEYS.CATEGORIES);
       clearCache(CACHE_KEYS.STORE_CATEGORIES_ID);
@@ -468,7 +467,7 @@ export const removeProductFromFavourite = async (
         },
       });
       clearCache(CACHE_KEYS.PRODUCTS);
-      clearCache(CACHE_KEYS.FAVORITE_PRODUCT);
+      clearCache(CACHE_KEYS.FAVORITE_PRODUCT + user.id);
       return returnJSONSuccess(res);
     } catch (error) {
       return returnJSONError(res, { message: "Unable to add to favourite" });

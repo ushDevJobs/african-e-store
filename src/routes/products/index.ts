@@ -63,7 +63,7 @@ router
   .get(checkAuth, cacheSuccess, rootErrorHandler(getFavouriteProducts))
   .post(checkAuth, rootErrorHandler(addProductToFavourite));
 router.delete(
-  "/favourite",
+  "/favourite/:id",
   checkAuth,
   rootErrorHandler(removeProductFromFavourite)
 );

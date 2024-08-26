@@ -21,7 +21,6 @@ model User {
   fullname          String
   password          String?
   telephone         String?
-  country           String?
   accountType       AccountType     @default(BUYER)
   orders            Order[]
   myRatings         Rating[]

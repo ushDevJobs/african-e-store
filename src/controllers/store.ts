@@ -365,9 +365,11 @@ export const updateStoreProfile = async (req: Request, res: Response) => {
       name: true,
       description: true,
       image: true,
+      id: true,
     },
   });
   clearCache(CACHE_KEYS.STORE + user.id);
+  clearCache(CACHE_KEYS.STORE_ID + store.id);
   clearCache(CACHE_KEYS.STORES);
   if (storeImage.image && storeImage.image !== "") {
     fs.unlink(
@@ -405,8 +407,10 @@ export const addStoreToFavourite = async (
         },
       });
       clearCache(CACHE_KEYS.STORES);
-      clearCache(CACHE_KEYS.FAVORITE_STORE + id);
-      clearCache(CACHE_KEYS.STORE + id);
+      clearCache(CACHE_KEYS.FAVORITE_STORE + user.id);
+      clearCache(CACHE_KEYS.STORE + user.id);
+      clearCache(CACHE_KEYS.STORE_ID + id);
+
       return returnJSONSuccess(res);
     } catch (error) {
       return returnJSONError(res, { message: "Unable to add to favourite" });
@@ -436,8 +440,10 @@ export const removeStoreFromFavourite = async (
         },
       });
       clearCache(CACHE_KEYS.STORES);
-      clearCache(CACHE_KEYS.FAVORITE_STORE + id);
-      clearCache(CACHE_KEYS.STORE + id);
+      clearCache(CACHE_KEYS.FAVORITE_STORE + user.id);
+      clearCache(CACHE_KEYS.STORE + user.id);
+      clearCache(CACHE_KEYS.STORE_ID + id);
+
       return returnJSONSuccess(res);
     } catch (error) {
       return returnJSONError(res, { message: "Unable to add to favourite" });
@@ -716,6 +722,11 @@ export const updateDeliveryStatusOfOrder = async (
   clearCache(CACHE_KEYS.USER_DELIVERED_ORDERS + o?.userId);
   clearCache(CACHE_KEYS.STORE_ORDERS + user.id);
   clearCache(CACHE_KEYS.STORE_TRANSACTIONS + user.id);
+  clearCache(CACHE_KEYS.STORE_PRODUCTS + user.id);
+  clearCache(CACHE_KEYS.STORE + user.id);
+  clearCache(CACHE_KEYS.STORE_ABOUT + user.id);
+  clearCache(CACHE_KEYS.STORE_ID + store.id);
+
   returnJSONSuccess(res, { data: order });
 };
 export const addBankDetails = async (req: Request, res: Response) => {
@@ -895,8 +906,6 @@ export const updateDeliveryFee = async (req: Request, res: Response) => {
     },
   });
   clearCache(CACHE_KEYS.STORE_DELIVERY_FEE + user.id);
-  clearCache(CACHE_KEYS.STORE_TRANSACTIONS + user.id);
-  clearCache(CACHE_KEYS.STORE_ORDERS + user.id);
   return returnJSONSuccess(res);
 };
 export const getStoreShippingFee = async (req: Request, res: Response) => {

@@ -130,6 +130,46 @@ export const getAllDeliveredOrders = async (req: Request, res: Response) => {
         },
       ],
     },
+    select: {
+      id: true,
+      user: {
+        select: {
+          id: true,
+          address: {
+            select: {
+              city: true,
+              country: true,
+              street: true,
+              postCode: true,
+              houseNumber: true,
+            },
+          },
+        },
+      },
+      orderDetails: {
+        select: {
+          id: true,
+          orderId: true,
+          amount: true,
+          shippingFee: true,
+          status: true,
+          product: {
+            select: {
+              name: true,
+              id: true,
+              coverImage: true,
+            },
+          },
+          store: {
+            select: {
+              name: true,
+              id: true,
+              image: true,
+            },
+          },
+        },
+      },
+    },
   });
   returnJSONSuccess(res, { data: orders });
 };

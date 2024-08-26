@@ -11,7 +11,7 @@ export enum CACHE_KEYS {
   CATEGORY = "category-",
   PRODUCTS = "products",
   PRODUCT = "product-",
-  FAVORITE_PRODUCT = "favorite-products",
+  FAVORITE_PRODUCT = "favorite-products-",
   RECENTLY_VIEWED_PRODUCTS = "recently-viewed-products-",
   RECOMMENDED_PRODUCTS = "recommended-products-",
   STORES = "stores",
