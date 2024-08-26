@@ -99,7 +99,7 @@ const CustomRecommendations = (props: Props) => {
         )}
       </div>
       <div className="grid grid-cols-2 xs:grid-cols-2 sm:grid-cols-4 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-6 gap-4">
-        {products?.slice(0, 8).map((product, index) => (
+        {products?.slice(0, 12).map((product, index) => (
           <ProductCard key={index} product={{ ...product, rating: 3 }} />
         ))}
       </div>

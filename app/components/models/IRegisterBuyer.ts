@@ -5,7 +5,11 @@ export interface RegisterBuyerRequest {
   confirmPassword: string;
   telephone: string;
   country: string;
-  address: string;
+  // address: string;
+  city: string,
+  street: string,
+  postCode: string,
+  houseNumber: string,
 }
 export interface RegisterBuyerResponse {
   status: boolean;

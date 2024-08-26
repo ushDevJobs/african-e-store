@@ -14,7 +14,6 @@ import ProductCard from "../components/ProductCard";
 import { Splide, SplideSlide } from "splide-nextjs/react-splide";
 import "splide-nextjs/splide/dist/css/themes/splide-default.min.css";
 
-
 type Props = {};
 
 const Categories = (props: Props) => {
@@ -34,7 +33,6 @@ const Categories = (props: Props) => {
   };
 
   const handleThumbs = (id: any) => {
-    console.log(mainRef.current);
     if (mainRef.current) {
       mainRef.current.splide.go(id);
     }
@@ -67,6 +65,16 @@ const Categories = (props: Props) => {
   useEffect(() => {
     handleFetchAllCategories();
   }, []);
+
+  useEffect(() => {
+    if (mainRef.current) {
+      // console.log(mainRef.current);
+      mainRef.current.splide.on("move", () => {
+        console.log(mainRef.current.splide.index);
+        setActiveTab(mainRef.current.splide.index);
+      });
+    }
+  }, [mainRef.current]);
 
   return (
     <div className={styles.main}>
@@ -120,6 +128,7 @@ const Categories = (props: Props) => {
             </div>
           </div>
           <Splide
+            id={"cat_splide"}
             options={{
               rewind: true,
               arrows: false,
@@ -157,7 +166,10 @@ const Categories = (props: Props) => {
                       categoryProd.products
                         .slice(0, 8)
                         .map((product, productIndex) => (
-                          <ProductCard key={productIndex} product={{...product, details: null}} />
+                          <ProductCard
+                            key={productIndex}
+                            product={{ ...product, details: null }}
+                          />
                         ))
                     ) : (
                       <p className="text-gray-400 text-sm text-center mx-auto w-full">
