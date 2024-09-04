@@ -40,7 +40,7 @@ export const register = async (
             city: req.body.city,
             country: req.body.country,
             street: req.body.street,
-            postCode: req.body.postCode,
+            postCode: parseInt(req.body.postCode),
             houseNumber: req.body.houseNumber,
           },
         },
