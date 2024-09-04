@@ -398,7 +398,7 @@ const SignupPage = (props: Props) => {
               <span>*</span>Post Code
             </label>
             <input
-              type="text"
+              type="number"
               name="postCode"
               id="postCode"
               placeholder="Enter your Post Code"
