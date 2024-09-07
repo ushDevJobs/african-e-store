@@ -264,7 +264,7 @@ model Address {
   userId      String   @unique
   houseNumber String?
   street      String?
-  postCode    Int?
+  postCode    String?
   city        String
   country     String   @default("United Kingdom")
   updatedAt   DateTime @updatedAt

@@ -58,7 +58,7 @@ export const validateAddress = z.object({
   city: z.string().min(1, "Must be more than 1 character"),
   houseNumber: z.string().optional(),
   street: z.string().optional(),
-  postCode: z.number().optional(),
+  postCode: z.string().optional(),
   country: z.string().optional(),
 });
 export const validateReview = z.object({
