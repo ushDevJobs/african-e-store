@@ -13,7 +13,7 @@ type Props = {};
 //     throw new Error("NEXT_PUBLIC_STRIPE_PUBLIC_KEY is not defined");
 // }
 const stripePromise = loadStripe(
-    "pk_test_51PZM1SRuKfeerLkMfjgba7cuAOUVJ4fvhLOEyi9evCGjbSk1Y4t68wKKQJaihdeGZRqBJiaJ2BrGERdNJC2L1Yzg00glfDzD4C"
+    "pk_live_51NaLL2L2BlwVomd9t8cHkPgzVcAidN6NmSqZygA5y5mspCmqvUdlL5lrtyTiyLiaUJkRGPK2GHWE66jLBkISeBEV00hlgad3vC"
 );
 const PaymentFormPage = (props: Props) => {
     const cartItems = useSelector((state: RootState) => state.cart.cartItems);
