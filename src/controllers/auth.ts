@@ -8,7 +8,7 @@ import {
 import { prisma } from "../prisma";
 import { BadRequest } from "../exceptions/bad-request";
 import { ErrorCode } from "../exceptions/root";
-import { validateRegData, validateSellerRegData } from "../schema/users";
+import { validateAdminRegData, validateRegData, validateSellerRegData } from "../schema/users";
 import { compareSync, hashSync } from "bcrypt";
 import { InternalException } from "../exceptions/internal-exception";
 import { NotFound } from "../exceptions/not-found";
@@ -165,6 +165,81 @@ export const registerSeller = async (
             location: req.body.country,
           },
         },
+        address: {
+          create: {
+            city: req.body.city,
+            country: req.body.country,
+            street: req.body.street,
+            postCode: req.body.postCode,
+            houseNumber: req.body.houseNumber,
+          },
+        },
+      },
+      select: {
+        id: true,
+        email: true,
+        password: true,
+      },
+    });
+    const id = await sendOtp(user.id, user.email);
+    if (id) {
+      return returnJSONSuccess(res, { userId: id });
+    } else {
+      await prisma.user.update({
+        where: {
+          id: user.id,
+        },
+        data: {
+          status: "FAILED",
+        },
+      });
+      next(
+        new InternalException("Could'nt send mail", ErrorCode.MAIL_ERROR, null)
+      );
+    }
+  } else {
+    if (findUser.status !== "VERIFIED") {
+      const id = await sendOtp(findUser.id, findUser.email);
+      if (id) {
+        return returnJSONSuccess(res, { userId: id });
+      } else {
+        await prisma.user.update({
+          where: {
+            id: findUser.id,
+          },
+          data: {
+            status: "FAILED",
+          },
+        });
+        next(
+          new InternalException(
+            "Could'nt send mail",
+            ErrorCode.MAIL_ERROR,
+            null
+          )
+        );
+      }
+    }
+    next(new BadRequest("User already exist", ErrorCode.USER_ALREADY_EXIST));
+  }
+};
+export const registerAdmin = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  validateAdminRegData.parse(req.body);
+  const findUser = await prisma.user.findFirst({
+    where: { email: req.body.email },
+  });
+  if (!findUser) {
+    let user = await prisma.user.create({
+      data: {
+        email: req.body.email as string,
+        fullname: req.body.fullname,
+        accountType: "ADMIN",
+        telephone: req.body.telephone,
+        password: hashSync(req.body.password, 10),
         address: {
           create: {
             city: req.body.city,

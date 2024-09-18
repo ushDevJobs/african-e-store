@@ -10,4 +10,6 @@ router.post(
   checkId,
   rootErrorHandler(approvePaymentByAdmin)
 );
+// router.route("/orders/").get(rootErrorHandler(getOrders));
+// router.get("/order/:id", rootErrorHandler(getOrders));
 export { router as adminRoute };

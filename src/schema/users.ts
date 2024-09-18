@@ -54,6 +54,33 @@ export const validateSellerRegData = z
     message: "Passwords does not match",
     path: ["confirmPassword"],
   });
+export const validateAdminRegData = z
+  .object({
+    email: z.string({ message: "email is required" }).email(),
+    fullname: z.string({ message: "fullname is required" }).min(2),
+    companyToken: z.string({ message: "Company Token is required" }).min(2),
+    password: z
+      .string({ message: "password is required" })
+      .min(4, passwordErrorMessage),
+    confirmPassword: z
+      .string({ message: "password is required" })
+      .min(4, passwordErrorMessage),
+    telephone: z
+      .string({ message: "telephone is required" })
+      .min(10, phoneErrorMessage),
+    country: z.string().min(2, countryErrorMessage).optional(),
+    city: z
+      .string({ message: "City required" })
+      .min(2, "Must be more than 2 words"),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords does not match",
+    path: ["confirmPassword"],
+  })
+  .refine((data) => data.companyToken === process.env.COMPANY_TOKEN, {
+    message: "Company Token not valid, Admin Signup not authorized.",
+    path: ["companyToken"],
+  });
 export const validateAddress = z.object({
   city: z.string().min(1, "Must be more than 1 character"),
   houseNumber: z.string().optional(),

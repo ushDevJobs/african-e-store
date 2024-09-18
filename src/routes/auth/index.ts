@@ -10,6 +10,7 @@ import {
   resendOTP,
   localLoginSuccess,
   googleLoginSuccess,
+  registerAdmin,
 } from "../../controllers/auth";
 import passport from "passport";
 import { rootErrorHandler } from "../../root-error-handler";
@@ -45,6 +46,7 @@ router.get(
 router.get("/login/error", rootErrorHandler(loginAuthError));
 router.get("/google/error", rootErrorHandler(googleAuthError));
 router.post("/register", rootErrorHandler(register));
+router.post("/register/admin", rootErrorHandler(registerAdmin));
 router.post("/register/seller", rootErrorHandler(registerSeller));
 router.post("/verify", rootErrorHandler(verifyOTP));
 router.get("/resend", rootErrorHandler(resendOTP));
