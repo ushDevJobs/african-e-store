@@ -8,6 +8,7 @@ import { RegisterSellerRequest } from "../components/models/IRegisterSeller";
 import { DeliveryStatus } from "../components/models/IOrderDeliveryStatus";
 import { ShippingFeeRequest } from "../components/models/IShippingFee";
 import { BankDetailRequest } from "../components/models/IBankDetails";
+import { RegisterAdminRequest } from "../components/models/IRegisterAdmin";
 
 export const API = axios.create({
     baseURL: ApiRoutes.BASE_URL_DEV,
@@ -42,6 +43,21 @@ export function useRegisterSeller() {
         return response;
     }
     return registerSeller;
+}
+
+// Api call to create new user(admin)
+export function useRegisterAdmin() {
+    /**
+     * @returns the response for the api request
+     */
+    async function registerAdmin(data: RegisterAdminRequest) {
+        //Fetch message
+        const response = await API.post(ApiRoutes.RegisterAdmin, data);
+
+        //Return response
+        return response;
+    }
+    return registerAdmin;
 }
 
 // Api call to verify user
