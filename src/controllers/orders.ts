@@ -18,7 +18,7 @@ export const getOrders = async (req: Request, res: Response) => {
   });
   req.apicacheGroup = CACHE_KEYS.USER_ORDERS + user.id;
   const count = await prisma.order.count({ 
-    // where: { userId: user.id } 
+    where: { userId: user.id } 
   });
   const page = (+validatedPag.data?._page! - 1) * (_limit ? +_limit : count);
   const orders = await prisma.$extends(extendOrderAmount()).order.findMany({
@@ -26,7 +26,7 @@ export const getOrders = async (req: Request, res: Response) => {
     take: +_limit! || undefined,
     where: {
       AND: [
-        // { userId: user.id }, 
+        { userId: user.id }, 
         { paymentStatus: true }
       ],
     },

@@ -5,6 +5,9 @@ import { returnJSONError, returnJSONSuccess } from "../utils/functions";
 import { NotFound } from "../exceptions/not-found";
 import { ErrorCode } from "../exceptions/root";
 import { CACHE_KEYS, clearCache } from "../middlewares/cache";
+import { extendOrderAmount } from "../prisma/extensions";
+import { validatePagination } from "../schema/categories";
+import { RequestUser } from "../types";
 
 export const approvePaymentByAdmin = async (
   req: Request,
@@ -86,4 +89,65 @@ export const approvePaymentByAdmin = async (
   } else {
     return returnJSONError(res, { message: "Order not delivered" });
   }
+};
+
+export const adminGetOrders = async (req: Request, res: Response) => {
+  const { _limit, _page } = req.query;
+  const user = req.user! as RequestUser;
+  if (!user || user.accountType !== 'ADMIN') {
+    return returnJSONError(res, { message: "Unauthorized" }, 403);
+  }
+  const validatedPag = validatePagination.safeParse({
+    _page: +_page!,
+  });
+  req.apicacheGroup = CACHE_KEYS.USER_ORDERS + user.id;
+  const count = await prisma.order.count({
+    // where: { userId: user.id }
+  });
+  const page = (+validatedPag.data?._page! - 1) * (_limit ? +_limit : count);
+  const orders = await prisma.$extends(extendOrderAmount()).order.findMany({
+    skip: page,
+    take: +_limit! || undefined,
+    where: {
+      AND: [
+        // { userId: user.id },
+        { paymentStatus: true },
+      ],
+    },
+    select: {
+      id: true,
+      orderId: true,
+      amount: true,
+      orderDetails: {
+        select: {
+          status: true,
+          quantity: true,
+          id: true,
+          amount: true,
+          shippingFee: true,
+          product: {
+            select: {
+              name: true,
+              id: true,
+              details: true,
+              itemCondition: true,
+              coverImage: true,
+              store: {
+                select: {
+                  name: true,
+                  id: true,
+                  image: true,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  });
+  returnJSONSuccess(res, {
+    data: orders,
+    totalPages: Math.ceil(count / (_limit ? +_limit : count)),
+    hasMore: validatedPag.data?._page! * (_limit ? +_limit : count) < count,
+  });
 };
