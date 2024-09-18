@@ -15,13 +15,14 @@ type Props = {
     categories: CategoriesResponse[] | null
     isLoggedIn: boolean
     isSellerLoggedIn: boolean
+    isAdminLoggedIn: boolean
     cartItems: CartItem[]
     Logout: () => Promise<void>
 }
 
 const MobileNavBar = ({ navIsOpen, setNavIsOpen, isDropdownOpen,
     setIsDropdownOpen, categories, isLoggedIn, cartItems,
-    isSellerLoggedIn, Logout }: Props) => {
+    isSellerLoggedIn, isAdminLoggedIn, Logout }: Props) => {
     const pathname = usePathname();
     const dropdownRef = useRef<HTMLLIElement>(null);
     return (
@@ -42,28 +43,28 @@ const MobileNavBar = ({ navIsOpen, setNavIsOpen, isDropdownOpen,
             {navIsOpen && (
                 <div className={styles.navbarOverlay}>
                     <ul>
-                        {!isSellerLoggedIn &&
+                        {!isSellerLoggedIn || !isAdminLoggedIn &&
                             <Link href="/" onClick={() => setNavIsOpen(false)}>
                                 <li className={pathname == "/" ? styles.active : ""}>Home</li>
                             </Link>
                         }
 
                         {
-                            !isSellerLoggedIn &&
+                            !isSellerLoggedIn || !isAdminLoggedIn &&
                             <Link href='/seller/signup' onClick={() => setNavIsOpen(false)}>
                                 <li className={pathname == '/seller/signup' ? styles.active : ""}>
                                     Sell
                                 </li>
                             </Link>
                         }
-                        {!isSellerLoggedIn &&
+                        {!isSellerLoggedIn || !isAdminLoggedIn &&
                             <Link href="/faqs" onClick={() => setNavIsOpen(false)}>
                                 <li className={pathname == "/faqs" ? styles.active : ""}>
                                     FAQ&apos;s
                                 </li>
                             </Link>
                         }
-                        {!isSellerLoggedIn && (
+                        {!isSellerLoggedIn || !isAdminLoggedIn && (
                             <>
                                 <li
                                     className={`${styles.dropdown} ${isDropdownOpen ? styles.open : styles.close
@@ -120,7 +121,7 @@ const MobileNavBar = ({ navIsOpen, setNavIsOpen, isDropdownOpen,
                                 Careers
                             </li>
                         </Link> */}
-                        {!isLoggedIn && !isSellerLoggedIn && (
+                        {!isLoggedIn && !isSellerLoggedIn && !isAdminLoggedIn && (
                             <>
                                 <Link href='/login'
                                     onClick={() => {
@@ -141,7 +142,7 @@ const MobileNavBar = ({ navIsOpen, setNavIsOpen, isDropdownOpen,
                             </>
                         )}
 
-                        {isLoggedIn &&
+                        {isLoggedIn && !isAdminLoggedIn &&
                             <>
                                 <Link href="/orders" onClick={() => setNavIsOpen(false)}>
                                     <li className={pathname == "/orders" ? styles.active : ""}>
@@ -172,13 +173,13 @@ const MobileNavBar = ({ navIsOpen, setNavIsOpen, isDropdownOpen,
                                 </Link>
                             </>
                         }
-                        {isSellerLoggedIn &&
+                        {isSellerLoggedIn || isAdminLoggedIn &&
                             <Link onClick={() => setNavIsOpen(false)} href='/seller-account' className='w-fit whitespace-nowrap'>
                                 <li className={pathname == "/seller-account" ? styles.active : ""}>My Account</li>
                             </Link>
                         }
 
-                        {isLoggedIn && (
+                        {isLoggedIn || isAdminLoggedIn && (
                             <>
                                 {/* <div className={styles.dropDownInfo} onClick={() => setIsLoginDropdownOpen(!isLoginDropdownOpen)}>
                                     <span ><UserIcon /> <DownArrowIcon /></span>

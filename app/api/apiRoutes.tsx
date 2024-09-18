@@ -96,6 +96,7 @@ export default class ApiRoutes {
   static FetchUserOrders: string = "api/orders";
 
   static AdminFetchOrders: string = "api/admin/orders";
+  static AdminFetchUsers: string = "api/admin/all-users";
 
   /**
    * Api routes to add store to favorite

@@ -451,6 +451,18 @@ export function useAdminFetchUserOrders() {
   return adminFetchOrders;
 }
 
+export function useAdminFetchUsers() {
+    async function adminFetchUsers() {
+      // Fire the request
+      const response = await API.get(ApiRoutes.AdminFetchUsers);
+  
+      // Return the response
+      return response;
+    }
+  
+    return adminFetchUsers;
+  }
+
 // Api call to fetch favorite products
 export function useFetchFavoriteProducts() {
     async function fetchFavoriteProducts() {

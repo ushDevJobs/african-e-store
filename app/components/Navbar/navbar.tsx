@@ -41,6 +41,9 @@ const Navbar = (props: Props) => {
   const [logoutResponse, setLogoutResponse] = useState<LogoutResponse>();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isSellerLoggedIn, setIsSellerLoggedIn] = useState(false);
+  const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
+  
+  
 
   const [scrolled, setScrolled] = useState(false);
 
@@ -111,6 +114,14 @@ const Navbar = (props: Props) => {
     }
   }, [accountStatus]);
 
+  useEffect(() => {
+    if (accountStatus && accountStatus.accountType == "ADMIN") {
+      setIsAdminLoggedIn(true);
+    } else {
+      setIsAdminLoggedIn(false);
+    }
+  }, [accountStatus]);
+
   const userDropdownRef = useRef<HTMLDivElement>(null);
   useOuterClick(userDropdownRef, setIsLoginDropdownOpen);
   const catDropdownRef = useRef<HTMLUListElement>(null);
@@ -135,12 +146,12 @@ const Navbar = (props: Props) => {
               </Link>
             )}
 
-            {!isLoggedIn && !isSellerLoggedIn && (
+            {!isLoggedIn && !isSellerLoggedIn && !isAdminLoggedIn && (
               <Link href="/seller/signup">
                 <li>Sell</li>
               </Link>
             )}
-            {!isSellerLoggedIn && (
+            {!isSellerLoggedIn || !isAdminLoggedIn && (
               <Link href="/faq">
                 <li>FAQ&apos;s</li>
               </Link>
@@ -158,7 +169,7 @@ const Navbar = (props: Props) => {
                 </li>
               </Link>
             )}
-            {!isSellerLoggedIn && (
+            {!isSellerLoggedIn && !isAdminLoggedIn && (
               <div className={styles.dropdown}>
                 <li
                   ref={categoryDropdownRef}
@@ -209,7 +220,7 @@ const Navbar = (props: Props) => {
                 )}
               </div>
             )}
-            {!isLoggedIn && !isSellerLoggedIn && (
+            {!isLoggedIn && !isSellerLoggedIn && !isAdminLoggedIn && (
               <>
                 <Link href="/login">
                   <button className={`${styles.login} hover:opacity-70`}>
@@ -225,7 +236,7 @@ const Navbar = (props: Props) => {
               </>
             )}
 
-            {isLoggedIn && (
+            {isLoggedIn && isAdminLoggedIn && (
               <Link href={"/cart"}>
                 <div className={styles.cart}>
                   <div className={styles.cartIcon}>
@@ -242,7 +253,7 @@ const Navbar = (props: Props) => {
               </Link>
             )}
 
-            {isLoggedIn && (
+            {isLoggedIn || isAdminLoggedIn && (
               <>
                 <div
                   className={styles.dropDownInfo}
@@ -325,6 +336,7 @@ const Navbar = (props: Props) => {
           categories={categories}
           isLoggedIn={isLoggedIn}
           isSellerLoggedIn={isSellerLoggedIn}
+          isAdminLoggedIn={isAdminLoggedIn}
           cartItems={cartItems}
           Logout={Logout}
         />

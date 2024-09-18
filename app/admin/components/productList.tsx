@@ -33,7 +33,7 @@ const ProductList: React.FC<ProductListProps> = ({ products }) => (
           {products.map((product) => (
             <tr key={product.id} className="border-b">
               <td className="py-2 px-4"><div className="max-w-[250px] truncate">{product.name}</div></td>
-              <td className="py-2 px-4">{product.amount}</td>
+              <td className="py-2 px-4">£{product.amount}</td>
               <td className="py-2 px-4">{product.quantity}</td>
               <td className="py-2 px-4">{product.itemCondition}</td>
             </tr>
