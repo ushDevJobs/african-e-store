@@ -1,7 +1,7 @@
 // pages/index.tsx (or pages/dashboard.tsx)
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import UserList from "./components/userList";
 import ProductList from "./components/productList";
 import SalesList from "./components/salesList";
@@ -12,14 +12,87 @@ import ProductCharts from "./components/productCharts";
 import HomeCharts from "./components/homeCharts";
 import OrderList from "./components/orderList";
 import OrdersChart from "./components/ordersChart";
+import { useCategories } from "../context/CategoryContext";
+import { Products } from "../components/models/AllCategories";
+import { toast } from "sonner";
+import { createCustomErrorMessages } from "../components/constants/catchError";
+import { StatusEnums } from "../components/models/ISellerStore";
+import { UserOrderResponse } from "../components/models/IUserOrder";
+import { useFetchUserOrders } from "../api/apiClients";
 
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState("Home");
-
   const handleTabChange = (tab: string) => setActiveTab(tab);
+  const { categories, handleFetchAllCategories } = useCategories();
+  const fetchOrders = useFetchUserOrders()
+  const [prods, setProds] = useState<Products[]>([]);
+  const [selectedOrder, setSelectedOrder] = useState<UserOrderResponse>()
+    const [orders, setOrders] = useState<UserOrderResponse[]>()
+    const [isFetchingOrders, setIsFetchingOrders] = useState<boolean>(true);
+    const [isDeliveryModalVisible, setIsDeliveryModalVisible] = useState<boolean>(false);
+
+    async function handleFetchOrders({ clearPreviousOrders = false }) {
+
+        // Show loader
+
+        if (clearPreviousOrders) {
+            // Clear previous configurations
+            setOrders(undefined);
+            // Show loader
+            setIsFetchingOrders(true);
+        }
+        await fetchOrders()
+            .then((response) => {
+                // console.log("Response: ", response.data.data);
+                setOrders(response.data.data);
+            })
+            .catch((error) => {
+                const errorMessage = createCustomErrorMessages(error.response?.data)
+                toast.error(errorMessage);
+            })
+            .finally(() => {
+                setIsFetchingOrders(false);
+            });
+    }
+    const getStatusColor = (status: StatusEnums) => {
+        switch (status) {
+            case StatusEnums.Pending:
+                return 'text-[#FD6A02]';
+            case StatusEnums.Delivered:
+                return 'text-[#2C7865]';
+            case StatusEnums.Dispatched:
+                return 'text-#6f6f6f';
+            default:
+                return 'text-#6f6f6f';
+        }
+    }
+
+    useEffect(() => {
+        handleFetchOrders({ clearPreviousOrders: true })
+    }, []);
+
+  useEffect(() => {
+    handleFetchAllCategories();
+  }, []);
+
+  useEffect(() => {
+    if (categories) {
+      setProds(
+        categories
+          .map((categoryProd) => {
+            return categoryProd.products;
+          })
+          .flat(1)
+      );
+    }
+  }, [categories]);
+
+  useEffect(() => {
+    console.log(orders ? orders[0] : {});
+  }, [orders]);
 
   return (
-    <div className="min-h-screen bg-gray-100 p-8">
+    <div className="min-h-screen bg-gray-100 py-8 px-4">
       {/* Header with Navigation Tabs */}
       <header className="bg-white p-4 shadow-lg rounded-md mt-20">
         <nav className="flex flex-wrap">
@@ -53,7 +126,7 @@ const Dashboard = () => {
               {/* Products Available Card */}
               <div className="bg-white shadow-lg rounded-lg p-6">
                 <h2 className="text-xl font-semibold">Products Available</h2>
-                <p className="text-3xl font-bold mt-2">{products.length}</p>
+                <p className="text-3xl font-bold mt-2">{prods?.length}</p>
                 <p className="text-sm text-gray-500 mt-1">
                   Products on the platform
                 </p>
@@ -61,7 +134,7 @@ const Dashboard = () => {
               {/* Total Sales Card */}
               <div className="bg-white shadow-lg rounded-lg p-6">
                 <h2 className="text-xl font-semibold">Total Sales</h2>
-                <p className="text-3xl font-bold mt-2">{sales.length}</p>
+                <p className="text-3xl font-bold mt-2">{orders ? orders.map(o=> {return o.orderDetails}).flat(1).length : [].length}</p>
                 <p className="text-sm text-gray-500 mt-1">Sales made</p>
               </div>
               {/* Average Spend Card */}
@@ -69,10 +142,10 @@ const Dashboard = () => {
                 <h2 className="text-xl font-semibold">Average Spend</h2>
                 <p className="text-3xl font-bold mt-2">
                   $
-                  {(
-                    users.reduce((total, user) => total + user.spend, 0) /
+                  {orders ? (
+                    orders.map(o=> {return o.orderDetails}).flat(1).reduce((total, user) => total + user.amount, 0) /
                     users.length
-                  ).toFixed(2)}
+                  ).toFixed(2) : [].length}
                 </p>
                 <p className="text-sm text-gray-500 mt-1">Per user</p>
               </div>
@@ -89,19 +162,19 @@ const Dashboard = () => {
         )}
         {activeTab === "Products" && (
           <div>
-            <ProductList products={products} />
+            <ProductList products={prods} />
             <ProductCharts />
           </div>
         )}
         {activeTab === "Orders" && (
           <div>
-            <OrderList orders={orders} />
+            <OrderList orders={orders ? orders : []} />
             <OrdersChart />
           </div>
         )}
         {activeTab === "Sales" && (
           <div>
-            <SalesList sales={sales} />
+            <SalesList sales={orders ? orders.map(o=> {return o.orderDetails}).flat(1) : []} />
             <SalesChart />
           </div>
         )}
