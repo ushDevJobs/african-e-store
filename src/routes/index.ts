@@ -7,7 +7,7 @@ import { categoryRoutes } from "./categories";
 import { orderRoutes } from "./orders";
 import { rootErrorHandler } from "../root-error-handler";
 import { paymentRoutes } from "./payment";
-import { sellerRoleCheck } from "../middlewares/roles";
+import { adminRoleCheck, sellerRoleCheck } from "../middlewares/roles";
 import { adminRoute } from "./admin";
 import { userRoutes } from "./user";
 import { cacheSuccess } from "../middlewares/cache";
@@ -21,7 +21,7 @@ router.use("/products", productRoutes);
 router.use("/categories", cacheSuccess, categoryRoutes);
 router.use("/orders", checkAuth, cacheSuccess, orderRoutes);
 router.use("/payment", checkAuth, paymentRoutes);
-router.use("/admin", checkAuth, sellerRoleCheck, adminRoute);
+router.use("/admin", checkAuth, adminRoleCheck, adminRoute);
 router.get("/cache", (req, res) => {
   res.json(apicache.getIndex());
 });

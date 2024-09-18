@@ -21,6 +21,19 @@ export const getLoggedusersAddress = async (req: Request, res: Response) => {
 
   return returnJSONSuccess(res, { data: address });
 };
+
+export const getLoggeduser = async (req: Request, res: Response) => {
+  const user = req.user as RequestUser;
+  req.apicacheGroup = CACHE_KEYS.USER_ADDRESS + user.id;
+  const userData = await prisma.user.findFirst({
+    where: {
+      id: user.id,
+    },
+  });
+
+  return returnJSONSuccess(res, { data: userData });
+};
+
 export const updateuserAddress = async (req: Request, res: Response) => {
   const user = req.user as RequestUser;
   let validated = validateAddress.parse(req.body);

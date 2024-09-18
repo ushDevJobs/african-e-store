@@ -94,9 +94,6 @@ export const approvePaymentByAdmin = async (
 export const adminGetOrders = async (req: Request, res: Response) => {
   const { _limit, _page } = req.query;
   const user = req.user! as RequestUser;
-  if (!user || user.accountType !== 'ADMIN') {
-    return returnJSONError(res, { message: "Unauthorized" }, 403);
-  }
   const validatedPag = validatePagination.safeParse({
     _page: +_page!,
   });
@@ -150,4 +147,16 @@ export const adminGetOrders = async (req: Request, res: Response) => {
     totalPages: Math.ceil(count / (_limit ? +_limit : count)),
     hasMore: validatedPag.data?._page! * (_limit ? +_limit : count) < count,
   });
+};
+
+export const adminGetUsers = async (req: Request, res: Response) => {
+  const user = req.user as RequestUser;
+  req.apicacheGroup = CACHE_KEYS.USER_ADDRESS + user.id;
+  const users = await prisma.user.findMany({
+    // where: {
+    //   id: user.id,
+    // },
+  });
+
+  return returnJSONSuccess(res, { data: users });
 };
