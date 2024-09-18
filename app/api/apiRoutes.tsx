@@ -1,5 +1,5 @@
 export default class ApiRoutes {
-  // static BASE_URL_DEV: string = "https://rayvvin.onrender.com";
+  // static BASE_URL_DEV: string = "https://rayvvin.com";
   static BASE_URL_DEV: string = "http://localhost:3000";
 
   /**
