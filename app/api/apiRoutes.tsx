@@ -95,6 +95,8 @@ export default class ApiRoutes {
   static UpdateProduct: string = "api/products/product";
   static FetchUserOrders: string = "api/orders";
 
+  static AdminFetchOrders: string = "api/admin/orders";
+
   /**
    * Api routes to add store to favorite
    */

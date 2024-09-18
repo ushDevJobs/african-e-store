@@ -6,4 +6,5 @@ export interface RegisterAdminRequest {
   telephone: string;
   companyToken: string;
   country: string;
+  city: string;
 }

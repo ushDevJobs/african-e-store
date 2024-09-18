@@ -18,13 +18,13 @@ import { toast } from "sonner";
 import { createCustomErrorMessages } from "../components/constants/catchError";
 import { StatusEnums } from "../components/models/ISellerStore";
 import { UserOrderResponse } from "../components/models/IUserOrder";
-import { useFetchUserOrders } from "../api/apiClients";
+import { useAdminFetchUserOrders, useFetchUserOrders } from "../api/apiClients";
 
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState("Home");
   const handleTabChange = (tab: string) => setActiveTab(tab);
   const { categories, handleFetchAllCategories } = useCategories();
-  const fetchOrders = useFetchUserOrders()
+  const fetchOrders = useAdminFetchUserOrders();
   const [prods, setProds] = useState<Products[]>([]);
   const [selectedOrder, setSelectedOrder] = useState<UserOrderResponse>()
     const [orders, setOrders] = useState<UserOrderResponse[]>()
@@ -184,3 +184,5 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+
+

@@ -32,6 +32,7 @@ const SignupPage = (props: Props) => {
     const [cofirmPasswordErrorMsg, setCofirmPasswordErrorMsg] = useState<string | boolean>(false);
     const [checkboxChecked, setCheckboxChecked] = useState(false);
     const [checkboxErrorMsg, setCheckboxErrorMsg] = useState<string | boolean>(false);
+    const [cityErrorMsg, setCityErrorMsg] = useState<string | boolean>(false);
 
     function onformValueChange(
         e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>,
@@ -93,6 +94,11 @@ const SignupPage = (props: Props) => {
                 setEmailAddressErrorMsg(true);
             } else {
                 setEmailAddressErrorMsg(false);
+            }
+            if (!formValues?.city) {
+              setCityErrorMsg(true);
+            } else {
+              setCityErrorMsg(false);
             }
             if (!formValues?.telephone) {
                 setPhoneErrorMsg(true);
@@ -295,23 +301,41 @@ const SignupPage = (props: Props) => {
               )}
             </div>
           </div>
-          <div className={styles.formField}>
-            <label htmlFor="email">
-              <span>*</span>Email address
-            </label>
-            <input
-              type="email"
-              name="email"
-              id="email"
-              placeholder="Please fill in email"
-              value={formValues?.email}
-              onChange={(e) => onformValueChange(e, setEmailAddressErrorMsg)}
-            />
-            {emailAddressErrorMsg && (
-              <span className={styles.errorMsg}>
-                Please enter your email address
-              </span>
-            )}
+          <div className={styles.rowForm}>
+            <div className={styles.formField}>
+              <label htmlFor="email">
+                <span>*</span>Email address
+              </label>
+              <input
+                type="email"
+                name="email"
+                id="email"
+                placeholder="Please fill in email"
+                value={formValues?.email}
+                onChange={(e) => onformValueChange(e, setEmailAddressErrorMsg)}
+              />
+              {emailAddressErrorMsg && (
+                <span className={styles.errorMsg}>
+                  Please enter your email address
+                </span>
+              )}
+            </div>
+            <div className={styles.formField}>
+              <label htmlFor="city">
+                <span>*</span>City
+              </label>
+              <input
+                type="text"
+                name="city"
+                id="city"
+                placeholder="Enter city"
+                value={formValues?.city}
+                onChange={(e) => onformValueChange(e, setCityErrorMsg)}
+              />
+              {cityErrorMsg && (
+                <span className={styles.errorMsg}>Please enter city</span>
+              )}
+            </div>
           </div>
 
           <div className="flex flex-col mb-8 gap-2">
