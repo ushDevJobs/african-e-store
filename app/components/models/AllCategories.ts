@@ -10,6 +10,10 @@ export type Products = {
   quantity: number;
   details: string;
   coverImage: string;
+  cat_id: string;
+  cat_name: string;
+  views: any[];
+  createdAt: Date;
 };
 
 export interface CategoriesResponse {

@@ -28,14 +28,22 @@ ChartJS.register(
   Legend
 );
 
-const ActiveUsersChart: React.FC = () => {
+interface ChartProps {
+  userDataByDate: any[];
+  userDataByAccountType: any[];
+}
+
+const ActiveUsersChart: React.FC<ChartProps> = ({
+  userDataByDate,
+  userDataByAccountType,
+}) => {
   // Data for User Growth Over Time
   const userGrowthData = {
-    labels: ["Week 1", "Week 2", "Week 3", "Week 4"],
+    labels: userDataByDate.map((pd) => pd.date),
     datasets: [
       {
         label: "Active Users",
-        data: [200, 400, 600, 800],
+        data: userDataByDate.map((pd) => pd.metaz.length),
         fill: false,
         backgroundColor: "#3b82f6",
         borderColor: "#3b82f6",
@@ -45,11 +53,11 @@ const ActiveUsersChart: React.FC = () => {
 
   // Data for User Engagement Over Time
   const userEngagementData = {
-    labels: ["Emails", "Social Media", "Direct", "Referral"],
+    labels: userDataByAccountType.map((pd) => pd.accountType.toLowerCase()),
     datasets: [
       {
-        label: "User Engagement",
-        data: [300, 500, 200, 100],
+        label: "Account Type",
+        data: userDataByAccountType.map((pd) => pd.metaz.length),
         backgroundColor: ["#3b82f6", "#10b981", "#f97316", "#e11d48"],
       },
     ],
@@ -90,7 +98,7 @@ const ActiveUsersChart: React.FC = () => {
           style={chartContainerStyle}
         >
           <h2 className="text-2xl font-semibold mb-4">
-            User Engagement by Source
+            User Segmentation by Account Type
           </h2>
           <div style={{ height: "400px" }}>
             <Doughnut data={userEngagementData} options={options} />

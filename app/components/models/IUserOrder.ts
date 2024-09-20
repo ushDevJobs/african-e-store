@@ -36,6 +36,7 @@ export interface UserOrderResponse {
   orderId: number;
   amount: true;
   orderDetails: UserOrderDetails[];
+  datePaid: Date;
 }
 export interface UserOrderDetails {
   status: StatusEnums;
@@ -53,6 +54,9 @@ export interface Product {
   store: Store;
   details: string;
   itemCondition: string;
+  views: any[];
+  createdAt: Date;
+  quantity: number;
 }
 
 export interface Store {

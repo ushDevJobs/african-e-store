@@ -1,7 +1,7 @@
 // components/HomeCharts.tsx
 
-import React from 'react';
-import { Line, Pie, Bar } from 'react-chartjs-2';
+import React from "react";
+import { Line, Pie, Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
   LineElement,
@@ -12,7 +12,7 @@ import {
   Title,
   Tooltip,
   Legend,
-} from 'chart.js';
+} from "chart.js";
 
 // Register components
 ChartJS.register(
@@ -26,15 +26,23 @@ ChartJS.register(
   Legend
 );
 
-const HomeCharts: React.FC = () => {
+interface ChartProps {
+  productSalesDataByCount: any[];
+  productSalesDataByDate: any[];
+}
+
+const HomeCharts: React.FC<ChartProps> = ({
+  productSalesDataByCount,
+  productSalesDataByDate,
+}) => {
   // Chart data remains the same...
   // Revenue Over Time Data
   const revenueData = {
-    labels: ["Week 1", "Week 2", "Week 3", "Week 4"],
+    labels: productSalesDataByDate.map((pd) => pd.date),
     datasets: [
       {
         label: "Revenue",
-        data: [5000, 7000, 8000, 10000],
+        data: productSalesDataByDate.map((pd) => pd.total_amount),
         fill: false,
         backgroundColor: "#e11d48",
         borderColor: "#e11d48",
@@ -56,11 +64,11 @@ const HomeCharts: React.FC = () => {
 
   // Top Selling Products Data
   const topProductsData = {
-    labels: ["Product A", "Product B", "Product C"],
+    labels: productSalesDataByCount.map((pd) => pd.name.split(" ").slice(0, 5)),
     datasets: [
       {
         label: "Sales",
-        data: [1000, 800, 600],
+        data: productSalesDataByCount.map((pd) => pd.count),
         backgroundColor: "#3b82f6",
       },
     ],
@@ -92,7 +100,7 @@ const HomeCharts: React.FC = () => {
         </div>
 
         {/* Traffic Sources */}
-        <div
+        {/* <div
           className="bg-white shadow-lg rounded-lg p-6"
           style={chartContainerStyle}
         >
@@ -100,11 +108,7 @@ const HomeCharts: React.FC = () => {
           <div style={{ height: "400px" }}>
             <Pie data={trafficData} options={options} />
           </div>
-        </div>
-      </div>
-
-      {/* Second Row of Charts */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        </div> */}
         {/* Top Selling Products */}
         <div
           className="bg-white shadow-lg rounded-lg p-6"
@@ -115,7 +119,10 @@ const HomeCharts: React.FC = () => {
             <Bar data={topProductsData} options={options} />
           </div>
         </div>
+      </div>
 
+      {/* Second Row of Charts */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Additional Chart or Visual */}
         {/* Include another chart here if needed */}
       </div>

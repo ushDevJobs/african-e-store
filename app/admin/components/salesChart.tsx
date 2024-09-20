@@ -26,14 +26,22 @@ ChartJS.register(
   Legend
 );
 
-const SalesChart: React.FC = () => {
+interface ChartProps {
+  productSalesDataByDate: any[];
+  productSalesDataByCategory: any[];
+}
+
+const SalesChart: React.FC<ChartProps> = ({
+  productSalesDataByDate,
+  productSalesDataByCategory,
+}) => {
   // Data for Sales Over Time
   const salesOverTimeData = {
-    labels: ["Oct 1", "Oct 2", "Oct 3", "Oct 4"],
+    labels: productSalesDataByDate.map((pd) => pd.date),
     datasets: [
       {
         label: "Sales",
-        data: [150, 200, 250, 300],
+        data: productSalesDataByDate.map((pd) => pd.count),
         backgroundColor: "#10b981",
       },
     ],
@@ -41,11 +49,11 @@ const SalesChart: React.FC = () => {
 
   // Data for Sales by Category
   const salesByCategoryData = {
-    labels: ["Electronics", "Clothing", "Home Goods", "Books"],
+    labels: productSalesDataByCategory.map((pd) => pd.name),
     datasets: [
       {
         label: "Sales by Category",
-        data: [500, 300, 200, 100],
+        data: productSalesDataByCategory.map((pd) => pd.products.length),
         backgroundColor: ["#3b82f6", "#f97316", "#10b981", "#e11d48"],
       },
     ],
@@ -65,7 +73,6 @@ const SalesChart: React.FC = () => {
     maxHeight: "600px",
     height: "100%",
   };
-
 
   return (
     <div className="mt-6">

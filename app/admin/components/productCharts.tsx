@@ -24,14 +24,26 @@ ChartJS.register(
   Legend
 );
 
-const ProductCharts: React.FC = () => {
+interface ChartProps {
+  productSalesDataByCount: any[];
+  productSalesDataByDate: any[];
+  productDataByCount: any[];
+  productDataByDate: any[];
+}
+
+const ProductCharts: React.FC<ChartProps> = ({
+  productSalesDataByCount,
+  productSalesDataByDate,
+  productDataByCount,
+  productDataByDate,
+}) => {
   // Inventory Levels Data
   const inventoryData = {
-    labels: ["Oct 1", "Oct 2", "Oct 3", "Oct 4"],
+    labels: productDataByDate.map((pd) => pd.date),
     datasets: [
       {
         label: "Inventory Levels",
-        data: [100, 80, 60, 40],
+        data: productDataByDate.map((pd) => pd.count),
         fill: false,
         backgroundColor: "#f97316",
         borderColor: "#f97316",
@@ -41,11 +53,11 @@ const ProductCharts: React.FC = () => {
 
   // Product Views Data
   const productViewsData = {
-    labels: ["Product A", "Product B", "Product C"],
+    labels: productDataByCount.map((pd) => pd.name.split(" ").slice(0, 5)),
     datasets: [
       {
         label: "Views",
-        data: [500, 400, 300],
+        data: productDataByCount.map((pd) => pd.views.length),
         backgroundColor: "#10b981",
       },
     ],
@@ -60,7 +72,6 @@ const ProductCharts: React.FC = () => {
     maxHeight: "500px",
     height: "100%",
   };
-
 
   return (
     <div className="mt-6">

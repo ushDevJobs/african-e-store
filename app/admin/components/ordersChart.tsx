@@ -24,14 +24,18 @@ ChartJS.register(
   Legend
 );
 
-const OrdersChart: React.FC = () => {
+interface ChartProps {
+  productSalesDataByDate: any[];
+}
+
+const OrdersChart: React.FC<ChartProps> = ({ productSalesDataByDate }) => {
   // Orders Over Time Data
   const ordersData = {
-    labels: ["Oct 1", "Oct 2", "Oct 3", "Oct 4"],
+    labels: productSalesDataByDate.map((pd) => pd.date),
     datasets: [
       {
-        label: "Orders",
-        data: [20, 25, 30, 35],
+        label: "Products per Order",
+        data: productSalesDataByDate.map((pd) => pd.count),
         fill: false,
         backgroundColor: "#3b82f6",
         borderColor: "#3b82f6",
@@ -44,17 +48,17 @@ const OrdersChart: React.FC = () => {
     maintainAspectRatio: false,
   };
 
-const chartContainerStyle = {
-  maxHeight: "500px",
-  height: "100%",
-};
+  const chartContainerStyle = {
+    maxHeight: "500px",
+    height: "100%",
+  };
 
   return (
     <div
       className="bg-white shadow-lg rounded-lg p-6 mt-6"
       style={chartContainerStyle}
     >
-      <h2 className="text-2xl font-semibold mb-4">Orders Over Time</h2>
+      <h2 className="text-2xl font-semibold mb-4">Products per Order Over Time</h2>
       <div style={{ height: "400px" }}>
         <Line data={ordersData} options={options} />
       </div>

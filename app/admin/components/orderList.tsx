@@ -25,7 +25,7 @@ const OrderList: React.FC<OrderListProps> = ({ orders }) => (
         <thead>
           <tr className="bg-gray-100">
             <th className="py-2 px-4 text-left">Order ID</th>
-            {/* <th className="py-2 px-4 text-left">Customer</th> */}
+            <th className="py-2 px-4 text-left">Product Count</th>
             <th className="py-2 px-4 text-left">Amount</th>
             {/* <th className="py-2 px-4 text-left">Date</th> */}
             <th className="py-2 px-4 text-left">Status</th>
@@ -35,7 +35,7 @@ const OrderList: React.FC<OrderListProps> = ({ orders }) => (
           {orders.map((order) => (
             <tr key={order.id} className="border-b">
               <td className="py-2 px-4">#{order.orderId}</td>
-              {/* <td className="py-2 px-4">{}</td> */}
+              <td className="py-2 px-4">{order.orderDetails.length}</td>
               <td className="py-2 px-4">${order.amount}</td>
               {/* <td className="py-2 px-4">{}</td> */}
               <td className="py-2 px-4">
