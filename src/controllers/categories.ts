@@ -108,6 +108,8 @@ export const getCategories = async (req: Request, res: Response) => {
               quantity: true,
               details: true,
               coverImage: true,
+              views: true,
+              createdAt: true,
               ...addFavourite,
             },
           },

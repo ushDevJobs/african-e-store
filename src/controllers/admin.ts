@@ -115,6 +115,7 @@ export const adminGetOrders = async (req: Request, res: Response) => {
       id: true,
       orderId: true,
       amount: true,
+      datePaid: true,
       orderDetails: {
         select: {
           status: true,
@@ -129,6 +130,7 @@ export const adminGetOrders = async (req: Request, res: Response) => {
               details: true,
               itemCondition: true,
               coverImage: true,
+              views: true,
               store: {
                 select: {
                   name: true,
@@ -136,6 +138,8 @@ export const adminGetOrders = async (req: Request, res: Response) => {
                   image: true,
                 },
               },
+              createdAt: true,
+              quantity: true,
             },
           },
         },
