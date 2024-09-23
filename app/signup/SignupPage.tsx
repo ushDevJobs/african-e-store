@@ -176,11 +176,11 @@ const SignupPage = (props: Props) => {
     setLoading(true);
 
     if (validateFields()) {
-      // console.log(formValues);
+      console.log(formValues);
 
       await registerBuyer(formValues as RegisterBuyerRequest)
         .then((response) => {
-          // console.log(response.data);
+          console.log(response.data);
 
           // Display success
           toast.success("You have successfully created an account.");
