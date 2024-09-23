@@ -528,7 +528,7 @@ export const getRecommendedProducts = async (req: Request, res: Response) => {
   });
   const randomUsed: number[] = [];
   const getRandomSkips = () => Math.floor(Math.random() * count);
-  const transactions = [];
+  const transactions: any[] = [];
   for (let i = 1; i <= 16; i++) {
     let randomSkip = getRandomSkips();
     if (randomUsed.includes(randomSkip)) {
