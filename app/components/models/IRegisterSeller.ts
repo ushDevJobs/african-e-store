@@ -6,4 +6,5 @@ export interface RegisterSellerRequest {
   telephone: string;
   companyName: string;
   country: string;
+  city: string;
 }

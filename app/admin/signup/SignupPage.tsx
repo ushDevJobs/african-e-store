@@ -69,6 +69,7 @@ const SignupPage = (props: Props) => {
             formValues.confirmPassword &&
             formValues.telephone &&
             formValues.companyToken &&
+            formValues.city &&
             checkboxChecked
         ) {
             return true;
