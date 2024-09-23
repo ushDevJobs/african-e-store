@@ -31,8 +31,9 @@ export const register = async (
   if (!findUser) {
     let user = await prisma.user.create({
       data: {
-        email: req.body.email,
+        email: req.body.email as string,
         fullname: req.body.fullname,
+        accountType: "BUYER",
         telephone: req.body.telephone,
         password: hashSync(req.body.password, 10),
         address: {
