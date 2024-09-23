@@ -1,6 +1,7 @@
 export default class ApiRoutes {
   // static BASE_URL_DEV: string = "https://rayvvin.com";
   static BASE_URL_DEV: string = "http://localhost:3000";
+  // static BASE_URL_DEV: string = "https://african-e-store.onrender.com";
 
   /**
    * Api routes to register new user(buyer)

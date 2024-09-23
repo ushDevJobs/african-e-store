@@ -42,8 +42,6 @@ const Navbar = (props: Props) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isSellerLoggedIn, setIsSellerLoggedIn] = useState(false);
   const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
-  
-  
 
   const [scrolled, setScrolled] = useState(false);
 
@@ -146,16 +144,17 @@ const Navbar = (props: Props) => {
               </Link>
             )}
 
-            {!isLoggedIn && !isSellerLoggedIn && !isAdminLoggedIn && (
+            {!isLoggedIn && !isSellerLoggedIn && (
               <Link href="/seller/signup">
                 <li>Sell</li>
               </Link>
             )}
-            {!isSellerLoggedIn || !isAdminLoggedIn && (
-              <Link href="/faq">
-                <li>FAQ&apos;s</li>
-              </Link>
-            )}
+            {!isSellerLoggedIn ||
+              (!isAdminLoggedIn && (
+                <Link href="/faq">
+                  <li>FAQ&apos;s</li>
+                </Link>
+              ))}
             {isSellerLoggedIn && (
               <Link href="/seller-account">
                 <li
@@ -169,7 +168,7 @@ const Navbar = (props: Props) => {
                 </li>
               </Link>
             )}
-            {!isSellerLoggedIn && !isAdminLoggedIn && (
+            {!isSellerLoggedIn && (
               <div className={styles.dropdown}>
                 <li
                   ref={categoryDropdownRef}
@@ -220,7 +219,7 @@ const Navbar = (props: Props) => {
                 )}
               </div>
             )}
-            {!isLoggedIn && !isSellerLoggedIn && !isAdminLoggedIn && (
+            {!isLoggedIn && !isSellerLoggedIn && (
               <>
                 <Link href="/login">
                   <button className={`${styles.login} hover:opacity-70`}>
@@ -236,7 +235,7 @@ const Navbar = (props: Props) => {
               </>
             )}
 
-            {isLoggedIn && isAdminLoggedIn && (
+            {isLoggedIn && (
               <Link href={"/cart"}>
                 <div className={styles.cart}>
                   <div className={styles.cartIcon}>
@@ -253,65 +252,66 @@ const Navbar = (props: Props) => {
               </Link>
             )}
 
-            {isLoggedIn || isAdminLoggedIn && (
-              <>
-                <div
-                  className={styles.dropDownInfo}
-                  onClick={() => setIsLoginDropdownOpen(!isLoginDropdownOpen)}
-                >
-                  <span>
-                    <UserIcon /> <DownArrowIcon />
-                  </span>
-                </div>
-                {isLoginDropdownOpen && (
+            {isLoggedIn ||
+              (isAdminLoggedIn && (
+                <>
                   <div
-                    className={`${styles.loginDropdownContainer} shadow-lg`}
-                    ref={userDropdownRef}
+                    className={styles.dropDownInfo}
+                    onClick={() => setIsLoginDropdownOpen(!isLoginDropdownOpen)}
                   >
-                    <Link
-                      href={"/orders"}
-                      onClick={() => setIsLoginDropdownOpen(false)}
-                    >
-                      My orders
-                    </Link>
-                    <Link
-                      href={"/help"}
-                      onClick={() => setIsLoginDropdownOpen(false)}
-                    >
-                      Help/support
-                    </Link>
-                    <Link
-                      href={"/stores"}
-                      onClick={() => setIsLoginDropdownOpen(false)}
-                    >
-                      Stores
-                    </Link>
-                    <Link
-                      href={"/saved-store"}
-                      onClick={() => setIsLoginDropdownOpen(false)}
-                    >
-                      Saved Store
-                    </Link>
-                    <Link
-                      href={"/saved-items"}
-                      onClick={() => setIsLoginDropdownOpen(false)}
-                    >
-                      Saved Items
-                    </Link>
-                    <Link href={"/orders"}>Track order</Link>
-                    <button
-                      className={"hover:opacity-70"}
-                      onClick={() => {
-                        setIsLoginDropdownOpen(false);
-                        Logout();
-                      }}
-                    >
-                      Log out
-                    </button>
+                    <span>
+                      <UserIcon /> <DownArrowIcon />
+                    </span>
                   </div>
-                )}
-              </>
-            )}
+                  {isLoginDropdownOpen && (
+                    <div
+                      className={`${styles.loginDropdownContainer} shadow-lg`}
+                      ref={userDropdownRef}
+                    >
+                      <Link
+                        href={"/orders"}
+                        onClick={() => setIsLoginDropdownOpen(false)}
+                      >
+                        My orders
+                      </Link>
+                      <Link
+                        href={"/help"}
+                        onClick={() => setIsLoginDropdownOpen(false)}
+                      >
+                        Help/support
+                      </Link>
+                      <Link
+                        href={"/stores"}
+                        onClick={() => setIsLoginDropdownOpen(false)}
+                      >
+                        Stores
+                      </Link>
+                      <Link
+                        href={"/saved-store"}
+                        onClick={() => setIsLoginDropdownOpen(false)}
+                      >
+                        Saved Store
+                      </Link>
+                      <Link
+                        href={"/saved-items"}
+                        onClick={() => setIsLoginDropdownOpen(false)}
+                      >
+                        Saved Items
+                      </Link>
+                      <Link href={"/orders"}>Track order</Link>
+                      <button
+                        className={"hover:opacity-70"}
+                        onClick={() => {
+                          setIsLoginDropdownOpen(false);
+                          Logout();
+                        }}
+                      >
+                        Log out
+                      </button>
+                    </div>
+                  )}
+                </>
+              ))}
 
             {isSellerLoggedIn && (
               <button
