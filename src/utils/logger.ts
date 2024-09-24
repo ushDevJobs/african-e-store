@@ -29,6 +29,12 @@ if (process.env.NODE_ENV !== "production") {
       format: format.combine(format.timestamp(), format.prettyPrint()),
     })
   );
+  logger.add(
+    new winston.transports.File({
+      filename: "logs/access.log",
+      format: format.combine(format.timestamp(), format.prettyPrint()),
+    })
+  );
 }
 export const morganLogger =
   process.env.NODE_ENV === "production"
