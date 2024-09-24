@@ -11,7 +11,7 @@ import { errorHandler } from "./middlewares/errorhandler";
 const app = express();
 const PORT = process.env.PORT || 3000;
 import morgan from "morgan";
-import logger, { morganLogger } from "./utils/logger";
+import logger from "./utils/logger";
 import passport from "passport";
 import { initializePassport } from "./config/passport.config";
 import flash from "express-flash";
@@ -57,4 +57,5 @@ app.use("/api", router);
 //   });
 // }
 app.use(errorHandler);
-app.listen(PORT, () => logger.info(`App Live`));
+app.listen(PORT, () => console.log(`App Live`));
+

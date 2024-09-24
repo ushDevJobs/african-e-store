@@ -9,7 +9,7 @@ export const errorHandler = (
   next: NextFunction
 ) => {
   const status = typeof err.statusCode === "number" ? err.statusCode : 500;
-  logger.error(err.message, { stack: err.stack });
+  console.log(err.message, { stack: err.stack });
   if (err.stack?.startsWith("PrismaClientInitializationError")) {
     err = {
       message:

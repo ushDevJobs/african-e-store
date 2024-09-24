@@ -36,18 +36,18 @@ if (process.env.NODE_ENV !== "production") {
     })
   );
 }
-export const morganLogger =
-  process.env.NODE_ENV === "production"
-    ? morgan("combined", {
-        skip: function (req, res) {
-          return res.statusCode < 400;
-        },
-        stream: fs.createWriteStream(
-          path.resolve(__dirname, "../logs/access.log"),
-          {
-            flags: "a",
-          }
-        ),
-      })
-    : morgan("dev");
+// export const morganLogger =
+//   process.env.NODE_ENV === "production"
+//     ? morgan("combined", {
+//         skip: function (req, res) {
+//           return res.statusCode < 400;
+//         },
+//         stream: fs.createWriteStream(
+//           path.resolve(__dirname, "../logs/access.log"),
+//           {
+//             flags: "a",
+//           }
+//         ),
+//       })
+//     : morgan("dev");
 export default logger;
