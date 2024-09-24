@@ -37,7 +37,7 @@ app.use(express.json());
 app.use(compression());
 app.use(flash());
 
-app.use(morganLogger);
+// app.use(morganLogger);
 initializePassport(passport);
 app.use(sessionMiddleware);
 app.use(passport.initialize());
@@ -48,13 +48,13 @@ app.use(
   express.static(path.join(__dirname, "images"))
 );
 app.use("/api", router);
-if (process.env.NODE_ENV === "production") {
-  const nextApp = next({ dev: false });
-  nextApp.prepare().then(() => {
-    app.all("*", (req, res) => {
-      return nextApp.getRequestHandler()(req, res);
-    });
-  });
-}
+// if (process.env.NODE_ENV === "production") {
+//   const nextApp = next({ dev: false });
+//   nextApp.prepare().then(() => {
+//     app.all("*", (req, res) => {
+//       return nextApp.getRequestHandler()(req, res);
+//     });
+//   });
+// }
 app.use(errorHandler);
 app.listen(PORT, () => logger.info(`App Live`));
