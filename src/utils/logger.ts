@@ -37,7 +37,7 @@ export const morganLogger =
           return res.statusCode < 400;
         },
         stream: fs.createWriteStream(
-          path.resolve(__dirname, "../logs/access.log"),
+          path.resolve(__dirname, "./dist/logs/access.log"),
           {
             flags: "a",
           }
