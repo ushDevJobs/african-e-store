@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "npx prisma generate --schema=./src/prisma/schema.prisma && nodemon src/index.ts",
-    "start": "node ./src/index.js",
+    "start": "node ./index.js",
     "sync": "npx prisma db push --schema=./src/prisma/schema.prisma",
     "gen": "npx prisma generate --schema=./src/prisma/schema.prisma",
     "db": "npx prisma studio --schema=./src/prisma/schema.prisma",
