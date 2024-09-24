@@ -36,9 +36,10 @@ app.use(express.json());
 // );
 app.use(compression());
 app.use(flash());
-app.use(sessionMiddleware);
+
 app.use(morganLogger);
 initializePassport(passport);
+app.use(sessionMiddleware);
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(

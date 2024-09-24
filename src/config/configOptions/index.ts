@@ -45,9 +45,11 @@ export const sessionMiddleware = session({
   store: sessionStore,
   name: "rayvvin",
   cookie: {
-    secure: process.env.NODE_ENV === "production" ? true : "auto",
+    // secure: process.env.NODE_ENV === "production" ? true : "auto",
+    secure: process.env.NODE_ENV === "development" ? true : "auto",
     httpOnly: true,
-    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+    // sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+    sameSite: process.env.NODE_ENV === "development" ? "none" : "lax",
     maxAge: 1000 * 60 * 60 * 24,
   },
 });
