@@ -17,6 +17,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@faker-js/faker": "^9.0.3",
     "@prisma/client": "^5.17.0",
     "apicache": "^1.6.3",
     "axios": "^1.7.2",

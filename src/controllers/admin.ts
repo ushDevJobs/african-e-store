@@ -8,6 +8,8 @@ import { CACHE_KEYS, clearCache } from "../middlewares/cache";
 import { extendOrderAmount } from "../prisma/extensions";
 import { validatePagination } from "../schema/categories";
 import { RequestUser } from "../types";
+import { faker } from "@faker-js/faker";
+
 
 export const approvePaymentByAdmin = async (
   req: Request,

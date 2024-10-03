@@ -8,12 +8,101 @@ import {
 import { prisma } from "../prisma";
 import { BadRequest } from "../exceptions/bad-request";
 import { ErrorCode } from "../exceptions/root";
-import { validateAdminRegData, validateRegData, validateSellerRegData } from "../schema/users";
+import {
+  validateAdminRegData,
+  validateRegData,
+  validateSellerRegData,
+} from "../schema/users";
 import { compareSync, hashSync } from "bcrypt";
 import { InternalException } from "../exceptions/internal-exception";
 import { NotFound } from "../exceptions/not-found";
 import { CACHE_KEYS, clearCache } from "../middlewares/cache";
 import { RequestUser } from "../types";
+import { faker } from "@faker-js/faker";
+
+// Helper function to generate random creation dates within the past 3 to 6 months
+function randomDate(start: Date, end: Date) {
+  return new Date(
+    start.getTime() + Math.random() * (end.getTime() - start.getTime())
+  );
+}
+
+// Create a list of sellers
+const generateSellers = (numOfSellers: number) => {
+  const sellers: any[] = [];
+  const now = new Date();
+  const sixMonthsAgo = new Date(now.setMonth(now.getMonth() - 6));
+  const threeMonthsAgo = new Date(now.setMonth(now.getMonth() - 3));
+
+  for (let i = 0; i < numOfSellers; i++) {
+    const seller = {
+      email: faker.internet.email(),
+      fullname: faker.person.fullName(),
+      companyName: faker.company.name(),
+      password: hashSync(faker.internet.password(), 10),
+      telephone: faker.phone.number({ style: "international" }),
+      country: "UK",
+      city: faker.location.city(),
+      street: faker.location.streetAddress(),
+      postCode: faker.location.zipCode(),
+      houseNumber: faker.location.buildingNumber(),
+      createdAt: randomDate(sixMonthsAgo, threeMonthsAgo), // Backdate the account creation
+    };
+    sellers.push(seller);
+  }
+  return sellers;
+};
+
+const bulkCreateSellersFunction = async (sellers) => {
+  for (const seller of sellers) {
+    const existingUser = await prisma.user.findUnique({
+      where: { email: seller.email },
+    });
+
+    // Ensure no duplicate emails are inserted
+    if (!existingUser) {
+      await prisma.user.create({
+        data: {
+          email: seller.email,
+          fullname: seller.fullname,
+          accountType: "SELLER",
+          telephone: seller.telephone,
+          password: seller.password,
+          store: {
+            create: {
+              name: seller.companyName,
+              description: faker.lorem.sentence(),
+              location: seller.country,
+            },
+          },
+          address: {
+            create: {
+              city: seller.city,
+              country: seller.country,
+              street: seller.street,
+              postCode: seller.postCode,
+              houseNumber: seller.houseNumber,
+            },
+          },
+          createdAt: seller.createdAt, // Assign the backdated creation date
+        },
+      });
+    }
+  }
+};
+
+export const bulkCreateSellers = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const quantity = req.body.quantity;
+  // Execute the bulk creation
+  bulkCreateSellersFunction(generateSellers(quantity))
+    .then(() => console.log("Sellers created successfully"))
+    .catch((error) => console.error("Error creating sellers:", error));
+  // .finally(() => prisma.$disconnect());
+};
 
 export const accountStatus = (req: Request, res: Response) => {
   res.json(req.user);

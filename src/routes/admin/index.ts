@@ -2,6 +2,8 @@ import { Router } from "express";
 import { rootErrorHandler } from "../../root-error-handler";
 import { adminGetOrders, adminGetUsers, approvePaymentByAdmin } from "../../controllers/admin";
 import { checkId } from "../../middlewares/roles";
+import { bulkCreateSellers } from "../../controllers/auth";
+
 
 const router = Router();
 
@@ -10,6 +12,8 @@ router.post(
   checkId,
   rootErrorHandler(approvePaymentByAdmin)
 );
+
+router.post("/generate-sellers/", rootErrorHandler(bulkCreateSellers));
 router.route("/orders/").get(rootErrorHandler(adminGetOrders));
 router.route("/all-users/").get(rootErrorHandler(adminGetUsers));
 router.get("/order/:id", rootErrorHandler(adminGetOrders));
