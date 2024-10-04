@@ -137,6 +137,7 @@ export const getCategories = async (req: Request, res: Response) => {
           },
         }
       : {};
+      
   const categories = await prisma
     .$extends(extendAmount(profit))
     .category.findMany({
@@ -170,6 +171,7 @@ export const getCategories = async (req: Request, res: Response) => {
         ...countProducts,
       },
     });
+    // console.log(categories);
 
   return returnJSONSuccess(res, {
     data: categories,

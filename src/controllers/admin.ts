@@ -12,6 +12,8 @@ import { faker } from "@faker-js/faker";
 import { parse } from "csv-parse";
 import fs from "fs";
 import { format, subMonths } from "date-fns";
+import moment from "moment";
+
 
 // Define types for the product data from CSV
 interface Product {
@@ -177,6 +179,90 @@ const bulkAddProducts = async (csvFilePath: string) => {
     console.error("Error bulk adding products:", error);
   }
 };
+
+
+async function generateEngagementData(months = 6) {
+  let startDate = moment().subtract(months, "months");
+  const endDate = moment();
+
+  while (startDate.isBefore(endDate)) {
+    await prisma.engagement.create({
+      data: {
+        date: startDate.toDate(),
+        dailyUsers: faker.number.int({ min: 50, max: 300 }),
+        interactions: faker.number.int({ min: 100, max: 1000 }),
+      },
+    });
+    startDate.add(1, "day");
+  }
+
+  console.log("Engagement data generated.");
+}
+
+async function generateHashtagRankings() {
+  const hashtags = ["#sale", "#promo", "#event", "#new", "#trending"];
+
+  for (const tag of hashtags) {
+    await prisma.hashtagRanking.create({
+      data: {
+        hashtag: tag,
+        frequency: faker.number.int({ min: 10, max: 300 }),
+      },
+    });
+  }
+
+  console.log("Hashtag rankings generated.");
+}
+
+
+async function generateMarketingData(months = 6) {
+  let startDate = moment().subtract(months, "months");
+  const endDate = moment();
+
+  while (startDate.isBefore(endDate)) {
+    // Generate for SEO
+    await prisma.marketingActivity.create({
+      data: {
+        type: "SEO",
+        clicks: faker.number.int({ min: 500, max: 5000 }),
+        impressions: faker.number.int({ min: 10000, max: 50000 }),
+        conversions: faker.number.int({ min: 50, max: 500 }),
+        costPerClick: parseFloat(faker.commerce.price({min: 0.1, max: 2})),
+        date: startDate.toDate(),
+      },
+    });
+
+    // Generate for PPC
+    await prisma.marketingActivity.create({
+      data: {
+        type: "PPC",
+        clicks: faker.number.int({ min: 100, max: 1000 }),
+        impressions: faker.number.int({ min: 5000, max: 20000 }),
+        conversions: faker.number.int({ min: 10, max: 100 }),
+        costPerClick: parseFloat(faker.commerce.price({min:0.5, max:5})),
+        date: startDate.toDate(),
+      },
+    });
+
+    // Generate for Email Marketing
+    await prisma.marketingActivity.create({
+      data: {
+        type: "Email",
+        openRate: faker.number.float({ min: 10, max: 50 }),
+        clickRate: faker.number.float({ min: 1, max: 10 }),
+        date: startDate.toDate(),
+      },
+    });
+
+    startDate.add(7, "days"); // Generate weekly data
+  }
+
+  console.log("Marketing data generated.");
+}
+
+generateMarketingData().catch((e) => console.error(e));
+
+
 
 export const generateProducts = async (
   req: Request,

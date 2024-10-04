@@ -282,6 +282,32 @@ model verifyUser {
   users     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
+model Engagement {
+  id          Int      @id @default(autoincrement())
+  date        DateTime
+  dailyUsers  Int
+  interactions Int
+}
+
+model HashtagRanking {
+  id         Int      @id @default(autoincrement())
+  hashtag    String
+  frequency  Int
+}
+
+
+model MarketingActivity {
+  id            Int      @id @default(autoincrement())
+  type          String
+  clicks        Int
+  impressions   Int
+  conversions   Int
+  costPerClick  Float
+  openRate      Float?
+  clickRate     Float?
+  date          DateTime
+}
+
 enum UserStatus {
   VERIFIED
   PENDING
