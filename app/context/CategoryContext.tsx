@@ -17,7 +17,7 @@ export const CategoriesProvider = ({ children }: { children: ReactNode }) => {
     const [categories, setCategories] = useState<CategoriesResponse[] | null>(null);
     const [isFetchingCategories, setIsFetchingCategories] = useState<boolean>(true);
     const [currentPage, setCurrentPage] = useState<number>(1); // Track current page
-    const limit = 6;
+    const limit = 10;
 
     async function handleFetchAllCategories() {
 

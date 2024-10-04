@@ -80,13 +80,43 @@ export function GenerateProductsFunction() {
    */
   async function generateProducts() {
     //Fetch message
-    console.log('Starting');
+    console.log('Products');
     const response = await API.post(ApiRoutes.GenerateProducts);
 
     //Return response
     return response;
   }
   return generateProducts();
+}
+
+export function GenerateSEOPPCFunction() {
+  /**
+   * @returns the response for the api request
+   */
+  async function generateProducts() {
+    //Fetch message
+    console.log("Generating SEO & PPC");
+    const response = await API.post(ApiRoutes.GenerateSEOPPC);
+
+    //Return response
+    return response;
+  }
+  return generateProducts();
+}
+
+export async function FetchSEOPPCFunction() {
+  /**
+   * @returns the response for the api request
+   */
+  async function fetchProducts() {
+    //Fetch message
+    console.log("Fetching SEO & PPC");
+    const response = await API.get(ApiRoutes.FetchSEOPPC);
+
+    //Return response
+    return response;
+  }
+  return fetchProducts();
 }
 
 // Api call to verify user

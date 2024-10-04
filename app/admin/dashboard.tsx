@@ -19,6 +19,7 @@ import { createCustomErrorMessages } from "../components/constants/catchError";
 import { StatusEnums } from "../components/models/ISellerStore";
 import { UserOrderResponse } from "../components/models/IUserOrder";
 import {
+  FetchSEOPPCFunction,
   useAdminFetchUserOrders,
   useAdminFetchUsers,
   useFetchUserOrders,
@@ -28,6 +29,10 @@ import FBPostAnalytics from "./components/FBPostAnalytics";
 import { PostData } from "../components/models/IFBPosts";
 import InstagramMarketingTab from "./components/InstagramMarketingTab";
 import GenerateSellers from "./components/generateSellers";
+import MarketingAnalyticsTab from "./components/MarketingAnalyticsTab";
+
+
+
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState("Home");
   const handleTabChange = (tab: string) => setActiveTab(tab);
@@ -123,6 +128,25 @@ const Dashboard = () => {
     handleFetchAllCategories();
   }, []);
 
+  const [marketingData, setMarketingData] = useState([]);
+
+
+  
+  // useEffect(() => {
+  //   const fetchMarketingData = async () => {
+  //     try {
+  //       const response = await FetchSEOPPCFunction();
+  //       // const data = await response.json(data);
+  //       console.log(response);
+  //       // setMarketingData(response.data);
+  //     } catch (error) {
+  //       console.error("Error fetching marketing data:", error);
+  //     }
+  //   };
+
+  //   // fetchMarketingData();
+  // }, []);
+
   useEffect(() => {
     if (categories) {
       setProds(
@@ -140,6 +164,9 @@ const Dashboard = () => {
       );
     }
   }, [categories]);
+
+
+
 
   useEffect(() => {
     if (orders && orders.length) {
@@ -402,6 +429,7 @@ const Dashboard = () => {
             "FB Marketing",
             "Instagram Marketing",
             "Generate Sellers",
+            "Marketing & SEO",
           ].map((tab) => (
             <button
               key={tab}
@@ -530,6 +558,8 @@ const Dashboard = () => {
         {activeTab === "FB Marketing" && <FBMarketingTab />}
         {/* Main Content */}
         {activeTab === "Instagram Marketing" && <InstagramMarketingTab />}
+
+        {activeTab === "Marketing & SEO" && <MarketingAnalyticsTab />}
 
         {activeTab === "Generate Sellers" && <GenerateSellers />}
       </main>

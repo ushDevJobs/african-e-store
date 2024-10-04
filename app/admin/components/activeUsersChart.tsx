@@ -80,10 +80,10 @@ const ActiveUsersChart: React.FC<ChartProps> = ({
 
   return (
     <div className="mt-6 space-y-6">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* User Growth Over Time */}
         <div
-          className="bg-white shadow-lg rounded-lg p-6"
+          className="bg-white shadow-lg rounded-lg p-6 lg:col-span-2"
           style={chartContainerStyle}
         >
           <h2 className="text-2xl font-semibold mb-4">User Growth Over Time</h2>
