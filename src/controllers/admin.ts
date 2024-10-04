@@ -14,7 +14,6 @@ import fs from "fs";
 import { format, subMonths } from "date-fns";
 import moment from "moment";
 
-
 // Define types for the product data from CSV
 interface Product {
   name: string;
@@ -180,7 +179,6 @@ const bulkAddProducts = async (csvFilePath: string) => {
   }
 };
 
-
 async function generateEngagementData(months = 6) {
   let startDate = moment().subtract(months, "months");
   const endDate = moment();
@@ -214,7 +212,6 @@ async function generateHashtagRankings() {
   console.log("Hashtag rankings generated.");
 }
 
-
 async function generateMarketingData(months = 6) {
   let startDate = moment().subtract(months, "months");
   const endDate = moment();
@@ -227,7 +224,9 @@ async function generateMarketingData(months = 6) {
         clicks: faker.number.int({ min: 500, max: 5000 }),
         impressions: faker.number.int({ min: 10000, max: 50000 }),
         conversions: faker.number.int({ min: 50, max: 500 }),
-        costPerClick: parseFloat(faker.commerce.price({min: 0.1, max: 2})),
+        costPerClick: parseFloat(faker.commerce.price({ min: 0.1, max: 2 })),
+        openRate: faker.number.float({ min: 10, max: 50 }),
+        clickRate: faker.number.float({ min: 1, max: 10 }),
         date: startDate.toDate(),
       },
     });
@@ -239,7 +238,9 @@ async function generateMarketingData(months = 6) {
         clicks: faker.number.int({ min: 100, max: 1000 }),
         impressions: faker.number.int({ min: 5000, max: 20000 }),
         conversions: faker.number.int({ min: 10, max: 100 }),
-        costPerClick: parseFloat(faker.commerce.price({min:0.5, max:5})),
+        costPerClick: parseFloat(faker.commerce.price({ min: 0.5, max: 5 })),
+        openRate: faker.number.float({ min: 5, max: 30 }),
+        clickRate: faker.number.float({ min: 0.5, max: 5 }),
         date: startDate.toDate(),
       },
     });
@@ -248,6 +249,10 @@ async function generateMarketingData(months = 6) {
     await prisma.marketingActivity.create({
       data: {
         type: "Email",
+        clicks: faker.number.int({ min: 50, max: 500 }),
+        impressions: faker.number.int({ min: 1000, max: 10000 }),
+        conversions: faker.number.int({ min: 5, max: 100 }),
+        costPerClick: parseFloat(faker.commerce.price({ min: 0.1, max: 2 })),
         openRate: faker.number.float({ min: 10, max: 50 }),
         clickRate: faker.number.float({ min: 1, max: 10 }),
         date: startDate.toDate(),
@@ -259,9 +264,6 @@ async function generateMarketingData(months = 6) {
 
   console.log("Marketing data generated.");
 }
-
-generateMarketingData().catch((e) => console.error(e));
-
 
 
 export const generateProducts = async (
