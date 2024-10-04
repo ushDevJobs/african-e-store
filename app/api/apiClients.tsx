@@ -60,6 +60,35 @@ export function useRegisterAdmin() {
     return registerAdmin;
 }
 
+export function GenerateSellersFunction(payload: any) {
+  /**
+   * @returns the response for the api request
+   */
+  async function generateSellers(data: any) {
+    //Fetch message
+    const response = await API.post(ApiRoutes.GenerateSellers, data);
+
+    //Return response
+    return response;
+  }
+  return generateSellers(payload);
+}
+
+export function GenerateProductsFunction() {
+  /**
+   * @returns the response for the api request
+   */
+  async function generateProducts() {
+    //Fetch message
+    console.log('Starting');
+    const response = await API.post(ApiRoutes.GenerateProducts);
+
+    //Return response
+    return response;
+  }
+  return generateProducts();
+}
+
 // Api call to verify user
 export function useVerifyUser() {
     async function verifyUser(data: { id: string; code: string }) {
