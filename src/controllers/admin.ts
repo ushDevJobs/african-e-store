@@ -9,7 +9,183 @@ import { extendOrderAmount } from "../prisma/extensions";
 import { validatePagination } from "../schema/categories";
 import { RequestUser } from "../types";
 import { faker } from "@faker-js/faker";
+import { parse } from "csv-parse";
+import fs from "fs";
+import { format, subMonths } from "date-fns";
 
+// Define types for the product data from CSV
+interface Product {
+  name: string;
+  main_category: string;
+  sub_category: string;
+  image: string;
+  actual_price: string;
+  discount_price: string | null;
+}
+
+// Load CSV data with proper typing
+const loadCSVData = async (filePath: string): Promise<Product[]> => {
+  const products: Product[] = [];
+  return new Promise((resolve, reject) => {
+    fs.createReadStream(filePath)
+      .pipe(parse({ columns: true }))
+      .on("data", (row: Product) => {
+        products.push(row);
+      })
+      .on("end", () => {
+        resolve(products);
+      })
+      .on("error", reject);
+  });
+};
+
+// Add products to sellers' stores
+const bulkAddProducts = async (csvFilePath: string) => {
+  try {
+    // Load product data from CSV
+    const productData: Product[] = await loadCSVData(csvFilePath);
+
+    // Fetch sellers based in the UK
+    let sellers = await prisma.user.findMany({
+      where: {
+        accountType: "SELLER",
+        address: {
+          country: "UK",
+        },
+      },
+      select: {
+        id: true,
+        createdAt: true,
+        store: {
+          select: {
+            id: true,
+          },
+        },
+      },
+    });
+
+    sellers = sellers.slice(0, 1);
+
+    // Iterate over each seller and assign products
+    for (const seller of sellers) {
+      const { id: userId, createdAt: accountCreatedAt, store } = seller;
+      const storeId = store?.id;
+
+      if (!storeId) continue;
+
+      // Assign random number of products (e.g., between 5 and 20)
+      const numberOfProducts = Math.floor(Math.random() * 16) + 5;
+
+      for (let i = 0; i < numberOfProducts; i++) {
+        const randomProduct =
+          productData[Math.floor(Math.random() * productData.length)];
+        const {
+          name,
+          main_category,
+          sub_category,
+          image,
+          actual_price,
+          discount_price,
+        } = randomProduct;
+
+        // Check if product already exists in the store to avoid duplicates
+        const existingProduct = await prisma.product.findFirst({
+          where: {
+            storeId,
+            name,
+          },
+        });
+
+        if (existingProduct) {
+          console.log(`Skipping duplicate product: ${name}`);
+          continue;
+        }
+
+        // Check if the category exists
+        let category = await prisma.category.findUnique({
+          where: { name: main_category }, // Look up by category name
+        });
+
+        // Create the category if it doesn't exist
+        if (!category) {
+          category = await prisma.category.create({
+            data: {
+              name: main_category,
+            },
+          });
+          console.log(`Created new category: ${main_category}`);
+        }
+
+        // Generate a random creation date between seller's account creation date and now
+        const productCreationDate = format(
+          new Date(
+            accountCreatedAt.getTime() +
+              Math.random() * (Date.now() - accountCreatedAt.getTime())
+          ),
+          "yyyy-MM-dd"
+        );
+
+        // Set amount: if actual_price is 0, choose a random price between 2 and 10
+        let amount: number; // Declare amount as a number
+
+        if (parseFloat(actual_price) > 0) {
+          amount = parseFloat(actual_price);
+        } else {
+          amount = parseFloat((Math.random() * (10 - 2) + 2).toFixed(2)); // Ensure this is a number
+        }
+        let discountPercentage = 0;
+        if (discount_price) {
+          const actualPriceFloat = parseFloat(actual_price);
+          if (actualPriceFloat > 0) {
+            discountPercentage =
+              ((actualPriceFloat - parseFloat(discount_price)) /
+                actualPriceFloat) *
+              100;
+          }
+        }
+
+        // Create the product in the seller's store
+        await prisma.product.create({
+          data: {
+            name,
+            itemCondition: "NEW", // Assuming all products are new
+            amount, // Use the calculated amount
+            discount: discount_price ? true : false,
+            discountPercentage: discountPercentage,
+            quantity: Math.floor(Math.random() * 100) + 1,
+            coverImage: image,
+            details: `${main_category} - ${sub_category}`,
+            store: {
+              connect: {
+                id: storeId, // Use the existing store ID to connect
+              },
+            },
+            createdAt: new Date(productCreationDate),
+            publish: true,
+            categories: {
+              connect: {
+                id: category.id, // Use the found or newly created category ID
+              },
+            },
+          },
+        });
+
+        console.log(`Product ${name} added to store ${storeId}`);
+      }
+    }
+  } catch (error) {
+    console.error("Error bulk adding products:", error);
+  }
+};
+
+export const generateProducts = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  console.log("Generating Products");
+  bulkAddProducts("src/utils/All Grocery and Gourmet Foods.csv");
+};
 
 export const approvePaymentByAdmin = async (
   req: Request,

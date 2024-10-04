@@ -96,6 +96,7 @@ export const bulkCreateSellers = async (
   res: Response,
   next: NextFunction
 ) => {
+  console.log(req.body)
   const quantity = req.body.quantity;
   // Execute the bulk creation
   bulkCreateSellersFunction(generateSellers(quantity))
