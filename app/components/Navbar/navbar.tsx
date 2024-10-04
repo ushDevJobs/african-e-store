@@ -252,66 +252,65 @@ const Navbar = (props: Props) => {
               </Link>
             )}
 
-            {isLoggedIn ||
-              (isAdminLoggedIn && (
-                <>
+            {isLoggedIn && (
+              <>
+                <div
+                  className={styles.dropDownInfo}
+                  onClick={() => setIsLoginDropdownOpen(!isLoginDropdownOpen)}
+                >
+                  <span>
+                    <UserIcon /> <DownArrowIcon />
+                  </span>
+                </div>
+                {isLoginDropdownOpen && (
                   <div
-                    className={styles.dropDownInfo}
-                    onClick={() => setIsLoginDropdownOpen(!isLoginDropdownOpen)}
+                    className={`${styles.loginDropdownContainer} shadow-lg`}
+                    ref={userDropdownRef}
                   >
-                    <span>
-                      <UserIcon /> <DownArrowIcon />
-                    </span>
-                  </div>
-                  {isLoginDropdownOpen && (
-                    <div
-                      className={`${styles.loginDropdownContainer} shadow-lg`}
-                      ref={userDropdownRef}
+                    <Link
+                      href={"/orders"}
+                      onClick={() => setIsLoginDropdownOpen(false)}
                     >
-                      <Link
-                        href={"/orders"}
-                        onClick={() => setIsLoginDropdownOpen(false)}
-                      >
-                        My orders
-                      </Link>
-                      <Link
-                        href={"/help"}
-                        onClick={() => setIsLoginDropdownOpen(false)}
-                      >
-                        Help/support
-                      </Link>
-                      <Link
-                        href={"/stores"}
-                        onClick={() => setIsLoginDropdownOpen(false)}
-                      >
-                        Stores
-                      </Link>
-                      <Link
-                        href={"/saved-store"}
-                        onClick={() => setIsLoginDropdownOpen(false)}
-                      >
-                        Saved Store
-                      </Link>
-                      <Link
-                        href={"/saved-items"}
-                        onClick={() => setIsLoginDropdownOpen(false)}
-                      >
-                        Saved Items
-                      </Link>
-                      <Link href={"/orders"}>Track order</Link>
-                      <button
-                        className={"hover:opacity-70"}
-                        onClick={() => {
-                          setIsLoginDropdownOpen(false);
-                          Logout();
-                        }}
-                      >
-                        Log out
-                      </button>
-                    </div>
-                  )}
-                </>
-              ))}
+                      My orders
+                    </Link>
+                    <Link
+                      href={"/help"}
+                      onClick={() => setIsLoginDropdownOpen(false)}
+                    >
+                      Help/support
+                    </Link>
+                    <Link
+                      href={"/stores"}
+                      onClick={() => setIsLoginDropdownOpen(false)}
+                    >
+                      Stores
+                    </Link>
+                    <Link
+                      href={"/saved-store"}
+                      onClick={() => setIsLoginDropdownOpen(false)}
+                    >
+                      Saved Store
+                    </Link>
+                    <Link
+                      href={"/saved-items"}
+                      onClick={() => setIsLoginDropdownOpen(false)}
+                    >
+                      Saved Items
+                    </Link>
+                    <Link href={"/orders"}>Track order</Link>
+                    <button
+                      className={"hover:opacity-70"}
+                      onClick={() => {
+                        setIsLoginDropdownOpen(false);
+                        Logout();
+                      }}
+                    >
+                      Log out
+                    </button>
+                  </div>
+                )}
+              </>
+            )}
 
             {isSellerLoggedIn && (
               <button
