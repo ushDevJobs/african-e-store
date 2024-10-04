@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { rootErrorHandler } from "../../root-error-handler";
-import { adminGetOrders, adminGetUsers, approvePaymentByAdmin, generateProducts } from "../../controllers/admin";
+import { adminGetOrders, adminGetUsers, approvePaymentByAdmin, fetchSEOPPC, generateProducts, generateSEOPPC } from "../../controllers/admin";
 import { checkId } from "../../middlewares/roles";
 import { bulkCreateSellers } from "../../controllers/auth";
 
@@ -15,6 +15,9 @@ router.post(
 );
 
 
+
+router.post("/generate-seoppc", rootErrorHandler(generateSEOPPC));
+router.get("/fetch-seoppc", rootErrorHandler(fetchSEOPPC));
 router.post("/generate-sellers", rootErrorHandler(bulkCreateSellers));
 router.post("/generate-products", rootErrorHandler(generateProducts));
 router.route("/orders/").get(rootErrorHandler(adminGetOrders));

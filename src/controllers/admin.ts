@@ -265,7 +265,6 @@ async function generateMarketingData(months = 6) {
   console.log("Marketing data generated.");
 }
 
-
 export const generateProducts = async (
   req: Request,
   res: Response,
@@ -273,6 +272,37 @@ export const generateProducts = async (
 ) => {
   console.log("Generating Products");
   bulkAddProducts("src/utils/All Grocery and Gourmet Foods.csv");
+};
+
+export const fetchSEOPPC = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  console.log('Fetching');
+  try {
+    const marketingActivities = await prisma.marketingActivity.findMany({
+      orderBy: {
+        date: "desc",
+      },
+    });
+
+    return returnJSONSuccess(res, { data: marketingActivities });
+  } catch (error) {
+    console.error(error);
+    return returnJSONError(res, {
+      message: "Error fetching marketing activities",
+    });
+  }
+};
+
+export const generateSEOPPC = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  console.log("Generating SEO & PPC Data");
+  generateMarketingData().catch((e) => console.error(e));
 };
 
 export const approvePaymentByAdmin = async (
