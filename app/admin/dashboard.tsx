@@ -26,6 +26,7 @@ import {
 import FBMarketingTab from "../admin/components/FBMarketingTab";
 import FBPostAnalytics from "./components/FBPostAnalytics";
 import { PostData } from "../components/models/IFBPosts";
+import GenerateSellers from "./components/generateSellers";
 import InstagramMarketingTab from "./components/InstagramMarketingTab";
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState("Home");
@@ -150,7 +151,7 @@ const Dashboard = () => {
       let resultObj6 = {};
       let resultObj7 = {};
       users.forEach((user) => {
-        console.log(user);
+        // console.log(user);
         if (
           Object.keys(resultObj6).includes(
             new Date(user.createdAt).toDateString()
@@ -345,7 +346,7 @@ const Dashboard = () => {
             }
             return 0;
           })
-          .slice(0, 5)
+          // .slice(0, 5)
       );
       setProductDataByDate(
         Object.keys(resultObj4)
@@ -353,7 +354,7 @@ const Dashboard = () => {
           .sort(
             (a, b) => new Date(a.date).valueOf() - new Date(b.date).valueOf()
           )
-          .slice(0, 5)
+          // .slice(0, 5)
       );
       setUserDataByAccountType(
         Object.keys(resultObj7)
@@ -375,9 +376,9 @@ const Dashboard = () => {
           .sort(
             (a, b) => new Date(a.date).valueOf() - new Date(b.date).valueOf()
           )
-          .slice(0, 5)
+          // .slice(0, 5)
       );
-      console.log(resultObj4);
+      // console.log(resultObj4);
     }
   }, [orders]);
 
@@ -392,27 +393,21 @@ const Dashboard = () => {
       {/* Header with Navigation Tabs */}
       <header className="bg-white p-4 shadow-lg rounded-md mt-20">
         <nav className="flex flex-wrap">
-          {[
-            "Home",
-            "Users",
-            "Products",
-            "Sales",
-            "Orders",
-            "FB Marketing",
-            "Instagram Marketing",
-          ].map((tab) => (
-            <button
-              key={tab}
-              onClick={() => handleTabChange(tab)}
-              className={`px-4 py-2 m-1 rounded text-sm sm:text-base ${
-                activeTab === tab
-                  ? "bg-[#2C7865] text-white"
-                  : "bg-gray-200 text-gray-800"
-              }`}
-            >
-              {tab}
-            </button>
-          ))}
+          {["Home", "Users", "Products", "Sales", "Orders", "FB Marketing"].map(
+            (tab) => (
+              <button
+                key={tab}
+                onClick={() => handleTabChange(tab)}
+                className={`px-4 py-2 m-1 rounded text-sm sm:text-base ${
+                  activeTab === tab
+                    ? "bg-[#2C7865] text-white"
+                    : "bg-gray-200 text-gray-800"
+                }`}
+              >
+                {tab}
+              </button>
+            )
+          )}
         </nav>
       </header>
 
@@ -526,8 +521,6 @@ const Dashboard = () => {
           </div>
         )}
         {activeTab === "FB Marketing" && <FBMarketingTab />}
-        {/* Main Content */}
-        {activeTab === "Instagram Marketing" && <InstagramMarketingTab />}
       </main>
     </div>
   );

@@ -13,6 +13,7 @@
     "@reduxjs/toolkit": "^2.2.5",
     "@stripe/react-stripe-js": "^2.7.3",
     "@stripe/stripe-js": "^4.1.0",
+    "african-e-store": "file:",
     "axios": "^1.7.2",
     "chart.js": "^4.4.4",
     "chartjs-gauge": "^0.3.0",

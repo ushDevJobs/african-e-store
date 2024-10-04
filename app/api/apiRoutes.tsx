@@ -3,6 +3,9 @@ export default class ApiRoutes {
   static BASE_URL_DEV: string = "http://localhost:3000";
   // static BASE_URL_DEV: string = "https://african-e-store-1.onrender.com";
 
+  static GenerateSellers: string = "api/admin/generate-sellers";
+
+  static GenerateProducts: string = "api/admin/generate-products";
   /**
    * Api routes to register new user(buyer)
    */
@@ -156,8 +159,6 @@ export default class ApiRoutes {
   static FetchStoreStoreIncome: string = "api/stores/store/transactions";
 
   static FetchFBPosts: string = "api/stores/store/transactions";
-
-
 
   static FetchStoreReview: (storeId: string) => string = (storeId: string) =>
     `api/stores/store/id/${storeId}/reviews`;
