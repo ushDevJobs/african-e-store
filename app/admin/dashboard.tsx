@@ -128,24 +128,10 @@ const Dashboard = () => {
     handleFetchAllCategories();
   }, []);
 
-  const [marketingData, setMarketingData] = useState([]);
 
 
   
-  // useEffect(() => {
-  //   const fetchMarketingData = async () => {
-  //     try {
-  //       const response = await FetchSEOPPCFunction();
-  //       // const data = await response.json(data);
-  //       console.log(response);
-  //       // setMarketingData(response.data);
-  //     } catch (error) {
-  //       console.error("Error fetching marketing data:", error);
-  //     }
-  //   };
-
-  //   // fetchMarketingData();
-  // }, []);
+  
 
   useEffect(() => {
     if (categories) {
@@ -337,7 +323,7 @@ const Dashboard = () => {
             }
             return 0;
           })
-          .slice(0, 5)
+          // .slice(0, 5)
       );
       setProductSalesDataByCategory(
         Object.keys(resultObj3)
@@ -359,7 +345,7 @@ const Dashboard = () => {
           .sort(
             (a, b) => new Date(a.date).valueOf() - new Date(b.date).valueOf()
           )
-          .slice(0, 5)
+          // .slice(0, 5)
       );
       setProductDataByCount(
         Object.keys(resultObj5)
@@ -428,7 +414,7 @@ const Dashboard = () => {
             "Orders",
             "FB Marketing",
             "Instagram Marketing",
-            "Generate Sellers",
+            // "Generate",
             "Marketing & SEO",
           ].map((tab) => (
             <button
@@ -561,7 +547,7 @@ const Dashboard = () => {
 
         {activeTab === "Marketing & SEO" && <MarketingAnalyticsTab />}
 
-        {activeTab === "Generate Sellers" && <GenerateSellers />}
+        {activeTab === "Generate" && <GenerateSellers />}
       </main>
     </div>
   );

@@ -5,6 +5,8 @@ export default class ApiRoutes {
 
   static GenerateSellers: string = "api/admin/generate-sellers";
 
+  static GenerateOrders: string = "api/admin/generate-orders";
+
   static GenerateSEOPPC: string = "api/admin/generate-seoppc";
 
   static FetchSEOPPC: string = "api/admin/fetch-seoppc";

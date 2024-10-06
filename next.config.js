@@ -9,6 +9,7 @@ const nextConfig = {
       'rayvvin.onrender.com',
       'newrayvinn.rapidsuite.ng',
       'rayvvin.com',
+      'm.media-amazon.com'
     ],
   },
 };
