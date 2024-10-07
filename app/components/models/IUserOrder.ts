@@ -34,7 +34,7 @@ export interface Products {
 export interface UserOrderResponse {
   id: string;
   orderId: number;
-  amount: true;
+  amount: number;
   orderDetails: UserOrderDetails[];
   datePaid: Date;
 }

@@ -31,8 +31,6 @@ import InstagramMarketingTab from "./components/InstagramMarketingTab";
 import GenerateSellers from "./components/generateSellers";
 import MarketingAnalyticsTab from "./components/MarketingAnalyticsTab";
 
-
-
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState("Home");
   const handleTabChange = (tab: string) => setActiveTab(tab);
@@ -128,11 +126,6 @@ const Dashboard = () => {
     handleFetchAllCategories();
   }, []);
 
-
-
-  
-  
-
   useEffect(() => {
     if (categories) {
       setProds(
@@ -150,9 +143,6 @@ const Dashboard = () => {
       );
     }
   }, [categories]);
-
-
-
 
   useEffect(() => {
     if (orders && orders.length) {
@@ -323,7 +313,7 @@ const Dashboard = () => {
             }
             return 0;
           })
-          // .slice(0, 5)
+        // .slice(0, 5)
       );
       setProductSalesDataByCategory(
         Object.keys(resultObj3)
@@ -345,7 +335,7 @@ const Dashboard = () => {
           .sort(
             (a, b) => new Date(a.date).valueOf() - new Date(b.date).valueOf()
           )
-          // .slice(0, 5)
+        // .slice(0, 5)
       );
       setProductDataByCount(
         Object.keys(resultObj5)
@@ -359,7 +349,7 @@ const Dashboard = () => {
             }
             return 0;
           })
-          // .slice(0, 5)
+        // .slice(0, 5)
       );
       setProductDataByDate(
         Object.keys(resultObj4)
@@ -367,7 +357,7 @@ const Dashboard = () => {
           .sort(
             (a, b) => new Date(a.date).valueOf() - new Date(b.date).valueOf()
           )
-          // .slice(0, 5)
+        // .slice(0, 5)
       );
       setUserDataByAccountType(
         Object.keys(resultObj7)
@@ -389,7 +379,7 @@ const Dashboard = () => {
           .sort(
             (a, b) => new Date(a.date).valueOf() - new Date(b.date).valueOf()
           )
-          // .slice(0, 5)
+        // .slice(0, 5)
       );
       // console.log(resultObj4);
     }
@@ -453,17 +443,30 @@ const Dashboard = () => {
               </div>
               {/* Total Sales Card */}
               <div className="bg-white shadow-lg rounded-lg p-6">
-                <h2 className="text-xl font-semibold">Total Sales</h2>
+                <h2 className="text-xl font-semibold">Total Revenue</h2>
                 <p className="text-3xl font-bold mt-2">
+                $
+                  {orders
+                    ? orders
+                        // .map((o) => {
+                        //   return o.orderDetails;
+                        // })
+                        // .flat(1)
+                        .reduce((total, order) => total + order.amount, 0)
+                        .toFixed(2)
+                    : [].length}
+                </p>
+                <p className="text-sm text-gray-500 mt-1">
+                  from{" "}
                   {orders
                     ? orders
                         .map((o) => {
                           return o.orderDetails;
                         })
                         .flat(1).length
-                    : [].length}
+                    : [].length}{" "}
+                  Sales made
                 </p>
-                <p className="text-sm text-gray-500 mt-1">Sales made</p>
               </div>
               {/* Average Spend Card */}
               <div className="bg-white shadow-lg rounded-lg p-6">

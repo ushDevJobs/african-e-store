@@ -38,7 +38,7 @@ interface SalesListProps {
 const SalesList: React.FC<SalesListProps> = ({ sales }) => (
   <div className="bg-white shadow-lg rounded-lg p-6">
     <h2 className="text-2xl font-semibold mb-4">Recent Sales</h2>
-    <div className=" min-w-full overflow-x-auto">
+    <div className=" min-w-full h-[500px] overflow-x-auto overflow-y-auto">
       <table className="min-w-full w-max">
         <thead>
           <tr className="bg-gray-100">
