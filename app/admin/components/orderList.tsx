@@ -36,7 +36,7 @@ const OrderList: React.FC<OrderListProps> = ({ orders }) => (
             <tr key={order.id} className="border-b">
               <td className="py-2 px-4">#{order.orderId}</td>
               <td className="py-2 px-4">{order.orderDetails.length}</td>
-              <td className="py-2 px-4">${order.amount}</td>
+              <td className="py-2 px-4">£{order.amount}</td>
               {/* <td className="py-2 px-4">{}</td> */}
               <td className="py-2 px-4">
                 {order.orderDetails

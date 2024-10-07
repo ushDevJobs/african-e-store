@@ -445,7 +445,7 @@ const Dashboard = () => {
               <div className="bg-white shadow-lg rounded-lg p-6">
                 <h2 className="text-xl font-semibold">Total Revenue</h2>
                 <p className="text-3xl font-bold mt-2">
-                $
+                £
                   {orders
                     ? orders
                         // .map((o) => {
@@ -472,7 +472,7 @@ const Dashboard = () => {
               <div className="bg-white shadow-lg rounded-lg p-6">
                 <h2 className="text-xl font-semibold">Average Spend</h2>
                 <p className="text-3xl font-bold mt-2">
-                  $
+                  £
                   {orders
                     ? (
                         orders

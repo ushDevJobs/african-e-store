@@ -2,6 +2,7 @@
 
 import { useMemo } from "react";
 import { InstagramPost } from "../../admin/utils/parseInstagramData";
+import { format, addDays, differenceInDays } from "date-fns";
 
 interface InstagramAnalytics {
   dates: string[];
@@ -22,23 +23,48 @@ export const useInstagramAnalytics = (
     const totalEngagements: number[] = [];
     const hashtagsFrequency: { [key: string]: number } = {};
 
-    posts.forEach((post) => {
-      // Dates
-      dates.push(post.date);
+    if (posts.length === 0) {
+      return {
+        dates,
+        likesCounts,
+        commentsCounts,
+        totalEngagements,
+        topPosts: [],
+        hashtagsFrequency,
+      };
+    }
 
-      // Likes and Comments
-      likesCounts.push(post.likes);
-      commentsCounts.push(post.comments);
-      totalEngagements.push(post.likes + post.comments);
+    // Sort posts by date to ensure proper timeline processing
+    const sortedPosts = [...posts].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+    const firstPostDate = new Date(sortedPosts[0].date);
+    const lastPostDate = new Date(sortedPosts[sortedPosts.length - 1].date);
+    const today = new Date();
 
-      // Hashtags
-      const hashtags = post.caption.match(/#\w+/g);
-      if (hashtags) {
-        hashtags.forEach((tag) => {
-          hashtagsFrequency[tag] = (hashtagsFrequency[tag] || 0) + 1;
-        });
+    // Start from the first post date, iterate until today
+    for (let currentDate = firstPostDate; currentDate <= today; currentDate = addDays(currentDate, 1)) {
+      const formattedDate = format(currentDate, 'yyyy-MM-dd');
+      dates.push(formattedDate);
+
+      const postForCurrentDate = sortedPosts.find(post => format(new Date(post.date), 'yyyy-MM-dd') === formattedDate);
+      if (postForCurrentDate) {
+        likesCounts.push(postForCurrentDate.likes);
+        commentsCounts.push(postForCurrentDate.comments);
+        totalEngagements.push(postForCurrentDate.likes + postForCurrentDate.comments);
+
+        // Hashtags for current post
+        const hashtags = postForCurrentDate.caption.match(/#\w+/g);
+        if (hashtags) {
+          hashtags.forEach((tag) => {
+            hashtagsFrequency[tag] = (hashtagsFrequency[tag] || 0) + 1;
+          });
+        }
+      } else {
+        // No post for this date, push zero engagements
+        likesCounts.push(0);
+        commentsCounts.push(0);
+        totalEngagements.push(0);
       }
-    });
+    }
 
     // Top Posts by Engagement
     const topPosts = [...posts]

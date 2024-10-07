@@ -51,7 +51,7 @@ const SalesList: React.FC<SalesListProps> = ({ sales }) => (
           {sales.map((sale) => (
             <tr key={sale.id} className="border-b">
               <td className="py-2 px-4">{sale.product.name}</td>
-              <td className="py-2 px-4">${sale.amount}</td>
+              <td className="py-2 px-4">£{sale.amount}</td>
               <td className="py-2 px-4">{sale.quantity}</td>
             </tr>
           ))}

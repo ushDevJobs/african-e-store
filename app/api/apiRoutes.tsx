@@ -1,7 +1,7 @@
 export default class ApiRoutes {
   // static BASE_URL_DEV: string = "https://rayvvin.com";
-  // static BASE_URL_DEV: string = "http://localhost:3000";
-  static BASE_URL_DEV: string = "https://african-e-store-1.onrender.com";
+  static BASE_URL_DEV: string = "http://localhost:3000";
+  // static BASE_URL_DEV: string = "https://african-e-store-1.onrender.com";
 
   static GenerateSellers: string = "api/admin/generate-sellers";
 
