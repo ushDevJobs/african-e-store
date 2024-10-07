@@ -9,7 +9,6 @@ import { CartIcon, DownArrowIcon, UserIcon } from "../SVGs/SVGicons";
 import { usePathname, useRouter } from "next/navigation";
 import { useAccountStatus } from "@/app/context/AccountStatusContext";
 import { useLogout } from "@/app/api/apiClients";
-import { LogoutResponse } from "../models/IAccountStatus";
 import { createCustomErrorMessages } from "../constants/catchError";
 import { toast } from "sonner";
 import { RootState } from "@/app/redux/store";
@@ -38,7 +37,6 @@ const Navbar = (props: Props) => {
 
   const [isCategoryDropdownOpen, setIsCategoryDropdownOpen] = useState(false);
   const [isLoginDropdownOpen, setIsLoginDropdownOpen] = useState(false);
-  const [logoutResponse, setLogoutResponse] = useState<LogoutResponse>();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isSellerLoggedIn, setIsSellerLoggedIn] = useState(false);
   const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
@@ -49,26 +47,19 @@ const Navbar = (props: Props) => {
 
   // Api call to check if user is logged in
   async function Logout() {
-    // Start loader
-    // setIsResendingVerificationCode(true);
-
     await logout()
       .then((response) => {
-        // console.log("Response: ", response);
-        setLogoutResponse(response.data);
         if (response.data.status) {
           router.push("/");
           setIsLoggedIn(false);
           setIsSellerLoggedIn(false);
+          setIsAdminLoggedIn(false);
         }
         toast.success("Logout successful");
       })
       .catch((error) => {
         const errorMessage = createCustomErrorMessages(error.response?.data);
         toast.error(errorMessage);
-      })
-      .finally(() => {
-        // setIsResendingVerificationCode(false);
       });
   }
 
@@ -79,11 +70,7 @@ const Navbar = (props: Props) => {
   useEffect(() => {
     const handleScroll = () => {
       const scrollPosition = window.scrollY;
-      if (scrollPosition > 0) {
-        setScrolled(true);
-      } else {
-        setScrolled(false);
-      }
+      setScrolled(scrollPosition > 0);
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -97,23 +84,19 @@ const Navbar = (props: Props) => {
   }, []);
 
   useEffect(() => {
-    if (accountStatus && accountStatus.accountType == "BUYER") {
+    if (accountStatus?.accountType === "BUYER") {
       setIsLoggedIn(true);
     } else {
       setIsLoggedIn(false);
     }
-  }, [accountStatus]);
 
-  useEffect(() => {
-    if (accountStatus && accountStatus.accountType == "SELLER") {
+    if (accountStatus?.accountType === "SELLER") {
       setIsSellerLoggedIn(true);
     } else {
       setIsSellerLoggedIn(false);
     }
-  }, [accountStatus]);
 
-  useEffect(() => {
-    if (accountStatus && accountStatus.accountType == "ADMIN") {
+    if (accountStatus?.accountType === "ADMIN") {
       setIsAdminLoggedIn(true);
     } else {
       setIsAdminLoggedIn(false);
@@ -124,133 +107,157 @@ const Navbar = (props: Props) => {
   useOuterClick(userDropdownRef, setIsLoginDropdownOpen);
   const catDropdownRef = useRef<HTMLUListElement>(null);
   useOuterClick(catDropdownRef, setIsCategoryDropdownOpen);
+
   return (
     <div
       className={`${styles.navbarContainer} ${scrolled ? styles.scrolled : ""}`}
     >
       {onDesktop && (
         <div className={styles.navContent}>
-          <Link
-            href={`${pathname.includes("/seller") ? "/seller" : "/"}`}
-            className={styles.logo}
-          >
+          <Link href="/" className={styles.logo}>
             <Image src={images.logo} alt="rayvvin logo" />
           </Link>
 
           <ul className={styles.links}>
-            {!isSellerLoggedIn && (
-              <Link href="/">
-                <li>Home</li>
-              </Link>
-            )}
+            <Link href="/">
+              <li>Home</li>
+            </Link>
 
-            {!isLoggedIn && !isSellerLoggedIn && (
-              <Link href="/seller/signup">
-                <li>Sell</li>
-              </Link>
-            )}
-            {!isSellerLoggedIn ||
-              (!isAdminLoggedIn && (
-                <Link href="/faq">
-                  <li>FAQ&apos;s</li>
-                </Link>
-              ))}
-            {isSellerLoggedIn && (
-              <Link href="/seller-account">
-                <li
-                  className={
-                    pathname == "/seller-account"
-                      ? "!text-[#2C7865] "
-                      : "hover:!text-[#2C7865]"
-                  }
-                >
-                  My Account
-                </li>
-              </Link>
-            )}
-            {!isSellerLoggedIn && (
-              <div className={styles.dropdown}>
-                <li
-                  ref={categoryDropdownRef}
-                  onClick={() =>
-                    setIsCategoryDropdownOpen(!isCategoryDropdownOpen)
-                  }
-                >
-                  Categories <DownArrowIcon />
-                </li>
-                {isCategoryDropdownOpen && (
-                  <ul className={styles.dropdownContainer} ref={catDropdownRef}>
-                    <div className="w-full flex flex-col !min-w-[300px] p-2">
-                      {categories?.slice(0, 6).map((category) => (
-                        <div
-                          className={`${styles.category} flex flex-col mx-3 my-1`}
-                          key={category.id}
-                        >
-                          <Link
-                            key={category.id}
-                            href={`/categories/${category.id}`}
-                            onClick={() => setIsCategoryDropdownOpen(false)}
-                            className="block px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition whitespace-nowrap "
-                          >
-                            {category.name}
-                          </Link>
-                        </div>
-                      ))}
-                      {!categories && isFetchingCategories && (
-                        <div className="h-28 w-full grid place-items-center ">
-                          <FullPageLoader className="w-6 h-6" />
-                        </div>
-                      )}
-                      {categories && (
+            {/* Categories dropdown always visible */}
+            <div className={styles.dropdown}>
+              <li
+                onClick={() =>
+                  setIsCategoryDropdownOpen(!isCategoryDropdownOpen)
+                }
+              >
+                Categories <DownArrowIcon />
+              </li>
+              {isCategoryDropdownOpen && (
+                <ul className={styles.dropdownContainer} ref={catDropdownRef}>
+                  <div className="w-full flex flex-col !min-w-[300px] p-2">
+                    {categories?.slice(0, 10).map((category) => (
+                      <div
+                        className={`${styles.category} flex flex-col mx-3 my-1`}
+                        key={category.id}
+                      >
                         <Link
-                          className="whitespace-nowrap text-[#2C7865] text-sm mx-3 my-2 text-center"
-                          href="/categories"
+                          key={category.id}
+                          href={`/categories/${category.id}`}
                           onClick={() => setIsCategoryDropdownOpen(false)}
+                          className="block px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition whitespace-nowrap "
                         >
-                          See all
-                          {/* See all categories */}
+                          {category.name}
                         </Link>
-                      )}
-                    </div>
-                    {/* <div className={styles.rhs}>
+                      </div>
+                    ))}
+                    {!categories && isFetchingCategories && (
+                      <div className="h-28 w-full grid place-items-center ">
+                        <FullPageLoader className="w-6 h-6" />
+                      </div>
+                    )}
+                    {categories && (
+                      <Link
+                        className="whitespace-nowrap text-[#2C7865] text-sm mx-3 my-2 text-center"
+                        href="/categories"
+                        onClick={() => setIsCategoryDropdownOpen(false)}
+                      >
+                        See all
+                        {/* See all categories */}
+                      </Link>
+                    )}
+                  </div>
+                  {/* <div className={styles.rhs}>
                                             <Image src={images.category_dropdown_image} alt='category iamge' />
                                         </div> */}
-                  </ul>
-                )}
-              </div>
-            )}
-            {!isLoggedIn && !isSellerLoggedIn && (
-              <>
-                <Link href="/login">
-                  <button className={`${styles.login} hover:opacity-70`}>
-                    {" "}
-                    Login
-                  </button>
-                </Link>
-                <Link href="/signup">
-                  <button className={`${styles.signup} hover:opacity-70`}>
-                    Sign up
-                  </button>
-                </Link>
-              </>
-            )}
+                </ul>
+              )}
+            </div>
 
+            {/* Sell always visible */}
+            <Link href="/seller/signup">
+              <li>Sell</li>
+            </Link>
+
+            <Link href="/faq">
+              <li>FAQ&apos;s</li>
+            </Link>
+
+            {/* Cart for Buyers */}
             {isLoggedIn && (
-              <Link href={"/cart"}>
+              <Link href="/cart">
                 <div className={styles.cart}>
                   <div className={styles.cartIcon}>
-                    <p>
-                      <CartIcon />
-                    </p>
-                    <span>
-                      {" "}
-                      {cartItems.length > 0 && <>{cartItems.length}</>}
-                    </span>
+                    <CartIcon />
+                    <span>{cartItems.length > 0 && cartItems.length}</span>
                   </div>
                   <h4>My cart</h4>
                 </div>
               </Link>
             )}
+
+            
+
+            
+
+            {isAdminLoggedIn && (
+              <>
+                <div
+                  className={styles.dropDownInfo}
+                  onClick={() => setIsLoginDropdownOpen(!isLoginDropdownOpen)}
+                >
+                  <span>
+                    <UserIcon /> <DownArrowIcon />
+                  </span>
+                </div>
+                {isLoginDropdownOpen && (
+                  <div
+                    className={`${styles.loginDropdownContainer} shadow-lg`}
+                    ref={userDropdownRef}
+                  >
+                    <button
+                      className={"hover:opacity-70"}
+                      onClick={() => {
+                        setIsLoginDropdownOpen(false);
+                        Logout();
+                      }}
+                    >
+                      Log out
+                    </button>
+                  </div>
+                )}
+              </>
+            )}
+
+            {isSellerLoggedIn && (
+              <>
+                <div
+                  className={styles.dropDownInfo}
+                  onClick={() => setIsLoginDropdownOpen(!isLoginDropdownOpen)}
+                >
+                  <span>
+                    <UserIcon /> <DownArrowIcon />
+                  </span>
+                </div>
+                {isLoginDropdownOpen && (
+                  <div
+                    className={`${styles.loginDropdownContainer} shadow-lg`}
+                    ref={userDropdownRef}
+                  >
+                    <button
+                      className={"hover:opacity-70"}
+                      onClick={() => {
+                        setIsLoginDropdownOpen(false);
+                        Logout();
+                      }}
+                    >
+                      Log out
+                    </button>
+                  </div>
+                )}
+              </>
+            )}
+
+            
 
             {isLoggedIn && (
               <>
@@ -299,7 +306,7 @@ const Navbar = (props: Props) => {
                     </Link>
                     <Link href={"/orders"}>Track order</Link>
                     <button
-                      className={"hover:opacity-70"}
+                      className={"hover:opacity-70 bg[#2c7865]"}
                       onClick={() => {
                         setIsLoginDropdownOpen(false);
                         Logout();
@@ -312,7 +319,7 @@ const Navbar = (props: Props) => {
               </>
             )}
 
-            {isSellerLoggedIn && (
+            {/* {isSellerLoggedIn && (
               <button
                 className={`${styles.signup} hover:opacity-70`}
                 onClick={() => {
@@ -322,10 +329,29 @@ const Navbar = (props: Props) => {
               >
                 Log out
               </button>
+            )} */}
+
+            {/* Login/Signup for Unauthenticated Users */}
+            {!isLoggedIn && !isSellerLoggedIn && !isAdminLoggedIn && (
+              <>
+                <Link href="/login">
+                  <button className={`${styles.login} hover:opacity-70`}>
+                    {" "}
+                    Login
+                  </button>
+                </Link>
+                <Link href="/signup">
+                  <button className={`${styles.signup} hover:opacity-70`}>
+                    Sign up
+                  </button>
+                </Link>
+              </>
             )}
           </ul>
         </div>
       )}
+
+      {/* Mobile Navbar */}
       {onMobile && (
         <MobileNavBar
           navIsOpen={navIsOpen}
@@ -338,6 +364,8 @@ const Navbar = (props: Props) => {
           isAdminLoggedIn={isAdminLoggedIn}
           cartItems={cartItems}
           Logout={Logout}
+          setIsLoginDropdownOpen={setIsLoginDropdownOpen}
+
         />
       )}
     </div>
