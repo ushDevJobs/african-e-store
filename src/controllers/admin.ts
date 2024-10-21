@@ -11,7 +11,7 @@ import { RequestUser } from "../types";
 import { faker } from "@faker-js/faker";
 import { parse } from "csv-parse";
 import fs from "fs";
-import { format, subMonths } from "date-fns";
+import { addDays, format, isBefore, subMonths } from "date-fns";
 import moment from "moment";
 const reviewTexts = [
   "Amazing product! Exceeded my expectations.",
@@ -57,7 +57,6 @@ const reviewTexts = [
   "Excellent! Would highly recommend to friends and family.",
   "Product was damaged on arrival, but still works fine.",
 ];
-
 
 // Define types for the product data from CSV
 interface Product {
@@ -475,9 +474,11 @@ const randomDateInLastThreeMonths = () => {
 
 const createBackdatedOrders = async (numberOfOrders: number) => {
   // Fetch all buyers and sellers
-  const buyers = await prisma.user.findMany({ where: { accountType: 'BUYER' } });
+  const buyers = await prisma.user.findMany({
+    where: { accountType: "BUYER" },
+  });
   const sellers = await prisma.user.findMany({
-    where: { accountType: 'SELLER' },
+    where: { accountType: "SELLER" },
     include: {
       store: true, // This includes the store relation for each seller
     },
@@ -496,8 +497,12 @@ const createBackdatedOrders = async (numberOfOrders: number) => {
 
     // Fetch available products, filtering for cheaper items (e.g., groceries or small-priced products)
     const products = await prisma.product.findMany({
-      where: { storeId: seller.store.id, quantity: { gt: 0 }, amount: { lte: 50 } }, // Prioritize cheaper items
-      orderBy: { amount: 'asc' }, // Sort by price ascending
+      where: {
+        storeId: seller.store.id,
+        quantity: { gt: 0 },
+        amount: { lte: 50 },
+      }, // Prioritize cheaper items
+      orderBy: { amount: "asc" }, // Sort by price ascending
     });
 
     if (products.length === 0) continue; // Skip if no available products
@@ -508,7 +513,10 @@ const createBackdatedOrders = async (numberOfOrders: number) => {
     const orderDetailsData = [] as any[];
 
     // Randomize the number of unique products, capped at 8
-    const numUniqueProducts = Math.min(Math.floor(Math.random() * 8) + 1, products.length);
+    const numUniqueProducts = Math.min(
+      Math.floor(Math.random() * 8) + 1,
+      products.length
+    );
 
     // Shuffle products to ensure randomness
     const shuffledProducts = products.sort(() => 0.5 - Math.random());
@@ -597,12 +605,13 @@ const createBackdatedOrders = async (numberOfOrders: number) => {
         },
       });
 
-      console.log(`Created order with ID ${order.id} for buyer ${buyer.fullname} with total amount ${totalAmount}`);
+      console.log(
+        `Created order with ID ${order.id} for buyer ${buyer.fullname} with total amount ${totalAmount}`
+      );
     }
   }
   console.log(`Order Generation Completed`);
 };
-
 
 // Function to generate random numbers for orderId
 const generateRandomNumbers = (length: number) => {
@@ -687,17 +696,11 @@ export const adminGetUsers = async (req: Request, res: Response) => {
   return returnJSONSuccess(res, { data: users });
 };
 
-
-import { PrismaClient } from "@prisma/client";
-import { subMonths, isBefore, format, addDays } from 'date-fns';
-
-const prisma = new PrismaClient();
-
 // Function to simulate product views
 export const simulateProductViews = async () => {
   const users = await prisma.user.findMany({
     where: {
-      accountType: 'BUYER',
+      accountType: "BUYER",
     },
     select: {
       id: true,
@@ -753,7 +756,6 @@ export const simulateProductViews = async () => {
   }
 };
 
-
 export const simulateProductRatingsAndReviews = async () => {
   const users = await prisma.user.findMany({
     where: {
@@ -801,25 +803,57 @@ export const simulateProductRatingsAndReviews = async () => {
         },
       });
 
+      // If no existing rating, proceed to create a new one
       if (!existingRating) {
-        const randomReview =
-          reviewTexts[Math.floor(Math.random() * reviewTexts.length)];
-
-        await prisma.rating.create({
-          data: {
-            rating: Math.floor(Math.random() * 5) + 1,
-            review: randomReview,
-            userId,
-            orderDetails: {
-              connect: {
-                productId: product.id,
-              },
-            },
-            createdAt: new Date(randomDate),
+        // Fetch the related OrderDetails (with both orderId and productId)
+        const orderDetail = await prisma.orderDetails.findFirst({
+          where: {
+            productId: product.id,
+          },
+          select: {
+            id: true, // Fetch orderDetailsId for connecting Rating
           },
         });
+
+        if (orderDetail) {
+          const randomReview =
+            reviewTexts[Math.floor(Math.random() * reviewTexts.length)];
+
+          // Create the rating
+          await prisma.rating.create({
+            data: {
+              rating: Math.floor(Math.random() * 5) + 1, // Generate a random rating between 1-5
+              review: randomReview, // Assign a random review text from predefined options
+              userId, // Link the user who gave the rating
+              orderDetailsId: orderDetail.id,
+              createdAt: new Date(randomDate), // Set a random backdated creation date
+            },
+          });
+        }
       }
     }
   }
 };
 
+export const generateBackdatedRatingsAndReviews = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    console.log("Simulating backdated product ratings and reviews");
+
+    // Call the simulateProductRatingsAndReviews function and await the result
+    await simulateProductRatingsAndReviews();
+
+    await simulateProductViews();
+
+    // Respond to the client indicating the simulation was successful
+    res.status(200).json({
+      message: "Backdated product ratings and reviews successfully simulated",
+    });
+  } catch (error) {
+    console.error("Error generating backdated ratings and reviews:", error);
+    next(error); // Pass error to the next middleware for error handling
+  }
+};
