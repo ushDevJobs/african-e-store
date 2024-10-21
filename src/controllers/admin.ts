@@ -11,8 +11,52 @@ import { RequestUser } from "../types";
 import { faker } from "@faker-js/faker";
 import { parse } from "csv-parse";
 import fs from "fs";
-import { format, subMonths } from "date-fns";
+import { addDays, format, isBefore, subMonths } from "date-fns";
 import moment from "moment";
+const reviewTexts = [
+  "Amazing product! Exceeded my expectations.",
+  "Good quality, fast delivery. Highly recommend!",
+  "I'm very satisfied with my purchase.",
+  "Great value for money. Will buy again!",
+  "The product is decent, but the delivery was slow.",
+  "Not bad, but I expected a bit more.",
+  "Excellent product! Works as described.",
+  "Good, but there's room for improvement.",
+  "This is my second purchase, and I'm still impressed.",
+  "Product arrived in perfect condition. Very happy with it.",
+  "Quality is top-notch! I'm loving it.",
+  "Packaging was good, but the product wasn't as described.",
+  "Very useful! Would definitely recommend.",
+  "Fantastic service and a great product!",
+  "It works okay, but there were some issues.",
+  "Not worth the price, unfortunately.",
+  "I'm happy with the product, but it took too long to arrive.",
+  "Five stars! I'll be buying from this seller again.",
+  "The product met my needs perfectly.",
+  "Decent quality, but I found it cheaper elsewhere.",
+  "Delivery was quick and the product works as expected.",
+  "Amazing service, and the product is of high quality.",
+  "A bit disappointed with the quality.",
+  "The product broke after a few uses, but customer service was helpful.",
+  "I wasn't sure at first, but this product is worth every penny.",
+  "It does the job, but nothing extraordinary.",
+  "High quality and affordable price. Very satisfied!",
+  "This was exactly what I was looking for!",
+  "Not great. I wouldn't buy this again.",
+  "Superb product! Well-built and durable.",
+  "I received the wrong item, but the seller handled it well.",
+  "I’ve been using it for a week now, and it’s working perfectly.",
+  "Product is okay, but I had better experiences with other brands.",
+  "It didn't work for me, unfortunately.",
+  "Best purchase I've made this year!",
+  "Works fine, but not as advertised.",
+  "Highly satisfied. This product made my life easier.",
+  "This product is a game-changer!",
+  "Poor quality. Not worth the hype.",
+  "It does what it says. No complaints.",
+  "Excellent! Would highly recommend to friends and family.",
+  "Product was damaged on arrival, but still works fine.",
+];
 
 // Define types for the product data from CSV
 interface Product {
@@ -430,9 +474,11 @@ const randomDateInLastThreeMonths = () => {
 
 const createBackdatedOrders = async (numberOfOrders: number) => {
   // Fetch all buyers and sellers
-  const buyers = await prisma.user.findMany({ where: { accountType: 'BUYER' } });
+  const buyers = await prisma.user.findMany({
+    where: { accountType: "BUYER" },
+  });
   const sellers = await prisma.user.findMany({
-    where: { accountType: 'SELLER' },
+    where: { accountType: "SELLER" },
     include: {
       store: true, // This includes the store relation for each seller
     },
@@ -451,8 +497,12 @@ const createBackdatedOrders = async (numberOfOrders: number) => {
 
     // Fetch available products, filtering for cheaper items (e.g., groceries or small-priced products)
     const products = await prisma.product.findMany({
-      where: { storeId: seller.store.id, quantity: { gt: 0 }, amount: { lte: 50 } }, // Prioritize cheaper items
-      orderBy: { amount: 'asc' }, // Sort by price ascending
+      where: {
+        storeId: seller.store.id,
+        quantity: { gt: 0 },
+        amount: { lte: 50 },
+      }, // Prioritize cheaper items
+      orderBy: { amount: "asc" }, // Sort by price ascending
     });
 
     if (products.length === 0) continue; // Skip if no available products
@@ -463,7 +513,10 @@ const createBackdatedOrders = async (numberOfOrders: number) => {
     const orderDetailsData = [] as any[];
 
     // Randomize the number of unique products, capped at 8
-    const numUniqueProducts = Math.min(Math.floor(Math.random() * 8) + 1, products.length);
+    const numUniqueProducts = Math.min(
+      Math.floor(Math.random() * 8) + 1,
+      products.length
+    );
 
     // Shuffle products to ensure randomness
     const shuffledProducts = products.sort(() => 0.5 - Math.random());
@@ -553,12 +606,13 @@ const createBackdatedOrders = async (numberOfOrders: number) => {
         },
       });
 
-      console.log(`Created order with ID ${order.id} for buyer ${buyer.fullname} with total amount ${totalAmount}`);
+      console.log(
+        `Created order with ID ${order.id} for buyer ${buyer.fullname} with total amount ${totalAmount}`
+      );
     }
   }
   console.log(`Order Generation Completed`);
 };
-
 
 // Function to generate random numbers for orderId
 const generateRandomNumbers = (length: number) => {
@@ -641,4 +695,166 @@ export const adminGetUsers = async (req: Request, res: Response) => {
   });
 
   return returnJSONSuccess(res, { data: users });
+};
+
+// Function to simulate product views
+export const simulateProductViews = async () => {
+  const users = await prisma.user.findMany({
+    where: {
+      accountType: "BUYER",
+    },
+    select: {
+      id: true,
+      createdAt: true,
+    },
+  });
+
+  const products = await prisma.product.findMany({
+    where: {
+      publish: true,
+    },
+    select: {
+      id: true,
+      createdAt: true,
+    },
+  });
+
+  for (const user of users) {
+    const { id: userId, createdAt: userCreatedAt } = user;
+
+    // Limit product views to the signup date of the user
+    const eligibleProducts = products.filter((product) =>
+      isBefore(new Date(product.createdAt), new Date())
+    );
+
+    for (const product of eligibleProducts) {
+      const randomDate = format(
+        addDays(
+          subMonths(new Date(), Math.random() * 6),
+          Math.floor(Math.random() * 30)
+        ),
+        "yyyy-MM-dd"
+      );
+
+      // Avoid duplicates
+      const existingView = await prisma.viewsTracker.findFirst({
+        where: {
+          userId,
+          productId: product.id,
+        },
+      });
+
+      if (!existingView) {
+        await prisma.viewsTracker.create({
+          data: {
+            userId,
+            productId: product.id,
+            viewedAt: new Date(randomDate),
+          },
+        });
+      }
+    }
+  }
+};
+
+export const simulateProductRatingsAndReviews = async () => {
+  const users = await prisma.user.findMany({
+    where: {
+      accountType: "BUYER",
+    },
+    select: {
+      id: true,
+      createdAt: true,
+    },
+  });
+
+  const products = await prisma.product.findMany({
+    where: {
+      publish: true,
+    },
+    select: {
+      id: true,
+      createdAt: true,
+    },
+  });
+
+  for (const user of users) {
+    const { id: userId, createdAt: userCreatedAt } = user;
+
+    const eligibleProducts = products.filter((product) =>
+      isBefore(new Date(product.createdAt), new Date())
+    );
+
+    for (const product of eligibleProducts) {
+      const randomDate = format(
+        addDays(
+          subMonths(new Date(), Math.random() * 6),
+          Math.floor(Math.random() * 30)
+        ),
+        "yyyy-MM-dd"
+      );
+
+      // Check if the user has already left a rating for the product
+      const existingRating = await prisma.rating.findFirst({
+        where: {
+          userId,
+          orderDetails: {
+            productId: product.id,
+          },
+        },
+      });
+
+      // If no existing rating, proceed to create a new one
+      if (!existingRating) {
+        // Fetch the related OrderDetails (with both orderId and productId)
+        const orderDetail = await prisma.orderDetails.findFirst({
+          where: {
+            productId: product.id,
+          },
+          select: {
+            id: true, // Fetch orderDetailsId for connecting Rating
+          },
+        });
+
+        if (orderDetail) {
+          const randomReview =
+            reviewTexts[Math.floor(Math.random() * reviewTexts.length)];
+
+          // Create the rating
+          await prisma.rating.create({
+            data: {
+              rating: Math.floor(Math.random() * 5) + 1, // Generate a random rating between 1-5
+              review: randomReview, // Assign a random review text from predefined options
+              userId, // Link the user who gave the rating
+              orderDetailsId: orderDetail.id,
+              createdAt: new Date(randomDate), // Set a random backdated creation date
+            },
+          });
+        }
+      }
+    }
+  }
+};
+
+export const generateBackdatedRatingsAndReviews = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    console.log("Simulating backdated product ratings and reviews");
+
+    // Call the simulateProductRatingsAndReviews function and await the result
+    await simulateProductRatingsAndReviews();
+
+    await simulateProductViews();
+
+    // Respond to the client indicating the simulation was successful
+    res.status(200).json({
+      message: "Backdated product ratings and reviews successfully simulated",
+    });
+  } catch (error) {
+    console.error("Error generating backdated ratings and reviews:", error);
+    next(error); // Pass error to the next middleware for error handling
+  }
 };
