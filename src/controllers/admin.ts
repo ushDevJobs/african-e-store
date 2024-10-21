@@ -520,6 +520,7 @@ const createBackdatedOrders = async (numberOfOrders: number) => {
           storeId: seller.store.id,
           shippingFee: seller.store.shippingFee,
           interest,
+          status: 'DELIVERED'
         });
 
         // Increment the total amount
