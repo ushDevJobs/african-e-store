@@ -324,11 +324,11 @@ export const fetchSEOPPC = async (
   res: Response,
   next: NextFunction
 ) => {
-  console.log('Fetching');
+  console.log("Fetching");
   try {
     const marketingActivities = await prisma.marketingActivity.findMany({
       orderBy: {
-        date: "desc",
+        date: "asc",
       },
     });
 
@@ -348,6 +348,36 @@ export const generateSEOPPC = async (
 ) => {
   console.log("Generating SEO & PPC Data");
   generateMarketingData().catch((e) => console.error(e));
+};
+
+export const generateBackdatedOrders = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    console.log("Generating backdated orders");
+
+    // Get the number of orders from the request body or query params
+    const { numberOfOrders } = req.body;
+
+    if (!numberOfOrders || isNaN(numberOfOrders)) {
+      return res.status(400).json({
+        message: "Invalid or missing number of orders",
+      });
+    }
+
+    // Call the createBackdatedOrders function and await the result
+    await createBackdatedOrders(numberOfOrders);
+
+    // Respond to the client indicating the orders were created
+    res.status(200).json({
+      message: `${numberOfOrders} backdated orders successfully created`,
+    });
+  } catch (error) {
+    console.error("Error generating backdated orders:", error);
+    next(error); // Pass error to the next middleware for handling
+  }
 };
 
 export const approvePaymentByAdmin = async (
@@ -430,6 +460,157 @@ export const approvePaymentByAdmin = async (
   } else {
     return returnJSONError(res, { message: "Order not delivered" });
   }
+};
+
+// Helper function to generate a random date in the last 3 months
+const randomDateInLastThreeMonths = () => {
+  const startDate = subMonths(new Date(), 3); // 3 months ago
+  const endDate = new Date(); // Today
+  const randomDate = new Date(
+    startDate.getTime() +
+      Math.random() * (endDate.getTime() - startDate.getTime())
+  );
+  return randomDate;
+};
+
+const createBackdatedOrders = async (numberOfOrders: number) => {
+  // Fetch all buyers and sellers
+  const buyers = await prisma.user.findMany({ where: { accountType: 'BUYER' } });
+  const sellers = await prisma.user.findMany({
+    where: { accountType: 'SELLER' },
+    include: {
+      store: true, // This includes the store relation for each seller
+    },
+  });
+
+  for (let i = 0; i < numberOfOrders; i++) {
+    console.log(`Creating Order ${i}`);
+    const buyer = buyers[Math.floor(Math.random() * buyers.length)];
+    const seller = sellers[Math.floor(Math.random() * sellers.length)];
+
+    // Check if the seller has a store before proceeding
+    if (!seller.store) {
+      console.log(`Seller ${seller.fullname} has no store, skipping...`);
+      continue; // Skip to the next iteration if the store is null
+    }
+
+    // Fetch available products, filtering for cheaper items (e.g., groceries or small-priced products)
+    const products = await prisma.product.findMany({
+      where: { storeId: seller.store.id, quantity: { gt: 0 }, amount: { lte: 50 } }, // Prioritize cheaper items
+      orderBy: { amount: 'asc' }, // Sort by price ascending
+    });
+
+    if (products.length === 0) continue; // Skip if no available products
+
+    // Set the maximum order total
+    const MAX_ORDER_TOTAL = 300;
+    let totalAmount = 0;
+    const orderDetailsData = [] as any[];
+
+    // Randomize the number of unique products, capped at 8
+    const numUniqueProducts = Math.min(Math.floor(Math.random() * 8) + 1, products.length);
+
+    // Shuffle products to ensure randomness
+    const shuffledProducts = products.sort(() => 0.5 - Math.random());
+
+    for (const product of shuffledProducts) {
+      // Stop adding products if the total amount is close to $200
+      if (totalAmount >= MAX_ORDER_TOTAL) break;
+
+      // Generate a random quantity between 1 and the available stock for each product
+      const randomQuantity = Math.floor(Math.random() * 8) + 1;
+      const finalQuantity = Math.min(randomQuantity, product.quantity);
+
+      // Calculate the potential amount for this product (based on quantity)
+      const productAmount = product.amount * finalQuantity;
+
+      // Check if adding this product will exceed $200
+      if (totalAmount + productAmount > MAX_ORDER_TOTAL) {
+        // If adding the full quantity will exceed the limit, adjust the quantity
+        const remainingAmount = MAX_ORDER_TOTAL - totalAmount;
+        const adjustedQuantity = Math.floor(remainingAmount / product.amount);
+        if (adjustedQuantity > 0) {
+          const adjustedProductAmount = product.amount * adjustedQuantity;
+          const interest = adjustedProductAmount * 0.05;
+
+          // Add this adjusted product to the order details
+          orderDetailsData.push({
+            amount: adjustedProductAmount,
+            quantity: adjustedQuantity,
+            productId: product.id,
+            storeId: seller.store.id,
+            shippingFee: seller.store.shippingFee,
+            interest,
+          });
+
+          // Increment the total amount
+          totalAmount += adjustedProductAmount;
+
+          // Decrease product quantity after order is created
+          await prisma.product.update({
+            where: { id: product.id },
+            data: { quantity: { decrement: adjustedQuantity } },
+          });
+        }
+        break; // Stop after adding this product
+      } else {
+        // Add the product with full quantity to the order
+        const interest = productAmount * 0.05;
+
+        // Add this product to the order details
+        orderDetailsData.push({
+          amount: productAmount,
+          quantity: finalQuantity,
+          productId: product.id,
+          storeId: seller.store.id,
+          shippingFee: seller.store.shippingFee,
+          interest,
+        });
+
+        // Increment the total amount
+        totalAmount += productAmount;
+
+        // Decrease product quantity after order is created
+        await prisma.product.update({
+          where: { id: product.id },
+          data: { quantity: { decrement: finalQuantity } },
+        });
+      }
+    }
+
+    const orderDate = randomDateInLastThreeMonths();
+
+    // Create the order for the buyer with the backdated creation date
+    if (totalAmount > 0) {
+      const order = await prisma.order.create({
+        data: {
+          orderId: generateRandomNumbers(7), // Function that generates random order IDs
+          amount: totalAmount, // Total amount for all products in the order
+          userId: buyer.id,
+          createdAt: orderDate,
+          updatedAt: orderDate,
+          paymentStatus: true, // Assuming payment was successful
+          datePaid: orderDate,
+          orderDetails: {
+            create: orderDetailsData, // Create multiple order details
+          },
+        },
+      });
+
+      console.log(`Created order with ID ${order.id} for buyer ${buyer.fullname} with total amount ${totalAmount}`);
+    }
+  }
+  console.log(`Order Generation Completed`);
+};
+
+
+// Function to generate random numbers for orderId
+const generateRandomNumbers = (length: number) => {
+  return parseInt(
+    Math.floor(Math.random() * Math.pow(10, length))
+      .toString()
+      .padStart(length, "0")
+  );
 };
 
 export const adminGetOrders = async (req: Request, res: Response) => {
