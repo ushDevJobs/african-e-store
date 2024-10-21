@@ -13,6 +13,51 @@ import { parse } from "csv-parse";
 import fs from "fs";
 import { format, subMonths } from "date-fns";
 import moment from "moment";
+const reviewTexts = [
+  "Amazing product! Exceeded my expectations.",
+  "Good quality, fast delivery. Highly recommend!",
+  "I'm very satisfied with my purchase.",
+  "Great value for money. Will buy again!",
+  "The product is decent, but the delivery was slow.",
+  "Not bad, but I expected a bit more.",
+  "Excellent product! Works as described.",
+  "Good, but there's room for improvement.",
+  "This is my second purchase, and I'm still impressed.",
+  "Product arrived in perfect condition. Very happy with it.",
+  "Quality is top-notch! I'm loving it.",
+  "Packaging was good, but the product wasn't as described.",
+  "Very useful! Would definitely recommend.",
+  "Fantastic service and a great product!",
+  "It works okay, but there were some issues.",
+  "Not worth the price, unfortunately.",
+  "I'm happy with the product, but it took too long to arrive.",
+  "Five stars! I'll be buying from this seller again.",
+  "The product met my needs perfectly.",
+  "Decent quality, but I found it cheaper elsewhere.",
+  "Delivery was quick and the product works as expected.",
+  "Amazing service, and the product is of high quality.",
+  "A bit disappointed with the quality.",
+  "The product broke after a few uses, but customer service was helpful.",
+  "I wasn't sure at first, but this product is worth every penny.",
+  "It does the job, but nothing extraordinary.",
+  "High quality and affordable price. Very satisfied!",
+  "This was exactly what I was looking for!",
+  "Not great. I wouldn't buy this again.",
+  "Superb product! Well-built and durable.",
+  "I received the wrong item, but the seller handled it well.",
+  "I’ve been using it for a week now, and it’s working perfectly.",
+  "Product is okay, but I had better experiences with other brands.",
+  "It didn't work for me, unfortunately.",
+  "Best purchase I've made this year!",
+  "Works fine, but not as advertised.",
+  "Highly satisfied. This product made my life easier.",
+  "This product is a game-changer!",
+  "Poor quality. Not worth the hype.",
+  "It does what it says. No complaints.",
+  "Excellent! Would highly recommend to friends and family.",
+  "Product was damaged on arrival, but still works fine.",
+];
+
 
 // Define types for the product data from CSV
 interface Product {
@@ -460,3 +505,140 @@ export const adminGetUsers = async (req: Request, res: Response) => {
 
   return returnJSONSuccess(res, { data: users });
 };
+
+
+import { PrismaClient } from "@prisma/client";
+import { subMonths, isBefore, format, addDays } from 'date-fns';
+
+const prisma = new PrismaClient();
+
+// Function to simulate product views
+export const simulateProductViews = async () => {
+  const users = await prisma.user.findMany({
+    where: {
+      accountType: 'BUYER',
+    },
+    select: {
+      id: true,
+      createdAt: true,
+    },
+  });
+
+  const products = await prisma.product.findMany({
+    where: {
+      publish: true,
+    },
+    select: {
+      id: true,
+      createdAt: true,
+    },
+  });
+
+  for (const user of users) {
+    const { id: userId, createdAt: userCreatedAt } = user;
+
+    // Limit product views to the signup date of the user
+    const eligibleProducts = products.filter((product) =>
+      isBefore(new Date(product.createdAt), new Date())
+    );
+
+    for (const product of eligibleProducts) {
+      const randomDate = format(
+        addDays(
+          subMonths(new Date(), Math.random() * 6),
+          Math.floor(Math.random() * 30)
+        ),
+        "yyyy-MM-dd"
+      );
+
+      // Avoid duplicates
+      const existingView = await prisma.viewsTracker.findFirst({
+        where: {
+          userId,
+          productId: product.id,
+        },
+      });
+
+      if (!existingView) {
+        await prisma.viewsTracker.create({
+          data: {
+            userId,
+            productId: product.id,
+            viewedAt: new Date(randomDate),
+          },
+        });
+      }
+    }
+  }
+};
+
+
+export const simulateProductRatingsAndReviews = async () => {
+  const users = await prisma.user.findMany({
+    where: {
+      accountType: "BUYER",
+    },
+    select: {
+      id: true,
+      createdAt: true,
+    },
+  });
+
+  const products = await prisma.product.findMany({
+    where: {
+      publish: true,
+    },
+    select: {
+      id: true,
+      createdAt: true,
+    },
+  });
+
+  for (const user of users) {
+    const { id: userId, createdAt: userCreatedAt } = user;
+
+    const eligibleProducts = products.filter((product) =>
+      isBefore(new Date(product.createdAt), new Date())
+    );
+
+    for (const product of eligibleProducts) {
+      const randomDate = format(
+        addDays(
+          subMonths(new Date(), Math.random() * 6),
+          Math.floor(Math.random() * 30)
+        ),
+        "yyyy-MM-dd"
+      );
+
+      // Check if the user has already left a rating for the product
+      const existingRating = await prisma.rating.findFirst({
+        where: {
+          userId,
+          orderDetails: {
+            productId: product.id,
+          },
+        },
+      });
+
+      if (!existingRating) {
+        const randomReview =
+          reviewTexts[Math.floor(Math.random() * reviewTexts.length)];
+
+        await prisma.rating.create({
+          data: {
+            rating: Math.floor(Math.random() * 5) + 1,
+            review: randomReview,
+            userId,
+            orderDetails: {
+              connect: {
+                productId: product.id,
+              },
+            },
+            createdAt: new Date(randomDate),
+          },
+        });
+      }
+    }
+  }
+};
+
