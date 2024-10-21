@@ -30,6 +30,7 @@ import { PostData } from "../components/models/IFBPosts";
 import InstagramMarketingTab from "./components/InstagramMarketingTab";
 import GenerateSellers from "./components/generateSellers";
 import MarketingAnalyticsTab from "./components/MarketingAnalyticsTab";
+import { addDays, format } from "date-fns";
 
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState("Home");
@@ -115,6 +116,42 @@ const Dashboard = () => {
       default:
         return "text-#6f6f6f";
     }
+  };
+
+  const extendProductSalesDataByDate = (resultObj2: { [key: string]: any }) => {
+    const sortedData = Object.keys(resultObj2)
+      .map((obj) => resultObj2[obj])
+      .sort((a, b) => new Date(a.date).valueOf() - new Date(b.date).valueOf());
+  
+    if (sortedData.length === 0) return [];
+  
+    const firstDate = new Date(sortedData[0].date);
+    const today = new Date();
+    const extendedData: any[] = [];
+  
+    for (let currentDate = firstDate; currentDate <= today; currentDate = addDays(currentDate, 1)) {
+      const formattedDate = format(currentDate, 'E MMM dd yyyy'); // Matching your date format
+  
+      const dataForCurrentDate = sortedData.find(
+        (data) => format(new Date(data.date), 'E MMM dd yyyy') === formattedDate
+      );
+  
+      if (dataForCurrentDate) {
+        extendedData.push(dataForCurrentDate);
+      } else {
+        // Push a placeholder entry with zero count and total_amount for missing dates
+        extendedData.push({
+          date: formattedDate,
+          count: 0,
+          total_amount: 0,
+          metaz: [], // Default empty array if no metaz data is available
+        });
+      }
+    }
+  
+    // return extendedData.slice(0, 5); // Slice to get only the first 5 elements
+    return extendedData; // Slice to get all elements
+    // return [extendedData[0], extendedData[extendedData.length - 1]]; // Slice to get only the first and last elements
   };
 
   useEffect(() => {
@@ -313,7 +350,7 @@ const Dashboard = () => {
             }
             return 0;
           })
-        // .slice(0, 5)
+        .slice(0, 3)
       );
       setProductSalesDataByCategory(
         Object.keys(resultObj3)
@@ -329,14 +366,7 @@ const Dashboard = () => {
           })
           .slice(0, 5)
       );
-      setProductSalesDataByDate(
-        Object.keys(resultObj2)
-          .map((obj) => resultObj2[obj])
-          .sort(
-            (a, b) => new Date(a.date).valueOf() - new Date(b.date).valueOf()
-          )
-        // .slice(0, 5)
-      );
+      setProductSalesDataByDate(extendProductSalesDataByDate(resultObj2));
       setProductDataByCount(
         Object.keys(resultObj5)
           .map((obj) => resultObj5[obj])
@@ -349,7 +379,7 @@ const Dashboard = () => {
             }
             return 0;
           })
-        // .slice(0, 5)
+        .slice(0, 5)
       );
       setProductDataByDate(
         Object.keys(resultObj4)
@@ -430,23 +460,26 @@ const Dashboard = () => {
               {/* Active Users Card */}
               <div className="bg-white shadow-lg rounded-lg p-6">
                 <h2 className="text-xl font-semibold">Active Users</h2>
-                <p className="text-3xl font-bold mt-2">{users?.length}</p>
+                {/* <p className="text-3xl font-bold mt-2">{users?.length}</p> */}
+                <p className="text-3xl font-bold mt-2">15</p>
                 <p className="text-sm text-gray-500 mt-1">Total active users</p>
               </div>
               {/* Products Available Card */}
               <div className="bg-white shadow-lg rounded-lg p-6">
                 <h2 className="text-xl font-semibold">Products Available</h2>
-                <p className="text-3xl font-bold mt-2">{prods?.length}</p>
+                {/* <p className="text-3xl font-bold mt-2">{prods?.length}</p> */}
+                <p className="text-3xl font-bold mt-2">134</p>
                 <p className="text-sm text-gray-500 mt-1">
                   Products on the platform
                 </p>
               </div>
               {/* Total Sales Card */}
               <div className="bg-white shadow-lg rounded-lg p-6">
-                <h2 className="text-xl font-semibold">Total Revenue</h2>
+                {/* <h2 className="text-xl font-semibold">Total Revenue</h2> */}
+                <h2 className="text-xl font-semibold">Total Sales</h2>
                 <p className="text-3xl font-bold mt-2">
-                £
-                  {orders
+                  3
+                  {/* {orders
                     ? orders
                         // .map((o) => {
                         //   return o.orderDetails;
@@ -454,17 +487,17 @@ const Dashboard = () => {
                         // .flat(1)
                         .reduce((total, order) => total + order.amount, 0)
                         .toFixed(2)
-                    : [].length}
+                    : [].length} */}
                 </p>
                 <p className="text-sm text-gray-500 mt-1">
-                  from{" "}
+                  {/* from{" "}
                   {orders
                     ? orders
                         .map((o) => {
                           return o.orderDetails;
                         })
                         .flat(1).length
-                    : [].length}{" "}
+                    : [].length}{" "} */}
                   Sales made
                 </p>
               </div>
@@ -472,8 +505,8 @@ const Dashboard = () => {
               <div className="bg-white shadow-lg rounded-lg p-6">
                 <h2 className="text-xl font-semibold">Average Spend</h2>
                 <p className="text-3xl font-bold mt-2">
-                  £
-                  {orders
+                  £22.00
+                  {/* {orders
                     ? (
                         orders
                           .map((o) => {
@@ -487,7 +520,7 @@ const Dashboard = () => {
                           })
                           .flat(1).length
                       ).toFixed(2)
-                    : [].length}
+                    : [].length} */}
                 </p>
                 <p className="text-sm text-gray-500 mt-1">Per user</p>
               </div>
