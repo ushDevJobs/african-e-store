@@ -4,7 +4,13 @@ import {
   adminGetOrders,
   adminGetUsers,
   approvePaymentByAdmin,
+  fetchActivity,
+  fetchMetric,
+  fetchRatingBreakdown,
+  fetchRecentReviews,
   fetchSEOPPC,
+  fetchTopRatedProds,
+  fetchTopViewed,
   generateBackdatedOrders,
   generateBackdatedRatingsAndReviews,
   generateProducts,
@@ -25,6 +31,15 @@ router.post(
   "/generate-ratings-reviews",
   rootErrorHandler(generateBackdatedRatingsAndReviews)
 );
+
+
+router.get("/metrics", rootErrorHandler(fetchMetric));
+router.get("/activity", rootErrorHandler(fetchActivity));
+router.get("/top-rated-products", rootErrorHandler(fetchTopRatedProds));
+router.get("/top-viewed-products", rootErrorHandler(fetchTopViewed));
+router.get("/rating-breakdown", rootErrorHandler(fetchRatingBreakdown));
+router.get("/recent-reviews", rootErrorHandler(fetchRecentReviews));
+
 router.post("/generate-orders", rootErrorHandler(generateBackdatedOrders));
 router.post("/generate-seoppc", rootErrorHandler(generateSEOPPC));
 router.get("/fetch-seoppc", rootErrorHandler(fetchSEOPPC));

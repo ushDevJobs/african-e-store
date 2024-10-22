@@ -11,51 +11,56 @@ import { RequestUser } from "../types";
 import { faker } from "@faker-js/faker";
 import { parse } from "csv-parse";
 import fs from "fs";
-import { addDays, format, isBefore, subMonths } from "date-fns";
+import {
+  addDays,
+  format,
+  isBefore,
+  subMonths,
+  formatISO,
+  parseISO,
+} from "date-fns";
 import moment from "moment";
+import { connect } from "net";
 const reviewTexts = [
-  "Amazing product! Exceeded my expectations.",
-  "Good quality, fast delivery. Highly recommend!",
-  "I'm very satisfied with my purchase.",
-  "Great value for money. Will buy again!",
-  "The product is decent, but the delivery was slow.",
-  "Not bad, but I expected a bit more.",
-  "Excellent product! Works as described.",
-  "Good, but there's room for improvement.",
-  "This is my second purchase, and I'm still impressed.",
-  "Product arrived in perfect condition. Very happy with it.",
-  "Quality is top-notch! I'm loving it.",
-  "Packaging was good, but the product wasn't as described.",
-  "Very useful! Would definitely recommend.",
-  "Fantastic service and a great product!",
-  "It works okay, but there were some issues.",
-  "Not worth the price, unfortunately.",
-  "I'm happy with the product, but it took too long to arrive.",
-  "Five stars! I'll be buying from this seller again.",
-  "The product met my needs perfectly.",
-  "Decent quality, but I found it cheaper elsewhere.",
-  "Delivery was quick and the product works as expected.",
-  "Amazing service, and the product is of high quality.",
-  "A bit disappointed with the quality.",
-  "The product broke after a few uses, but customer service was helpful.",
-  "I wasn't sure at first, but this product is worth every penny.",
-  "It does the job, but nothing extraordinary.",
-  "High quality and affordable price. Very satisfied!",
-  "This was exactly what I was looking for!",
-  "Not great. I wouldn't buy this again.",
-  "Superb product! Well-built and durable.",
-  "I received the wrong item, but the seller handled it well.",
-  "I’ve been using it for a week now, and it’s working perfectly.",
-  "Product is okay, but I had better experiences with other brands.",
-  "It didn't work for me, unfortunately.",
-  "Best purchase I've made this year!",
-  "Works fine, but not as advertised.",
-  "Highly satisfied. This product made my life easier.",
-  "This product is a game-changer!",
-  "Poor quality. Not worth the hype.",
-  "It does what it says. No complaints.",
-  "Excellent! Would highly recommend to friends and family.",
-  "Product was damaged on arrival, but still works fine.",
+  "Fresh and exactly what I needed!",
+  "Great quality, delivered promptly. Will order again.",
+  "Tasty and well-packaged. Highly recommend!",
+  "The product was fresh, but delivery took too long.",
+  "Good value for money, but the quantity could be better.",
+  "Very satisfied with the freshness and taste.",
+  "Excellent quality! Will definitely buy more.",
+  "Not bad, but I’ve had better quality before.",
+  "Perfect for my cooking needs. Will reorder soon.",
+  "Quick delivery and the product was in great condition.",
+  "The veggies were fresh, but some items were damaged.",
+  "Amazing quality and very fresh. Super happy with my order!",
+  "Delivery was fast, but the produce wasn't as fresh as I hoped.",
+  "Great packaging and the product exceeded my expectations.",
+  "Some items were fresher than others, but overall good.",
+  "I expected better quality for the price.",
+  "Five stars for the freshness and quick service!",
+  "The product met my expectations, but room for improvement.",
+  "Good for the price, but I've found better deals elsewhere.",
+  "Arrived in perfect condition and tastes great!",
+  "Impressed with the quality and freshness.",
+  "A bit disappointed with the overall quality.",
+  "Some of the items were stale, but customer service was great.",
+  "Was skeptical at first, but the quality is impressive!",
+  "It’s decent, but I wouldn't repurchase.",
+  "Fresh, affordable, and exactly what I needed!",
+  "Superb! Will be buying again for sure.",
+  "Received the wrong item, but was quickly resolved.",
+  "I've used it a few times, and it stays fresh longer than expected.",
+  "Okay product, but the quality could be better.",
+  "Didn’t live up to my expectations, unfortunately.",
+  "Best groceries purchase I’ve made in a while!",
+  "Works fine for my needs, but not extraordinary.",
+  "Very satisfied. It’s made meal prepping much easier!",
+  "Game-changing product for my kitchen!",
+  "Not as fresh as advertised.",
+  "It does the job, but I've had fresher.",
+  "Highly recommend for its freshness and quality.",
+  "Arrived with minor damages, but still good quality.",
 ];
 
 // Define types for the product data from CSV
@@ -573,7 +578,7 @@ const createBackdatedOrders = async (numberOfOrders: number) => {
           storeId: seller.store.id,
           shippingFee: seller.store.shippingFee,
           interest,
-          status: 'DELIVERED'
+          status: "DELIVERED",
         });
 
         // Increment the total amount
@@ -758,6 +763,14 @@ export const simulateProductViews = async () => {
 };
 
 export const simulateProductRatingsAndReviews = async () => {
+  const buyerNames = [
+    "uchenna ukeh",
+    "Uchenna Ukeh",
+    "Jeremiah Anachuna",
+    "Ikechukwu Josiah Anachuna",
+    "Chidi Mgbara",
+  ];
+
   const users = await prisma.user.findMany({
     where: {
       accountType: "BUYER",
@@ -765,6 +778,7 @@ export const simulateProductRatingsAndReviews = async () => {
     select: {
       id: true,
       createdAt: true,
+      fullname: true,
     },
   });
 
@@ -794,40 +808,70 @@ export const simulateProductRatingsAndReviews = async () => {
         "yyyy-MM-dd"
       );
 
-      // Check if the user has already left a rating for the product
-      const existingRating = await prisma.rating.findFirst({
+      // Fetch the related OrderDetails (with both orderId and productId)
+      const orderDetail = await prisma.orderDetails.findFirst({
         where: {
-          userId,
-          orderDetails: {
-            productId: product.id,
-          },
+          productId: product.id,
+        },
+        select: {
+          id: true, // Fetch orderDetailsId for connecting Rating
         },
       });
 
-      // If no existing rating, proceed to create a new one
-      if (!existingRating) {
-        // Fetch the related OrderDetails (with both orderId and productId)
-        const orderDetail = await prisma.orderDetails.findFirst({
+      if (orderDetail) {
+        // Check if the Rating for this OrderDetails already exists
+        const existingRating = await prisma.rating.findFirst({
           where: {
-            productId: product.id,
-          },
-          select: {
-            id: true, // Fetch orderDetailsId for connecting Rating
+            orderDetailsId: orderDetail.id,
           },
         });
 
-        if (orderDetail) {
+        if (existingRating) {
+          console.log(
+            `Rating already exists for OrderDetails ID: ${orderDetail.id}`
+          );
+
+          // Get all other users (buyers) except the current one
+          const otherUsers = users.filter((u) => u.id !== userId && !buyerNames.includes(u.fullname));
+
+          if (otherUsers.length > 0) {
+            // Pick a random buyer from the remaining users
+            const randomBuyer =
+              otherUsers[Math.floor(Math.random() * otherUsers.length)];
+
+            // Update the existing rating with a new random buyer and review
+            const randomReview =
+              reviewTexts[Math.floor(Math.random() * reviewTexts.length)];
+
+            await prisma.rating.update({
+              where: { id: existingRating.id },
+              data: {
+                userId: randomBuyer.id,
+                rating: Math.floor(Math.random() * 5) + 1, // Update with a new rating value
+                review: randomReview, // Update with a new review text
+                createdAt: new Date(randomDate), // Update the date
+              },
+            });
+
+            console.log(
+              `Rating for OrderDetails ID: ${orderDetail.id} updated to new user ${randomBuyer.id}`
+            );
+          }
+        } else {
+          // If no existing rating, proceed to create a new one
           const randomReview =
             reviewTexts[Math.floor(Math.random() * reviewTexts.length)];
 
-          // Create the rating
           await prisma.rating.create({
             data: {
-              rating: Math.floor(Math.random() * 5) + 1, // Generate a random rating between 1-5
-              review: randomReview, // Assign a random review text from predefined options
-              userId, // Link the user who gave the rating
-              orderDetailsId: orderDetail.id,
-              createdAt: new Date(randomDate), // Set a random backdated creation date
+              rating: Math.floor(Math.random() * 5) + 1,
+              review: randomReview,
+              userId,
+              orderDetailsId: orderDetail.id, // Use the direct ID for the orderDetails relation
+              createdAt: new Date(randomDate),
+              // // Assign a random buyer name from the predefined list
+              // buyerName:
+              //   buyerNames[Math.floor(Math.random() * buyerNames.length)],
             },
           });
         }
@@ -847,8 +891,11 @@ export const generateBackdatedRatingsAndReviews = async (
     // Call the simulateProductRatingsAndReviews function and await the result
     await simulateProductRatingsAndReviews();
 
-    await simulateProductViews();
+    console.log("Backdated product ratings and reviews successfully simulated");
+    console.log("Simulating product views");
+    // await simulateProductViews();
 
+    // console.log("Backdated views successfully simulated");
     // Respond to the client indicating the simulation was successful
     res.status(200).json({
       message: "Backdated product ratings and reviews successfully simulated",
@@ -856,5 +903,220 @@ export const generateBackdatedRatingsAndReviews = async (
   } catch (error) {
     console.error("Error generating backdated ratings and reviews:", error);
     next(error); // Pass error to the next middleware for error handling
+  }
+};
+
+export const fetchMetric = async (req: Request, res: Response) => {
+  try {
+    const totalViews = await prisma.viewsTracker.count(); // Total product views
+    const totalRatings = await prisma.rating.count(); // Total ratings
+    const totalReviews = await prisma.rating.count({
+      where: { review: { not: "" } },
+    }); // Total reviews with non-null reviewText
+    const averageRating = await prisma.rating.aggregate({
+      _avg: { rating: true },
+    });
+
+    res.status(200).json({
+      totalViews,
+      totalRatings,
+      totalReviews,
+      averageRating: averageRating._avg.rating ?? 0,
+    });
+  } catch (error) {
+    console.error("Error fetching metrics:", error);
+    res.status(500).json({ error: "Failed to fetch metrics" });
+  }
+};
+
+export const fetchActivity = async (req: Request, res: Response) => {
+  try {
+    const startDate = subMonths(new Date(), 6); // Data from the past 6 months
+
+    // Fetch views data
+    const views = await prisma.viewsTracker.groupBy({
+      by: ["createdAt"],
+      _count: true,
+      where: { createdAt: { gte: startDate } },
+      orderBy: { createdAt: "asc" },
+    });
+
+    // Fetch ratings data
+    const ratings = await prisma.rating.groupBy({
+      by: ["createdAt"],
+      _count: true,
+      where: { createdAt: { gte: startDate } },
+      orderBy: { createdAt: "asc" },
+    });
+
+    // Fetch reviews data
+    const reviews = await prisma.rating.groupBy({
+      by: ["createdAt"],
+      _count: true,
+      where: { createdAt: { gte: startDate }, review: { not: "" } },
+      orderBy: { createdAt: "asc" },
+    });
+
+    // Create a map to group data by date (YYYY-MM-DD)
+    const activityMap: Record<
+      string,
+      { views: number; ratings: number; reviews: number }
+    > = {};
+
+    // Helper function to normalize the date to YYYY-MM-DD
+    const normalizeDate = (dateString: string) =>
+      formatISO(parseISO(dateString), { representation: "date" });
+
+    // Add views data to the map
+    views.forEach((view) => {
+      const date = normalizeDate(view.createdAt.toISOString());
+      if (!activityMap[date])
+        activityMap[date] = { views: 0, ratings: 0, reviews: 0 };
+      activityMap[date].views += view._count;
+    });
+
+    // Add ratings data to the map
+    ratings.forEach((rating) => {
+      const date = normalizeDate(rating.createdAt.toISOString());
+      if (!activityMap[date])
+        activityMap[date] = { views: 0, ratings: 0, reviews: 0 };
+      activityMap[date].ratings += rating._count;
+    });
+
+    // Add reviews data to the map
+    reviews.forEach((review) => {
+      const date = normalizeDate(review.createdAt.toISOString());
+      if (!activityMap[date])
+        activityMap[date] = { views: 0, ratings: 0, reviews: 0 };
+      activityMap[date].reviews += review._count;
+    });
+
+    // Convert the activityMap to an array for response
+    const activityOverTime = Object.keys(activityMap)
+      .map((date) => ({
+        date,
+        ...activityMap[date],
+      }))
+      .filter((actv) => actv.views <= 10);
+
+    res.status(200).json({ activityOverTime });
+  } catch (error) {
+    console.error("Error fetching user activity:", error);
+    res.status(500).json({ error: "Failed to fetch user activity" });
+  }
+};
+
+export const fetchTopRatedProds = async (req: Request, res: Response) => {
+  try {
+    const topRatedProducts = await prisma.rating.groupBy({
+      by: ["orderDetailsId", "rating"], // Group by orderDetailsId instead of productId
+      _avg: { rating: true },
+      _count: { rating: true },
+      having: { rating: { gte: 1 } },
+      // having: { _count: { rating: { gte: 1 } } },  // Products with at least 1 rating
+      orderBy: { _avg: { rating: "desc" } },
+      take: 10,
+    });
+
+    // Then fetch the products details using the grouped orderDetailsIds
+    const orderDetailsIds = topRatedProducts.map((item) => item.orderDetailsId);
+    const productDetails = await prisma.orderDetails.findMany({
+      where: {
+        id: { in: orderDetailsIds },
+      },
+      include: {
+        product: true, // Include the related Product model
+      },
+    });
+
+    const result = productDetails.map((tr) => ({
+      productId: tr.productId,
+      productName: tr.product.name,
+      averageRating:
+        topRatedProducts.find((p) => p.orderDetailsId === tr.id)?._avg ?? "",
+    }));
+
+    res.status(200).json(result);
+  } catch (error) {
+    console.error("Error fetching top rated products:", error);
+    res.status(500).json({ error: "Failed to fetch top rated products" });
+  }
+};
+
+export const fetchTopViewed = async (req: Request, res: Response) => {
+  try {
+    const topViewedProducts = await prisma.viewsTracker.groupBy({
+      by: ["productId"],
+      _count: true,
+      orderBy: { _count: { productId: "desc" } },
+      take: 10,
+    });
+
+    const products = await prisma.product.findMany({
+      where: { id: { in: topViewedProducts.map((p) => p.productId) } },
+    });
+
+    const result = topViewedProducts.map((tv) => ({
+      productId: tv.productId,
+      productName: products.find((p) => p.id === tv.productId)?.name ?? "",
+      viewCount: tv._count,
+    }));
+
+    res.status(200).json(result);
+  } catch (error) {
+    console.error("Error fetching top viewed products:", error);
+    res.status(500).json({ error: "Failed to fetch top viewed products" });
+  }
+};
+
+export const fetchRatingBreakdown = async (req: Request, res: Response) => {
+  try {
+    const ratingsBreakdown = await prisma.rating.groupBy({
+      by: ["rating"],
+      _count: true,
+    });
+
+    const result = ratingsBreakdown.map(async (rb) => ({
+      rating: rb.rating,
+      percentage: (rb._count * 100) / (await prisma.rating.count()),
+    }));
+
+    res.status(200).json(result);
+  } catch (error) {
+    console.error("Error fetching rating breakdown:", error);
+    res.status(500).json({ error: "Failed to fetch rating breakdown" });
+  }
+};
+
+export const fetchRecentReviews = async (req: Request, res: Response) => {
+  try {
+    const reviews = await prisma.rating.findMany({
+      where: { review: { not: "" } },
+      orderBy: { createdAt: "desc" },
+      take: 10,
+      include: {
+        user: true,
+        orderDetails: true,
+      },
+    });
+
+    const products = await prisma.product.findMany({
+      where: { id: { in: reviews.map((p) => p.orderDetails.productId) } },
+    });
+
+    const result = reviews.map((review) => ({
+      user: review.user.fullname,
+      productName:
+        products.find((p) => p.id === review.orderDetails.productId)?.name ??
+        "",
+      reviewText: review.review,
+      rating: review.rating,
+      createdAt: review.createdAt,
+    }));
+
+    res.status(200).json(result);
+  } catch (error) {
+    console.error("Error fetching recent reviews:", error);
+    res.status(500).json({ error: "Failed to fetch recent reviews" });
   }
 };
