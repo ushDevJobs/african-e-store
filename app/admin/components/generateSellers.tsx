@@ -6,9 +6,8 @@ import {
   GenerateProductsFunction,
   GenerateSellersFunction,
   GenerateSEOPPCFunction,
+  GenerateRatRevFunction,
 } from "@/app/api/apiClients";
-
-
 
 const GenerateSellers = () => {
   const handleGenerateSellers = async () => {
@@ -32,7 +31,7 @@ const GenerateSellers = () => {
         numberOfOrders: 100,
       });
       //   alert("Sellers generated successfully!");
-        console.log(response); // Optional: For debugging
+      console.log(response); // Optional: For debugging
     } catch (error) {
       //   alert("Error generating sellers");
       console.error("Error:", error);
@@ -65,6 +64,19 @@ const GenerateSellers = () => {
     }
   };
 
+  const handleGenerateRatRev = async () => {
+    try {
+      // console.log("H");
+      // console.log(`${ApiRoutes.BASE_URL_DEV}/${ApiRoutes.GenerateSellers}/`);
+      const response = GenerateRatRevFunction();
+      //   alert("Sellers generated successfully!");
+      //   console.log(response.data); // Optional: For debugging
+    } catch (error) {
+      //   alert("Error generating sellers");
+      console.error("Error:", error);
+    }
+  };
+
   return (
     <div className="flex justify-center items-center h-full space-x-4">
       <button
@@ -86,6 +98,13 @@ const GenerateSellers = () => {
         className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 transition-all"
       >
         Generate SEO & PPC
+      </button>
+
+      <button
+        onClick={handleGenerateRatRev}
+        className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 transition-all"
+      >
+        Generate Rat Rev
       </button>
 
       <button

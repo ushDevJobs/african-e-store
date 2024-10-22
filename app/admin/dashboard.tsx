@@ -31,9 +31,10 @@ import InstagramMarketingTab from "./components/InstagramMarketingTab";
 import GenerateSellers from "./components/generateSellers";
 import MarketingAnalyticsTab from "./components/MarketingAnalyticsTab";
 import { addDays, format } from "date-fns";
+import AdminAnalyticsPage from "./user-activity/adminAnalytics";
 
 const Dashboard = () => {
-  const [activeTab, setActiveTab] = useState("Home");
+  const [activeTab, setActiveTab] = useState("Analytics");
   const handleTabChange = (tab: string) => setActiveTab(tab);
   const { categories, handleFetchAllCategories } = useCategories();
   const fetchOrders = useAdminFetchUserOrders();
@@ -434,8 +435,9 @@ const Dashboard = () => {
             "Orders",
             "FB Marketing",
             "Instagram Marketing",
-            // "Generate",
+            "Generate",
             "Marketing & SEO",
+            "Analytics"
           ].map((tab) => (
             <button
               key={tab}
@@ -584,6 +586,8 @@ const Dashboard = () => {
         {activeTab === "Marketing & SEO" && <MarketingAnalyticsTab />}
 
         {activeTab === "Generate" && <GenerateSellers />}
+
+        {activeTab === "Analytics" && <AdminAnalyticsPage />}
       </main>
     </div>
   );

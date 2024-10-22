@@ -12,6 +12,15 @@ export default class ApiRoutes {
   static FetchSEOPPC: string = "api/admin/fetch-seoppc";
 
   static GenerateProducts: string = "api/admin/generate-products";
+
+  static GenerateReviews: string = "api/admin/generate-ratings-reviews";
+
+  static FetchMetrics : string = "api/admin/metrics";
+  static FetchActivity : string = "api/admin/activity";
+  static FetchTopRatedProducts : string = "api/admin/top-rated-products";
+  static FetchTopViewedProducts : string = "api/admin/top-viewed-products";
+  static FetchRatingBreakdown : string = "api/admin/rating-breakdown";
+  static FetchRecentReviews : string = "api/admin/recent-reviews";
   /**
    * Api routes to register new user(buyer)
    */

@@ -118,6 +118,21 @@ export function GenerateSEOPPCFunction() {
   return generateProducts();
 }
 
+export function GenerateRatRevFunction() {
+  /**
+   * @returns the response for the api request
+   */
+  async function generateRatRev() {
+    //Fetch message
+    console.log("Generating Ratings & Reviews");
+    const response = await API.post(ApiRoutes.GenerateReviews);
+
+    //Return response
+    return response;
+  }
+  return generateRatRev();
+}
+
 export async function FetchSEOPPCFunction() {
   /**
    * @returns the response for the api request
@@ -132,6 +147,37 @@ export async function FetchSEOPPCFunction() {
   }
   return fetchProducts();
 }
+
+
+export const fetchMetrics = async () => {
+  const { data } = await API.get(ApiRoutes.FetchMetrics);
+  return data;
+};
+
+export const fetchUserActivity = async () => {
+  const { data } = await API.get(ApiRoutes.FetchActivity);
+  return data;
+};
+
+export const fetchTopRatedProducts = async () => {
+  const { data } = await API.get(ApiRoutes.FetchTopRatedProducts);
+  return data;
+};
+
+export const fetchTopViewedProducts = async () => {
+  const { data } = await API.get(ApiRoutes.FetchTopViewedProducts);
+  return data;
+};
+
+export const fetchRatingBreakdown = async () => {
+  const { data } = await API.get(ApiRoutes.FetchRatingBreakdown);
+  return data;
+};
+
+export const fetchRecentReviews = async () => {
+  const { data } = await API.get(ApiRoutes.FetchRecentReviews);
+  return data;
+};
 
 // Api call to verify user
 export function useVerifyUser() {
