@@ -762,15 +762,15 @@ export const simulateProductViews = async () => {
   }
 };
 
-export const simulateProductRatingsAndReviews = async () => {
-  const buyerNames = [
-    "uchenna ukeh",
-    "Uchenna Ukeh",
-    "Jeremiah Anachuna",
-    "Ikechukwu Josiah Anachuna",
-    "Chidi Mgbara",
-  ];
+const buyerNames = [
+  "uchenna ukeh",
+  "Uchenna Ukeh",
+  "Jeremiah Anachuna",
+  "Ikechukwu Josiah Anachuna",
+  "Chidi Mgbara",
+];
 
+export const simulateProductRatingsAndReviews = async () => {
   const users = await prisma.user.findMany({
     where: {
       accountType: "BUYER",
@@ -832,7 +832,9 @@ export const simulateProductRatingsAndReviews = async () => {
           );
 
           // Get all other users (buyers) except the current one
-          const otherUsers = users.filter((u) => u.id !== userId && !buyerNames.includes(u.fullname));
+          const otherUsers = users.filter(
+            (u) => u.id !== userId && !buyerNames.includes(u.fullname)
+          );
 
           if (otherUsers.length > 0) {
             // Pick a random buyer from the remaining users
@@ -1090,21 +1092,61 @@ export const fetchRatingBreakdown = async (req: Request, res: Response) => {
 
 export const fetchRecentReviews = async (req: Request, res: Response) => {
   try {
-    const reviews = await prisma.rating.findMany({
-      where: { review: { not: "" } },
+    // Step 1: Fetch all relevant reviews
+    const allReviews = await prisma.rating.findMany({
+      where: {
+        review: { not: "" },
+        user: {
+          fullname: {
+            notIn: buyerNames, // Exclude users in the buyer names list
+          },
+        },
+      },
       orderBy: { createdAt: "desc" },
-      take: 10,
       include: {
         user: true,
         orderDetails: true,
       },
     });
 
-    const products = await prisma.product.findMany({
-      where: { id: { in: reviews.map((p) => p.orderDetails.productId) } },
+    // Step 2: Group reviews by user and limit to two per user
+    const uniqueReviews = {};
+    allReviews.forEach((review) => {
+      const userId = review.userId;
+      if (!uniqueReviews[userId]) {
+        uniqueReviews[userId] = [];
+      }
+      if (uniqueReviews[userId].length < 2) {
+        uniqueReviews[userId].push(review);
+      }
     });
 
-    const result = reviews.map((review) => ({
+    // Step 3: Flatten the unique reviews object to get an array
+    const reviews: any[] = Object.values(uniqueReviews).flat();
+
+    // Step 4: Randomize dates for the reviews within the last 3 months
+    const threeMonthsBack = new Date();
+    threeMonthsBack.setMonth(threeMonthsBack.getMonth() - 3);
+
+    reviews.forEach((review) => {
+      // Generate a random date within the last 3 months
+      const randomDate = new Date(
+        threeMonthsBack.getTime() +
+          Math.random() * (Date.now() - threeMonthsBack.getTime())
+      );
+      review.createdAt = randomDate; // Assign the random date
+    });
+
+    // Step 5: Randomize the order of the returned reviews
+    const randomizedReviews = reviews.sort(() => Math.random() - 0.5);
+
+    const products = await prisma.product.findMany({
+      where: {
+        id: { in: randomizedReviews.map((p) => p.orderDetails.productId) },
+      },
+    });
+
+    const result = randomizedReviews.map((review) => ({
       user: review.user.fullname,
       productName:
         products.find((p) => p.id === review.orderDetails.productId)?.name ??

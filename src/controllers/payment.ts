@@ -65,6 +65,7 @@ export const paymentIntent = async (req: Request, res: Response) => {
     },
   });
   try {
+    console.log('Creating Intent');
     const intent = await stripe.paymentIntents.create({
       amount: convertToSubcurrency(amount),
       currency: "GBP",
@@ -74,6 +75,7 @@ export const paymentIntent = async (req: Request, res: Response) => {
       description: `${products.map((p) => p.name).join(", ")}`,
       metadata: { order_id: order.id },
     });
+    console.log(intent);
     products.map((p) => {
       clearCache(CACHE_KEYS.STORE_ABOUT + p.store.userId);
       clearCache(CACHE_KEYS.STORE_TRANSACTIONS + p.store.userId);
